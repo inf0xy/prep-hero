@@ -1,0 +1,22 @@
+.admin-dashboard {
+  /* height: calc(100% - 150px); */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color-50);
+  font-size: 1.5rem;
+}
+
+.create-button {
+  margin: 2rem 5rem;
+  width: fit-content;
+  padding: 1rem 2rem;
+  background-color: var(--color-primary-100);
+  border-radius: 4px;
+  transition: opacity 0.3s ease-in;
+}
+
+.create-button:hover,
+.create-button:active {
+  opacity: 0.7;
+}

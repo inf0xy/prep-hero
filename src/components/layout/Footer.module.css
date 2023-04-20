@@ -1,0 +1,30 @@
+.footer {
+  bottom: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: center;
+  height: 80px;
+  font-size: 1.4rem;
+  padding: 0 3rem;
+  background-color: var(--background-color-50);
+}
+
+.footer > * {
+  display: flex;
+  justify-content: center;
+}
+
+.disclaimer {
+  grid-column: span 2;
+  border-left: none
+}
+
+.socials {
+  grid-column: span 1.5;
+  gap: 1.5rem;
+}
+
+.socials > * {
+  cursor: pointer;
+}

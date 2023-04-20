@@ -1,0 +1,68 @@
+.header {
+  max-width: 120rem;
+  height: 70px;
+  background-color: var(--background-color-100);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+  padding: 0 5rem;
+}
+
+.logo {
+}
+
+.main-nav,
+.auth {
+  display: flex;
+}
+
+.main-nav {
+  gap: 2rem;
+}
+
+.main-nav li {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1.4px;
+  text-decoration-color: transparent;
+  transition: 0.5s;
+  font-size: 1.7rem;
+  font-weight: 300;
+}
+
+.main-nav li:hover {
+  text-decoration-color: white;
+}
+
+.auth {
+  align-items: center;
+  gap: 1.8rem;
+}
+
+.login,
+.signup,
+.logout {
+  padding: 8px 20px;
+  text-align: center;
+  transition: opacity 0.3s ease-in;
+}
+
+.login:hover,
+.signup:hover,
+.logout:hover {
+  opacity: 0.6;
+}
+
+.login,
+.logout {
+  border: solid var(--color-off-white) 2px;
+}
+
+.signup {
+  border: solid var(--color-primary-50) 2px;
+}
+
+.logout, .avatar {
+  cursor: pointer;
+}

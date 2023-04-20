@@ -1,0 +1,58 @@
+.problem-form-container {
+  font-weight: 400;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.form-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-weight: 300;
+}
+
+.field {
+  width: 20rem;
+  color: #000;
+  padding: 0.5rem 1.5rem;
+  background-color: var(--color-grey-100);
+  border-radius: 2px;
+}
+
+.required {
+  font-size: 2rem;
+  color: var(--color-error-200);
+}
+
+.difficulty {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.category, .companies, .tags {
+  max-width: 70rem;
+}
+
+.category {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.companies, .tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.companies > *, .tags > * {
+  margin-right: 1rem;
+}
+
+.added-companies {
+  margin-top: 1rem;
+}
+
+.leetcode-link input, .video-link input {
+  width: 30rem;
+}
