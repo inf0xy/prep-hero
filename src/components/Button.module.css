@@ -1,0 +1,11 @@
+.custom-button {
+  width: fit-content;
+  background-color: var(--color-primary-100);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.custom-button:hover {
+  opacity: 0.8;
+}

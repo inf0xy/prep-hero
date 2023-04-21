@@ -4,7 +4,8 @@ import Difficulty from './Difficulty';
 import Tags from './Tags';
 import Companies from './Companies';
 import Categories from './Categories';
-import Editor from './Editor';
+import TextEditor from '@/components/TextEditor';
+import Button from '../Button';
 
 type GeneralFormData = {
   listName: string;
@@ -35,8 +36,6 @@ const ProblemForm = () => {
     videoLink: ''
   });
   const [description, setDescription] = useState('');
-
-  console.log(generalInfo);
 
   // const handleCompaniesInput = (e: ChangeEvent<HTMLInputElement>) => {
   //   if (e.target.value.trim().length > 0) {
@@ -141,8 +140,13 @@ const ProblemForm = () => {
         <label>
           Description: <span className={classes.required}>*</span>
         </label>
-        <Editor value={description} setValue={setDescription}/>
+        <TextEditor
+          value={description}
+          setValue={setDescription}
+          className={classes.description}
+        />
       </div>
+      <Button paddingX='8rem' paddingY='1rem' className='self-center'>Submit</Button>
     </form>
   );
 };

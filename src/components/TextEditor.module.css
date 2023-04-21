@@ -1,0 +1,12 @@
+.editor-container {
+  position: relative;
+}
+
+.editor-mode {
+  width: fit-content;
+  position: absolute;
+  right: 105px;
+  top: 8.5px;
+  cursor: pointer;
+  z-index: 10;
+}
