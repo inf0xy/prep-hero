@@ -18,7 +18,9 @@ const Companies: React.FC<CompaniesProps> = ({ setGeneralInfo }) => {
           onChange={(e) =>
             setGeneralInfo((prev) => ({
               ...prev,
-              companies: [...prev.companies, e.target.value]
+              companies: prev.companies.includes(e.target.value)
+                ? [...prev.companies.filter(el => el !== e.target.value)]
+                : [...prev.companies, e.target.value]
             }))
           }
         />

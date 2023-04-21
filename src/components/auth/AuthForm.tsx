@@ -300,7 +300,7 @@ const AuthForm = () => {
           </Button>
           <Button
             extraStyle={{ width: '100%', padding: '0.8rem' }}
-            color="rgb(53 180 109)"
+            color="#35b46d"
             onClick={() =>
               signIn('google', { callbackUrl: '/problems', redirect: true })
             }

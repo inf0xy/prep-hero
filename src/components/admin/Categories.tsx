@@ -17,7 +17,7 @@ const Categories: React.FC<CategoriesProps> = ({ setGeneralInfo }) => {
         onChange={(e) =>
           setGeneralInfo((prev) => ({
             ...prev,
-            categories: e.target.value
+            category: e.target.value
           }))
         }
       />

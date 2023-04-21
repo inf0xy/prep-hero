@@ -17,7 +17,9 @@ const Tags: React.FC<TagsProps> = ({ setGeneralInfo }) => {
           onChange={(e) =>
             setGeneralInfo((prev) => ({
               ...prev,
-              tags: [...prev.tags, e.target.value]
+              tags: prev.tags.includes(e.target.value)
+                ? [...prev.tags.filter((el) => el !== e.target.value)]
+                : [...prev.tags, e.target.value]
             }))
           }
         />

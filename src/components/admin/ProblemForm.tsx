@@ -1,22 +1,29 @@
-import { ChangeEvent, useState, useRef } from 'react';
+import { useState, useRef, FormEvent } from 'react';
 import classes from './ProblemForm.module.css';
 import Difficulty from './Difficulty';
 import Tags from './Tags';
 import Companies from './Companies';
 import Categories from './Categories';
 import TextEditor from '@/components/TextEditor';
+import Alert from '../Alert';
 import Button from '../Button';
+import ListName from './ListName';
+import { validateAddedProblems } from '@/helpers/validateProblemForm';
 
 type GeneralFormData = {
   listName: string;
   title: string;
   difficulty: string;
-  categories: string;
+  category: string;
   tags: string[];
   companies: string[];
-  addedCompanies: string;
   leetcodeLink: string;
   videoLink: string;
+};
+
+type NotificationType = {
+  status: 'success' | 'error' | 'warning' | undefined;
+  message: string | undefined;
 };
 
 const formatString = (text: string) => {
@@ -28,38 +35,85 @@ const ProblemForm = () => {
     listName: '',
     title: '',
     difficulty: '',
-    categories: '',
+    category: '',
     tags: [],
     companies: [],
-    addedCompanies: '',
     leetcodeLink: '',
     videoLink: ''
   });
   const [description, setDescription] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [notification, setNotification] = useState<NotificationType>({
+    status: undefined,
+    message: undefined
+  });
+  const companyInputRef = useRef<HTMLInputElement>(null);
 
-  // const handleCompaniesInput = (e: ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.value.trim().length > 0) {
-  //     const addedCompanies = e.target.value.split(',').map((el) => formatString(el.trim()));
-  //     setGeneralInfo(prev => ({
-  //       ...prev,
-  //       companies: [...prev.companies, ...addedCompanies]
-  //     }));
-  //   }
-  // };
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    const companyInput = companyInputRef.current?.value;
+    let selectedCompanies = generalInfo.companies.slice();
+    if (companyInput && companyInput.trim().length > 0) {
+      companyInput.split(',').forEach((el) => {
+        if (
+          selectedCompanies.every(
+            (company) => company.toLowerCase() !== el.trim().toLowerCase()
+          )
+        ) {
+          selectedCompanies.push(formatString(el.trim()));
+        }
+      });
+    }
+
+    if (
+      validateAddedProblems(
+        generalInfo,
+        description,
+        selectedCompanies.join(',')
+      )
+    ) {
+      // TODO; SUBMIT FORM
+    } else {
+      setNotification({
+        status: 'error',
+        message: 'Please fill out all required (*) fields'
+      });
+      setShowAlert(true);
+    }
+  };
 
   return (
-    <form className={classes['problem-form-container']}>
+    <form className={classes['problem-form-container']} onSubmit={handleSubmit}>
+      {showAlert && (
+        <Alert onClose={setShowAlert} status={notification.status!}>
+          {notification.message}
+        </Alert>
+      )}
       <div className={classes['form-controls']}>
         <label>
           List Name: <span className={classes.required}>*</span>
         </label>
-        <input className={classes.field} />
+        <div className={classes['list-name']}>
+          <input
+            className={classes.field}
+            onChange={(e) =>
+              setGeneralInfo((prev) => ({ ...prev, listName: e.target.value }))
+            }
+          />
+          <ListName setGeneralInfo={setGeneralInfo} />
+        </div>
       </div>
       <div className={classes['form-controls']}>
         <label>
           Title: <span className={classes.required}>*</span>
         </label>
-        <input className={classes.field} />
+        <input
+          className={classes.field}
+          onChange={(e) =>
+            setGeneralInfo((prev) => ({ ...prev, title: e.target.value }))
+          }
+        />
       </div>
       <div className={classes.difficulty}>
         <label>
@@ -93,15 +147,9 @@ const ProblemForm = () => {
           <Companies setGeneralInfo={setGeneralInfo} />
         </div>
         <input
+          ref={companyInputRef}
           className={`${classes.field} ${classes['added-companies']}`}
           placeholder="Google, Facebook, ..."
-          value={generalInfo.addedCompanies}
-          onChange={(e) =>
-            setGeneralInfo((prev) => ({
-              ...prev,
-              addedCompanies: e.target.value
-            }))
-          }
         />
       </fieldset>
       <div
@@ -146,7 +194,7 @@ const ProblemForm = () => {
           className={classes.description}
         />
       </div>
-      <Button className='self-center'>Submit</Button>
+      <Button className="self-center" extraStyle={{padding: '1rem 6rem'}}>Submit</Button>
     </form>
   );
 };

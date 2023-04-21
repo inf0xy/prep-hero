@@ -16,7 +16,7 @@ const Button: React.FC<ButtonProps> = ({
   extraStyle,
   ...rest
 }) => {
-  let chosenColor = '';
+  let chosenColor = '#e65715';
   if (color) {
     if (color === 'prirmay-100') {
       chosenColor = '#e65715';

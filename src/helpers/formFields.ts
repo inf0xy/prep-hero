@@ -1,3 +1,9 @@
+export const listNameOptions = [
+  { label: 'Blind 75', value: 'blind75' },
+  { label: 'NeetCode 150', value: 'neetcode150' },
+  { label: 'NeetCode All', value: 'neetcodeall' }
+];
+
 export const categorySelection = [
   'Array',
   'Hash Table',
@@ -92,10 +98,9 @@ export type GeneralFormData = {
   listName: string;
   title: string;
   difficulty: string;
-  categories: string;
+  category: string;
   tags: string[];
   companies: string[];
-  addedCompanies: string;
   leetcodeLink: string;
   videoLink: string;
 };

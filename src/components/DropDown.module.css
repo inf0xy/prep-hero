@@ -1,0 +1,49 @@
+.arrow-down_show,
+.arrow-up_show,
+.options_show {
+  opacity: 1;
+}
+
+.arrow-down_hide,
+.arrow-up_hide,
+.options_hide {
+  opacity: 0;
+}
+
+.arrow-down_show,
+.arrow-up_show,
+.arrow-down_hide,
+.arrow-up_hide {
+  transition: all 0.5s ease;
+}
+
+.arrow-down_show {
+  transform: rotate(0deg);
+}
+
+.arrow-down_hide {
+  transform: rotate(180deg);
+}
+
+.arrow-up_show {
+  transform: rotate(360deg);
+}
+
+.arrow-up_hide {
+  transform: rotate(180deg);
+}
+
+.options_show {
+  visibility: visible;
+  pointer-events: all;
+  transition: opacity 0.5s ease-out;
+}
+
+.options_hide {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.option-item {
+  transition: all 0.3s ease;
+}

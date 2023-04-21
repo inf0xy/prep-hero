@@ -7,6 +7,7 @@
 :root {
   --color-primary-50: #ff7230;
   --color-primary-100: #e65715;
+  --color-primary-200: #e64900;
   --color-primary-150: #993507;
   --color-secondary-50: #15e6d0;
   --color-secondary-100: #009989;
@@ -21,10 +22,10 @@
   --color-grey-700: hsl(265, 4%, 31%);
   --color-grey-800: hsl(276, 5%, 20%);
   --color-grey-900: hsl(280, 5%, 13%);
-  --background-color-50: rgb(20, 20, 20);
+  --background-color-50: #141414;
   --background-color-100: #050505;
   --facebook-background-color: #2b70c0;
-  --google-background-color: rgb(53 180 109);
+  --google-background-color: #35b46d;
   --github-background-color: #3b3b3b;
 
   --color-success-100: #a2f0bc;
@@ -34,9 +35,11 @@
   --color-error-50: #eac0d2;
   --color-error-100: #f1acc9;
   --color-error-200: #c55584;
+  --color-error-300: #f6385b;
   --color-error-500: #a10c4a;
 
-  /* --color-resize-handlebar: #37414b; */
+  --color-warning-100: #eea60c;
+
   --color-resize-handlebar: #37414b;
 }
 
