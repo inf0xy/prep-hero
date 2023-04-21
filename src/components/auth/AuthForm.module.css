@@ -88,8 +88,6 @@
 .email {
   border-bottom: solid var(--color-grey-100) 0.5px;
   border-top: solid var(--color-grey-100) 0.5px;
-  /* border-top-left-radius: 4px;
-  border-top-right-radius: 4px; */
 }
 
 .name-error,
@@ -117,18 +115,6 @@
   flex-direction: column;
   margin-top: 3rem;
   gap: 2rem;
-}
-
-.form-actions button,
-.oauth-actions button {
-  width: 100%;
-  border-radius: 4px;
-  padding: 1rem 2rem;
-  transition: opacity 0.3s ease-in;
-}
-
-.signin-button {
-  background-color: var(--color-primary-100);
 }
 
 .oauth-actions {
@@ -161,21 +147,4 @@
   display: flex;
   justify-content: center;
   padding: 0.3rem;
-}
-
-.facebook-button {
-  background-color: var(--facebook-background-color);
-}
-
-.google-button {
-  background-color: var(--google-background-color);
-}
-
-.github-button {
-  background-color: var(--github-background-color);
-}
-
-.signin-button:hover,
-.oauth-buttons > *:hover {
-  opacity: 0.7;
 }

@@ -2,14 +2,13 @@
   max-width: 120rem;
   height: 70px;
   background-color: var(--background-color-100);
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+  border-bottom: solid rgb(108, 107, 107) 0.1px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 1.5rem;
   padding: 0 5rem;
-}
-
-.logo {
 }
 
 .main-nav,

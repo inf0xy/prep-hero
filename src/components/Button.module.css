@@ -1,6 +1,7 @@
 .custom-button {
   width: fit-content;
   background-color: var(--color-primary-100);
+  padding: 1rem 2rem;
   border-radius: 4px;
   cursor: pointer;
   transition: opacity 0.3s ease-in-out;

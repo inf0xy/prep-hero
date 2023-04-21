@@ -146,7 +146,7 @@ const ProblemForm = () => {
           className={classes.description}
         />
       </div>
-      <Button paddingX='8rem' paddingY='1rem' className='self-center'>Submit</Button>
+      <Button className='self-center'>Submit</Button>
     </form>
   );
 };

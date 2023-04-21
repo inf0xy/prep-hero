@@ -9,6 +9,7 @@ import FacebookIcon from '../icons/FacebookIcon';
 import CircleX from '../icons/CircleX';
 import { validateFormData } from '@/helpers/validateFormData';
 import { registerUser } from '@/helpers/registerUser';
+import Button from '../Button';
 
 const AuthForm = () => {
   const { data: session } = useSession();
@@ -126,15 +127,11 @@ const AuthForm = () => {
           });
           const newSession = await getSession();
           if (newSession) {
-            setAlertStatus('success');
-            setNotification('Successfully signed in.');
-            setTimeout(() => {
-              if (newSession.session.user.account_type === 'admin') {
-                router.push('/admin');
-              } else if (newSession.session.user.account_type === 'user') {
-                router.push('/problems');
-              }
-            }, 2000);
+            if (newSession.session.user.account_type === 'admin') {
+              router.push('/admin');
+            } else if (newSession.session.user.account_type === 'user') {
+              router.push('/problems');
+            }
           } else {
             throw new Error('Cannot create new session.');
           }
@@ -280,9 +277,9 @@ const AuthForm = () => {
           )}
         </div>
         <div className={classes['form-actions']}>
-          <button className={classes['signin-button']} type="submit">
+          <Button extraStyle={{ width: '100%' }} type="submit">
             {loginForm ? 'Sign in' : 'Register'}
-          </button>
+          </Button>
         </div>
       </form>
       <div className={classes['oauth-actions']}>
@@ -292,30 +289,33 @@ const AuthForm = () => {
           <p className={classes.line}></p>
         </div>
         <div className={classes['oauth-buttons']}>
-          <button
-            className={classes['github-button']}
+          <Button
+            extraStyle={{ width: '100%', padding: '0.8rem' }}
+            color="#3b3b3b"
             onClick={() =>
               signIn('github', { callbackUrl: '/problems', redirect: true })
             }
           >
             <GithubIcon width="18px" height="18px" />
-          </button>
-          <button
-            className={classes['google-button']}
+          </Button>
+          <Button
+            extraStyle={{ width: '100%', padding: '0.8rem' }}
+            color="rgb(53 180 109)"
             onClick={() =>
               signIn('google', { callbackUrl: '/problems', redirect: true })
             }
           >
             <GoogleIcon width="18px" height="18px" />
-          </button>
-          <button
-            className={classes['facebook-button']}
+          </Button>
+          <Button
+            extraStyle={{ width: '100%', padding: '0.8rem' }}
+            color="#2b70c0"
             onClick={() =>
               signIn('facebook', { callbackUrl: '/problems', redirect: true })
             }
           >
             <FacebookIcon width="18px" height="18px" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

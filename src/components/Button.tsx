@@ -2,19 +2,18 @@ import { ReactNode } from 'react';
 import classes from './Button.module.css';
 
 type ButtonProps = {
-  paddingX: string;
-  paddingY: string;
   color?: string;
   children: ReactNode;
   className?: string;
-};
+  extraStyle?: object;
+  [rest:string]: any;
+}
 
 const Button: React.FC<ButtonProps> = ({
-  paddingX,
-  paddingY,
   color,
   children,
   className,
+  extraStyle,
   ...rest
 }) => {
   let chosenColor = '';
@@ -33,8 +32,8 @@ const Button: React.FC<ButtonProps> = ({
   }
 
   const buttonStyle = {
-    padding: `${paddingY} ${paddingX}`,
-    backgroundColor: chosenColor
+    backgroundColor: chosenColor,
+    ...extraStyle
   };
   return (
     <button
