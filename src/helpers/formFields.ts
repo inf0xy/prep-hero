@@ -1,37 +1,31 @@
-export const categorySelection = {
-  first: [
-    'Array',
-    'Hash Table',
-    'Linked List',
-    'Stack',
-    'Heap & Priority Queue',
-    'Binary Search',
-    'Merge Sort',
-    'Quick Sort',
-    'Recursion'
-  ],
-  second: [
-    'Depth-First Search',
-    'Breath-First Search',
-    'Backtracking',
-    'Shortest Path',
-    'Greedy',
-    'Intervals',
-    'Tree',
-    'Graph'
-  ],
-  third: [
-    'Trie',
-    'Two Pointers',
-    'Sliding window',
-    'Prefix & Suffix',
-    'Advanced Graph',
-    '1D Dynamic Programming',
-    '2D Dynamic Programming',
-    'Math & Geometry',
-    'Bit Manipulation'
-  ]
-};
+export const categorySelection = [
+  'Array',
+  'Hash Table',
+  'Linked List',
+  'Stack',
+  'Heap & Priority Queue',
+  'Binary Search',
+  'Merge Sort',
+  'Quick Sort',
+  'Recursion',
+  'Depth-First Search',
+  'Breath-First Search',
+  'Backtracking',
+  'Shortest Path',
+  'Greedy',
+  'Intervals',
+  'Tree',
+  'Graph',
+  'Trie',
+  'Two Pointers',
+  'Sliding window',
+  'Prefix & Suffix',
+  'Advanced Graph',
+  '1D Dynamic Programming',
+  '2D Dynamic Programming',
+  'Math & Geometry',
+  'Bit Manipulation'
+];
 
 export const tagSelection = [
   'Array',
@@ -70,12 +64,6 @@ export const tagSelection = [
   'Permutations'
 ].sort();
 
-export const difficulties = [
-  { text: 'Easy', color: 'success' },
-  { text: 'Medium', color: 'warning' },
-  { text: 'Hard', color: 'error' }
-];
-
 export const companies = [
   'Adobe',
   'AirBnB',
@@ -99,3 +87,15 @@ export const companies = [
   'Uber',
   'Yahoo'
 ];
+
+export type GeneralFormData = {
+  listName: string;
+  title: string;
+  difficulty: string;
+  categories: string;
+  tags: string[];
+  companies: string[];
+  addedCompanies: string;
+  leetcodeLink: string;
+  videoLink: string;
+};

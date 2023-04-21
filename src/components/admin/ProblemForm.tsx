@@ -1,15 +1,10 @@
-import { ChangeEvent, ReactElement, useState, useRef } from 'react';
+import { ChangeEvent, useState, useRef } from 'react';
 import classes from './ProblemForm.module.css';
-import {
-  categorySelection,
-  difficulties,
-  tagSelection,
-  companies
-} from '../../helpers/formFields';
-
-type Categories = {
-  [key: string]: string[];
-};
+import Difficulty from './Difficulty';
+import Tags from './Tags';
+import Companies from './Companies';
+import Categories from './Categories';
+import Editor from './Editor';
 
 type GeneralFormData = {
   listName: string;
@@ -39,6 +34,7 @@ const ProblemForm = () => {
     leetcodeLink: '',
     videoLink: ''
   });
+  const [description, setDescription] = useState('');
 
   console.log(generalInfo);
 
@@ -51,103 +47,6 @@ const ProblemForm = () => {
   //     }));
   //   }
   // };
-
-  const renderedDifficulty = difficulties.map(({ text, color }) => (
-    <div key={text} className="flex space-x-3">
-      <label>{text}</label>
-      <input
-        type="radio"
-        name="radio-5"
-        className={`radio radio-${color}`}
-        value={text}
-        onChange={(e) =>
-          setGeneralInfo((prev) => ({
-            ...prev,
-            difficulty: e.target.value
-          }))
-        }
-      />
-    </div>
-  ));
-
-  let renderedSelection: ReactElement[] = [];
-  for (let group in categorySelection) {
-    (categorySelection as Categories)[group].map((el) => {
-      let groupColor = '';
-      if (group === 'first') {
-        groupColor = 'info';
-      } else if (group === 'second') {
-        groupColor = 'accent';
-      } else if (group === 'third') {
-        groupColor = 'primary';
-      }
-      renderedSelection.push(
-        <div key={el} className="flex space-x-3">
-          <input
-            type="radio"
-            name="radio-5"
-            className={`radio radio-${groupColor}`}
-            value={el}
-            onChange={(e) =>
-              setGeneralInfo((prev) => ({
-                ...prev,
-                categories: e.target.value
-              }))
-            }
-          />
-          <label className="text-gray-400">{el}</label>
-        </div>
-      );
-    });
-  }
-
-  const renderedTags = tagSelection.map((el, index) => {
-    let color = '';
-    if (index > 23) {
-      color = 'info';
-    } else if (index > 12) {
-      color = 'warning';
-    } else {
-      color = 'secondary';
-    }
-    return (
-      <div key={el} className="form-control w-fit mt-2">
-        <label className="label cursor-pointer">
-          <span className="label-text text-[1.5rem]">{el}</span>
-          <input
-            type="checkbox"
-            className={`checkbox checkbox-${color} ml-3`}
-            value={el}
-            onChange={(e) =>
-              setGeneralInfo((prev) => ({
-                ...prev,
-                tags: [...prev.tags, e.target.value]
-              }))
-            }
-          />
-        </label>
-      </div>
-    );
-  });
-
-  const renderedCompanies = companies.map((el) => (
-    <div key={el} className="form-control w-fit mt-2">
-      <label className="label cursor-pointer">
-        <span className="label-text text-[1.5rem]">{el}</span>
-        <input
-          type="checkbox"
-          className={`checkbox checkbox-success ml-3`}
-          value={el}
-          onChange={(e) =>
-            setGeneralInfo((prev) => ({
-              ...prev,
-              companies: [...prev.companies, e.target.value]
-            }))
-          }
-        />
-      </label>
-    </div>
-  ));
 
   return (
     <form className={classes['problem-form-container']}>
@@ -168,26 +67,32 @@ const ProblemForm = () => {
           Difficulty: <span className={classes.required}>*</span>
         </label>
         <div className="flex space-x-4 text-font-medium">
-          {renderedDifficulty}
+          <Difficulty setGeneralInfo={setGeneralInfo} />
         </div>
       </div>
-      <div className={classes['form-controls']}>
-        <label>
+      <fieldset className={classes['form-controls']}>
+        <legend>
           Category: <span className={classes.required}>*</span>
-        </label>
-        <div className={classes.category}>{renderedSelection}</div>
-      </div>
-      <div className={classes['form-controls']}>
-        <label>
+        </legend>
+        <div className={classes.category}>
+          <Categories setGeneralInfo={setGeneralInfo} />
+        </div>
+      </fieldset>
+      <fieldset className={classes['form-controls']}>
+        <legend>
           Tags: <span className={classes.required}>*</span>
-        </label>
-        <div className={classes.tags}>{renderedTags}</div>
-      </div>
-      <div className={classes['form-controls']}>
-        <label>
+        </legend>
+        <div className={classes.tags}>
+          <Tags setGeneralInfo={setGeneralInfo} />
+        </div>
+      </fieldset>
+      <fieldset className={classes['form-controls']}>
+        <legend>
           Companies: <span className={classes.required}>*</span>
-        </label>
-        <div className={classes.companies}>{renderedCompanies}</div>
+        </legend>
+        <div className={classes.companies}>
+          <Companies setGeneralInfo={setGeneralInfo} />
+        </div>
         <input
           className={`${classes.field} ${classes['added-companies']}`}
           placeholder="Google, Facebook, ..."
@@ -199,7 +104,7 @@ const ProblemForm = () => {
             }))
           }
         />
-      </div>
+      </fieldset>
       <div
         className={`${classes['form-controls']} ${classes['leetcode-link']}`}
       >
@@ -231,6 +136,12 @@ const ProblemForm = () => {
           }
           className={classes.field}
         />
+      </div>
+      <div className={classes['form-controls']}>
+        <label>
+          Description: <span className={classes.required}>*</span>
+        </label>
+        <Editor value={description} setValue={setDescription}/>
       </div>
     </form>
   );
