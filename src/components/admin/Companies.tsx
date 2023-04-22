@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { GeneralFormData } from '@/helpers/formFields';
+import { GeneralFormData } from '@/types/dataTypes';
 import { companies } from '@/helpers/formFields';
 
 type CompaniesProps = {

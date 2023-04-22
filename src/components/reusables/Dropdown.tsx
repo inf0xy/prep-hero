@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Panel from './Panel';
-import ChevronUp from './icons/ChevronUp';
-import ChevronDown from './icons/ChevronDown';
+import ChevronUp from '@/components/icons/ChevronUp';
+import ChevronDown from '@/components/icons/ChevronDown';
 import classes from './DropDown.module.css';
 
 type Option = {

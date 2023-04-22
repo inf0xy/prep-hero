@@ -1,6 +1,6 @@
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 import classes from './Alert.module.css';
-import CircleX from './icons/CircleX';
+import CircleX from '@/components/icons/CircleX';
 
 type AlertProps = {
   children: ReactNode;

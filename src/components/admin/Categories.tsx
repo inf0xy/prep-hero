@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { categorySelection } from '@/helpers/formFields';
-import { GeneralFormData } from '@/helpers/formFields';
+import { GeneralFormData } from '@/types/dataTypes';
 
 type CategoriesProps = {
   setGeneralInfo: Dispatch<SetStateAction<GeneralFormData>>;
@@ -11,7 +11,7 @@ const Categories: React.FC<CategoriesProps> = ({ setGeneralInfo }) => {
     <div key={el} className="flex space-x-3">
       <input
         type="radio"
-        name="radio-5"
+        name="category"
         className={`radio radio-info`}
         value={el}
         onChange={(e) =>

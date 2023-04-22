@@ -1,30 +1,26 @@
 import { useState, useRef, FormEvent } from 'react';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 import classes from './ProblemForm.module.css';
 import Difficulty from './Difficulty';
 import Tags from './Tags';
 import Companies from './Companies';
 import Categories from './Categories';
-import TextEditor from '@/components/TextEditor';
-import Alert from '../Alert';
-import Button from '../Button';
+import TextEditor from '@/components/reusables/TextEditor';
+import Alert from '@/components/reusables/Alert';
+import Button from '@/components/reusables/Button';
 import ListName from './ListName';
 import { validateAddedProblems } from '@/helpers/validateProblemForm';
-
-type GeneralFormData = {
-  listName: string;
-  title: string;
-  difficulty: string;
-  category: string;
-  tags: string[];
-  companies: string[];
-  leetcodeLink: string;
-  videoLink: string;
-};
+import { GeneralFormData } from '@/types/dataTypes';
 
 type NotificationType = {
   status: 'success' | 'error' | 'warning' | undefined;
   message: string | undefined;
 };
+
+interface AddProblem {
+  message: string;
+}
 
 const formatString = (text: string) => {
   return text.replace(/\b\w/g, (match) => match.toUpperCase());
@@ -48,8 +44,9 @@ const ProblemForm = () => {
     message: undefined
   });
   const companyInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     const companyInput = companyInputRef.current?.value;
@@ -73,7 +70,33 @@ const ProblemForm = () => {
         selectedCompanies.join(',')
       )
     ) {
-      // TODO; SUBMIT FORM
+      try {
+        const { data } = await axios.post<AddProblem>('/api/problems/new', {
+          list_name: generalInfo.listName,
+          title: generalInfo.title,
+          difficulty: generalInfo.difficulty,
+          category: generalInfo.category,
+          tags: generalInfo.tags,
+          companies: selectedCompanies,
+          leetcode_link: generalInfo.leetcodeLink,
+          solution_vid_link: generalInfo.videoLink,
+          description: JSON.stringify(description)
+        });
+        setNotification({
+          status: 'success',
+          message: data.message
+        });
+        setShowAlert(true);
+        setTimeout(() => {
+          router.push('/admin');
+        }, 1000);
+      } catch (err: any) {
+        setNotification({
+          status: 'error',
+          message: err.response.data.message
+        });
+        setShowAlert(true);
+      }
     } else {
       setNotification({
         status: 'error',
@@ -97,6 +120,7 @@ const ProblemForm = () => {
         <div className={classes['list-name']}>
           <input
             className={classes.field}
+            value={generalInfo.listName}
             onChange={(e) =>
               setGeneralInfo((prev) => ({ ...prev, listName: e.target.value }))
             }
@@ -146,11 +170,14 @@ const ProblemForm = () => {
         <div className={classes.companies}>
           <Companies setGeneralInfo={setGeneralInfo} />
         </div>
-        <input
-          ref={companyInputRef}
-          className={`${classes.field} ${classes['added-companies']}`}
-          placeholder="Google, Facebook, ..."
-        />
+        <div className="flex items-center space-x-5">
+          <input
+            ref={companyInputRef}
+            className={`${classes.field} ${classes['added-companies']}`}
+            placeholder="Google, Facebook,..."
+          />
+          <p className="pt-4 italic">** If not listed above</p>
+        </div>
       </fieldset>
       <div
         className={`${classes['form-controls']} ${classes['leetcode-link']}`}
@@ -194,7 +221,9 @@ const ProblemForm = () => {
           className={classes.description}
         />
       </div>
-      <Button className="self-center" extraStyle={{padding: '1rem 6rem'}}>Submit</Button>
+      <Button className="self-center" extraStyle={{ padding: '1rem 6rem' }}>
+        Submit
+      </Button>
     </form>
   );
 };

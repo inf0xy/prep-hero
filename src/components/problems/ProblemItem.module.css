@@ -1,0 +1,62 @@
+.problem {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  height: 6rem;
+  padding: 0 2rem;
+  align-items: center;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+.category-content {
+  grid-column: span 2;
+  padding-right: 0.5rem;
+}
+
+.title-content {
+  grid-column: span 4;
+  transition: color 0.3s ease;
+}
+
+.difficulty-content {
+  grid-column: span 1;
+}
+
+.solution-content {
+  grid-column: span 1;
+}
+
+.solution-content svg {
+  transform: translateX(70%);
+  transition: color 0.3s ease;
+}
+
+.title-content:hover,
+.solution-content svg:hover {
+  color: var(--color-primary-50);
+}
+
+.companies-content {
+  grid-column: span 4;
+  position: relative;
+}
+
+.companies-content::before {
+  transition: all 0.3s ease;
+}
+
+.companies-content:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 30rem;
+  font-size: 1.3rem;
+  background-color: rgb(214, 111, 56);
+  color: var(--color-off-white);
+  padding: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}

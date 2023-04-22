@@ -1,4 +1,4 @@
-import { GeneralFormData } from '@/helpers/formFields';
+import { GeneralFormData } from '@/types/dataTypes';
 import { Dispatch, SetStateAction } from 'react';
 
 type DifficultyProps = {
@@ -27,7 +27,7 @@ const Difficulty: React.FC<DifficultyProps> = ({ setGeneralInfo }) => {
         <label>Medium</label>
         <input
           type="radio"
-          name="radio-5"
+          name="difficulty"
           className={`radio radio-warning`}
           value="Medium"
           onChange={(e) =>

@@ -1,0 +1,4 @@
+.problems-page {
+height: calc(100% - 150px);
+padding: 5rem;
+}

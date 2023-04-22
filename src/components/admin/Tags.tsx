@@ -1,4 +1,5 @@
-import { GeneralFormData, tagSelection } from '@/helpers/formFields';
+import { tagSelection } from '@/helpers/formFields';
+import { GeneralFormData } from '@/types/dataTypes';
 import { Dispatch, SetStateAction } from 'react';
 
 type TagsProps = {

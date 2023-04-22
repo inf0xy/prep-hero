@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import DropDown from '../Dropdown';
+import DropDown from '@/components/reusables/Dropdown';
 import { listNameOptions } from '@/helpers/formFields';
-import { GeneralFormData } from '@/helpers/formFields';
+import { GeneralFormData } from '@/types/dataTypes';
 
 type Option = {
   label: string;
@@ -29,7 +29,7 @@ const ListName: React.FC<ListNameProps> = ({ setGeneralInfo }) => {
       options={listNameOptions}
       onChange={handleSelectListName}
       defaultText="Select List Name"
-      width='15rem'
+      width='17rem'
     />
   );
 };

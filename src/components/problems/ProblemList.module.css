@@ -1,0 +1,43 @@
+.problems-table {
+  width: 100%;
+  overflow: hidden;
+  font-size: 1.5rem;
+  color: var(--color-off-white);
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  height: 4rem;
+  border-bottom: solid rgba(128, 128, 128, 0.509) 0.4px;
+  margin-bottom: 1.5rem;
+  padding: 0 2rem;
+  color: var(--color-grey-200);
+}
+
+.category-header {
+  grid-column: span 2;
+}
+
+.title-header {
+  grid-column: span 4;
+}
+
+.difficulty-header {
+  grid-column: span 1;
+}
+
+.solution-header {
+  grid-column: span 1;
+}
+
+.companies-header {
+  grid-column: span 4;
+}
+
+.table-body > *:nth-child(even) {
+  background-color: rgba(43, 40, 37, 0.382);
+  border-radius: 5px;
+  color: white;
+}
+

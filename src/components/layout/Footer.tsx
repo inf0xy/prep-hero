@@ -10,12 +10,15 @@ const Footer = () => {
   const router = useRouter();
   const [footerStyle, setFooterStyle] = useState('fixed')
 
+  const staticStylePaths = ['/admin/add', '/problems'];
+
   useEffect(() => {
-    if (router.pathname === '/admin/add') {
+    if (staticStylePaths.includes(router.pathname)) {
       setFooterStyle('static');
     } else {
       setFooterStyle('fixed');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.pathname]);
 
   return (

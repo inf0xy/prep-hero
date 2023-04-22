@@ -2,8 +2,8 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
 import '@uiw/react-markdown-preview/markdown.css';
 import '@uiw/react-md-editor/markdown-editor.css';
-import DarkIcon from './icons/DarkIcon';
-import LightIcon from './icons/LightIcon';
+import DarkIcon from '@/components/icons/DarkIcon';
+import LightIcon from '@/components/icons/LightIcon';
 import classes from './TextEditor.module.css';
 
 interface TextEditorProps {
