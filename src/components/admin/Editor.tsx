@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, Dispatch, SetStateAction } from 'react';
-import MarkdownEditor from '@uiw/react-markdown-editor';
+// import MarkdownEditor from '@uiw/react-markdown-editor';
+import MarkdownEditor from '@uiw/react-md-editor'
 
 interface EditorProps {
   // onChange: (value: string) => void;
@@ -35,7 +36,7 @@ const Editor: React.FC<EditorProps> = ({ value, setValue }) => {
     <MarkdownEditor
       value={value}
       onChange={(value) => {
-        setValue(value);
+        setValue(value!);
       }}
     />
   );

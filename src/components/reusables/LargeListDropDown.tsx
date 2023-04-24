@@ -9,15 +9,15 @@ type Option = {
   label: string;
 };
 
-interface DropDownProps {
+interface LargeListDropDownProps {
   options: Option[];
   onChange: (selected: Option) => void;
-  value: Option;
+  value: Option[];
   defaultText: string;
   width: string;
 }
 
-const DropDown: React.FC<DropDownProps> = ({
+const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
   options,
   onChange,
   value,
@@ -53,27 +53,33 @@ const DropDown: React.FC<DropDownProps> = ({
   };
 
   const renderOptions = options.map((option, index) => (
-    <div
+    <span
       key={option.value + index}
-      className={`${classes['option-item']} text-gray-200 hover:bg-[#e64900b5] rounded-md cursor-pointer p-3`}
+      className="badge hover:bg-[#e64900b5] border-0 cursor-pointer text-[1.3rem] mr-3 mb-3 px-4 py-5"
       onClick={() => handleOptionClick(option)}
+      style={{
+        backgroundColor:
+          value && value.includes(option) ? '#e64900b5' : '#827a7763'
+      }}
     >
       {option.label}
-    </div>
+    </span>
   ));
 
   return (
-    <div ref={divEl} className="relative text-[1.4rem] font-medium" style={{ width }}>
+    <div
+      ref={divEl}
+      className="relative text-[1.4rem] font-medium"
+      style={{ width }}
+    >
       <Panel
         className={`
           bg-[#454545] flex justify-between items-center cursor-pointer font-light rounded-md
         `}
         onClick={handleToggle}
       >
-        <span className="px-5 font-medium text-gray-200">{value?.label || defaultText}</span>
-        <div
-          className={`flex items-center justify-center w-fit h-[3rem] px-1`}
-        >
+        <span className="px-5 font-medium text-gray-200">{defaultText}</span>
+        <div className={`flex items-center justify-center w-fit h-[3rem] px-1`}>
           <div className="relative w-7 h-full mr-3">
             <ChevronDown
               className={`absolute top-[25%] left-[5%] text-lg text-white ${
@@ -89,10 +95,11 @@ const DropDown: React.FC<DropDownProps> = ({
         </div>
       </Panel>
       <Panel
-        className={`absolute top-full p-3 mt-[3px] bg-[#3a3a3a] z-50 ${
+        className={`absolute top-full px-8 pt-6 pb-5 mt-[3px] bg-[#3a3a3a] z-50 ${
           isOpen ? classes['options_show'] : classes['options_hide']
         } rounded-md`}
         onClick={() => {}}
+        style={{ width: '40rem' }}
       >
         {renderOptions}
       </Panel>
@@ -100,4 +107,4 @@ const DropDown: React.FC<DropDownProps> = ({
   );
 };
 
-export default DropDown;
+export default LargeListDropDown;

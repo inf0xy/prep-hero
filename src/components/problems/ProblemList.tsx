@@ -14,6 +14,9 @@ const ProblemList: React.FC<ProblemListProps> = ({ problems }) => {
   return (
     <div role="table" className={classes['problems-table']}>
       <div className={classes['table-header']}>
+        <div role="row" className={classes['solved-header']}>
+          <div>Solved</div>
+        </div>
         <div role="row" className={classes['category-header']}>
           <div>Category</div>
         </div>

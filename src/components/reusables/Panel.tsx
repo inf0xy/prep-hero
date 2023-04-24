@@ -10,7 +10,7 @@ interface PanelProps {
 
 const Panel: React.FC<PanelProps> = ({ children, ...rest }) => {
   const classes = className(
-    'border-t-0 shadow bg-white w-full text-neutral',
+    'border-t-0 shadow w-full text-neutral',
     rest.className
   );
   return (

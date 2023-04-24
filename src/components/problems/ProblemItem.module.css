@@ -1,11 +1,16 @@
 .problem {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(13, 1fr);
   height: 6rem;
   padding: 0 2rem;
   align-items: center;
   line-height: 1.4;
   margin-bottom: 1rem;
+}
+
+.solved-content {
+  grid-column: span 1;
+  padding-left: 15%;
 }
 
 .category-content {
@@ -16,6 +21,7 @@
 .title-content {
   grid-column: span 4;
   transition: color 0.3s ease;
+  padding-right: 1rem;
 }
 
 .difficulty-content {

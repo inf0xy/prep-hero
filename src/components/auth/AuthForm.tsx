@@ -9,7 +9,7 @@ import FacebookIcon from '../icons/FacebookIcon';
 import CircleX from '../icons/CircleX';
 import { validateFormData } from '@/helpers/validateFormData';
 import { registerUser } from '@/helpers/registerUser';
-import Button from '../Button';
+import Button from '@/components/reusables/Button';
 
 const AuthForm = () => {
   const { data: session } = useSession();

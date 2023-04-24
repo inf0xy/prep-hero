@@ -3,6 +3,8 @@ import VideoIcon from '../icons/VideoIcon';
 import Link from 'next/link';
 import classes from './ProblemItem.module.css';
 
+import CheckIcon from '@/components/icons/CheckIcon';
+
 type ProblemItemProps = {
   problem: Problem;
 };
@@ -32,6 +34,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({ problem }) => {
 
   return (
     <div className={classes.problem}>
+      <div className={classes['solved-content']}><CheckIcon width='18' height='18'/></div>
       <div className={classes['category-content']}>{category}</div>
       <div className={classes['title-content']}>
         <Link target="_blank" href={leetcode_link}>
@@ -53,7 +56,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({ problem }) => {
         className={`${classes['companies-content']}`}
         data-tooltip={companies.join(', ')}
       >
-        {formatCompanies(companies.join(', '), 70)}
+        {formatCompanies(companies.join(', '), 60)}
       </div>
     </div>
   );

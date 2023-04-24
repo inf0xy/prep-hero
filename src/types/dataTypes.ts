@@ -18,5 +18,14 @@ export type Problem = {
   companies: string[];
   description?: string;
   leetcode_link: string;
-  solution_vid_link: string
-}
+  solution_vid_link: string;
+};
+
+export type SearchCriteria = {
+  category: string;
+  difficulty: string;
+  tags: string[];
+  companies: string[];
+  text: string;
+  [key: string]: string | string[]
+};
