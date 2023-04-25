@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import LargeListDropDown from '../reusables/LargeListDropDown';
 import { categoryListOptions } from '@/helpers/formFields';
 import { SearchCriteria } from '@/types/dataTypes';
@@ -10,10 +10,20 @@ type Option = {
 
 interface CategoryListProps {
   setCategory: Dispatch<SetStateAction<SearchCriteria>>;
+  searchCriteria: SearchCriteria;
 }
 
-const CategoryList: React.FC<CategoryListProps> = ({ setCategory }) => {
+const CategoryList: React.FC<CategoryListProps> = ({
+  setCategory,
+  searchCriteria
+}) => {
   const [selected, setSelected] = useState<Option[]>([]);
+
+  useEffect(() => {
+    if (searchCriteria.category === '') {
+      setSelected([]);
+    }
+  }, [searchCriteria]);
 
   const handleSelectCategoryList: (option: Option) => void = (option) => {
     setSelected((prev) => (prev.includes(option) ? [] : [option]));

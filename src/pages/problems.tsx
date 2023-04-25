@@ -1,6 +1,6 @@
+import { useState, useEffect, useRef } from 'react';
 import { GetStaticProps } from 'next';
-import { getAllProblems } from '@/helpers/problem-api-util';
-import { useState, useEffect, ReactElement } from 'react';
+import { getProblems } from '@/helpers/problem-api-util';
 import ProblemList from '@/components/problems/ProblemList';
 import { Problem, SearchCriteria } from '@/types/dataTypes';
 import classes from '../styles/ProblemsPage.module.css';
@@ -13,12 +13,14 @@ import SearchBar from '@/components/reusables/SearchBar';
 import Button from '@/components/reusables/Button';
 import ShuffleIcon from '@/components/icons/ShuffleIcon';
 import CircleX from '@/components/icons/CircleX';
+import ResetIcon from '@/components/icons/ResetIcon';
 
 interface AllProblemsPageProps {
   problems: Problem[];
 }
 
 const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
+  const [currentProblems, setCurrentProblems] = useState(problems);
   const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>({
     category: '',
     difficulty: '',
@@ -26,6 +28,19 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
     companies: [],
     text: ''
   });
+
+  useEffect(() => {
+    const fetchProblems = async () => {
+      const data = await getProblems(1, searchCriteria);
+      setCurrentProblems(data);
+    };
+
+    try {
+      fetchProblems();
+    } catch (err) {
+      console.error(err);
+    }
+  }, [searchCriteria]);
 
   const handleRemoveFilters = (value: string) => {
     for (let key in searchCriteria) {
@@ -42,7 +57,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
       }
     }
   };
-console.log(searchCriteria)
+
   let renderedFilters = [];
   for (let filter in searchCriteria) {
     if (searchCriteria[filter] !== '' || searchCriteria[filter].length) {
@@ -77,14 +92,34 @@ console.log(searchCriteria)
     }
   }
 
+  const handleSearchReset = () => {
+    setSearchCriteria({
+      category: '',
+      difficulty: '',
+      tags: [],
+      companies: [],
+      text: ''
+    });
+  };
+
   return (
     <section className={classes['problems-page']}>
       <div className={classes.selections}>
-        <CategoryList setCategory={setSearchCriteria} />
+        <CategoryList
+          searchCriteria={searchCriteria}
+          setCategory={setSearchCriteria}
+        />
         <DifficultyList setDifficulty={setSearchCriteria} />
-        <TagList setTags={setSearchCriteria} />
-        <CompanyList setCompany={setSearchCriteria} />
-        <SearchBar setSearchTerm={setSearchCriteria} defaultText='Search'/>
+        <TagList searchCriteria={searchCriteria} setTags={setSearchCriteria} />
+        <CompanyList
+          searchCriteria={searchCriteria}
+          setCompany={setSearchCriteria}
+        />
+        <SearchBar
+          setSearchTerm={setSearchCriteria}
+          defaultText="Search"
+          currentSearch={searchCriteria.text}
+        />
         <div className={classes.random} data-tooltip="Pick random question">
           <Button
             extraStyle={{
@@ -98,15 +133,39 @@ console.log(searchCriteria)
             <ShuffleIcon width={20} height={20} />
           </Button>
         </div>
+        <div
+          className={classes.reset}
+          data-tooltip="Pick random question"
+          onClick={handleSearchReset}
+        >
+          <Button
+            extraStyle={{
+              borderRadius: '8px',
+              height: '3rem',
+              width: '4rem',
+              padding: '0'
+            }}
+            color="primary-200"
+          >
+            <ResetIcon width={15} height={15} />
+          </Button>
+        </div>
       </div>
       <div className={classes.filters}>{renderedFilters}</div>
-      <ProblemList problems={problems} />
+      {currentProblems && <ProblemList problems={currentProblems} />}
     </section>
   );
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const problems = await getAllProblems(1);
+  const problems = await getProblems(1, {
+    category: '',
+    difficulty: '',
+    tags: [],
+    companies: [],
+    text: ''
+  });
+
   return {
     props: { problems },
     revalidate: 3600

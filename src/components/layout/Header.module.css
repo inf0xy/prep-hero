@@ -1,7 +1,7 @@
 .header {
   max-width: 120rem;
   height: 70px;
-  background-color: var(--background-color-100);
+  background-color: var(--background-color-300);
   box-shadow: 0 2px 4px rgba(0,0,0,.1);
   border-bottom: solid rgb(108, 107, 107) 0.1px;
   display: flex;

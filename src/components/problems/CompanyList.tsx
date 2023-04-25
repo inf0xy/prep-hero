@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import LargeListDropDown from '../reusables/LargeListDropDown';
 import { companyListOption } from '@/helpers/formFields';
 import { SearchCriteria } from '@/types/dataTypes';
@@ -10,10 +10,20 @@ type Option = {
 
 interface CompanyListProps {
   setCompany: Dispatch<SetStateAction<SearchCriteria>>;
+  searchCriteria: SearchCriteria;
 }
 
-const CompanyList: React.FC<CompanyListProps> = ({ setCompany }) => {
+const CompanyList: React.FC<CompanyListProps> = ({
+  setCompany,
+  searchCriteria
+}) => {
   const [selected, setSelected] = useState<Option[]>([]);
+
+  useEffect(() => {
+    setSelected((prev) =>
+      prev.filter((option) => searchCriteria.companies.includes(option.value))
+    );
+  }, [searchCriteria]);
 
   const handleSelectCompany: (option: Option) => void = (option) => {
     setSelected((prev) =>

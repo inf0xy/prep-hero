@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import LargeListDropDown from '../reusables/LargeListDropDown';
 import { tagListOptions } from '@/helpers/formFields';
 import { SearchCriteria } from '@/types/dataTypes';
@@ -10,10 +10,17 @@ type Option = {
 
 interface TagListProps {
   setTags: Dispatch<SetStateAction<SearchCriteria>>;
+  searchCriteria: SearchCriteria;
 }
 
-const TagList: React.FC<TagListProps> = ({ setTags }) => {
+const TagList: React.FC<TagListProps> = ({ setTags, searchCriteria }) => {
   const [selected, setSelected] = useState<Option[]>([]);
+
+  useEffect(() => {
+    setSelected((prev) =>
+      prev.filter((option) => searchCriteria.tags.includes(option.value))
+    );
+  }, [searchCriteria]);
 
   const handleSelectTag: (option: Option) => void = (option) => {
     setSelected((prev) =>
