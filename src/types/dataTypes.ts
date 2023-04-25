@@ -19,6 +19,7 @@ export type Problem = {
   description?: string;
   leetcode_link: string;
   solution_vid_link: string;
+  [key: string]: any
 };
 
 export type SearchCriteria = {

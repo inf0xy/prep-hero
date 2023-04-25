@@ -70,7 +70,7 @@ const DropDown: React.FC<DropDownProps> = ({
         `}
         onClick={handleToggle}
       >
-        <span className="px-5 font-medium text-gray-200">{value?.label || defaultText}</span>
+        <span className="px-5 font-medium text-gray-200">{defaultText}</span>
         <div
           className={`flex items-center justify-center w-fit h-[3rem] px-1`}
         >

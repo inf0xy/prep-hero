@@ -13,6 +13,7 @@
   margin-bottom: 1.5rem;
   padding: 0 2rem;
   color: var(--color-grey-200);
+  gap: 1rem;
 }
 
 .category-header {
@@ -29,6 +30,7 @@
 
 .difficulty-header {
   grid-column: span 1;
+  min-width: 7.7rem;
 }
 
 .solution-header {
@@ -39,9 +41,15 @@
   grid-column: span 4;
 }
 
+.category-header,
+.title-header,
+.difficulty-header {
+  display: flex;
+  width: fit-content;
+  gap: 0.5rem;
+}
+
 .table-body > *:nth-child(even) {
-  /* background-color: rgba(43, 40, 37, 0.382); */
-  /* background-color: rgba(43, 40, 37, 0.382); */
   background-color: var(--color-table-even-row);
   border-radius: 5px;
 }

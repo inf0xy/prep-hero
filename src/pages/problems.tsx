@@ -1,19 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { GetStaticProps } from 'next';
 import { getProblems } from '@/helpers/problem-api-util';
-import ProblemList from '@/components/problems/ProblemList';
 import { Problem, SearchCriteria } from '@/types/dataTypes';
+import ProblemList from '@/components/problems/ProblemList';
 import classes from '../styles/ProblemsPage.module.css';
-
-import CategoryList from '@/components/problems/CategoryList';
-import DifficultyList from '@/components/problems/DifficultyList';
-import TagList from '@/components/problems/TagList';
-import CompanyList from '@/components/problems/CompanyList';
-import SearchBar from '@/components/reusables/SearchBar';
-import Button from '@/components/reusables/Button';
-import ShuffleIcon from '@/components/icons/ShuffleIcon';
+import useSort from '@/hooks/useSort';
 import CircleX from '@/components/icons/CircleX';
-import ResetIcon from '@/components/icons/ResetIcon';
+import SelectBar from '@/components/problems/SelectBar';
 
 interface AllProblemsPageProps {
   problems: Problem[];
@@ -28,6 +21,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
     companies: [],
     text: ''
   });
+  const handleSort = useSort(problems, setCurrentProblems);
 
   useEffect(() => {
     const fetchProblems = async () => {
@@ -92,67 +86,18 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
     }
   }
 
-  const handleSearchReset = () => {
-    setSearchCriteria({
-      category: '',
-      difficulty: '',
-      tags: [],
-      companies: [],
-      text: ''
-    });
-  };
-
   return (
     <section className={classes['problems-page']}>
       <div className={classes.selections}>
-        <CategoryList
+        <SelectBar
           searchCriteria={searchCriteria}
-          setCategory={setSearchCriteria}
+          setSearchCriteria={setSearchCriteria}
         />
-        <DifficultyList setDifficulty={setSearchCriteria} />
-        <TagList searchCriteria={searchCriteria} setTags={setSearchCriteria} />
-        <CompanyList
-          searchCriteria={searchCriteria}
-          setCompany={setSearchCriteria}
-        />
-        <SearchBar
-          setSearchTerm={setSearchCriteria}
-          defaultText="Search"
-          currentSearch={searchCriteria.text}
-        />
-        <div className={classes.random} data-tooltip="Pick random question">
-          <Button
-            extraStyle={{
-              borderRadius: '8px',
-              height: '3rem',
-              width: '5rem',
-              padding: '0'
-            }}
-            color="secondary-200"
-          >
-            <ShuffleIcon width={20} height={20} />
-          </Button>
-        </div>
-        <div
-          className={classes.reset}
-          data-tooltip="Pick random question"
-          onClick={handleSearchReset}
-        >
-          <Button
-            extraStyle={{
-              borderRadius: '8px',
-              height: '3rem',
-              width: '4rem',
-              padding: '0'
-            }}
-            color="primary-200"
-          >
-            <ResetIcon width={15} height={15} />
-          </Button>
-        </div>
       </div>
       <div className={classes.filters}>{renderedFilters}</div>
-      {currentProblems && <ProblemList problems={currentProblems} />}
+      {currentProblems && (
+        <ProblemList onSort={handleSort} problems={currentProblems} />
+      )}
     </section>
   );
 };

@@ -21,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
     if (color === 'primary-100') {
       chosenColor = '#e65715';
     } else if (color === 'primary-200') {
-      chosenColor = '#993507';
+      chosenColor = '#c25421';
     } else if (color === 'secondary-100') {
       chosenColor = '#15e6d0';
     } else if (color === 'secondary-200') {
