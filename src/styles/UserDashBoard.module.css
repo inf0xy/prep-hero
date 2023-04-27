@@ -1,0 +1,32 @@
+.user-dashboard {
+  min-height: calc(100vh - 150px);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color-300);
+  font-size: 1.5rem;
+}
+
+.records {
+}
+
+.overview {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 3rem;
+  align-items: center;
+}
+
+.heatmap {
+}
+
+.vl {
+  width: 1px;
+  height: 13rem;
+  background-color: var(--color-grey-300);
+}
+
+.progress {
+  display: flex;
+  justify-content: center;
+}

@@ -5,6 +5,7 @@ import '@uiw/react-md-editor/markdown-editor.css';
 import DarkIcon from '@/components/icons/DarkIcon';
 import LightIcon from '@/components/icons/LightIcon';
 import classes from './TextEditor.module.css';
+import { modeColors } from '@/helpers/extraStyles';
 
 interface TextEditorProps {
   value: string;
@@ -35,7 +36,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     <div data-color-mode={currentMode} className={classes['editor-container']}>
       <div
         className={classes['editor-mode']}
-        style={{ color: mode ? '#fff' : '#000' }}
+        style={{ color: modeColors[currentMode] }}
         onClick={() => setMode((prev) => !prev)}
       >
         {mode ? <LightIcon /> : <DarkIcon />}

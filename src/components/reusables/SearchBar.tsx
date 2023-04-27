@@ -1,11 +1,17 @@
-import { Dispatch, SetStateAction, useEffect, useState, MutableRefObject } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  MutableRefObject
+} from 'react';
 import SearchIcon from '../icons/SearchIcon';
 import { SearchCriteria } from '@/types/dataTypes';
 
 type SearchBarProps = {
   setSearchTerm: Dispatch<SetStateAction<SearchCriteria>>;
   defaultText?: string;
-  currentSearch: string
+  currentSearch: string;
 };
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -16,15 +22,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
-    if (searchInput.length) {
-      const timeoutId = setTimeout(function () {
-        setSearchTerm((prev) => ({ ...prev, text: searchInput.trim() }));
-      }, 500);
+    const timeoutId = setTimeout(function () {
+      setSearchTerm((prev) => ({ ...prev, text: searchInput.trim() }));
+    }, 500);
 
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [searchInput, setSearchTerm]);
 
   useEffect(() => {

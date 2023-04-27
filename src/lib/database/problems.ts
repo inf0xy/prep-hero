@@ -65,6 +65,7 @@ export const getProblems = async (
 ) => {
   await connectDB();
   const filters: SearchFilter = {};
+  const skipNum = --page * ITEMS_PER_PAGE;
 
   tagsFilter = tagsFilter ? JSON.parse(tagsFilter) : [];
   companiesFilter = companiesFilter ? JSON.parse(companiesFilter) : [];
@@ -82,19 +83,33 @@ export const getProblems = async (
     filters['companies'] = { $in: companiesFilter };
   }
   if (textFilter !== '') {
-    filters['$text'] = { $search: textFilter };
-    // filters['$or'] = [
-    //   { title: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
-    //   { category: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
-    //   { difficulty: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
-    //   { tags: { $elemMatch: { $regex: new RegExp(`^${textFilter}$`, 'i') } } },
-    //   { companies: { $elemMatch: { $regex: new RegExp(`^${textFilter}$`, 'i') } } }
-    // ];
+    filters['$or'] = [
+      { title: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
+      { category: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
+      { difficulty: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
+      { tags: { $elemMatch: { $regex: new RegExp(`^${textFilter}$`, 'i') } } },
+      {
+        companies: {
+          $elemMatch: { $regex: new RegExp(`^${textFilter}$`, 'i') }
+        }
+      }
+    ];
   }
 
-  return problemsCollection
+  let result = await problemsCollection
     .find(filters, { projection: { _id: 0, tags: 0, description: 0 } })
-    .skip(--page * ITEMS_PER_PAGE)
+    .skip(skipNum)
     .limit(ITEMS_PER_PAGE)
     .toArray();
+
+  if (result.length === 0) {
+    delete filters['$or'];
+    filters['$text'] = { $search: textFilter };
+    result = await problemsCollection
+      .find(filters, { projection: { _id: 0, tags: 0, description: 0 } })
+      .skip(skipNum)
+      .limit(ITEMS_PER_PAGE)
+      .toArray();
+  }
+  return result;
 };

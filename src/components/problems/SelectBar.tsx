@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { SearchCriteria } from '@/types/dataTypes';
 import classes from './SelectBar.module.css';
 
@@ -17,6 +17,7 @@ type SelectBarProps = {
 };
 
 const SelectBar: React.FC<SelectBarProps> = ({ searchCriteria, setSearchCriteria }) => {
+  const [showNotes, setShowNotes] = useState(false);
   const handleSearchReset = () => {
     setSearchCriteria({
       category: '',
@@ -74,6 +75,7 @@ const SelectBar: React.FC<SelectBarProps> = ({ searchCriteria, setSearchCriteria
           <ResetIcon width={15} height={15} />
         </Button>
       </div>
+      <input type="checkbox" className="toggle h-[2.5rem] w-[4.5rem]" checked={showNotes}/>
     </>
   );
 };

@@ -4,7 +4,8 @@ import '@uiw/react-markdown-preview/markdown.css';
 
 interface EditorPreviewProps {
   value: string;
-  className: string;
+  className?: string;
+  extraStyle?: object;
 }
 
 const EditerMarkdown = dynamic(
@@ -20,6 +21,14 @@ const Markdown = dynamic(
   { ssr: false }
 );
 
-const EditorPreview: React.FC<EditorPreviewProps> = ({ value, className }) => {
-  return <EditerMarkdown source={value} className={className} />;
+const EditorPreview: React.FC<EditorPreviewProps> = ({
+  value,
+  className,
+  extraStyle
+}) => {
+  return (
+    <EditerMarkdown source={value} className={className} style={extraStyle} />
+  );
 };
+
+export default EditorPreview;

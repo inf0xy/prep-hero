@@ -1,0 +1,44 @@
+.progress-circle__container {
+  position: relative;
+  width: 15rem;
+}
+
+.progress-text {
+  position: absolute;
+  width: 7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  top: 50%;
+  left: 50%;
+  z-index: 30;
+  transform: translate(-57%, -50%);
+  color: var(--color-grey-200);
+}
+
+.solved {
+  font-size: 3rem;
+  color: var(--color-off-white);
+}
+
+.progress-circle {
+  transform: translateX(-8rem) rotate(-88deg);
+}
+
+.progress-circle-background {
+  fill: none;
+  stroke: var(--color-grey-200);
+  stroke-width: 5px;
+  stroke-linecap: round;
+}
+
+.progress-circle-progress {
+  fill: none;
+  stroke: var(--color-primary-100);
+  stroke-width: 6px;
+  stroke-dasharray: 472;
+  stroke-dashoffset: 467.28;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s ease-in-out;
+}

@@ -1,9 +1,8 @@
 .admin-dashboard {
-  /* height: calc(100% - 150px); */
-  height: 100vh;
+  min-height: calc(100vh - 150px);
   display: flex;
   flex-direction: column;
-  background-color: var(--background-color-50);
+  background-color: var(--background-color-300);
   font-size: 1.5rem;
 }
 

@@ -1,0 +1,26 @@
+.progress-bar__container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.8rem;
+}
+
+.progress-bar {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-off-white);
+  gap: 0.5rem;
+}
+
+.bar__outer {
+  width: 10rem;
+  height: 6px;
+  border-radius: 10px;
+  background-color: rgb(191, 191, 191);
+}
+
+.bar__inner {
+  width: 20px;
+  height: 6px;
+  border-radius: 10px;
+}

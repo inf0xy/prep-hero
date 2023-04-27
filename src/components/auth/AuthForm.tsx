@@ -11,6 +11,9 @@ import { validateFormData } from '@/helpers/validateFormData';
 import { registerUser } from '@/helpers/registerUser';
 import Button from '@/components/reusables/Button';
 
+const loginMessage = 'Sign in to you account';
+const signupMessage = 'Create your acount';
+
 const AuthForm = () => {
   const { data: session } = useSession();
   const [loginForm, setLoginForm] = useState<null | boolean>(null);
@@ -172,9 +175,6 @@ const AuthForm = () => {
       });
     }
   };
-
-  const loginMessage = 'Sign in to you account';
-  const signupMessage = 'Create your acount';
 
   return (
     <div className={classes['auth-form']}>

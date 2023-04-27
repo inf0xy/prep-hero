@@ -5,7 +5,7 @@
   padding: 0 2rem;
   align-items: center;
   line-height: 1.4;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   gap: 1rem;
 }
 
@@ -66,4 +66,32 @@
   padding: 1rem;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.note {
+  /* padding: 0 0 1rem; */
+  padding-left: 3rem;
+  padding-right: 1rem;
+  margin: 0 0 1.5rem;
+  display: flex;
+  height: 5rem;
+}
+
+.strip {
+  background-color: rgb(227, 92, 51);
+  width: 2.5rem;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.note > * {
+  display: flex;
+  align-items: center;
+}
+
+.note > *:nth-child(2) {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding: 0 3rem;
+  width: 100%;
 }
