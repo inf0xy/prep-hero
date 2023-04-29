@@ -58,6 +58,23 @@
   }
 }*/
 
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-color-200);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-grey-700);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-grey-600);
+}
+
 *,
 *::before,
 *::after {
@@ -79,6 +96,15 @@ body {
   background-color: var(--background-color-200);
 }
 
+/* .text-editor .w-md-editor-content,
+.text-editor .wmde-markdown.wmde-markdown-color {
+  background-color: var(--background-color-100);
+}
+
+.text-editor .w-md-editor-toolbar {
+  background-color: var(--background-color-400);
+} */
+
 .text-editor .w-md-editor-bar svg {
   display: none;
 }
@@ -96,7 +122,15 @@ body {
   right: 1px;
 }
 
-.react-calendar-heatmap .color-scale-1 { fill: #bafcff; }
-.react-calendar-heatmap .color-scale-2 { fill: #1cc5ce; }
-.react-calendar-heatmap .color-scale-3 { fill: #10979e; }
-.react-calendar-heatmap .color-scale-4 { fill: #096c71; }
+.react-calendar-heatmap .color-scale-1 {
+  fill: #bafcff;
+}
+.react-calendar-heatmap .color-scale-2 {
+  fill: #1cc5ce;
+}
+.react-calendar-heatmap .color-scale-3 {
+  fill: #10979e;
+}
+.react-calendar-heatmap .color-scale-4 {
+  fill: #096c71;
+}

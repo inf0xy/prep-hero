@@ -73,7 +73,7 @@ try {
             'category',
             'description',
             'tags',
-            'solution_vid_link',
+            'solution_link',
             'leetcode_link',
             'companies'
           ],
@@ -84,7 +84,7 @@ try {
             category: { bsonType: ['string'] },
             description: { bsonType: ['string'] },
             tags: { bsonType: ['array'] },
-            solution_vid_link: { bsonType: ['string'] },
+            solutiond_link: { bsonType: ['string'] },
             leetcode_link: { bsonType: ['string'] },
             companies: { bsonType: ['array'] }
           }

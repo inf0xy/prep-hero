@@ -5,7 +5,7 @@ export const validateAddedProblems = (
   description: string,
   companies: string
 ) => {
-  let validFied = [
+  let validFields = [
     companies,
     formData.listName.trim(),
     formData.title.trim(),
@@ -17,5 +17,5 @@ export const validateAddedProblems = (
     formData.tags.join(','),
   ].every((el) => el.length > 2);
 
-  return validFied;
+  return validFields;
 };

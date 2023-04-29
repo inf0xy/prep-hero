@@ -7,6 +7,8 @@ import classes from '../styles/ProblemsPage.module.css';
 import useSort from '@/hooks/useSort';
 import CircleX from '@/components/icons/CircleX';
 import SelectBar from '@/components/problems/SelectBar';
+import { useAppDispatch } from '@/hooks/hooks';
+import { fetchUserData } from '@/store';
 
 interface AllProblemsPageProps {
   problems: Problem[];
@@ -14,6 +16,7 @@ interface AllProblemsPageProps {
 
 const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
   const [currentProblems, setCurrentProblems] = useState(problems);
+  const [showNotes, setShowNotes] = useState(false);
   const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>({
     category: '',
     difficulty: '',
@@ -21,6 +24,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
     companies: [],
     text: ''
   });
+  const dispatch = useAppDispatch();
   const handleSort = useSort(problems, setCurrentProblems);
 
   useEffect(() => {
@@ -35,6 +39,17 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
       console.error(err);
     }
   }, [searchCriteria]);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      await dispatch(fetchUserData());
+    }
+    try {
+      fetchUserInfo();
+    } catch (err) {
+      console.error(err);
+    }
+  }, [dispatch]);
 
   const handleRemoveFilters = (value: string) => {
     for (let key in searchCriteria) {
@@ -87,18 +102,26 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
   }
 
   return (
-    <section className={classes['problems-page']}>
-      <div className={classes.selections}>
-        <SelectBar
-          searchCriteria={searchCriteria}
-          setSearchCriteria={setSearchCriteria}
-        />
-      </div>
-      <div className={classes.filters}>{renderedFilters}</div>
-      {currentProblems && (
-        <ProblemList onSort={handleSort} problems={currentProblems} />
-      )}
-    </section>
+    <>
+      <section className={classes['problems-page']}>
+        <div className={classes.selections}>
+          <SelectBar
+            showNotes={showNotes}
+            setShowNotes={setShowNotes}
+            searchCriteria={searchCriteria}
+            setSearchCriteria={setSearchCriteria}
+          />
+        </div>
+        <div className={classes.filters}>{renderedFilters}</div>
+        {currentProblems && (
+          <ProblemList
+            onSort={handleSort}
+            problems={currentProblems}
+            showNotes={showNotes}
+          />
+        )}
+      </section>
+    </>
   );
 };
 

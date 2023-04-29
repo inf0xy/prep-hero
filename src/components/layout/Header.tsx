@@ -25,7 +25,7 @@ const Header = () => {
       <nav>
         <ul className={classes['main-nav']}>
           {/* <li>
-            <Link href="/about">Blogs</Link>
+            <Link href="/about">Resources</Link>
           </li> */}
           <li>
             <Link href="/problems">Problems</Link>

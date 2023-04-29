@@ -11,19 +11,30 @@ export const stripStyle = {
 };
 
 export const selectedColors = {
-  'success': '#6fc88d',
-  'error': '#f6385b',
-  'warning': '#eea60c'
-}
+  success: '#6fc88d',
+  error: '#f6385b',
+  warning: '#eea60c'
+};
 
 export const buttonColors: { [key: string]: string } = {
   'primary-100': '#e65715',
   'primary-200': '#c25421',
   'secondary-100': '#15e6d0',
   'secondary-200': '#009989'
-}
+};
 
 export const modeColors = {
-  'light': '#000',
-  'dark': '#fff'
+  light: '#000',
+  dark: '#fff'
+};
+
+export const oddCellStyle = {
+  backgroundColor: '#4545456b',
+  borderRadius: '5px'
+};
+
+export const statusStyle = {
+  opacity: 1,
+  visibility: 'visible',
+  pointerEvents: 'unset',
 }

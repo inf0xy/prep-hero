@@ -12,6 +12,9 @@
 .solved-content {
   grid-column: span 1;
   padding-left: 15%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .category-content {
@@ -21,11 +24,21 @@
 
 .title-content {
   grid-column: span 4;
-  transition: color 0.3s ease;
   padding-right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.difficulty-content {
+.note-icon,
+.expand,
+.edit,
+.clear,
+.add {
+  position: relative;
+}
+
+.note-icon .difficulty-content {
   grid-column: span 1;
 }
 
@@ -38,9 +51,26 @@
   transition: color 0.3s ease;
 }
 
-.title-content:hover,
-.solution-content svg:hover {
-  color: var(--color-primary-50);
+.note-icon:hover::after,
+.expand:hover:after,
+.edit:hover:after,
+.clear:hover:after,
+.add:hover:after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  /* width: 5rem; */
+  width: fit-content;
+  font-size: 1.2rem;
+  background-color: var(--background-color-50);
+  color: var(--color-off-white);
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
 }
 
 .companies-content {
@@ -69,12 +99,40 @@
 }
 
 .note {
-  /* padding: 0 0 1rem; */
+  position: relative;
   padding-left: 3rem;
   padding-right: 1rem;
-  margin: 0 0 1.5rem;
+  margin: 1rem 0 1.5rem;
   display: flex;
   height: 5rem;
+}
+
+.note-actions {
+  position: absolute;
+  right: 3rem;
+  top: 1.4rem;
+  gap: 1rem;
+  color: var(--color-grey-600);
+  cursor: pointer;
+}
+
+.title-link,
+.note-icon,
+.expand,
+.edit,
+.clear,
+.add {
+  transition: color 0.3s ease;
+}
+
+.title-link:hover,
+.note-icon:hover,
+.solution-content svg:hover,
+.expand:hover,
+.edit:hover,
+.clear:hover,
+.add:hover {
+  color: var(--color-primary-50);
 }
 
 .strip {
@@ -89,7 +147,7 @@
   align-items: center;
 }
 
-.note > *:nth-child(2) {
+.note > *:nth-child(3) {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   padding: 0 3rem;

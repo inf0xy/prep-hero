@@ -18,8 +18,8 @@ export type Problem = {
   companies: string[];
   description?: string;
   leetcode_link: string;
-  solution_vid_link: string;
-  [key: string]: any
+  solution_link: string;
+  [key: string]: any;
 };
 
 export type SearchCriteria = {
@@ -28,5 +28,21 @@ export type SearchCriteria = {
   tags: string[];
   companies: string[];
   text: string;
-  [key: string]: string | string[]
+  [key: string]: string | string[];
+};
+
+export type Note = {
+  listName: string;
+  title: string;
+  content: string;
+};
+export type AttemptedProblem = { title: string };
+export type EasySolved = { title: string };
+export type MediumSolved = { title: string };
+export type HardSolved = { title: string };
+export type Submission = { date: Date; title: string; code: string };
+
+export type NotificationType = {
+  status: 'success' | 'error' | 'warning' | undefined;
+  message: string | undefined;
 };

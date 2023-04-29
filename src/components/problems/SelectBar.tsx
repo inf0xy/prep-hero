@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useState } from 'react';
+import { Tooltip } from 'react-tooltip';
 import { SearchCriteria } from '@/types/dataTypes';
 import classes from './SelectBar.module.css';
 
@@ -14,10 +15,17 @@ import ResetIcon from '@/components/icons/ResetIcon';
 type SelectBarProps = {
   searchCriteria: SearchCriteria;
   setSearchCriteria: Dispatch<SetStateAction<SearchCriteria>>;
+  setShowNotes: Dispatch<SetStateAction<boolean>>;
+  showNotes: boolean
 };
 
-const SelectBar: React.FC<SelectBarProps> = ({ searchCriteria, setSearchCriteria }) => {
-  const [showNotes, setShowNotes] = useState(false);
+const SelectBar: React.FC<SelectBarProps> = ({
+  searchCriteria,
+  setSearchCriteria,
+  setShowNotes,
+  showNotes
+}) => {
+
   const handleSearchReset = () => {
     setSearchCriteria({
       category: '',
@@ -75,7 +83,13 @@ const SelectBar: React.FC<SelectBarProps> = ({ searchCriteria, setSearchCriteria
           <ResetIcon width={15} height={15} />
         </Button>
       </div>
-      <input type="checkbox" className="toggle h-[2.5rem] w-[4.5rem]" checked={showNotes}/>
+      <input
+        data-tooltip="Show / Hide all notes"
+        type="checkbox"
+        className={`toggle ${classes['note-switch']}`}
+        checked={showNotes}
+        onChange={() => setShowNotes((prev) => !prev)}
+      />
     </>
   );
 };

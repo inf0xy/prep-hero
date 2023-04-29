@@ -33,7 +33,6 @@ const AuthForm = () => {
   const [alertStatus, setAlertStatus] = useState<null | 'error' | 'success'>(
     null
   );
-
   const router = useRouter();
   const slug = router.query.slug;
 

@@ -10,7 +10,8 @@ import { modeColors } from '@/helpers/extraStyles';
 interface TextEditorProps {
   value: string;
   setValue: Dispatch<SetStateAction<string>>;
-  className: string;
+  className?: string;
+  defaultMode: boolean;
 }
 
 const MDEditor = dynamic(
@@ -26,9 +27,10 @@ const Markdown = dynamic(
 const TextEditor: React.FC<TextEditorProps> = ({
   value,
   setValue,
-  className
+  className,
+  defaultMode
 }) => {
-  const [mode, setMode] = useState(true);
+  const [mode, setMode] = useState(defaultMode);
 
   const currentMode = mode === true ? 'dark' : 'light';
 

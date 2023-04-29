@@ -48,8 +48,3 @@
   width: fit-content;
   gap: 0.5rem;
 }
-
-.table-body > *:nth-child(even) {
-  background-color: var(--color-table-even-row);
-  border-radius: 5px;
-}

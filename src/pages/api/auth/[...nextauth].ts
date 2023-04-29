@@ -57,6 +57,7 @@ export const authOptions: NextAuthOptions = {
       let facebook_id =
         user.account.provider === 'facebook' ? user.user.id : null;
 
+      // Create account if not exists after signing in with oAuth
       try {
         await createUser(
           name,

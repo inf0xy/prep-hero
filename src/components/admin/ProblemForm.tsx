@@ -12,19 +12,13 @@ import Button from '@/components/reusables/Button';
 import ListName from './ListName';
 import { validateAddedProblems } from '@/helpers/validateProblemForm';
 import { GeneralFormData } from '@/types/dataTypes';
+import { NotificationType } from '@/types/dataTypes';
+import { formatString } from '@/helpers/formatString';
 
-type NotificationType = {
-  status: 'success' | 'error' | 'warning' | undefined;
-  message: string | undefined;
-};
 
 interface AddProblem {
   message: string;
 }
-
-const formatString = (text: string) => {
-  return text.replace(/\b\w/g, (match) => match.toUpperCase());
-};
 
 const ProblemForm = () => {
   const [generalInfo, setGeneralInfo] = useState<GeneralFormData>({
@@ -79,7 +73,7 @@ const ProblemForm = () => {
           tags: generalInfo.tags,
           companies: selectedCompanies,
           leetcode_link: generalInfo.leetcodeLink,
-          solution_vid_link: generalInfo.videoLink,
+          solution_link: generalInfo.videoLink,
           description: JSON.stringify(description)
         });
         setNotification({
@@ -109,7 +103,7 @@ const ProblemForm = () => {
   return (
     <form className={classes['problem-form-container']} onSubmit={handleSubmit}>
       {showAlert && (
-        <Alert onClose={setShowAlert} status={notification.status!}>
+        <Alert onClose={setShowAlert} status={notification.status!} setNotification={setNotification}>
           {notification.message}
         </Alert>
       )}
@@ -198,7 +192,7 @@ const ProblemForm = () => {
       </div>
       <div className={`${classes['form-controls']} ${classes['video-link']}`}>
         <label>
-          Solution video link: <span className={classes.required}>*</span>
+          Solution link: <span className={classes.required}>*</span>
         </label>
         <input
           value={generalInfo.videoLink}
@@ -216,6 +210,7 @@ const ProblemForm = () => {
           Description: <span className={classes.required}>*</span>
         </label>
         <TextEditor
+          defaultMode={true}
           value={description}
           setValue={setDescription}
           className={classes.description}

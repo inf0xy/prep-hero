@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Problem } from '@/types/dataTypes';
 import ProblemItem from './ProblemItem';
 import classes from './ProblemList.module.css';
@@ -6,12 +6,22 @@ import SortIcon from '../icons/SortIcon';
 
 interface ProblemListProps {
   problems: Problem[];
-  onSort: (field: string) => void
+  onSort: (field: string) => void;
+  showNotes: boolean;
 }
 
-const ProblemList: React.FC<ProblemListProps> = ({ problems, onSort }) => {
-  const renderedProblems = problems.map((problem) => (
-    <ProblemItem key={problem.title} problem={problem} />
+const ProblemList: React.FC<ProblemListProps> = ({
+  problems,
+  onSort,
+  showNotes
+}) => {
+  const renderedProblems = problems.map((problem, index) => (
+    <ProblemItem
+      key={problem.title}
+      problem={problem}
+      showNotes={showNotes}
+      oddCell={index % 2 === 1 ? true : false}
+    />
   ));
 
   return (
@@ -22,19 +32,28 @@ const ProblemList: React.FC<ProblemListProps> = ({ problems, onSort }) => {
         </div>
         <div role="row" className={classes['category-header']}>
           <span>Category</span>
-          <span className="cursor-pointer pt-[0.5px]" onClick={() => onSort('category')}>
+          <span
+            className="cursor-pointer pt-[0.5px]"
+            onClick={() => onSort('category')}
+          >
             <SortIcon width={14} height={14} />
           </span>
         </div>
         <div role="row" className={classes['title-header']}>
           <span>Title</span>
-          <span className="cursor-pointer pt-[0.5px]" onClick={() => onSort('title')}>
+          <span
+            className="cursor-pointer pt-[0.5px]"
+            onClick={() => onSort('title')}
+          >
             <SortIcon width={14} height={14} />
           </span>
         </div>
         <div role="row" className={classes['difficulty-header']}>
           <span>Difficulty</span>
-          <span className="cursor-pointer pt-[0.5px]" onClick={() => onSort('difficulty')}>
+          <span
+            className="cursor-pointer pt-[0.5px]"
+            onClick={() => onSort('difficulty')}
+          >
             <SortIcon width={14} height={14} />
           </span>
         </div>

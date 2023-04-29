@@ -10,7 +10,7 @@ const Footer = () => {
   const router = useRouter();
   const [footerStyle, setFooterStyle] = useState('fixed')
 
-  const staticStylePaths = ['/admin/add', '/problems'];
+  const staticStylePaths = ['/admin/add', '/problems', '/notes/add'];
 
   useEffect(() => {
     if (staticStylePaths.includes(router.pathname)) {

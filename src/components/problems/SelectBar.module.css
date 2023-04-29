@@ -2,7 +2,15 @@
   position: relative;
 }
 
-.random:hover::after {
+.note-switch {
+  position: relative;
+  height: 2rem;
+  width: 4rem;
+  align-self: center;
+}
+
+.random:hover::after,
+.note-switch:hover::after {
   content: attr(data-tooltip);
   position: absolute;
   top: 120%;

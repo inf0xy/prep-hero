@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     tags,
     companies,
     leetcode_link,
-    solution_vid_link,
+    solution_link,
     description
   } = req.body;
 
@@ -23,7 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     tags &&
     companies &&
     leetcode_link &&
-    solution_vid_link &&
+    solution_link &&
     description
   ) {
     const sanitizedDescription = sanitizeHtml(description);
@@ -36,7 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         tags,
         companies,
         leetcode_link,
-        solution_vid_link,
+        solution_link,
         description: sanitizedDescription
       });
       res.status(201).json({ message: 'Successfully added new problem.' });

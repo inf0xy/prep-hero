@@ -20,7 +20,7 @@ export default class Problem {
     public tags: string[],
     public companies: string[],
     public leetcode_link: string,
-    public solution_vid_link: string,
+    public solution_link: string,
     public description: string
   ) {
     this.list_name = list_name;
@@ -30,7 +30,7 @@ export default class Problem {
     this.tags = tags;
     this.companies = companies;
     this.leetcode_link = leetcode_link;
-    this.solution_vid_link = solution_vid_link;
+    this.solution_link = solution_link;
     this.description = description;
   }
 }
@@ -44,7 +44,7 @@ export const addNewProblems = async (problem: Problem) => {
     problem.tags,
     problem.companies,
     problem.leetcode_link,
-    problem.solution_vid_link,
+    problem.solution_link,
     problem.description
   );
   await connectDB();

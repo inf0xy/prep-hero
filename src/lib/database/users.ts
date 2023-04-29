@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb';
+import sanitizeHtml from 'sanitize-html';
 import { connectDB, usersCollection } from './db-util';
 import { hashPassword, comparePassword } from '@/lib/auth';
+import { Note } from '@/types/dataTypes';
 
 type List = {
   problem_id: ObjectId;
@@ -21,9 +23,12 @@ export default class User {
     public facebook_id: string | null = null,
     public account_type: 'user' | 'admin' = 'user',
     public list: List[] = [],
-    public easy_solved: number = 0,
-    public medium_solved: number = 0,
-    public hard_solved: number = 0,
+    public notes: List[] = [],
+    public attempted_problems: List[] = [],
+    public submissions: List[] = [],
+    public easy_solved: List[] = [],
+    public medium_solved: List[] = [],
+    public hard_solved: List[] = [],
     public total_solved: number = 0
   ) {
     this.account_type = account_type;
@@ -35,6 +40,10 @@ export default class User {
     this.email = email;
     this.password = password;
     this.list = list;
+    this.notes = notes;
+    this.notes = notes;
+    this.attempted_problems = attempted_problems;
+    this.submissions = submissions;
     this.easy_solved = easy_solved;
     this.medium_solved = medium_solved;
     this.hard_solved = hard_solved;
@@ -86,4 +95,60 @@ export const fetchUser = async (oauth_type: string, email: string) => {
     { email, oauth_type },
     { projection: { _id: 1, name: 1, email: 1, account_type: 1 } }
   );
+};
+
+export const getUserData = async (_id: ObjectId) => {
+  await connectDB();
+  return usersCollection.findOne(
+    { _id },
+    {
+      projection: {
+        list: 1,
+        notes: 1,
+        attempted_problems: 1,
+        submissions: 1,
+        easy_solved: 1,
+        medium_solved: 1,
+        hard_solved: 1,
+        total_solved: 1
+      }
+    }
+  );
+};
+
+export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
+  await connectDB();
+  const { listName: list_name, title, content } = note;
+  if (list_name && title && content) {
+    const result = await usersCollection.find({ _id: userId, 'notes.title': title }).toArray();
+    if (result && result[0]) {
+      const data = await usersCollection.updateOne(
+        { _id: userId, 'notes.title': title },
+        {
+          $set: {
+            'notes.$.list_name': list_name,
+            'notes.$.title': title,
+            'notes.$.content': sanitizeHtml(content)
+          }
+        }
+      );
+      return 'Udpated';
+    } else {
+      const data = await usersCollection.updateOne(
+        { _id: userId },
+        {
+          $push: {
+            notes: {
+              list_name,
+              title,
+              content: sanitizeHtml(content)
+            }
+          }
+        }
+      );
+      return 'Created';
+    }
+  } else {
+    return null;
+  }
 };
