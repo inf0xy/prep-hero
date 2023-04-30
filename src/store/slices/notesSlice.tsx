@@ -28,10 +28,10 @@ export const addOrUpdateNote = createAsyncThunk(
 
 export const deleteNote = createAsyncThunk(
   'notes/deleteNote',
-  async (title: string) => {
+  async (title: string, { rejectWithValue }) => {
     const session = await getSession();
     if (!session) {
-      throw new Error('Required login');
+      return rejectWithValue(new Error('Required login'));
     }
     const userId = session?.session.user._id;
     const { data } = await axios.delete('/api/users/notes/delete', {
@@ -65,7 +65,7 @@ const notesSlice = createSlice({
     builder.addCase(addOrUpdateNote.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(addOrUpdateNote.fulfilled, (state) => {
+    builder.addCase(addOrUpdateNote.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = undefined;
     });

@@ -1,6 +1,7 @@
 import { addNewProblems } from '@/lib/database/problems';
 import { NextApiRequest, NextApiResponse } from 'next';
 import sanitizeHtml from 'sanitize-html';
+import { checkAuth } from '../checkAuth';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {
@@ -14,6 +15,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     solution_link,
     description
   } = req.body;
+
+  if (req.method !== 'POST') {
+    return res.status(400).json({ message: 'Invalid' });
+  }
 
   if (
     list_name &&
@@ -53,4 +58,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default handler;
+export default checkAuth(handler);

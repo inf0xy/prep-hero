@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import TextEditor from '@/components/reusables/TextEditor';
 import Alert from '@/components/reusables/Alert';
@@ -16,24 +16,26 @@ type NoteFormProps = {
   listName?: string;
   title?: string;
   content?: string;
-  disableListName?: boolean;
-  disableTitle?: boolean;
+  disableListName: boolean;
+  disableTitle: boolean;
 };
 
 const noteFormDefaultProps: NoteFormProps = {
   destination: '/problems',
   listName: '',
   title: '',
-  content: ''
+  content: '',
+  disableListName: false,
+  disableTitle: false
 };
 
 const NoteForm: React.FC<NoteFormProps> = ({
   destination,
+  disableListName,
+  disableTitle,
   listName,
   title,
-  content,
-  disableListName,
-  disableTitle
+  content
 }) => {
   const [note, setNote] = useState<Note>({
     listName,
@@ -45,12 +47,33 @@ const NoteForm: React.FC<NoteFormProps> = ({
     status: undefined,
     message: undefined
   });
+  const [submitted, setSubmitted] = useState(false);
   const router = useRouter();
   const { error } = useAppSelector((state) => state.notes);
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (error) {
+      setShowAlert(true);
+      setNotification({
+        status: 'error',
+        message: error.includes('401') ? 'Please log in.' : error
+      });
+    } else if (!error && submitted) {
+      setNotification({
+        status: 'success',
+        message: submitText === 'Add' ? 'Added' : 'Saved'
+      });
+      setTimeout(() => {
+        router.push(destination);
+      }, 500);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error, submitted]);
+
   const handleSubmitNote = async (e: FormEvent) => {
     e.preventDefault();
+    setSubmitted(true);
     const checkForm = validateAddingNote(note);
     if (checkForm.valid) {
       await dispatch(
@@ -60,18 +83,6 @@ const NoteForm: React.FC<NoteFormProps> = ({
           content: note.content!
         })
       );
-      setShowAlert(true);
-      if (error) {
-        setNotification({ status: 'error', message: error });
-      } else {
-        setNotification({
-          status: 'success',
-          message: submitText === 'Add' ? 'Added' : 'Saved'
-        });
-        setTimeout(() => {
-          router.push(destination);
-        }, 500);
-      }
     } else {
       setShowAlert(true);
       setNotification({
@@ -81,7 +92,7 @@ const NoteForm: React.FC<NoteFormProps> = ({
     }
   };
 
-  const submitText = router.pathname.includes('add') ? 'Add' : 'Save'
+  const submitText = router.pathname.includes('add') ? 'Add' : 'Save';
 
   return (
     <div className={classes['add-notes']}>
@@ -103,8 +114,10 @@ const NoteForm: React.FC<NoteFormProps> = ({
             <input
               className={classes['add-notes__list-field']}
               value={note.listName}
-              disabled={disableListName || false}
-              onChange={() => {}}
+              disabled={disableListName}
+              onChange={(e) =>
+                setNote((prev) => ({ ...prev, listName: e.target.value }))
+              }
             />
           </div>
         </div>
@@ -115,8 +128,10 @@ const NoteForm: React.FC<NoteFormProps> = ({
           <input
             className={classes['add-notes__title-field']}
             value={note.title}
-            disabled={disableTitle || false}
-            onChange={() => {}}
+            disabled={disableListName}
+            onChange={(e) =>
+              setNote((prev) => ({ ...prev, title: e.target.value }))
+            }
           />
         </div>
         <div className={classes['add-notes__content']}>

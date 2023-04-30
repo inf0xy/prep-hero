@@ -1,4 +1,4 @@
-.confirm-panel {
+/* .confirm-panel {
   display: flex;
   flex-direction: column;
   padding: 3rem 4rem;
@@ -12,8 +12,6 @@
 .confirm-panel__top {
   display: flex;
   gap: 3rem;
-  /* margin-left: 2rem;
-  margin-right: 2rem; */
   margin: 1rem 2rem 1.5rem;
 }
 
@@ -31,7 +29,7 @@
   align-self: end;
   gap: 1.5rem;
   margin-top: 2rem;
-}
+} */
 
 .confirm-panel__icon-container {
   position: relative;

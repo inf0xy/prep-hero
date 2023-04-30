@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { checkAuth } from '@/middlewares/checkAuth';
+import { checkAuth } from '../../checkAuth';
 import { ObjectId } from 'mongodb';
 import { deleteUserNote } from '@/lib/database/users';
 
@@ -19,5 +19,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// export default checkAuth(handler);
-export default handler;
+export default checkAuth(handler);

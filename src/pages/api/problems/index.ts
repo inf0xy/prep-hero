@@ -3,6 +3,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { page, category, difficulty, tags, companies, text } = req.query;
+
+  if (req.method !== 'GET') {
+    return res.status(400).json({ message: 'Invalid' });
+  }
+
   if (
     page === undefined ||
     category === undefined ||

@@ -47,8 +47,6 @@ export const statusStyle = {
 
 export const modalBackgroundClear = {
   opacity: '1',
-  // backgroundColor: '#d3e8ff1c'
-  // backgroundColor: '#32323273'
   backgroundColor: '#282828b3'
 }
 

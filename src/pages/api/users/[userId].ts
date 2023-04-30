@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { checkAuth } from '@/middlewares/checkAuth';
+import { checkAuth } from '@/pages/api/checkAuth';
 import { getUserData } from '@/lib/database/users';
 import { ObjectId } from 'mongodb';
 
