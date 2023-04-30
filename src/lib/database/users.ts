@@ -120,7 +120,9 @@ export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
   await connectDB();
   const { listName: list_name, title, content } = note;
   if (list_name && title && content) {
-    const result = await usersCollection.find({ _id: userId, 'notes.title': title }).toArray();
+    const result = await usersCollection
+      .find({ _id: userId, 'notes.title': title })
+      .toArray();
     if (result && result[0]) {
       const data = await usersCollection.updateOne(
         { _id: userId, 'notes.title': title },
@@ -150,5 +152,18 @@ export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
     }
   } else {
     return null;
+  }
+};
+
+export const deleteUserNote = async (userId: ObjectId, title: string) => {
+  await connectDB();
+  const result = await usersCollection.updateOne(
+    { _id: userId },
+    { $pull: { notes: { title } } }
+  );
+  if (result.modifiedCount === 1) {
+    return { message: 'Deleted', title };
+  } else {
+    return { message: 'Unable to delete note.' };
   }
 };

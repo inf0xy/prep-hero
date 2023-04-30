@@ -9,6 +9,7 @@ import {
   HardSolved,
   Submission
 } from '@/types/dataTypes';
+import { deleteNote } from './notesSlice';
 
 interface User {
   notes: Note[];
@@ -55,7 +56,6 @@ const userSlice = createSlice({
     });
     builder.addCase(fetchUserData.fulfilled, (state, action) => {
       state.isLoading = false;
-  console.log('action payload, ', action.payload);
       if (action.payload) {
         state.isLoading = false;
         state.notes = action.payload.notes;
@@ -71,6 +71,12 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.error.message;
     });
+    builder.addCase(deleteNote.fulfilled, (state, action) => {
+      const noteIndex = state.notes.findIndex(el => el.title === action.payload.title);
+      if (noteIndex !== -1) {
+        state.notes.splice(noteIndex, 1);
+      }
+    })
   }
 });
 

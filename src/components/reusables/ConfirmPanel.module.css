@@ -1,0 +1,57 @@
+.confirm-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem 4rem;
+  background-color: #333;
+  color: white;
+  min-width: 50rem;
+  font-size: 1.5rem;
+  border-radius: 10px;
+}
+
+.confirm-panel__top {
+  display: flex;
+  gap: 3rem;
+  /* margin-left: 2rem;
+  margin-right: 2rem; */
+  margin: 1rem 2rem 1.5rem;
+}
+
+.confirm-panel__message h3 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.confirm-panel__message p {
+  font-size: 1.7rem;
+}
+
+.confirm-panel__actions {
+  display: flex;
+  align-self: end;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.confirm-panel__icon-container {
+  position: relative;
+  width: 2rem;
+  height: 3rem;
+  background-color: #fff;
+  margin-top: 1rem;
+}
+
+.confirm-panel__icon-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.confirm-panel__icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}

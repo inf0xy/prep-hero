@@ -1,14 +1,18 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { checkAuth } from '@/middlewares/checkAuth';
-import { createOrUpdateNote } from '@/lib/database/users';
 import { ObjectId } from 'mongodb';
+import { deleteUserNote } from '@/lib/database/users';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { note, userId } = req.body;
-  if (req.method === 'POST') {
+  const { title, userId } = req.query;
+
+  if (req.method === 'DELETE' && title && userId) {
     try {
-      const result = await createOrUpdateNote(new ObjectId(userId), note);
-      res.status(201).json({ message: result, note });
+      const result = await deleteUserNote(
+        new ObjectId(userId as string),
+        title as string
+      );
+      res.status(result.title ? 200 : 500).json(result);
     } catch (err: any) {
       res.status(400).json({ message: 'Invalid request' });
     }

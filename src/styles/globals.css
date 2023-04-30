@@ -46,8 +46,8 @@
   --color-warning-100: #eea60c;
 
   --color-resize-handlebar: #37414b;
-  /* --color-table-even-row: #403e3d61; */
   --color-table-even-row: #4545456b;
+  --color-strip: #dedede;
 }
 
 /* @media (prefers-color-scheme: dark) {

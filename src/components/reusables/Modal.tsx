@@ -1,13 +1,25 @@
-import React, { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import {
+  modalBackgroundBlur,
+  modalBackgroundClear
+} from '@/helpers/extraStyles';
 
 interface ModalProps {
   children: any;
   className?: string;
+  type: 'clear' | 'blur';
   onClose: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, onClose, className }) => {
+const Modal: React.FC<ModalProps> = ({
+  children,
+  onClose,
+  className,
+  type
+}) => {
+  const [isVisible, setIsVisible] = useState(false);
+
   useEffect(() => {
     document.body.style.overflow = 'hidden';
 
@@ -16,14 +28,27 @@ const Modal: React.FC<ModalProps> = ({ children, onClose, className }) => {
     };
   }, []);
 
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const backgroundStyle =
+    type === 'clear' ? modalBackgroundClear : modalBackgroundBlur;
+
+
   return createPortal(
-    <div>
+    <div
+      className={`transition-opacity duration-500 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
       <div
-        className="fixed inset-0 bg-gray-300 opacity-80"
+        className="fixed inset-0"
         onClick={onClose}
+        style={backgroundStyle}
       ></div>
       <div
-        className={`fixed inset-0 m-auto bg-white rounded-md w-fit h-fit max-h-screen overflow-y-auto text-gray-800 ${className}`}
+        className={`fixed inset-0 m-auto rounded-lg w-fit h-fit max-h-screen overflow-y-auto text-gray-800 shadow-xl ${className}`}
       >
         <div>{children}</div>
       </div>

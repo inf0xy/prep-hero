@@ -4,13 +4,19 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import Modal from '../reusables/Modal';
+import ConfirmPanel from '../reusables/ConfirmPanel';
 import EditorPreview from '../reusables/EditorPreview';
 import classes from './ProblemItem.module.css';
 import { Problem } from '@/types/dataTypes';
-import { statusStyle, stripStyle } from '@/helpers/extraStyles';
+import {
+  statusStyle,
+  noteStripStyle,
+  fullNoteStyle,
+  colorPrimary
+} from '@/helpers/extraStyles';
 import { colors, oddCellStyle } from '@/helpers/extraStyles';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { setSelectedNote } from '@/store';
+import { deleteNote, setSelectedNote } from '@/store';
 import { formatLongString } from '@/helpers/formatString';
 
 import VideoIcon from '../icons/VideoIcon';
@@ -20,8 +26,10 @@ import CodeIcon from '../icons/CodeIcon';
 import ExpandIcon from '../icons/ExpandIcon';
 import EditIcon from '../icons/EditIcon';
 import TrashIcon from '../icons/TrashIcon';
-import PlusIcon from '../icons/PlusIcon';
 import CodeBracketIcon from '../icons/CodeBracketIcon';
+import PlusIconOutline from '../icons/PlusIconOutline';
+import Button from '../reusables/Button';
+import CircleX from '../icons/CircleX';
 
 type ProblemItemProps = {
   problem: Problem;
@@ -36,6 +44,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
 }) => {
   const [showModalSolution, setShowModalSolution] = useState(false);
   const [showModalNote, setShowModalNote] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showProblemNote, setShowProblemNote] = useState(false);
   const {
     list_name,
@@ -46,16 +55,16 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     leetcode_link,
     solution_link
   } = problem;
-  const { data: session } = useSession();
   const { attempted_problems, easy_solved, medium_solved, hard_solved, notes } =
     useAppSelector((state) => state.user);
+  const { data: session } = useSession();
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  let problemNoteContent;
+  let problemNoteContent: string | undefined;
   if (notes) {
     const result = notes.filter((el) => el.title === title);
-    problemNoteContent = result.length ? result[0].content : null;
+    problemNoteContent = result.length ? result[0].content : undefined;
   }
 
   useEffect(() => {
@@ -67,8 +76,19 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   }, [showNotes]);
 
   const handleAddNote = () => {
-    dispatch(setSelectedNote({ list_name, title }));
+    dispatch(setSelectedNote({ list_name, title, problemNoteContent }));
     router.push('/notes/add');
+  };
+
+  const handleEditNote = () => {
+    dispatch(
+      setSelectedNote({ list_name, title, content: problemNoteContent })
+    );
+    router.push('/notes/edit');
+  };
+
+  const handleDeleteNote = async () => {
+    await dispatch(deleteNote(title));
   };
 
   const solvedStatusStyle =
@@ -140,42 +160,52 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       </div>
       {showProblemNote && (
         <div className={classes.note}>
-          <ul className={classes['note-actions']}>
-            {notes && problemNoteContent ? (
+          <div className={classes.strip}></div>
+          <div className={classes.content}>
+            <EditorPreview
+              value={problemNoteContent ? problemNoteContent : ''}
+              extraStyle={noteStripStyle}
+            />
+          </div>
+          {notes && problemNoteContent ? (
+            <ul className={classes['note-actions']}>
               <>
-                <li data-tooltip="Expand" className={classes.expand}>
+                <li
+                  data-tooltip="Expand"
+                  className={classes.expand}
+                  onClick={() => setShowModalNote(true)}
+                >
                   <ExpandIcon width={7} height={7} />
                 </li>
-                <li data-tooltip="Edit" className={classes.edit}>
+                <li
+                  data-tooltip="Edit"
+                  className={classes.edit}
+                  onClick={handleEditNote}
+                >
                   <EditIcon width={8} height={8} />
                 </li>
-                <li data-tooltip="Clear" className={classes.clear}>
+                <li
+                  data-tooltip="Clear"
+                  className={classes.clear}
+                  // onClick={handleDeleteNote}
+                  onClick={() => setShowDeleteConfirm(true)}
+                >
                   <TrashIcon width={8} height={8} />
                 </li>
               </>
-            ) : (
-              <li
-                data-tooltip="New"
-                className={classes.add}
-                onClick={handleAddNote}
-              >
-                <PlusIcon width={8} height={8} />
-              </li>
-            )}
-          </ul>
-          <div className={classes.strip}></div>
-          <EditorPreview
-            value={
-              problemNoteContent
-                ? formatLongString(problemNoteContent, 60)
-                : 'Add a note'
-            }
-            extraStyle={stripStyle}
-          />
+            </ul>
+          ) : (
+            <div className={classes.add}>
+              <span onClick={handleAddNote}>
+                <PlusIconOutline width={8} height={8} />
+              </span>
+              <p>Add a note</p>
+            </div>
+          )}
         </div>
       )}
       {showModalSolution && (
-        <Modal onClose={() => setShowModalSolution(false)}>
+        <Modal type="blur" onClose={() => setShowModalSolution(false)}>
           <Image
             src={solution_link}
             alt="solution code"
@@ -184,9 +214,39 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           />
         </Modal>
       )}
-      {/* {showModalNote && (
-        <Modal onClose={() => setShowModalNote(false)}><TextEditor /></Modal>
-      )} */}
+      {showModalNote && (
+        <Modal
+          className="bg-[#333]"
+          type="blur"
+          onClose={() => setShowModalNote(false)}
+        >
+          <div
+            className="text-gray-300 hover:text-[#e64900] absolute top-12 right-12 cursor-pointer transition duration-300 ease"
+            onClick={() => setShowModalNote(false)}
+          >
+            <CircleX width={10} height={10} />
+          </div>
+          <div className={classes['modal__full-note']}>
+            <EditorPreview
+              value={problemNoteContent!}
+              extraStyle={fullNoteStyle}
+            />
+          </div>
+        </Modal>
+      )}
+      {showDeleteConfirm && (
+        <ConfirmPanel
+          onCancel={() => setShowDeleteConfirm(false)}
+          onConfirm={() => {
+            handleDeleteNote();
+            setShowDeleteConfirm(false);
+          }}
+          cancelText="Cancel"
+          confirmText="Confirm"
+          headerText="Are you sure?"
+          message="You are about to delete this note."
+        />
+      )}
     </>
   );
 };

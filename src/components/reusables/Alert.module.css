@@ -1,5 +1,6 @@
 .alert {
   width: fit-content;
+  font-size: 1.6rem;
   max-width: 50rem;
   position: fixed;
   bottom: 2rem;

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import '@uiw/react-markdown-preview/markdown.css';
 import '@uiw/react-md-editor/markdown-editor.css';
@@ -9,7 +9,7 @@ import { modeColors } from '@/helpers/extraStyles';
 
 interface TextEditorProps {
   value: string;
-  setValue: Dispatch<SetStateAction<string>>;
+  setValue: (val: string) => void;
   className?: string;
   defaultMode: boolean;
 }

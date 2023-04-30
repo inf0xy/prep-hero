@@ -1,4 +1,9 @@
-const CircleX = () => {
+type CircleXProps = {
+  width?: number;
+  height?: number;
+};
+
+const CircleX: React.FC<CircleXProps> = ({ width, height }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -6,7 +11,7 @@ const CircleX = () => {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      className="w-8 h-8"
+      className={`w-${width || 8} h-${height || 9}`}
     >
       <path
         strokeLinecap="round"

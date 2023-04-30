@@ -1,0 +1,4 @@
+.note-page {
+  min-height: calc(100vh - 150px);
+  padding: 5rem;
+}

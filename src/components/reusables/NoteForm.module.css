@@ -1,19 +1,17 @@
 .add-notes {
-  min-height: calc(100vh - 150px);
   display: flex;
   flex-direction: column;
-  padding: 5rem;
   font-size: 1.4rem;
 }
 
 .add-notes__content {
-  margin-top: 3rem;
+  margin-top: 6rem;
 }
 
 .add-notes__actions {
   display: flex;
   gap: 2rem;
-  margin-top: 3rem;
+  margin-top: 5rem;
   align-self: center;
 }
 

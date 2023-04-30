@@ -2,7 +2,7 @@ import { useAppSelector } from '@/hooks/hooks';
 import NoteForm from '@/components/reusables/NoteForm';
 import classes from '@/styles/NotePage.module.css';
 
-const AddNotePage = () => {
+const EditNotePage = () => {
   const { selectedNote } = useAppSelector((state) => state.notes);
 
   return (
@@ -10,6 +10,7 @@ const AddNotePage = () => {
       <NoteForm
         listName={selectedNote.listName}
         title={selectedNote.title}
+        content={selectedNote.content}
         destination="/problems"
         disableListName={true}
         disableTitle={true}
@@ -18,4 +19,4 @@ const AddNotePage = () => {
   );
 };
 
-export default AddNotePage;
+export default EditNotePage;

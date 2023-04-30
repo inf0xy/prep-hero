@@ -213,17 +213,3 @@ export const dates = [
   { month: '11', abbreviation: 'Nov', days: 30, year: currentYear },
   { month: '12', abbreviation: 'Dec', days: 31, year: currentYear },
 ]
-
-export const grayColors = {
-  50: 'hsl(265, 55%, 96%)',
-  100: 'hsl(265, 19%, 88%)',
-  200: 'hsl(265, 7%, 70%)',
-  300: 'hsl(265, 6%, 66%)',
-  400: 'hsl(265, 4%, 57%)',
-  500: 'hsl(265, 3%, 53%)',
-  600: 'hsl(265, 4%, 42%)',
-  700: 'hsl(265, 4%, 31%)',
-  800: 'hsl(276, 5%, 20%)',
-  900: 'hsl(280, 5%, 13%)'
-}
-

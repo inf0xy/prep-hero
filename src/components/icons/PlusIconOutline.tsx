@@ -1,11 +1,11 @@
-type PlusIconProps = {
+type PlusIconOutlineProps = {
   className?: string;
   width?: number;
   height?: number;
   extraStyle?: object;
 };
 
-const PlusIcon: React.FC<PlusIconProps> = ({
+const PlusIconOutline: React.FC<PlusIconOutlineProps> = ({
   className,
   width,
   height,
@@ -32,4 +32,4 @@ const PlusIcon: React.FC<PlusIconProps> = ({
   );
 };
 
-export default PlusIcon;
+export default PlusIconOutline;

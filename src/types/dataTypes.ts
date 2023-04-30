@@ -32,9 +32,9 @@ export type SearchCriteria = {
 };
 
 export type Note = {
-  listName: string;
-  title: string;
-  content: string;
+  listName: string | undefined;
+  title: string | undefined;
+  content: string | undefined;
 };
 export type AttemptedProblem = { title: string };
 export type EasySolved = { title: string };
