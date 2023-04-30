@@ -16,7 +16,7 @@ import {
 } from '@/helpers/extraStyles';
 import { colors, oddCellStyle } from '@/helpers/extraStyles';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { deleteNote, setSelectedNote } from '@/store';
+import { deleteNote, setSelectedNote, setSelectedProblem } from '@/store';
 import { formatLongString } from '@/helpers/formatString';
 
 import VideoIcon from '../icons/VideoIcon';
@@ -28,7 +28,6 @@ import EditIcon from '../icons/EditIcon';
 import TrashIcon from '../icons/TrashIcon';
 import CodeBracketIcon from '../icons/CodeBracketIcon';
 import PlusIconOutline from '../icons/PlusIconOutline';
-import Button from '../reusables/Button';
 import CircleX from '../icons/CircleX';
 
 type ProblemItemProps = {
@@ -53,7 +52,9 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     category,
     companies,
     leetcode_link,
-    solution_link
+    solution_link,
+    description,
+    tags
   } = problem;
   const { attempted_problems, easy_solved, medium_solved, hard_solved, notes } =
     useAppSelector((state) => state.user);
@@ -81,9 +82,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   };
 
   const handleEditNote = () => {
-    dispatch(
-      setSelectedNote({ list_name, title, content: problemNoteContent })
-    );
+    dispatch(setSelectedProblem(problem));
     router.push('/notes/edit');
   };
 
@@ -91,12 +90,20 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     await dispatch(deleteNote(title));
   };
 
+  const handleEditProblem = () => {
+    dispatch(
+      setSelectedNote(problem)
+    );
+    router.push('/admin/edit');
+  };
+
   const solvedStatusStyle =
-    session &&
-    (easy_solved.some((el) => el.title === title) ||
-      medium_solved.some((el) => el.title === title) ||
-      hard_solved.some((el) => el.title === title) ||
-      attempted_problems.some((el) => el.title === title))
+    session?.session.user.account_type === 'admin' ||
+    (session &&
+      (easy_solved.some((el) => el.title === title) ||
+        medium_solved.some((el) => el.title === title) ||
+        hard_solved.some((el) => el.title === title) ||
+        attempted_problems.some((el) => el.title === title)))
       ? statusStyle
       : {};
 
@@ -104,10 +111,22 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     <>
       <div className={classes.problem} style={oddCell ? oddCellStyle : {}}>
         <div className={classes['solved-content']} style={solvedStatusStyle}>
-          {attempted_problems.some((el) => el.title === title) ? (
-            <CodeBracketIcon data-tooltip="Attempted" />
+          {session?.session.user.account_type === 'user' ? (
+            <>
+              {attempted_problems.some((el) => el.title === title) ? (
+                <CodeBracketIcon data-tooltip="Attempted" />
+              ) : (
+                <CheckIcon data-tooltip="Solved" width="18" height="18" />
+              )}
+            </>
           ) : (
-            <CheckIcon data-tooltip="Solved" width="18" height="18" />
+            <span onClick={handleEditProblem}>
+              <EditIcon
+                width={7}
+                height={7}
+                className="cursor-pointer hover:text-[#ff7230] transition ease duration-300"
+              />
+            </span>
           )}
         </div>
         <div className={classes['category-content']}>{category}</div>

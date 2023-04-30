@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { useSession } from 'next-auth/react';
 import { Problem } from '@/types/dataTypes';
 import ProblemItem from './ProblemItem';
 import classes from './ProblemList.module.css';
@@ -7,7 +7,7 @@ import SortIcon from '../icons/SortIcon';
 interface ProblemListProps {
   problems: Problem[];
   onSort: (field: string) => void;
-  showNotes: boolean;
+  showNotes?: boolean;
 }
 
 const ProblemList: React.FC<ProblemListProps> = ({
@@ -15,11 +15,13 @@ const ProblemList: React.FC<ProblemListProps> = ({
   onSort,
   showNotes
 }) => {
+  const { data: session } = useSession();
+
   const renderedProblems = problems.map((problem, index) => (
     <ProblemItem
       key={problem.title}
       problem={problem}
-      showNotes={showNotes}
+      showNotes={showNotes!}
       oddCell={index % 2 === 1 ? true : false}
     />
   ));
@@ -28,7 +30,9 @@ const ProblemList: React.FC<ProblemListProps> = ({
     <div role="table" className={classes['problems-table']}>
       <div className={classes['table-header']}>
         <div role="row" className={classes['solved-header']}>
-          <div>Solved</div>
+          <div>
+            {session?.session.user.account_type === 'user' ? 'Status' : 'Edit'}
+          </div>
         </div>
         <div role="row" className={classes['category-header']}>
           <span>Category</span>

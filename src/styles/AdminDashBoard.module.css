@@ -2,12 +2,13 @@
   min-height: calc(100vh - 150px);
   display: flex;
   flex-direction: column;
-  background-color: var(--background-color-300);
+  background-color: var(--background-color-500);
   font-size: 1.5rem;
+  padding: 5rem;
 }
 
 .create-button {
-  margin: 2rem 5rem;
+  margin-bottom: 4rem;
   width: fit-content;
   padding: 1rem 2rem;
   background-color: var(--color-primary-100);

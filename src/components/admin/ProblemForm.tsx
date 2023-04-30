@@ -11,7 +11,7 @@ import Alert from '@/components/reusables/Alert';
 import Button from '@/components/reusables/Button';
 import ListName from './ListName';
 import { validateAddedProblems } from '@/helpers/validateProblemForm';
-import { GeneralFormData } from '@/types/dataTypes';
+import { GeneralFormData, Problem } from '@/types/dataTypes';
 import { NotificationType } from '@/types/dataTypes';
 import { formatString } from '@/helpers/formatString';
 
@@ -20,18 +20,32 @@ interface AddProblem {
   message: string;
 }
 
-const ProblemForm = () => {
+type ProblemFormProps = {
+  problem?: Problem
+}
+
+const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
+  const listName = problem?.list_name || '';
+  const title = problem?.title || '';
+  const difficulty = problem?.category || '';
+  const category = problem?.category || '';
+  const tags = problem?.tags || [];
+  const companies = problem?.companies || [];
+  const leetcodeLink = problem?.leetcode_link || '';
+  const videoLink = problem?.solution_link || '';
+  const noteDescription = problem?.description || '';
+console.log(problem);
   const [generalInfo, setGeneralInfo] = useState<GeneralFormData>({
-    listName: '',
-    title: '',
-    difficulty: '',
-    category: '',
-    tags: [],
-    companies: [],
-    leetcodeLink: '',
-    videoLink: ''
+    listName,
+    title,
+    difficulty,
+    category,
+    tags,
+    companies,
+    leetcodeLink,
+    videoLink
   });
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState(noteDescription);
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType>({
     status: undefined,

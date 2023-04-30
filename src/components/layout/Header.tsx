@@ -1,10 +1,16 @@
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
+import ConfirmPanel from '../reusables/ConfirmPanel';
 import classes from './Header.module.css';
+import UserMenu from '../user/UserMenu';
 
 const Header = () => {
+  const [userMenuVisible, setUserMenuVisible] = useState(false);
+  const [confirmPanelVisible, setConfirmPanelVisible] = useState(false);
+  const avatarRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -24,17 +30,12 @@ const Header = () => {
       </Link>
       <nav>
         <ul className={classes['main-nav']}>
-          {/* <li>
+          <li>
             <Link href="/about">Resources</Link>
-          </li> */}
+          </li>
           <li>
             <Link href="/problems">Problems</Link>
           </li>
-          {session && session.session.user.account_type === 'admin' && (
-            <li>
-              <Link href="/admin">Dashboard</Link>
-            </li>
-          )}
         </ul>
       </nav>
       {!session ? (
@@ -51,22 +52,36 @@ const Header = () => {
           </nav>
         </>
       ) : (
-        <nav>
-          <ul className={classes.auth}>
-            <li className={classes.logout} onClick={handleLogout}>
-              <p>Logout</p>
-            </li>
-            <li className={classes.avatar}>
-              <Image
-                src="/user.png"
-                alt="avatar"
-                width={32}
-                height={32}
-                className="white"
-              />
-            </li>
-          </ul>
-        </nav>
+        <div
+          ref={avatarRef}
+          className={classes.avatar}
+          onClick={() => setUserMenuVisible((prev) => !prev)}
+        >
+          <Image
+            src="/user.png"
+            alt="avatar"
+            width={32}
+            height={32}
+            className="white"
+          />
+          {userMenuVisible && (
+            <UserMenu
+              onClose={setUserMenuVisible}
+              onTriggerLogout={setConfirmPanelVisible}
+              avatarRef={avatarRef}
+            />
+          )}
+        </div>
+      )}
+      {confirmPanelVisible && (
+        <ConfirmPanel
+          headerText="Are you sure?"
+          message="You are about to log out."
+          cancelText="Cancel"
+          confirmText="Logout"
+          onCancel={() => setConfirmPanelVisible(false)}
+          onConfirm={handleLogout}
+        />
       )}
     </header>
   );

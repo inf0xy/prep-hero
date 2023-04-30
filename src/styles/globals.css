@@ -23,12 +23,13 @@
   --color-grey-700: hsl(265, 4%, 31%);
   --color-grey-800: hsl(276, 5%, 20%);
   --color-grey-900: hsl(280, 5%, 13%);
-  --background-color-50: #2b2b2b;
-  --background-color-100: #212121;
-  --background-color-200: #181818;
-  --background-color-300: #151515;
-  --background-color-400: #141414;
-  --background-color-500: #050505;
+  --background-color-100: #3a3a3a;
+  --background-color-200: #2b2b2b;
+  --background-color-300: #212121;
+  --background-color-400: #181818;
+  --background-color-500: #151515;
+  --background-color-600: #141414;
+  --background-color-700: #050505;
   --facebook-background-color: #2b70c0;
   --google-background-color: #35b46d;
   --github-background-color: #3b3b3b;
@@ -93,7 +94,7 @@ body {
   line-height: 1;
   font-weight: 400;
   color: #fff;
-  background-color: var(--background-color-200);
+  background-color: var(--background-color-400);
 }
 
 /* .text-editor .w-md-editor-content,

@@ -106,7 +106,7 @@ export const getProblems = async (
     delete filters['$or'];
     filters['$text'] = { $search: textFilter };
     result = await problemsCollection
-      .find(filters, { projection: { _id: 0, tags: 0, description: 0 } })
+      .find(filters, { projection: { _id: 0 } })
       .skip(skipNum)
       .limit(ITEMS_PER_PAGE)
       .toArray();

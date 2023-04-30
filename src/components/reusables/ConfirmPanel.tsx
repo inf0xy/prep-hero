@@ -72,13 +72,13 @@ const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
               className="btn btn-lg text-[1.5rem] bg-gray-600 hover:bg-gray-600 hover:opacity-70 border-0 normal-case"
               onClick={onCancel}
             >
-              Cancel
+              {cancelText}
             </button>
             <button
               className="btn btn-lg bg-[#009989] hover:opacity-70 hover:bg-[#009989]  border-0 text-[1.5rem] btn-primary normal-case"
               onClick={onConfirm}
             >
-              Confirm
+              {confirmText}
             </button>
           </div>
         </div>

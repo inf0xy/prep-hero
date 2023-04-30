@@ -35,7 +35,6 @@ const Modal: React.FC<ModalProps> = ({
   const backgroundStyle =
     type === 'clear' ? modalBackgroundClear : modalBackgroundBlur;
 
-
   return createPortal(
     <div
       className={`transition-opacity duration-500 ${

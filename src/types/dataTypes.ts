@@ -10,15 +10,15 @@ export type GeneralFormData = {
 };
 
 export type Problem = {
-  list_name: string;
-  title: string;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-  category: string;
-  tags?: string[];
-  companies: string[];
-  description?: string;
-  leetcode_link: string;
-  solution_link: string;
+  list_name: string | undefined;
+  title: string | undefined;
+  difficulty: 'Easy' | 'Medium' | 'Hard' | undefined;
+  category: string | undefined;
+  tags?: string[] | undefined;
+  companies: string[] | undefined;
+  description?: string | undefined;
+  leetcode_link: string | undefined;
+  solution_link: string | undefined;
   [key: string]: any;
 };
 

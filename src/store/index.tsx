@@ -5,11 +5,13 @@ import notesSlice, {
   addOrUpdateNote,
   deleteNote
 } from './slices/notesSlice';
+import problemsReducer, { setSelectedProblem } from './slices/problemsSlice';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    notes: notesSlice
+    notes: notesSlice,
+    problems: problemsReducer
   }
 });
 export type RootState = ReturnType<typeof store.getState>;
@@ -19,5 +21,6 @@ export {
   fetchUserData,
   setSelectedNote,
   addOrUpdateNote,
-  deleteNote
+  deleteNote,
+  setSelectedProblem
 };
