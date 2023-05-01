@@ -11,8 +11,7 @@ import { Problem } from '@/types/dataTypes';
 import {
   statusStyle,
   noteStripStyle,
-  fullNoteStyle,
-  colorPrimary
+  fullNoteStyle
 } from '@/helpers/extraStyles';
 import { colors, oddCellStyle } from '@/helpers/extraStyles';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
@@ -56,7 +55,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     description,
     tags
   } = problem;
-
   const { attempted_problems, easy_solved, medium_solved, hard_solved, notes } =
     useAppSelector((state) => state.user);
   const { data: session } = useSession();
@@ -92,9 +90,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   };
 
   const handleEditProblem = () => {
-    dispatch(
-      setSelectedProblem(problem)
-    );
+    dispatch(setSelectedProblem(problem));
     router.push('/admin/edit');
   };
 
@@ -175,7 +171,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           className={`${classes['companies-content']}`}
           data-tooltip={companies!.join(', ')}
         >
-          {formatLongString(companies!.join(', '), 80)}
+          {/* {formatLongString(companies!.join(', '), 80)} */}
+          <p className={classes.cell}>{companies!.join(', ')}</p>
         </div>
       </div>
       {showProblemNote && (
@@ -207,7 +204,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 <li
                   data-tooltip="Clear"
                   className={classes.clear}
-                  // onClick={handleDeleteNote}
                   onClick={() => setShowDeleteConfirm(true)}
                 >
                   <TrashIcon width={8} height={8} />
@@ -224,6 +220,56 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           )}
         </div>
       )}
+      {/* {transition((style, item) =>
+        item ? (
+          <animated.div style={style}>
+            <div className={classes.note}>
+              <div className={classes.strip}></div>
+              <div className={classes.content}>
+                <EditorPreview
+                  value={problemNoteContent ? problemNoteContent : ''}
+                  extraStyle={noteStripStyle}
+                />
+              </div>
+              {notes && problemNoteContent ? (
+                <ul className={classes['note-actions']}>
+                  <>
+                    <li
+                      data-tooltip="Expand"
+                      className={classes.expand}
+                      onClick={() => setShowModalNote(true)}
+                    >
+                      <ExpandIcon width={7} height={7} />
+                    </li>
+                    <li
+                      data-tooltip="Edit"
+                      className={classes.edit}
+                      onClick={handleEditNote}
+                    >
+                      <EditIcon width={8} height={8} />
+                    </li>
+                    <li
+                      data-tooltip="Clear"
+                      className={classes.clear}
+                      onClick={() => setShowDeleteConfirm(true)}
+                    >
+                      <TrashIcon width={8} height={8} />
+                    </li>
+                  </>
+                </ul>
+              ) : (
+                <div className={classes.add}>
+                  <span onClick={handleAddNote}>
+                    <PlusIconOutline width={8} height={8} />
+                  </span>
+                  <p>Add a note</p>
+                </div>
+              )}
+            </div>
+          </animated.div>
+        ) : null
+      )} */}
+
       {showModalSolution && (
         <Modal type="blur" onClose={() => setShowModalSolution(false)}>
           <Image

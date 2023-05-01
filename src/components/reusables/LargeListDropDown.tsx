@@ -26,6 +26,7 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const divEl = useRef<HTMLDivElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handler = (event: React.MouseEvent<HTMLElement>) => {
@@ -33,6 +34,9 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
         return;
       }
       if (!divEl.current.contains(event.target as Node)) {
+        setTimeout(() => {
+          setIsVisible(false);
+        }, 300);
         setIsOpen(false);
       }
     };
@@ -44,11 +48,21 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
   }, []);
 
   const handleOptionClick: (selected: Option) => void = (selectedOption) => {
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 300);
     setIsOpen(false);
     onChange(selectedOption);
   };
 
   const handleToggle = () => {
+    if (isOpen) {
+      setTimeout(() => {
+        setIsVisible(false);
+      }, 300);
+    } else {
+      setIsVisible(true);
+    }
     setIsOpen((prev) => !prev);
   };
 
@@ -99,7 +113,7 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
           isOpen ? classes['options_show'] : classes['options_hide']
         } rounded-md`}
         onClick={() => {}}
-        style={{ width: '40rem' }}
+        style={{ width: '40rem', visibility: isVisible ? 'visible' : 'hidden' }}
       >
         {renderOptions}
       </Panel>

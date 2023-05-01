@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTransition, animated } from 'react-spring';
 import Panel from './Panel';
 import ChevronUp from '@/components/icons/ChevronUp';
 import ChevronDown from '@/components/icons/ChevronDown';
@@ -26,6 +27,11 @@ const DropDown: React.FC<DropDownProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const divEl = useRef<HTMLDivElement | null>(null);
+  const transition = useTransition(isOpen, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 }
+  });
 
   useEffect(() => {
     const handler = (event: React.MouseEvent<HTMLElement>) => {
@@ -63,7 +69,11 @@ const DropDown: React.FC<DropDownProps> = ({
   ));
 
   return (
-    <div ref={divEl} className="relative text-[1.4rem] font-medium" style={{ width }}>
+    <div
+      ref={divEl}
+      className="relative text-[1.4rem] font-medium"
+      style={{ width }}
+    >
       <Panel
         className={`
           bg-[#454545] flex justify-between items-center cursor-pointer font-light rounded-md
@@ -71,9 +81,7 @@ const DropDown: React.FC<DropDownProps> = ({
         onClick={handleToggle}
       >
         <span className="px-5 font-medium text-gray-200">{defaultText}</span>
-        <div
-          className={`flex items-center justify-center w-fit h-[3rem] px-1`}
-        >
+        <div className={`flex items-center justify-center w-fit h-[3rem] px-1`}>
           <div className="relative w-7 h-full mr-3">
             <ChevronDown
               className={`absolute top-[25%] left-[5%] text-lg text-white ${
@@ -88,14 +96,21 @@ const DropDown: React.FC<DropDownProps> = ({
           </div>
         </div>
       </Panel>
-      <Panel
-        className={`absolute top-full p-3 mt-[3px] bg-[#3a3a3a] z-50 ${
-          isOpen ? classes['options_show'] : classes['options_hide']
-        } rounded-md`}
-        onClick={() => {}}
-      >
-        {renderOptions}
-      </Panel>
+      {transition((style, item) =>
+        item ? (
+          <animated.div style={style}>
+            <Panel
+              // className={`absolute top-full p-3 mt-[3px] bg-[#3a3a3a] z-50 ${
+              //   isOpen ? classes['options_show'] : classes['options_hide']
+              // } rounded-md`}
+              className={`absolute top-full p-3 mt-[3px] bg-[#3a3a3a] z-50 rounded-md`}
+              onClick={() => {}}
+            >
+              {renderOptions}
+            </Panel>
+          </animated.div>
+        ) : null
+      )}
     </div>
   );
 };

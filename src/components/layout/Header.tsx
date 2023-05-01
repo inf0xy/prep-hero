@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
-import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { useTransition, animated } from 'react-spring';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import ConfirmPanel from '../reusables/ConfirmPanel';
@@ -10,9 +10,13 @@ import UserMenu from '../user/UserMenu';
 const Header = () => {
   const [userMenuVisible, setUserMenuVisible] = useState(false);
   const [confirmPanelVisible, setConfirmPanelVisible] = useState(false);
+  const userMenuTransition = useTransition(userMenuVisible, {
+    from: { opacity: 1 },
+    leave: { opacity: 0 }
+  });
+
   const avatarRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
-  const router = useRouter();
 
   const handleLogout = () => {
     signOut({ redirect: true, callbackUrl: '/auth/login' });
@@ -64,12 +68,16 @@ const Header = () => {
             height={32}
             className="white"
           />
-          {userMenuVisible && (
-            <UserMenu
-              onClose={setUserMenuVisible}
-              onTriggerLogout={setConfirmPanelVisible}
-              avatarRef={avatarRef}
-            />
+          {userMenuTransition((style, item) =>
+            item ? (
+              <animated.div style={style}>
+                <UserMenu
+                  onClose={setUserMenuVisible}
+                  onTriggerLogout={setConfirmPanelVisible}
+                  avatarRef={avatarRef}
+                />
+              </animated.div>
+            ) : null
           )}
         </div>
       )}

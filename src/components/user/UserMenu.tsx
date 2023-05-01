@@ -52,7 +52,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
   return (
     <div
       ref={ref}
-      className={`transition-opacity duration-300 ${
+      className={`transition-opacity duration-500 ${
         isVisible ? 'opacity-100' : 'opacity-0'
       } ${classes['user-menu']}`}
     >

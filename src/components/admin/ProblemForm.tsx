@@ -100,7 +100,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
             (company) => company.toLowerCase() !== el.trim().toLowerCase()
           )
         ) {
-          selectedCompanies.push(formatString(el.trim()));
+          selectedCompanies.push(el !== 'eBay' ? formatString(el.trim()) : el.trim());
         }
       });
     }
@@ -290,7 +290,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
         >
           Back
         </Button>
-        <Button className="self-center" extraStyle={{ padding: '1rem 4rem' }}>
+        <Button className="self-center" extraStyle={{ padding: '1rem 4rem' }} onClick={handleSubmit}>
           Submit
         </Button>
       </div>

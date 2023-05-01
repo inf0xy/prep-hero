@@ -1,0 +1,129 @@
+.heatmap-calendar {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  background-color: #3a3a3a;
+  width: fit-content;
+  gap: 0.5rem;
+}
+
+.heatmap-month {
+  font-size: 1.2rem;
+  margin-bottom: 0.6rem;
+}
+
+.heatmap-weekdays {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  align-self: flex-end;
+  gap: 1.1px;
+}
+
+.heatmap-week {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.heatmap-day {
+  width: 9px;
+  height: 9px;
+  position: relative;
+}
+
+.heatmap-day:hover:after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 25rem;
+  max-width: 28rem;
+  font-size: 1.2rem;
+  background-color: var(--light-background-color-100);
+  color: var(--color-grey-800);
+  padding: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+
+.heatmap-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+}
+
+
+.heatmap-month-name {
+  /* text-transform: uppercase; */
+}
+
+.heatmap-month-date{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heatmap-year {
+  /* font-size: 18px;
+  font-weight: normal;
+  margin-left: 10px; */
+}
+
+
+.heatmap-weekday {
+  /* width: 30px;
+  height: 30px; */
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  /* text-transform: uppercase; */
+  /* font-weight: bold; */
+  /* color: #999; */
+  /* border: 1px solid #eee; */
+}
+
+.heatmap-day {
+  /* width: 9px;
+  height: 9px; */
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  /* color: #fff; */
+  /* font-weight: bold; */
+  /* border: 1px solid #eee; */
+}
+
+/* .heatmap-day.sun {
+  background-color: #e74c3c;
+}
+
+.heatmap-day.mon {
+  background-color: #f1c40f;
+}
+
+.heatmap-day.tue {
+  background-color: #3498db;
+}
+
+.heatmap-day.wed {
+  background-color: #2ecc71;
+}
+
+.heatmap-day.thu {
+  background-color: #9b59b6;
+}
+
+.heatmap-day.fri {
+  background-color: #1abc9c;
+}
+
+.heatmap-day.sat {
+  background-color: #34495e;
+} */
+
+

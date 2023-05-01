@@ -34,14 +34,13 @@
 }
 
 .options_show {
-  visibility: visible;
   pointer-events: all;
   transition: opacity 0.5s ease-out;
 }
 
 .options_hide {
-  visibility: hidden;
   pointer-events: none;
+  transition: opacity 0.5s ease-out;
 }
 
 .option-item {
