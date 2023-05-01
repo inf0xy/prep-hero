@@ -4,9 +4,10 @@ import { companies } from '@/helpers/formFields';
 
 type CompaniesProps = {
   setGeneralInfo: Dispatch<SetStateAction<GeneralFormData>>;
+  currentSelectedCompanies: string[]
 };
 
-const Companies: React.FC<CompaniesProps> = ({ setGeneralInfo }) => {
+const Companies: React.FC<CompaniesProps> = ({ setGeneralInfo, currentSelectedCompanies }) => {
   const renderedCompanies = companies.map((el) => (
     <div key={el} className="form-control w-fit mt-2">
       <label className="label cursor-pointer">
@@ -15,6 +16,7 @@ const Companies: React.FC<CompaniesProps> = ({ setGeneralInfo }) => {
           type="checkbox"
           className={`checkbox checkbox-success ml-3`}
           value={el}
+          checked={currentSelectedCompanies.includes(el)}
           onChange={(e) =>
             setGeneralInfo((prev) => ({
               ...prev,

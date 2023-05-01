@@ -51,9 +51,25 @@ export const addNewProblems = async (problem: Problem) => {
   return problemsCollection.insertOne(problem);
 };
 
-// export const updateProblem = async (problem: Problem) => {
-//   await connectDB();
-// };
+export const updateProblem = async (problem: Problem) => {
+  await connectDB();
+  return problemsCollection.updateOne(
+    { title: problem.title },
+    {
+      $set: {
+        list_name: problem.list_name,
+        title: problem.title,
+        difficulty: problem.difficulty,
+        category: problem.category,
+        tags: problem.tags,
+        companies: problem.companies,
+        leetcode_link: problem.leetcode_link,
+        solution_link: problem.solution_link,
+        description: problem.description
+      }
+    }
+  );
+};
 
 export const getProblems = async (
   page: number,
@@ -97,7 +113,7 @@ export const getProblems = async (
   }
 
   let result = await problemsCollection
-    .find(filters, { projection: { _id: 0, tags: 0, description: 0 } })
+    .find(filters, { projection: { _id: 0 } })
     .skip(skipNum)
     .limit(ITEMS_PER_PAGE)
     .toArray();

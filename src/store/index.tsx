@@ -5,7 +5,7 @@ import notesSlice, {
   addOrUpdateNote,
   deleteNote
 } from './slices/notesSlice';
-import problemsReducer, { setSelectedProblem } from './slices/problemsSlice';
+import problemsReducer, { setSelectedProblem, addProblem, updateProblem } from './slices/problemsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -22,5 +22,7 @@ export {
   setSelectedNote,
   addOrUpdateNote,
   deleteNote,
-  setSelectedProblem
+  setSelectedProblem,
+  addProblem,
+  updateProblem
 };

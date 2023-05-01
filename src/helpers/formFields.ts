@@ -87,9 +87,11 @@ export const companyListOption = [
   { label: 'Coinbase', value: 'Coinbase' },
   { label: 'Cisco', value: 'Cisco' },
   { label: 'Coinbase', value: 'Coinbase' },
+  { label: 'eBay', value: 'eBay' },
   { label: 'Facebook (Meta)', value: 'Facebook (Meta)' },
   { label: 'Google', value: 'Google' },
   { label: 'Intel', value: 'Intel' },
+  { label: 'LinkedIn', value: 'LinkedIn' },
   { label: 'Lyft', value: 'Lyft' },
   { label: 'Intel', value: 'Intel' },
   { label: 'Netflix', value: 'Netflix' },
@@ -101,7 +103,9 @@ export const companyListOption = [
   { label: 'Twitch', value: 'Twitch' },
   { label: 'Saleforces', value: 'Saleforces' },
   { label: 'SpotifyUber', value: 'SpotifyUber' },
+  { label: 'TikTok', value: 'TikTok' },
   { label: 'Uber', value: 'Uber' },
+  { label: 'Walmart', value: 'Walmart' },
   { label: 'Yahoo', value: 'Yahoo' }
 ];
 
@@ -181,9 +185,11 @@ export const companies = [
   'Bloomberg',
   'Coinbase',
   'Cisco',
+  'eBay',
   'Facebook (Meta)',
   'Google',
   'Intel',
+  'LinkedIn',
   'Lyft',
   'Netflix',
   'Microsoft',
@@ -193,7 +199,9 @@ export const companies = [
   'Twitch',
   'Saleforces',
   'Spotify',
+  'TikTok',
   'Uber',
+  'Walmart',
   'Yahoo'
 ];
 

@@ -1,6 +1,5 @@
-import { addNewProblems } from '@/lib/database/problems';
+import { addNewProblems, updateProblem } from '@/lib/database/problems';
 import { NextApiRequest, NextApiResponse } from 'next';
-import sanitizeHtml from 'sanitize-html';
 import { checkAuth } from '../checkAuth';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -16,45 +15,76 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     description
   } = req.body;
 
-  if (req.method !== 'POST') {
-    return res.status(400).json({ message: 'Invalid' });
-  }
-
-  if (
-    list_name &&
-    title &&
-    difficulty &&
-    category &&
-    tags &&
-    companies &&
-    leetcode_link &&
-    solution_link &&
-    description
-  ) {
-    const sanitizedDescription = sanitizeHtml(description);
-    try {
-      const result = await addNewProblems({
-        list_name,
-        title,
-        difficulty,
-        category,
-        tags,
-        companies,
-        leetcode_link,
-        solution_link,
-        description: sanitizedDescription
-      });
-      res.status(201).json({ message: 'Successfully added new problem.' });
-    } catch (err: any) {
-      if (err.message.includes('duplicate key error')) {
-        res.status(422).json({ message: 'Title already existed.' });
-      } else {
-        console.error(err);
-        res.status(500).json({ message: 'Unable to add new problems.' });
+  if (req.method === 'POST') {
+    if (
+      list_name &&
+      title &&
+      difficulty &&
+      category &&
+      tags &&
+      companies &&
+      leetcode_link &&
+      solution_link &&
+      description
+    ) {
+      try {
+        const result = await addNewProblems({
+          list_name,
+          title,
+          difficulty,
+          category,
+          tags,
+          companies,
+          leetcode_link,
+          solution_link,
+          description
+        });
+        res.status(201).json({ message: 'Successfully added new problem.' });
+      } catch (err: any) {
+        if (err.message.includes('duplicate key error')) {
+          res.status(422).json({ message: 'Title already existed.' });
+        } else {
+          console.error(err);
+          res.status(500).json({ message: 'Unable to add new problems.' });
+        }
       }
+    } else {
+      res.status(422).json({ message: 'Invalid input' });
+    }
+  } else if (req.method === 'PUT') {
+    if (
+      list_name &&
+      title &&
+      difficulty &&
+      category &&
+      tags &&
+      companies &&
+      leetcode_link &&
+      solution_link &&
+      description
+    ) {
+      try {
+        const result = await updateProblem({
+          list_name,
+          title,
+          difficulty,
+          category,
+          tags,
+          companies,
+          leetcode_link,
+          solution_link,
+          description
+        });
+        res.status(200).json({ message: 'Successfully updated problem.' });
+      } catch (err: any) {
+        console.error(err);
+        res.status(500).json({ message: 'Unable to update problems.' });
+      }
+    } else {
+      res.status(422).json({ message: 'Invalid input' });
     }
   } else {
-    res.status(422).json({ message: 'Invalid input' });
+    return res.status(400).json({ message: 'Invalid' });
   }
 };
 

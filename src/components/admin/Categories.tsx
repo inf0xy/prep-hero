@@ -4,9 +4,10 @@ import { GeneralFormData } from '@/types/dataTypes';
 
 type CategoriesProps = {
   setGeneralInfo: Dispatch<SetStateAction<GeneralFormData>>;
+  currentSelectedCategory: string
 };
 
-const Categories: React.FC<CategoriesProps> = ({ setGeneralInfo }) => {
+const Categories: React.FC<CategoriesProps> = ({ setGeneralInfo, currentSelectedCategory }) => {
   const renderedCategories = categorySelection.map((el) => (
     <div key={el} className="flex space-x-3">
       <input
@@ -14,6 +15,7 @@ const Categories: React.FC<CategoriesProps> = ({ setGeneralInfo }) => {
         name="category"
         className={`radio radio-info`}
         value={el}
+        checked={currentSelectedCategory === el}
         onChange={(e) =>
           setGeneralInfo((prev) => ({
             ...prev,

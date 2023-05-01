@@ -12,7 +12,7 @@ export type GeneralFormData = {
 export type Problem = {
   list_name: string | undefined;
   title: string | undefined;
-  difficulty: 'Easy' | 'Medium' | 'Hard' | undefined;
+  difficulty: 'Easy' | 'Medium' | 'Hard' | string | undefined;
   category: string | undefined;
   tags?: string[] | undefined;
   companies: string[] | undefined;

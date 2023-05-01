@@ -1,5 +1,4 @@
 import { ObjectId } from 'mongodb';
-import sanitizeHtml from 'sanitize-html';
 import { connectDB, usersCollection } from './db-util';
 import { hashPassword, comparePassword } from '@/lib/auth';
 import { Note } from '@/types/dataTypes';
@@ -130,7 +129,7 @@ export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
           $set: {
             'notes.$.list_name': list_name,
             'notes.$.title': title,
-            'notes.$.content': sanitizeHtml(content)
+            'notes.$.content': content
           }
         }
       );
@@ -143,7 +142,7 @@ export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
             notes: {
               list_name,
               title,
-              content: sanitizeHtml(content)
+              content: content
             }
           }
         }

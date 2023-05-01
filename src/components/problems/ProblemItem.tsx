@@ -56,6 +56,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     description,
     tags
   } = problem;
+
   const { attempted_problems, easy_solved, medium_solved, hard_solved, notes } =
     useAppSelector((state) => state.user);
   const { data: session } = useSession();
@@ -87,12 +88,12 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   };
 
   const handleDeleteNote = async () => {
-    await dispatch(deleteNote(title));
+    await dispatch(deleteNote(title!));
   };
 
   const handleEditProblem = () => {
     dispatch(
-      setSelectedNote(problem)
+      setSelectedProblem(problem)
     );
     router.push('/admin/edit');
   };
@@ -131,7 +132,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
         <div className={classes['category-content']}>{category}</div>
         <div className={classes['title-content']}>
-          {session && (
+          {session && session.session.user.account_type === 'user' && (
             <span
               data-tooltip="Note"
               className={classes['note-icon']}
@@ -142,7 +143,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           )}
           <Link
             target="_blank"
-            href={leetcode_link}
+            href={leetcode_link!}
             className={classes['title-link']}
           >
             {title}
@@ -150,13 +151,13 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
         <div
           className={classes['difficulty-content']}
-          style={{ color: colors[difficulty] }}
+          style={{ color: colors[difficulty!] }}
         >
           {difficulty}
         </div>
         <div className={classes['solution-content']}>
-          {solution_link.includes('youtube') ? (
-            <Link target="_blank" href={solution_link}>
+          {solution_link!.includes('youtube') ? (
+            <Link target="_blank" href={solution_link!}>
               <VideoIcon />
             </Link>
           ) : (
@@ -172,9 +173,9 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
         <div
           className={`${classes['companies-content']}`}
-          data-tooltip={companies.join(', ')}
+          data-tooltip={companies!.join(', ')}
         >
-          {formatLongString(companies.join(', '), 80)}
+          {formatLongString(companies!.join(', '), 80)}
         </div>
       </div>
       {showProblemNote && (
@@ -226,7 +227,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       {showModalSolution && (
         <Modal type="blur" onClose={() => setShowModalSolution(false)}>
           <Image
-            src={solution_link}
+            src={solution_link!}
             alt="solution code"
             width={700}
             height={700}

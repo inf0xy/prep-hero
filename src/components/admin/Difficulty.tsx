@@ -3,18 +3,26 @@ import { Dispatch, SetStateAction } from 'react';
 
 type DifficultyProps = {
   setGeneralInfo: Dispatch<SetStateAction<GeneralFormData>>;
+  currentSelectedDiffs: string
 };
 
-const Difficulty: React.FC<DifficultyProps> = ({ setGeneralInfo }) => {
+enum Diff {
+  Easy = 'Easy',
+  Medium = 'Medium',
+  Hard = 'Hard'
+}
+
+const Difficulty: React.FC<DifficultyProps> = ({ setGeneralInfo, currentSelectedDiffs }) => {
   return (
     <>
-      <div key="Easy" className="flex space-x-3">
-        <label>Easy</label>
+      <div key={Diff.Easy} className="flex space-x-3">
+        <label>{Diff.Easy}</label>
         <input
           type="radio"
           name="radio-5"
           className={`radio radio-success`}
-          value="Easy"
+          value={Diff.Easy}
+          checked={currentSelectedDiffs === Diff.Easy}
           onChange={(e) =>
             setGeneralInfo((prev) => ({
               ...prev,
@@ -23,13 +31,14 @@ const Difficulty: React.FC<DifficultyProps> = ({ setGeneralInfo }) => {
           }
         />
       </div>
-      <div key="Medium" className="flex space-x-3">
-        <label>Medium</label>
+      <div key={Diff.Medium} className="flex space-x-3">
+        <label>{Diff.Medium}</label>
         <input
           type="radio"
           name="difficulty"
           className={`radio radio-warning`}
-          value="Medium"
+          value={Diff.Medium}
+          checked={currentSelectedDiffs === Diff.Medium}
           onChange={(e) =>
             setGeneralInfo((prev) => ({
               ...prev,
@@ -38,13 +47,14 @@ const Difficulty: React.FC<DifficultyProps> = ({ setGeneralInfo }) => {
           }
         />
       </div>
-      <div key="Hard" className="flex space-x-3">
-        <label>Hard</label>
+      <div key={Diff.Hard} className="flex space-x-3">
+        <label>{Diff.Hard}</label>
         <input
           type="radio"
           name="radio-5"
           className={`radio radio-error`}
-          value="Hard"
+          value={Diff.Hard}
+          checked={currentSelectedDiffs === Diff.Hard}
           onChange={(e) =>
             setGeneralInfo((prev) => ({
               ...prev,
