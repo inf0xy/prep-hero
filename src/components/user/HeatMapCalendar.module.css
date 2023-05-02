@@ -1,10 +1,13 @@
 .heatmap-calendar {
   display: flex;
-  align-items: center;
-  margin: 0 auto;
-  background-color: #3a3a3a;
   width: fit-content;
-  gap: 0.5rem;
+  background-color: transparent;
+}
+
+.heatmap-calendar-month {
+  display: flex;
+  align-items: center;
+  margin: 0 0.5rem;
 }
 
 .heatmap-month {
@@ -26,13 +29,14 @@
   gap: 2px;
 }
 
-.heatmap-day {
-  width: 9px;
-  height: 9px;
+.heatmap-day-dark,
+.heatmap-day-light {
+  width: 8px;
+  height: 8px;
   position: relative;
 }
 
-.heatmap-day:hover:after {
+.heatmap-day-dark:hover:after {
   content: attr(data-tooltip);
   position: absolute;
   bottom: 120%;
@@ -50,6 +54,23 @@
   text-align: center;
 }
 
+.heatmap-day-light:hover:after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 25rem;
+  max-width: 28rem;
+  font-size: 1.2rem;
+  background-color: var(--background-color-500);
+  color: var(--color-off-white);
+  padding: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
 
 .heatmap-grid {
   display: flex;
@@ -57,12 +78,11 @@
   gap: 2px;
 }
 
-
 .heatmap-month-name {
   /* text-transform: uppercase; */
 }
 
-.heatmap-month-date{
+.heatmap-month-date {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -74,8 +94,8 @@
   margin-left: 10px; */
 }
 
-
 .heatmap-weekday {
+  margin-right: 0.5rem;
   /* width: 30px;
   height: 30px; */
   /* display: flex;
@@ -97,33 +117,3 @@
   /* font-weight: bold; */
   /* border: 1px solid #eee; */
 }
-
-/* .heatmap-day.sun {
-  background-color: #e74c3c;
-}
-
-.heatmap-day.mon {
-  background-color: #f1c40f;
-}
-
-.heatmap-day.tue {
-  background-color: #3498db;
-}
-
-.heatmap-day.wed {
-  background-color: #2ecc71;
-}
-
-.heatmap-day.thu {
-  background-color: #9b59b6;
-}
-
-.heatmap-day.fri {
-  background-color: #1abc9c;
-}
-
-.heatmap-day.sat {
-  background-color: #34495e;
-} */
-
-

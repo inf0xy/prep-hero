@@ -1,83 +1,75 @@
 import classes from './HeatMapCalendar.module.css';
+import {
+  Month,
+  months,
+  weekdays,
+  getHeatmapColor,
+  weeksInMonth
+} from '@/helpers/heatmap-util';
 
 interface HeatmapCalendarProps {
-  data: { [key: string]: number };
+  data: { [key: string]: number }; // key format : 'YYYY-MM-DD'
+  showWeekdays?: boolean;
+  className?: string;
+  theme?: string;
 }
 
-const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({ data }) => {
-  const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
+const defaultProps = {
+  data: {},
+  showWeekdays: false,
+  className: '',
+  theme: 'dark'
+};
 
+const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({
+  data,
+  showWeekdays,
+  className,
+  theme
+}) => {
   const today = new Date();
   const thisYear = today.getFullYear();
-  // const thisMonth = today.getMonth();
-  const thisMonth = 1;
+  const thisMonth = 4;
 
-  const monthDays = (month: number, year: number) => {
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const startDay = new Date(year, month, 1).getDay();
-    const endDay = new Date(year, month, daysInMonth).getDay();
-
-    return { daysInMonth, startDay, endDay };
-  };
-
-  const weeksInMonth = (month: number, year: number) => {
-    const { daysInMonth, startDay, endDay } = monthDays(month, year);
-    const firstWeek = Math.ceil((1 + 6 - startDay) / 7);
-    const lastWeek = Math.ceil((daysInMonth + (6 - endDay)) / 7);
-
-    return { firstWeek, lastWeek };
-  };
-
-  const getHeatmapColor = (value: number) => {
-    const colorMap = [
-      '#FFF',
-      '#B7E3EE',
-      '#A1DDE9',
-      '#6ECEDC',
-      '#4DBED0',
-      '#2CACC0',
-      '#0C8DA1'
-    ];
-
-    if (value === 0) {
-      return colorMap[0];
-    } else if (value > 6) {
-      return colorMap[6];
-    } else {
-      return colorMap[value];
-    }
-  };
-
-  const renderCalendar = () => {
+  const renderMonth = (monthIndex: number, month: Month) => {
     const weeks = [];
     let count = 0;
-    const { firstWeek, lastWeek } = weeksInMonth(thisMonth, thisYear);
+    const { firstWeek, lastWeek } = weeksInMonth(monthIndex, thisYear);
 
     for (let week = firstWeek; week <= lastWeek; week++) {
       const days = [];
+      let weekdayCount = 0;
+      let firstWeekday = new Date(`${monthIndex + 1}/1/${thisYear}`).getDay();
+      const daySkip = firstWeekday;
 
-      for (let i = 0; i < weekdays.length; i++) {
-        const dayOfWeek = weekdays[i];
-        const date = new Date(thisYear, thisMonth, 1 + (week - 1) * 7 + i);
+      while (weekdayCount < weekdays.length) {
+        if (week === firstWeek && firstWeekday > 0) {
+          while (firstWeekday > 0) {
+            days.push(
+              <div
+                key={weekdays[weekdayCount]}
+                className={`rounded ${classes['heatmap-day']}`}
+                style={{
+                  visibility: 'hidden'
+                }}
+              />
+            );
+            firstWeekday--;
+            weekdayCount++;
+          }
+          continue;
+        }
 
+        const dayOfWeek = weekdays[weekdayCount];
+        const date = new Date(
+          thisYear,
+          monthIndex,
+          1 + (week - 1) * 7 + weekdayCount - daySkip
+        );
         const readableDate = date.toDateString();
         const dateString = date.toISOString().substring(0, 10);
         const value = data[dateString] || 0;
-        const color = getHeatmapColor(value);
+        const color = getHeatmapColor(theme!, value);
         const tooltip =
           value === 0
             ? `No contributions on ${readableDate}`
@@ -85,17 +77,20 @@ const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({ data }) => {
                 value === 1 ? 'contribution' : 'contributions'
               } on ${readableDate}`;
         count++;
+
         days.push(
           <div
             key={dayOfWeek}
-            className={`rounded ${classes['heatmap-day']}`}
+            className={`rounded ${classes[`heatmap-day-${theme}`]}`}
             style={{
               backgroundColor: color,
-              visibility: count > 31 ? 'hidden' : 'visible'
+              visibility:
+                count > months[monthIndex].totalDays ? 'hidden' : 'visible'
             }}
             data-tooltip={tooltip}
           />
         );
+        weekdayCount++;
       }
 
       weeks.push(
@@ -104,36 +99,51 @@ const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({ data }) => {
         </div>
       );
     }
-
     return weeks;
   };
 
-  return (
-    <div className={classes['heatmap-calendar']}>
-      <div className={classes['heatmap-weekdays']}>
-        {weekdays.map((dayOfWeek) => (
-          <div
-            key={dayOfWeek}
-            className={`${
-              dayOfWeek === 'Mon' || dayOfWeek === 'Wed' || dayOfWeek === 'Fri'
-                ? 'opacity-1'
-                : 'opacity-0'
-            } ${classes[`heatmap-weekday ${dayOfWeek.toLowerCase()}`]}`}
-          >
-            {dayOfWeek}
-          </div>
-        ))}
-      </div>
+  const renderedCalendar = months.map((el, index) => (
+    <div className={classes['heatmap-calendar-month']} key={`${el}-${index}`}>
+      {showWeekdays && (
+        <div className={classes['heatmap-weekdays']}>
+          {weekdays.map((dayOfWeek) => (
+            <div
+              key={dayOfWeek}
+              className={`${
+                dayOfWeek === 'Mon' ||
+                dayOfWeek === 'Wed' ||
+                dayOfWeek === 'Fri'
+                  ? 'opacity-1'
+                  : 'opacity-0'
+              } ${classes['heatmap-weekday']}`}
+            >
+              {dayOfWeek}
+            </div>
+          ))}
+        </div>
+      )}
       <div className={classes['heatmap-month-date']}>
         <div className={classes['heatmap-month']}>
-          <span className={classes['heatmap-month-name']}>
-            {months[thisMonth]}
+          <span className={theme === 'light' ? 'text-gray-500' : ''}>
+            {months[index].name}
           </span>{' '}
         </div>
-        <div className={classes['heatmap-grid']}>{renderCalendar()}</div>
+        <div className={classes['heatmap-grid']}>
+          {renderMonth(index, months[index])}
+        </div>
       </div>
+    </div>
+  ));
+
+  return (
+    <div
+      className={`${classes['heatmap-calendar']} ${className}`}
+    >
+      {renderedCalendar}
     </div>
   );
 };
+
+HeatMapCalendar.defaultProps = defaultProps;
 
 export default HeatMapCalendar;

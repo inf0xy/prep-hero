@@ -204,20 +204,3 @@ export const companies = [
   'Walmart',
   'Yahoo'
 ];
-
-const currentYear = new Date().getFullYear();
-const daysInFeburary = new Date(currentYear, 1, 0).getDate();
-export const dates = [
-  { month: '01', abbreviation: 'Jan', days: 31, year: currentYear },
-  { month: '02', abbreviation: 'Feb', days: daysInFeburary, year: currentYear },
-  { month: '03', abbreviation: 'Mar', days: 31, year: currentYear },
-  { month: '04', abbreviation: 'Apr', days: 30, year: currentYear },
-  { month: '05', abbreviation: 'May', days: 31, year: currentYear },
-  { month: '06', abbreviation: 'Jun', days: 30, year: currentYear },
-  { month: '07', abbreviation: 'Jul', days: 30, year: currentYear },
-  { month: '08', abbreviation: 'Aug', days: 31, year: currentYear },
-  { month: '09', abbreviation: 'Sep', days: 30, year: currentYear },
-  { month: '10', abbreviation: 'Oct', days: 31, year: currentYear },
-  { month: '11', abbreviation: 'Nov', days: 30, year: currentYear },
-  { month: '12', abbreviation: 'Dec', days: 31, year: currentYear },
-]

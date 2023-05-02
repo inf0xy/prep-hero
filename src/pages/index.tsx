@@ -36,8 +36,8 @@ const HomePage = () => {
     '2023-05-31': 62,
   };
 
-  return <div className={classes.homepage}>
-    <HeatMapCalendar data={data}/>
+  return <div className={`bg-white ${classes.homepage}`}>
+    <HeatMapCalendar data={data} theme='light'/>
   </div>
 };
 
