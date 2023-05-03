@@ -1,6 +1,0 @@
-.problems-page {
-  min-height: calc(100vh - 50px);
-  background-color: var(--background-color-400);
-  font-size: 1.5rem;
-  padding: 5rem;
-}

@@ -1,0 +1,104 @@
+@import '@/styles/variables.module.scss';
+
+.header {
+  max-width: 120rem;
+  height: 7rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+  padding: 0 5rem;
+
+  &--dark {
+    background-color: $dark-background-500;
+    border-bottom: solid $header-divider 0.1px;
+    color: $text-off-white;
+  }
+
+  &--light {
+    background-color: $light-background-0;
+    border-bottom: solid $color-gray-100 0.1px;
+    color: $text-gray-700;
+  }
+}
+
+.logo {
+  height: 100%;
+  overflow: hidden;
+  transform: translateY(-0.8rem);
+}
+
+.main-nav,
+.auth {
+  display: flex;
+}
+
+.main-nav {
+  gap: 2rem;
+}
+
+.main-nav li {
+  text-decoration: underline;
+  text-underline-offset: 8px;
+  text-decoration-thickness: 1.6px;
+  text-decoration-color: transparent;
+  transition: 0.5s;
+  font-size: 1.7rem;
+  font-weight: 400;
+}
+
+.main-nav li:hover {
+  text-decoration-color: $color-primary-50;
+}
+
+.auth {
+  align-items: center;
+  gap: 1.8rem;
+}
+
+.login,
+.signup {
+  padding: 8px 20px;
+  text-align: center;
+  transition: all 0.3s ease-in;
+}
+
+.login--dark {
+  border: solid $color-off-white 2px;
+}
+
+.login--light {
+  border: solid $color-gray-400 2px;
+}
+
+.signup--dark {
+  border: solid $color-primary-50 2px;
+}
+
+.signup--light {
+  border: solid $color-primary-50 2px;
+}
+
+.login--dark:hover,
+.signup--dark:hover {
+  opacity: 0.6;
+}
+
+.login--light:hover {
+  background-color: $color-gray-200;
+  border: solid $color-gray-200 2px;
+  color: $text-off-white;
+}
+
+.signup--light:hover {
+  background-color: $color-primary-50;
+  border: solid $color-primary-50 2px;
+  color: $text-off-white;
+}
+
+.avatar {
+  position: relative;
+  cursor: pointer;
+  margin-right: 3rem;
+}

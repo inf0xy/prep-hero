@@ -5,13 +5,19 @@ import notesSlice, {
   addOrUpdateNote,
   deleteNote
 } from './slices/notesSlice';
-import problemsReducer, { setSelectedProblem, addProblem, updateProblem } from './slices/problemsSlice';
+import problemsReducer, {
+  setSelectedProblem,
+  addProblem,
+  updateProblem
+} from './slices/problemsSlice';
+import themeReducer, { setTheme, getTheme } from './slices/themeSlice';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     notes: notesSlice,
-    problems: problemsReducer
+    problems: problemsReducer,
+    theme: themeReducer
   }
 });
 export type RootState = ReturnType<typeof store.getState>;
@@ -24,5 +30,7 @@ export {
   deleteNote,
   setSelectedProblem,
   addProblem,
-  updateProblem
+  updateProblem,
+  setTheme,
+  getTheme
 };

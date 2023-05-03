@@ -123,16 +123,3 @@ body {
   top: 5px;
   right: 1px;
 }
-
-.react-calendar-heatmap .color-scale-1 {
-  fill: #bafcff;
-}
-.react-calendar-heatmap .color-scale-2 {
-  fill: #1cc5ce;
-}
-.react-calendar-heatmap .color-scale-3 {
-  fill: #10979e;
-}
-.react-calendar-heatmap .color-scale-4 {
-  fill: #096c71;
-}

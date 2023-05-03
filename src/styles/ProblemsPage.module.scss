@@ -1,6 +1,10 @@
+@import '@/styles/variables.module.scss';
+
 .problems-page {
   min-height: calc(100vh - 150px);
   padding: 5rem;
+
+  background-color: $dark-background-300;
 }
 
 .selections {
@@ -20,8 +24,8 @@
   align-items: center;
   gap: 0.7rem;
   font-size: 1.4rem;
-  background-color: var(--color-primary-250);
-  color: var(--color-grey-200);
+  background-color: $color-primary-400;
+  color: $color-gray-200;
   border-radius: 20px;
   padding: 0.3rem 1rem;
 }

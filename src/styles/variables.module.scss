@@ -1,0 +1,108 @@
+// Primary colors
+$color-primary-50: #ff7230;
+$color-primary-100: #e65715;
+$color-primary-200: #e64900;
+$color-primary-300: #c25421;
+$color-primary-400: #e64900b5;
+$color-primary-500: #993507;
+
+// Secondary colors
+$color-secondary-50: #15e6d0;
+$color-secondary-100: #009989;
+
+// Gray colors:
+$color-gray-50: #f4effa;
+$color-gray-100: #dfdbe6;
+$color-gray-200: #b2adb8;
+$color-gray-300: #a7a3ae;
+$color-gray-400: #918d96;
+$color-gray-500: #87848b;
+$color-gray-600: #6a676f;
+$color-gray-700: #4f4c52;
+$color-gray-800: #343036;
+$color-gray-900: #221f23;
+
+// Dark background colors:
+$dark-background-100: #3a3a3a;
+$dark-background-200: #2b2b2b;
+$dark-background-300: #212121;
+$dark-background-400: #181818;
+$dark-background-500: #151515;
+$dark-background-600: #141414;
+$dark-background-700: #050505;
+
+// Light background colors:
+$light-background-0: #fff;
+$light-background-100: #e7e7e7;
+
+// Text colors::after
+$text-off-white: #ffffffde;
+$text-gray-400: $color-gray-400;
+$text-gray-500: $color-gray-500;
+$text-gray-600: $color-gray-600;
+$text-gray-700: $color-gray-700;
+$text-gray-800: $color-gray-800;
+$text-gray-900: $color-gray-900;
+
+// Miscelaneous colors:
+$facebook-background: #2b70c0;
+$google-background: #35b46d;
+$github-background: #3b3b3b;
+
+$color-success-100: #a2f0bc;
+$color-success-200: #6fc88d;
+$color-success-500: #12bd4b;
+
+$color-error-50: #eac0d2;
+$color-error-100: #f1acc9;
+$color-error-200: #c55584;
+$color-error-300: #f6385b;
+$color-error-500: #a10c4a;
+
+$color-warning-100: #eea60c;
+
+$color-black: #000;
+$color-white: #fff;
+$color-off-white: #ffffffde;
+
+$resize-handlebar-color: #37414b;
+$table-even-row-color: #4545456b;
+$strip-color: #dedede;
+$header-divider: #6c6b6b;
+
+$dark-heatmap-color-0: $color-gray-600;
+$light-heatmap-color-0: $color-gray-50;
+$heatmap-color-1: #2a8559;
+$heatmap-color-2: #27ab6b;
+$heatmap-color-3: #1dcf79;
+$heatmap-color-4: #0cf283;
+
+:export {
+  colorPrimary50: $color-primary-50;
+  colorPrimary100: $color-primary-100;
+  colorPrimary200: $color-primary-200;
+  colorPrimary300: $color-primary-300;
+  colorPrimary400: $color-primary-400;
+  colorPrimary500: $color-primary-500;
+
+  colorSecondary50: $color-secondary-50;
+  colorSecondary100: $color-secondary-100;
+
+  colorGray50: $color-gray-50;
+  colorGray100: $color-gray-100;
+  colorGray200: $color-gray-200;
+  colorGray300: $color-gray-300;
+  colorGray400: $color-gray-400;
+  colorGray500: $color-gray-500;
+  colorGray600: $color-gray-600;
+  colorGray700: $color-gray-700;
+  colorGray800: $color-gray-800;
+  colorGray900: $color-gray-900;
+
+  darkHeatMapColor0: $dark-heatmap-color-0;
+  lightHeatMapColor0: $light-heatmap-color-0;
+  heatMapColor1: $heatmap-color-1;
+  heatMapColor2: $heatmap-color-2;
+  heatMapColor3: $heatmap-color-3;
+  heatMapColor4: $heatmap-color-4;
+}

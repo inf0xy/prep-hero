@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import './variables.module.scss';
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-color-200);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-grey-700);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-grey-600);
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1;
+  font-weight: 400;
+  color: #fff;
+  background-color: $dark-background-400;
+}
+
+.text-editor .w-md-editor-bar svg {
+  display: none;
+}
+
+.text-editor .w-md-editor-bar {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+  height: 10px;
+  cursor: row-resize;
+  background-color: $resize-handlebar-color;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  width: calc(100% + 2px);
+  position: relative;
+  top: 5px;
+  right: 1px;
+}

@@ -1,7 +1,8 @@
 import ProgressBar from '@/components/user/ProgressBar';
 import classes from '../styles/UserDashBoard.module.css';
 import ProgressCircle from '@/components/user/ProgressCircle';
-import ActivityCalendar from '@/components/user/ActivityCalendar';
+import HeatMapCalendar from '@/components/user/HeatMapCalendar';
+import { data } from '.';
 
 const progress = [
   { difficulty: 'Easy', solved: 20 },
@@ -15,7 +16,7 @@ const DashBoard = () => {
       <div className={classes.records}></div>
       <div className={classes.overview}>
         <div className={classes.heatmap}>
-          <ActivityCalendar />
+          <HeatMapCalendar data={data} />
         </div>
         <div className={classes.vl}></div>
         <div className={classes.progress}>

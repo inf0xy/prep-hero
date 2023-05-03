@@ -1,4 +1,4 @@
-import { grayColors } from './extraStyles';
+import variables from '@/styles/variables.module.scss';
 
 const getTotalDaysInFebruary = () => {
   const now = new Date();
@@ -29,9 +29,15 @@ export const months = [
 
 export const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const colorMaps: { [key: string]: string[] } = {
-  light: ['#e0e0e0', '#2a8559', '#27ab6b', '#1dcf79', '#0cf283'],
-  dark: [grayColors[600], '#2a8559', '#27ab6b', '#1dcf79', '#0cf283']
+const colorMaps: { [key: string]: string[] | string } = {
+  light: variables.lightHeatMapColor0,
+  dark: variables.darkHeatMapColor0,
+  acvitities: [
+    variables.heatMapColor1,
+    variables.heatMapColor2,
+    variables.heatMapColor3,
+    variables.heatMapColor4
+  ]
 };
 
 export const monthDays = (month: number, year: number) => {
@@ -52,14 +58,14 @@ export const weeksInMonth = (month: number, year: number) => {
 
 export const getHeatmapColor = (theme: string, value: number) => {
   if (value === 0) {
-    return colorMaps[theme][0];
+    return colorMaps[theme];
   } else if (value > 30) {
-    return colorMaps[theme][4];
+    return colorMaps.acvitities[3];
   } else if (value > 15) {
-    return colorMaps[theme][3];
+    return colorMaps.acvitities[2];
   } else if (value > 7) {
-    return colorMaps[theme][2];
+    return colorMaps.acvitities[1];
   } else {
-    return colorMaps[theme][1];
+    return colorMaps.acvitities[0];
   }
 };

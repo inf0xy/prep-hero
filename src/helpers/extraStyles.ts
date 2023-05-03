@@ -22,13 +22,6 @@ export const selectedColors = {
   warning: '#eea60c'
 };
 
-export const buttonColors: { [key: string]: string } = {
-  'primary-100': '#e65715',
-  'primary-200': '#c25421',
-  'secondary-100': '#15e6d0',
-  'secondary-200': '#009989'
-};
-
 export const modeColors = {
   light: '#000',
   dark: '#fff'

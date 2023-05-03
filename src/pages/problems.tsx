@@ -3,7 +3,7 @@ import { GetStaticProps } from 'next';
 import { getProblems } from '@/helpers/problem-api-util';
 import { Problem, SearchCriteria } from '@/types/dataTypes';
 import ProblemList from '@/components/problems/ProblemList';
-import classes from '../styles/ProblemsPage.module.css';
+import classes from '../styles/ProblemsPage.module.scss';
 import useSort from '@/hooks/useSort';
 import CircleX from '@/components/icons/CircleX';
 import SelectBar from '@/components/problems/SelectBar';

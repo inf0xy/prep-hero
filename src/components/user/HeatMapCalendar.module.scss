@@ -1,0 +1,90 @@
+@import '@/styles/variables.module.scss';
+
+.heatmap-calendar {
+  display: flex;
+  width: fit-content;
+  background-color: transparent;
+}
+
+.heatmap-calendar__month {
+  display: flex;
+  align-items: center;
+  margin: 0 0.5rem;
+}
+
+.heatmap-month {
+  font-size: 1.2rem;
+  margin-bottom: 0.6rem;
+}
+
+.heatmap-weekdays {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  align-self: flex-end;
+  gap: 1.1px;
+}
+
+.heatmap-week {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.heatmap-day--dark,
+.heatmap-day--light {
+  width: 0.8rem;
+  height: 0.8rem;
+  position: relative;
+}
+
+.heatmap-day--dark:hover:after,
+.heatmap-day--light:hover:after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 25rem;
+  max-width: 28rem;
+  font-size: 1.2rem;
+  padding: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.heatmap-day--dark:hover:after {
+  background-color: $light-background-100;
+  color: $text-gray-800;
+}
+
+.heatmap-day--light:hover:after {
+  background-color: $dark-background-500;
+  color: $text-off-white;
+}
+
+.heatmap-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+}
+
+.heatmap-month-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heatmap-month__name-light {
+  color: $text-gray-900;
+}
+
+.heatmap-month__name-dark {
+  color: $text-off-white;
+}
+
+.heatmap-weekday {
+  margin-right: 0.5rem;
+}

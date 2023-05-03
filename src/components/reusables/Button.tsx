@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import classes from './Button.module.css';
-import { buttonColors } from '@/helpers/extraStyles';
+import classes from './Button.module.scss';
+import variables from '@/styles/variables.module.scss';
 
 type ButtonProps = {
   color?: string;
@@ -10,6 +10,10 @@ type ButtonProps = {
   [rest: string]: any;
 };
 
+const defaultProps = {
+  color: variables.colorPrimary100
+}
+
 const Button: React.FC<ButtonProps> = ({
   color,
   children,
@@ -17,10 +21,14 @@ const Button: React.FC<ButtonProps> = ({
   extraStyle,
   ...rest
 }) => {
-  let chosenColor = color ? buttonColors[color] || color : '#e65715';
+
+  const colors: { [key:string]: string } = {
+    'primary': variables.colorPrimary300,
+    'secondary': variables.colorSecondary100
+  }
 
   const buttonStyle = {
-    backgroundColor: chosenColor,
+    backgroundColor: colors[color!] || color,
     ...extraStyle
   };
   return (
@@ -33,5 +41,7 @@ const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
+
+Button.defaultProps = defaultProps;
 
 export default Button;

@@ -1,4 +1,5 @@
-import classes from './HeatMapCalendar.module.css';
+import { useAppSelector } from '@/hooks/hooks';
+import classes from './HeatMapCalendar.module.scss';
 import {
   Month,
   months,
@@ -11,25 +12,22 @@ interface HeatmapCalendarProps {
   data: { [key: string]: number }; // key format : 'YYYY-MM-DD'
   showWeekdays?: boolean;
   className?: string;
-  theme?: string;
 }
 
 const defaultProps = {
   data: {},
   showWeekdays: false,
   className: '',
-  theme: 'dark'
 };
 
 const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({
   data,
   showWeekdays,
   className,
-  theme
 }) => {
+  const { theme } = useAppSelector(state => state.theme);
   const today = new Date();
   const thisYear = today.getFullYear();
-  const thisMonth = 4;
 
   const renderMonth = (monthIndex: number, month: Month) => {
     const weeks = [];
@@ -48,7 +46,7 @@ const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({
             days.push(
               <div
                 key={weekdays[weekdayCount]}
-                className={`rounded ${classes['heatmap-day']}`}
+                className={`rounded ${classes[`heatmap-day--${theme}`]}`}
                 style={{
                   visibility: 'hidden'
                 }}
@@ -72,18 +70,18 @@ const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({
         const color = getHeatmapColor(theme!, value);
         const tooltip =
           value === 0
-            ? `No contributions on ${readableDate}`
+            ? `No submissions on ${readableDate}`
             : `${value} ${
-                value === 1 ? 'contribution' : 'contributions'
+                value === 1 ? 'submission' : 'submissions'
               } on ${readableDate}`;
         count++;
 
         days.push(
           <div
             key={dayOfWeek}
-            className={`rounded ${classes[`heatmap-day-${theme}`]}`}
+            className={`rounded ${classes[`heatmap-day--${theme}`]}`}
             style={{
-              backgroundColor: color,
+              backgroundColor: color as string,
               visibility:
                 count > months[monthIndex].totalDays ? 'hidden' : 'visible'
             }}
@@ -103,7 +101,7 @@ const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({
   };
 
   const renderedCalendar = months.map((el, index) => (
-    <div className={classes['heatmap-calendar-month']} key={`${el}-${index}`}>
+    <div className={classes['heatmap-calendar__month']} key={`${el}-${index}`}>
       {showWeekdays && (
         <div className={classes['heatmap-weekdays']}>
           {weekdays.map((dayOfWeek) => (
@@ -124,7 +122,7 @@ const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({
       )}
       <div className={classes['heatmap-month-date']}>
         <div className={classes['heatmap-month']}>
-          <span className={theme === 'light' ? 'text-gray-500' : ''}>
+          <span className={classes[`heatmap-month__name-${theme}`]}>
             {months[index].name}
           </span>{' '}
         </div>

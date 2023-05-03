@@ -2,10 +2,12 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import '@uiw/react-markdown-preview/markdown.css';
 import '@uiw/react-md-editor/markdown-editor.css';
-import DarkIcon from '@/components/icons/DarkIcon';
-import LightIcon from '@/components/icons/LightIcon';
-import classes from './TextEditor.module.css';
+import classes from './TextEditor.module.scss';
 import { modeColors } from '@/helpers/extraStyles';
+
+import DarkIcon from '../icons/DarkIcon';
+import LightIcon from '../icons/LightIcon';
+import { useAppSelector } from '@/hooks/hooks';
 
 interface TextEditorProps {
   value: string;
@@ -30,18 +32,22 @@ const TextEditor: React.FC<TextEditorProps> = ({
   className,
   defaultMode
 }) => {
-  const [mode, setMode] = useState(defaultMode);
-
-  const currentMode = mode === true ? 'dark' : 'light';
+  const { theme } = useAppSelector((state) => state.theme);
+  const [mode, setMode] = useState(theme);
 
   return (
-    <div data-color-mode={currentMode} className={classes['editor-container']}>
+    <div data-color-mode={mode} className={classes.editor}>
       <div
-        className={classes['editor-mode']}
-        style={{ color: modeColors[currentMode] }}
-        onClick={() => setMode((prev) => !prev)}
+        className={`${classes['editor__mode-button']} ${
+          classes[`editor__mode-button--${mode}`]
+        }`}
+        onClick={() => setMode((prev) => (prev === 'dark' ? 'light' : 'dark'))}
       >
-        {mode ? <LightIcon /> : <DarkIcon />}
+        {mode === 'dark' ? (
+          <LightIcon width={19} height={19} />
+        ) : (
+          <DarkIcon width={19} height={19} />
+        )}
       </div>
       <MDEditor
         value={value}

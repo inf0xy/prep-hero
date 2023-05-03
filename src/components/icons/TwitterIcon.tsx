@@ -1,9 +1,10 @@
 type TwitterIconProps = {
   width: string;
   height: string;
+  theme: string;
 };
 
-const TwitterIcon: React.FC<TwitterIconProps> = ({ width, height }) => {
+const TwitterIcon: React.FC<TwitterIconProps> = ({ width, height, theme }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,7 +15,7 @@ const TwitterIcon: React.FC<TwitterIconProps> = ({ width, height }) => {
       viewBox="0,0,256,256"
     >
       <g
-        fill="#ffffff"
+        fill={theme === 'dark' ? "#ffffff" : "#000000"}
         fillRule="nonzero"
         stroke="none"
         strokeWidth="1"

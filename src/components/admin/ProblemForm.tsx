@@ -1,6 +1,6 @@
 import { useState, useRef, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import classes from './ProblemForm.module.css';
+import classes from './ProblemForm.module.scss';
 import Difficulty from './Difficulty';
 import Tags from './Tags';
 import Companies from './Companies';
@@ -16,7 +16,7 @@ import { addProblem, updateProblem } from '@/store';
 import { GeneralFormData, Problem } from '@/types/dataTypes';
 import { NotificationType } from '@/types/dataTypes';
 import { formatString } from '@/helpers/formatString';
-import { grayColors } from '@/helpers/extraStyles';
+import variables from '@/styles/variables.module.scss';
 
 interface AddProblem {
   message: string;
@@ -281,7 +281,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
       </form>
       <div className={classes['form-actions']}>
         <Button
-          color={grayColors[400]}
+          color={variables.colorGray400}
           className="self-center"
           extraStyle={{ padding: '1rem 4.6rem' }}
           onClick={() => {

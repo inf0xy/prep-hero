@@ -9,7 +9,7 @@ import {
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import classes from './UserMenu.module.css';
+import classes from './UserMenu.module.scss';
 
 type UserMenuProps = {
   avatarRef: RefObject<HTMLDivElement>;

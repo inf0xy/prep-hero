@@ -1,9 +1,10 @@
 type InstagramIconProps = {
   width: string;
   height: string;
+  theme: string;
 };
 
-const InstagramIcon: React.FC<InstagramIconProps> = ({ width, height }) => {
+const InstagramIcon: React.FC<InstagramIconProps> = ({ width, height, theme }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +33,7 @@ const InstagramIcon: React.FC<InstagramIconProps> = ({ width, height }) => {
         <path d="M0,256v-256h256v256z" id="bgRectangle"></path>
       </g>
       <g
-        fill="#ffffff"
+        fill={theme === 'dark' ? "#ffffff" : "#000000"}
         fillRule="nonzero"
         stroke="none"
         strokeWidth="1"
