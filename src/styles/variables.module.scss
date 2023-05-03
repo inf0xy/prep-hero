@@ -9,6 +9,7 @@ $color-primary-500: #993507;
 // Secondary colors
 $color-secondary-50: #15e6d0;
 $color-secondary-100: #009989;
+$color-secondary-200: #177c70;
 
 // Gray colors:
 $color-gray-50: #f4effa;
@@ -33,7 +34,8 @@ $dark-background-700: #050505;
 
 // Light background colors:
 $light-background-0: #fff;
-$light-background-100: #e7e7e7;
+$light-background-100: #f6f6f6de;
+$light-background-200: #e7e7e7;
 
 // Text colors::after
 $text-off-white: #ffffffde;
@@ -63,11 +65,13 @@ $color-warning-100: #eea60c;
 
 $color-black: #000;
 $color-white: #fff;
-$color-off-white: #ffffffde;
+$color-off-white: hsla(0, 0%, 100%, 0.871);
 
 $resize-handlebar-color: #37414b;
-$table-even-row-color: #4545456b;
-$strip-color: #dedede;
+$odd-cell-color-dark: #4545456b;
+$odd-cell-color-light: #cecece6b;
+$strip-color-dark: #dedede;
+$strip-color-light: #ffecde;
 $header-divider: #6c6b6b;
 
 $dark-heatmap-color-0: $color-gray-600;
@@ -105,4 +109,8 @@ $heatmap-color-4: #0cf283;
   heatMapColor2: $heatmap-color-2;
   heatMapColor3: $heatmap-color-3;
   heatMapColor4: $heatmap-color-4;
+
+  stripColorDark: $strip-color-dark;
+  stripColorLight: $strip-color-light;
+  colorOffWhite: $color-off-white;
 }

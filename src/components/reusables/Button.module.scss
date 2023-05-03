@@ -1,4 +1,7 @@
-.custom-button {
+@import '@/styles/variables.module.scss';
+
+.custom-button--dark,
+.custom-button--light {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,9 +9,39 @@
   padding: 1rem 2rem;
   border-radius: 4px;
   cursor: pointer;
-  transition: opacity 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
-.custom-button:hover {
+.custom-button--dark--primary,
+.custom-button--light--primary {
+  background-color: $color-primary-300;
+}
+
+.custom-button--dark--secondary,
+.custom-button--light--secondary {
+  background-color: $color-secondary-100;
+}
+
+.custom-button--dark--gray,
+.custom-button--light--gray {
+  background-color: $color-gray-400;
+}
+
+.custom-button--dark--primary:hover,
+.custom-button--dark--secondary:hover,
+.custom-button--dark--gray:hover {
   opacity: 0.8;
 }
+
+.custom-button--light--primary:hover {
+  background-color: $color-primary-500;
+}
+
+.custom-button--light--secondary:hover {
+  background-color: $color-secondary-200;
+}
+
+.custom-button--light--gray:hover {
+  background-color: $color-gray-700;
+}
+

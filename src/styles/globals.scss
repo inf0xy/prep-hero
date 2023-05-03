@@ -11,15 +11,15 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background-color-200);
+  background: $dark-background-200;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-grey-700);
+  background: $color-gray-700;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-grey-600);
+  background: $color-gray-600;
 }
 
 *,

@@ -6,17 +6,16 @@ import Image from 'next/image';
 import Modal from '../reusables/Modal';
 import ConfirmPanel from '../reusables/ConfirmPanel';
 import EditorPreview from '../reusables/EditorPreview';
-import classes from './ProblemItem.module.css';
+import classes from './ProblemItem.module.scss';
 import { Problem } from '@/types/dataTypes';
 import {
   statusStyle,
   noteStripStyle,
   fullNoteStyle
 } from '@/helpers/extraStyles';
-import { colors, oddCellStyle } from '@/helpers/extraStyles';
+import { colors } from '@/helpers/extraStyles';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { deleteNote, setSelectedNote, setSelectedProblem } from '@/store';
-import { formatLongString } from '@/helpers/formatString';
 
 import VideoIcon from '../icons/VideoIcon';
 import CheckIcon from '@/components/icons/CheckIcon';
@@ -51,14 +50,13 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     category,
     companies,
     leetcode_link,
-    solution_link,
-    description,
-    tags
+    solution_link
   } = problem;
   const { attempted_problems, easy_solved, medium_solved, hard_solved, notes } =
     useAppSelector((state) => state.user);
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
+  const { theme } = useAppSelector(state => state.theme);
   const router = useRouter();
 
   let problemNoteContent: string | undefined;
@@ -106,7 +104,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
 
   return (
     <>
-      <div className={classes.problem} style={oddCell ? oddCellStyle : {}}>
+      <div className={`${classes.problem} ${oddCell ? classes[`problem--${theme}--odd-cell`]: undefined}`}>
         <div className={classes['solved-content']} style={solvedStatusStyle}>
           {session?.session.user.account_type === 'user' ? (
             <>
@@ -171,17 +169,16 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           className={`${classes['companies-content']}`}
           data-tooltip={companies!.join(', ')}
         >
-          {/* {formatLongString(companies!.join(', '), 80)} */}
           <p className={classes.cell}>{companies!.join(', ')}</p>
         </div>
       </div>
       {showProblemNote && (
-        <div className={classes.note}>
+        <div className={`${classes.note} ${classes[`note--${theme}`]}`}>
           <div className={classes.strip}></div>
           <div className={classes.content}>
             <EditorPreview
               value={problemNoteContent ? problemNoteContent : ''}
-              extraStyle={noteStripStyle}
+              extraStyle={noteStripStyle[theme]}
             />
           </div>
           {notes && problemNoteContent ? (

@@ -4,7 +4,7 @@ import { GeneralFormData } from '@/types/dataTypes';
 
 type CategoriesProps = {
   setGeneralInfo: Dispatch<SetStateAction<GeneralFormData>>;
-  currentSelectedCategory: string
+  currentSelectedCategory: string;
 };
 
 const Categories: React.FC<CategoriesProps> = ({ setGeneralInfo, currentSelectedCategory }) => {
@@ -23,7 +23,8 @@ const Categories: React.FC<CategoriesProps> = ({ setGeneralInfo, currentSelected
           }))
         }
       />
-      <label className="text-gray-400">{el}</label>
+      {/* <label className="text-gray-400">{el}</label> */}
+      <label>{el}</label>
     </div>
   ));
 

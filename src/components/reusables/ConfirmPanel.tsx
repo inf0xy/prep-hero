@@ -75,7 +75,7 @@ const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
               {cancelText}
             </button>
             <button
-              className="btn btn-lg bg-[#009989] hover:opacity-70 hover:bg-[#009989]  border-0 text-[1.5rem] btn-primary normal-case"
+              className="btn btn-lg text-white hover:opacity-70 hover:bg-accent border-0 text-[1.5rem] btn-accent normal-case"
               onClick={onConfirm}
             >
               {confirmText}

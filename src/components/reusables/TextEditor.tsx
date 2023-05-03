@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic';
 import '@uiw/react-markdown-preview/markdown.css';
 import '@uiw/react-md-editor/markdown-editor.css';
 import classes from './TextEditor.module.scss';
-import { modeColors } from '@/helpers/extraStyles';
 
 import DarkIcon from '../icons/DarkIcon';
 import LightIcon from '../icons/LightIcon';

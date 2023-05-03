@@ -16,7 +16,6 @@ import { addProblem, updateProblem } from '@/store';
 import { GeneralFormData, Problem } from '@/types/dataTypes';
 import { NotificationType } from '@/types/dataTypes';
 import { formatString } from '@/helpers/formatString';
-import variables from '@/styles/variables.module.scss';
 
 interface AddProblem {
   message: string;
@@ -64,6 +63,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
     message: undefined
   });
 
+  const { theme } = useAppSelector(state => state.theme);
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state) => state.problems);
   const router = useRouter();
@@ -140,7 +140,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
   return (
     <>
       <form
-        className={classes['problem-form-container']}
+        className={`${classes['problem-form']} ${classes[`problem-form--${theme}`]}`}
         onSubmit={handleSubmit}
       >
         {showAlert && (
@@ -158,7 +158,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
           </label>
           <div className={classes['list-name']}>
             <input
-              className={classes.field}
+              className={`${classes.field} ${classes[`field--${theme}`]}`}
               value={generalInfo.listName}
               onChange={(e) =>
                 setGeneralInfo((prev) => ({
@@ -175,7 +175,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
             Title: <span className={classes.required}>*</span>
           </label>
           <input
-            className={classes.field}
+            className={`${classes.field} ${classes[`field--${theme}`]}`}
             value={generalInfo.title}
             onChange={(e) =>
               setGeneralInfo((prev) => ({ ...prev, title: e.target.value }))
@@ -197,7 +197,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
           <legend>
             Category: <span className={classes.required}>*</span>
           </legend>
-          <div className={classes.category}>
+          <div className={`${classes.category} ${classes[`category--${theme}`]}`}>
             <Categories
               setGeneralInfo={setGeneralInfo}
               currentSelectedCategory={generalInfo.category}
@@ -208,7 +208,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
           <legend>
             Tags: <span className={classes.required}>*</span>
           </legend>
-          <div className={classes.tags}>
+          <div className={`${classes.tags} ${classes[`tags--${theme}`]}`}>
             <Tags
               setGeneralInfo={setGeneralInfo}
               currentSelectedTags={generalInfo.tags}
@@ -219,7 +219,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
           <legend>
             Companies: <span className={classes.required}>*</span>
           </legend>
-          <div className={classes.companies}>
+          <div className={`${classes.companies} ${classes[`companies--${theme}`]}`}>
             <Companies
               setGeneralInfo={setGeneralInfo}
               currentSelectedCompanies={generalInfo.companies}
@@ -229,7 +229,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
             <input
               value={extraCompanies}
               onChange={(e) => setExtraCompanies(e.target.value)}
-              className={`${classes.field} ${classes['added-companies']}`}
+              className={`${classes.field} ${classes[`field--${theme}`]} ${classes['added-companies']}`}
               placeholder="Google, Facebook,..."
             />
             <p className="pt-4 italic">** If not listed above</p>
@@ -249,7 +249,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
                 leetcodeLink: e.target.value
               }))
             }
-            className={`${classes.field} `}
+            className={`${classes.field} ${classes[`field--${theme}`]}`}
           />
         </div>
         <div className={`${classes['form-controls']} ${classes['video-link']}`}>
@@ -264,7 +264,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
                 videoLink: e.target.value
               }))
             }
-            className={classes.field}
+            className={`${classes.field} ${classes[`field--${theme}`]}`}
           />
         </div>
         <div className={classes['form-controls']}>
@@ -281,7 +281,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
       </form>
       <div className={classes['form-actions']}>
         <Button
-          color={variables.colorGray400}
+          color='gray'
           className="self-center"
           extraStyle={{ padding: '1rem 4.6rem' }}
           onClick={() => {

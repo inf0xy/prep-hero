@@ -11,7 +11,7 @@ const Companies: React.FC<CompaniesProps> = ({ setGeneralInfo, currentSelectedCo
   const renderedCompanies = companies.map((el) => (
     <div key={el} className="form-control w-fit mt-2">
       <label className="label cursor-pointer">
-        <span className="label-text text-[1.5rem]">{el}</span>
+        <span className="text-[1.5rem]">{el}</span>
         <input
           type="checkbox"
           className={`checkbox checkbox-success ml-3`}

@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { GetStaticProps } from 'next';
-import { getProblems } from '@/helpers/problem-api-util';
 import Link from 'next/link';
-import classes from '../../styles/AdminDashBoard.module.css';
-import ProblemList from '@/components/problems/ProblemList';
+import { useAppSelector } from '@/hooks/hooks';
+import { getProblems } from '@/helpers/problem-api-util';
 import { Problem } from '@/types/dataTypes';
+import ProblemList from '@/components/problems/ProblemList';
+import Button from '@/components/reusables/Button';
 import useSort from '@/hooks/useSort';
+import classes from '../../styles/AdminDashBoard.module.scss';
+
 type AdminDashBoardProps = {
   problems: Problem[];
 };
@@ -13,12 +16,19 @@ type AdminDashBoardProps = {
 const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ problems }) => {
   const [currentProblems, setCurrentProblems] = useState(problems);
   const handleSort = useSort(problems, setCurrentProblems);
+  const { theme } = useAppSelector((state) => state.theme);
 
   return (
-    <div className={classes['admin-dashboard']}>
-      <Link href="/admin/add" className={classes['create-button']}>
-        Add problem
-      </Link>
+    <div
+      className={`${classes['admin-dashboard']} ${
+        classes[`admin-dashboard--${theme}`]
+      }`}
+    >
+      <Button>
+        <Link href="/admin/add">
+          Add problem
+        </Link>
+      </Button>
       <ProblemList onSort={handleSort} problems={currentProblems} />
     </div>
   );

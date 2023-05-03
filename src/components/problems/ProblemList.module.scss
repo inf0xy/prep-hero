@@ -1,15 +1,24 @@
+@import '@/styles/variables.module.scss';
+
 .problems-table {
   width: 100%;
   overflow: hidden;
   font-size: 1.5rem;
-  color: var(--color-off-white);
+
+  &--dark {
+    color: $text-off-white;
+  }
+
+  &--light {
+    color: $text-gray-700;
+  }
 }
 
 .table-header {
   display: grid;
   grid-template-columns: repeat(13, 1fr);
   height: 4rem;
-  border-bottom: solid rgba(128, 128, 128, 0.509) 0.4px;
+  border-bottom: solid $color-gray-600 0.4px;
   margin-bottom: 1.5rem;
   padding: 0 2rem;
   color: var(--color-grey-200);

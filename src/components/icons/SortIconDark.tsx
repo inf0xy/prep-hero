@@ -1,11 +1,11 @@
 import Image from 'next/image';
 
-type SortIconProps = {
+type SortIconDarkProps = {
   width: number;
   height: number;
 };
 
-const SortIcon: React.FC<SortIconProps> = ({ width, height }) => {
+const SortIconDark: React.FC<SortIconDarkProps> = ({ width, height }) => {
   return (
     <Image
       src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAApUlEQVR4nO3WQQrCMBCF4VyiUu9/Deu6oisXkfkJ5CiVgF2qTWYSquTBQHbfJsk853r2nBDCQURuadK5CQoMwB1YXvPw3h9bo0t1nPdoPZzvqD3OdtQOJx/V45SjOhy4KNB15hJ4MoBP2XDP/0dEzgaXa/qp5zRoP5AY45gNa7/MYlSzJNRoyVo0Q3OKgDm6pfpUQz+VveromlRpgWuaZvW2xxXmCSJfTImcTdxLAAAAAElFTkSuQmCC"
@@ -16,4 +16,4 @@ const SortIcon: React.FC<SortIconProps> = ({ width, height }) => {
   );
 };
 
-export default SortIcon;
+export default SortIconDark;

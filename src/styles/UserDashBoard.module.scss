@@ -1,9 +1,19 @@
+@import '@/styles/variables.module.scss';
+
 .user-dashboard {
   min-height: calc(100vh - 150px);
   display: flex;
   flex-direction: column;
-  background-color: var(--background-color-500);
+
   font-size: 1.5rem;
+
+  &--dark {
+    background-color: $dark-background-400;
+  }
+
+  &--light {
+    background-color: $light-background-0;
+  }
 }
 
 .records {

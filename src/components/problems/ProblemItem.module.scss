@@ -1,3 +1,5 @@
+@import '@/styles/variables.module.scss';
+
 .problem {
   display: grid;
   grid-template-columns: repeat(13, 1fr);
@@ -6,6 +8,16 @@
   align-items: center;
   line-height: 1.4;
   gap: 1rem;
+}
+
+.problem--dark--odd-cell {
+  background-color: $odd-cell-color-dark;
+  border-radius: 5px;
+}
+
+.problem--light--odd-cell {
+  background-color: $odd-cell-color-light;
+  border-radius: 5px;
 }
 
 .solved-content {
@@ -61,8 +73,8 @@
   z-index: 10;
   width: fit-content;
   font-size: 1.2rem;
-  background-color: var(--background-color-200);
-  color: var(--color-off-white);
+  background-color: $dark-background-200;
+  color: $text-off-white;
   padding: 0.5rem;
   border-radius: 4px;
   cursor: pointer;
@@ -88,7 +100,7 @@
   width: 30rem;
   font-size: 1.3rem;
   background-color: rgb(214, 111, 56);
-  color: var(--color-off-white);
+  color: $text-off-white;
   padding: 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -100,32 +112,43 @@
   overflow: hidden;
 }
 
-
 .note {
   position: relative;
   padding-right: 1rem;
   margin: 1rem 0 1.5rem;
   display: flex;
   height: 5rem;
-  background-color: var(--color-strip);
   border-radius: 5px;
   margin-left: 2rem;
   margin-right: 1rem;
+
+  & > * {
+    display: flex;
+    align-items: center;
+  }
+
+  &--dark {
+    background-color: $strip-color-dark;
+  }
+
+  &--light {
+    background-color: $strip-color-light;
+  }
 }
 
 .note-actions {
   gap: 1rem;
-  color: var(--color-grey-600);
+  color: $color-gray-600;
   cursor: pointer;
   margin-left: 0.5rem;
 }
 .add {
   position: absolute;
-  top: 1.6rem;
+  top: 1.5rem;
   left: 4rem;
   gap: 0.8rem;
   font-size: 1.6rem;
-  color: var(--color-grey-700);
+  color: $color-gray-700;
 }
 
 .add span {
@@ -141,13 +164,13 @@
   display: flex;
   align-items: center;
   padding: 0 2rem;
-}
 
-.content > * {
-  width: 100%;
-  height: 2rem;
-  line-height: 1.3;
-  overflow: hidden;
+  & > * {
+    width: 100%;
+    height: 2rem;
+    line-height: 1.3;
+    overflow: hidden;
+  }
 }
 
 .title-link,
@@ -166,24 +189,19 @@
 .edit:hover,
 .clear:hover,
 .add span:hover {
-  color: var(--color-primary-50);
+  color: $color-primary-50;
 }
 
 .strip {
-  background-color: rgb(227, 92, 51);
   width: 2.5rem;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
   transform: translateX(-2px);
-}
-
-.note > * {
-  display: flex;
-  align-items: center;
+  background-color: $color-primary-100;
 }
 
 .modal__full-note {
   width: 60vw;
   margin: 6rem 5rem 5rem;
-  background-color: var(--color-strip);
+  background-color: $strip-color-dark;
 }

@@ -1,13 +1,22 @@
+import variables from '@/styles/variables.module.scss';
+
 export const colors: { [key: string]: string } = {
   Easy: '#25b384',
   Medium: '#fbcb06',
   Hard: '#be224c'
 };
 
-export const noteStripStyle = {
-  backgroundColor: '#dedede',
-  color: '#363636',
-  fontSize: '1.5rem'
+export const noteStripStyle: { [key: string]: object } = {
+  dark: {
+    backgroundColor: variables.stripColorDark,
+    color: variables.colorGray800,
+    fontSize: '1.5rem'
+  },
+  light: {
+    backgroundColor: variables.stripColorLight,
+    color: variables.colorOffWhite,
+    fontSize: '1.5rem'
+  }
 };
 
 export const fullNoteStyle = {
@@ -20,16 +29,6 @@ export const selectedColors = {
   success: '#6fc88d',
   error: '#f6385b',
   warning: '#eea60c'
-};
-
-export const modeColors = {
-  light: '#000',
-  dark: '#fff'
-};
-
-export const oddCellStyle = {
-  backgroundColor: '#4545456b',
-  borderRadius: '5px'
 };
 
 export const statusStyle = {

@@ -11,7 +11,7 @@ const Tags: React.FC<TagsProps> = ({ setGeneralInfo, currentSelectedTags }) => {
   const renderedTags = tagSelection.map((el) => (
     <div key={el} className="form-control w-fit mt-2">
       <label className="label cursor-pointer">
-        <span className="label-text text-[1.5rem]">{el}</span>
+        <span className="text-[1.5rem]">{el}</span>
         <input
           type="checkbox"
           className={`checkbox checkbox-warning ml-3`}

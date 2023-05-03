@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import classes from './Button.module.scss';
-import variables from '@/styles/variables.module.scss';
+import { useAppSelector } from '@/hooks/hooks';
 
 type ButtonProps = {
   color?: string;
@@ -11,8 +11,8 @@ type ButtonProps = {
 };
 
 const defaultProps = {
-  color: variables.colorPrimary100
-}
+  color: 'primary'
+};
 
 const Button: React.FC<ButtonProps> = ({
   color,
@@ -21,20 +21,17 @@ const Button: React.FC<ButtonProps> = ({
   extraStyle,
   ...rest
 }) => {
-
-  const colors: { [key:string]: string } = {
-    'primary': variables.colorPrimary300,
-    'secondary': variables.colorSecondary100
-  }
+  const { theme } = useAppSelector((state) => state.theme);
 
   const buttonStyle = {
-    backgroundColor: colors[color!] || color,
     ...extraStyle
   };
   return (
     <button
       style={buttonStyle}
-      className={`${classes['custom-button']} ${className || ''}`}
+      className={`${classes[`custom-button--${theme}`]} ${
+        classes[`custom-button--${theme}--${color}`]
+      } ${className || ''}`}
       {...rest}
     >
       {children}

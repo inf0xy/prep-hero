@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import classes from './UserMenu.module.scss';
+import { useAppSelector } from '@/hooks/hooks';
 
 type UserMenuProps = {
   avatarRef: RefObject<HTMLDivElement>;
@@ -25,7 +26,8 @@ const UserMenu: React.FC<UserMenuProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
-  console.log(session);
+  const { theme } = useAppSelector(state => state.theme);
+
   useEffect(() => {
     setIsVisible(true);
   }, []);
@@ -56,7 +58,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
         isVisible ? 'opacity-100' : 'opacity-0'
       } ${classes['user-menu']}`}
     >
-      <div className={classes['user-menu__nav-items']}>
+      <div className={`${classes['user-menu__nav-items']} ${classes[`user-menu__nav-items--${theme}`]}`}>
         <div className={classes['user-menu__avatar']}>
           <Image
             src="/user.png"
@@ -67,7 +69,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
           />
           <h3>{session && session.session.user.name}</h3>
         </div>
-        <ul className={classes['user-menu__items']}>
+        <ul className={classes[`user-menu__items--${theme}`]}>
           <li>My Profile</li>
           <li>
             <Link

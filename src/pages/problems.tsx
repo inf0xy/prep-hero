@@ -7,7 +7,7 @@ import classes from '../styles/ProblemsPage.module.scss';
 import useSort from '@/hooks/useSort';
 import CircleX from '@/components/icons/CircleX';
 import SelectBar from '@/components/problems/SelectBar';
-import { useAppDispatch } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { fetchUserData } from '@/store';
 
 interface AllProblemsPageProps {
@@ -25,6 +25,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
     text: ''
   });
   const dispatch = useAppDispatch();
+  const { theme } = useAppSelector((state) => state.theme);
   const handleSort = useSort(problems, setCurrentProblems);
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       await dispatch(fetchUserData());
-    }
+    };
     try {
       fetchUserInfo();
     } catch (err) {
@@ -103,7 +104,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
 
   return (
     <>
-      <section className={classes['problems-page']}>
+      <section className={`${classes['problems']} ${classes[`problems--${theme}`]}`}>
         <div className={classes.selections}>
           <SelectBar
             showNotes={showNotes}

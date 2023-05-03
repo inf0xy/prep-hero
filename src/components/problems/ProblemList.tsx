@@ -1,8 +1,10 @@
 import { useSession } from 'next-auth/react';
+import { useAppSelector } from '@/hooks/hooks';
 import { Problem } from '@/types/dataTypes';
 import ProblemItem from './ProblemItem';
-import classes from './ProblemList.module.css';
-import SortIcon from '../icons/SortIcon';
+import classes from './ProblemList.module.scss';
+import SortIconDark from '../icons/SortIconDark';
+import SortIconLight from '../icons/SortIconLight';
 
 interface ProblemListProps {
   problems: Problem[];
@@ -16,6 +18,7 @@ const ProblemList: React.FC<ProblemListProps> = ({
   showNotes
 }) => {
   const { data: session } = useSession();
+  const { theme } = useAppSelector((state) => state.theme);
 
   const renderedProblems = problems.map((problem, index) => (
     <ProblemItem
@@ -27,7 +30,12 @@ const ProblemList: React.FC<ProblemListProps> = ({
   ));
 
   return (
-    <div role="table" className={classes['problems-table']}>
+    <div
+      role="table"
+      className={`${classes['problems-table']} ${
+        classes[`problems-table--${theme}`]
+      }`}
+    >
       <div className={classes['table-header']}>
         <div role="row" className={classes['solved-header']}>
           <div>
@@ -40,7 +48,11 @@ const ProblemList: React.FC<ProblemListProps> = ({
             className="cursor-pointer pt-[0.5px]"
             onClick={() => onSort('category')}
           >
-            <SortIcon width={14} height={14} />
+            {theme === 'dark' ? (
+              <SortIconDark width={14} height={14} />
+            ) : (
+              <SortIconLight width={14} height={14} />
+            )}
           </span>
         </div>
         <div role="row" className={classes['title-header']}>
@@ -49,7 +61,11 @@ const ProblemList: React.FC<ProblemListProps> = ({
             className="cursor-pointer pt-[0.5px]"
             onClick={() => onSort('title')}
           >
-            <SortIcon width={14} height={14} />
+            {theme === 'dark' ? (
+              <SortIconDark width={14} height={14} />
+            ) : (
+              <SortIconLight width={14} height={14} />
+            )}
           </span>
         </div>
         <div role="row" className={classes['difficulty-header']}>
@@ -58,7 +74,11 @@ const ProblemList: React.FC<ProblemListProps> = ({
             className="cursor-pointer pt-[0.5px]"
             onClick={() => onSort('difficulty')}
           >
-            <SortIcon width={14} height={14} />
+            {theme === 'dark' ? (
+              <SortIconDark width={14} height={14} />
+            ) : (
+              <SortIconLight width={14} height={14} />
+            )}
           </span>
         </div>
         <div role="row" className={classes['solution-header']}>
