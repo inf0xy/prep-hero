@@ -1,11 +1,14 @@
+@import '@/styles/variables.module.scss';
+
 .random {
   position: relative;
 }
 
 .note-switch {
   position: relative;
-  height: 2rem;
-  width: 4rem;
+  height: 2.5rem;
+  width: 4.5rem;
+  border-radius: 7px;
   align-self: center;
 }
 
@@ -19,8 +22,8 @@
   z-index: 10;
   width: 9rem;
   font-size: 1.2rem;
-  background-color: var(--background-color-200);
-  color: var(--color-off-white);
+  background-color: $dark-background-100;
+  color: $color-off-white;
   padding: 0.5rem;
   border-radius: 4px;
   cursor: pointer;

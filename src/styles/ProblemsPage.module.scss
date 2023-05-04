@@ -1,11 +1,14 @@
 @import '@/styles/variables.module.scss';
 
 .problems {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   min-height: calc(100vh - 150px);
   padding: 5rem;
 
   &--dark {
-    background-color: $dark-background-300;
+    background-color: $dark-background-400;
   }
 
   &--light {
@@ -17,10 +20,12 @@
   display: flex;
   margin-bottom: 1.5rem;
   gap: 1.5rem;
+  align-self: flex-start;
 }
 
 .filters {
   display: flex;
+  align-self: flex-start;
   margin-bottom: 3rem;
   gap: 1rem;
 }

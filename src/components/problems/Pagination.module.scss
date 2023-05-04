@@ -1,0 +1,32 @@
+@import '@/styles/variables.module.scss';
+
+.pagination__button--dark {
+  background-color: $dark-background-200;
+  border: none;
+  color: $text-off-white;
+
+  &:hover {
+    background-color: $dark-background-100;
+  }
+}
+
+.pagination__button--light {
+  background-color: $light-background-200;
+  border: none;
+  color: $text-gray-400;
+
+  &:hover {
+    background-color: $color-gray-200;
+  }
+}
+
+.pagination__button--light--selected,
+.pagination__button--dark--selected {
+  background-color: $color-primary-100;
+  color: $text-off-white;
+  border: none;
+
+  &:hover {
+    background-color: $color-primary-100;
+  }
+}

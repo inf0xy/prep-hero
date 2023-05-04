@@ -12,9 +12,12 @@
   transition: all 0.3s ease-in-out;
 }
 
-.custom-button--dark--primary,
-.custom-button--light--primary {
+.custom-button--dark--primary {
   background-color: $color-primary-300;
+}
+
+.custom-button--light--primary {
+  background-color: $color-primary-200;
 }
 
 .custom-button--dark--secondary,
@@ -34,7 +37,7 @@
 }
 
 .custom-button--light--primary:hover {
-  background-color: $color-primary-500;
+  background-color: $color-primary-300;
 }
 
 .custom-button--light--secondary:hover {

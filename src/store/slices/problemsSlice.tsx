@@ -15,10 +15,10 @@ interface ProblemState {
     solution_link: string | undefined;
     description: string | undefined;
   };
-  allProblemCount: number;
-  easyProblemCount: number;
-  mediumProblemCount: number;
-  hardProblemCount: number;
+  allProblemsCount: number;
+  easyProblemsCount: number;
+  mediumProblemsCount: number;
+  hardProblemsCount: number;
   isLoading: boolean;
   error: undefined | string;
 }
@@ -50,7 +50,7 @@ export const updateProblem = createAsyncThunk(
 export const getProblemCounts = createAsyncThunk(
   'problems/getProblemCounts',
   async () => {
-    const { data } = await axios.get('/api/problems');
+    const { data } = await axios.get('/api/problems/count');
     return data;
   }
 );
@@ -67,10 +67,10 @@ const initialState: ProblemState = {
     solution_link: undefined,
     description: undefined
   },
-  allProblemCount: 0,
-  easyProblemCount: 0,
-  mediumProblemCount: 0,
-  hardProblemCount: 0,
+  allProblemsCount: 0,
+  easyProblemsCount: 0,
+  mediumProblemsCount: 0,
+  hardProblemsCount: 0,
   isLoading: false,
   error: undefined
 };
@@ -120,10 +120,11 @@ const problemsSlice = createSlice({
     builder.addCase(getProblemCounts.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = undefined;
-      // state.allProblemCount =
-      // state.easyProblemCount =
-      // state.mediumProblemCount =
-      // state.hardProblemCount =
+      const [{ easyCount }, { mediumCount }, { hardCount }] = action.payload;
+      state.easyProblemsCount = easyCount;
+      state.mediumProblemsCount = mediumCount;
+      state.hardProblemsCount = hardCount;
+      state.allProblemsCount = easyCount + mediumCount + hardCount;
     });
     builder.addCase(getProblemCounts.rejected, (state, action) => {
       state.isLoading = false;

@@ -1,0 +1,71 @@
+import { Dispatch, SetStateAction, Fragment } from 'react';
+import { useAppSelector } from '@/hooks/hooks';
+import classes from './Pagination.module.scss';
+
+type PaginationProps = {
+  selectedPage: number;
+  onPageSelect: Dispatch<SetStateAction<number>>;
+  className?: string;
+};
+
+const ITEM_PER_PAGE = 50;
+
+const Pagination: React.FC<PaginationProps> = ({
+  selectedPage,
+  onPageSelect,
+  className
+}) => {
+  const { allProblemsCount, theme } = useAppSelector((state) => {
+    const { allProblemsCount } = state.problems;
+    const { theme } = state.theme;
+    return { allProblemsCount, theme };
+  });
+
+  const totalPages = Math.ceil(allProblemsCount / ITEM_PER_PAGE);
+
+  const getPages = () => {
+    let pages = [];
+    if (totalPages <= 5) {
+      pages = [...Array(totalPages).keys()].map((i) => i + 1);
+    } else if (selectedPage <= 3) {
+      pages = [1, 2, '...', totalPages - 1, totalPages];
+    } else if (selectedPage >= totalPages - 2) {
+      pages = [1, '...', totalPages - 1, totalPages - 2, totalPages];
+    } else {
+      pages = [1, '...', selectedPage, '...', totalPages];
+    }
+
+    return pages;
+  };
+
+  return (
+    <div className={`btn-group ${className}`}>
+      {getPages().map((p: string | number, index: number) =>
+        p !== '...' ? (
+          <button
+            key={p}
+            onClick={() => onPageSelect(p as number)}
+            className={`btn btn-lg  ${
+              selectedPage === p
+                ? classes[`pagination__button--${theme}--selected`]
+                : classes[`pagination__button--${theme}`]
+            }`}
+          >
+            {p}
+          </button>
+        ) : (
+          <button
+            key={p}
+            className={`btn btn-lg btn-disabled ${
+              theme === 'light' ? 'bg-gray-100 text-gray-500' : 'bg-neutral'
+            }`}
+          >
+            ...
+          </button>
+        )
+      )}
+    </div>
+  );
+};
+
+export default Pagination;

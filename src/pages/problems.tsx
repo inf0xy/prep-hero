@@ -3,6 +3,7 @@ import { GetStaticProps } from 'next';
 import { getProblems } from '@/helpers/problem-api-util';
 import { Problem, SearchCriteria } from '@/types/dataTypes';
 import ProblemList from '@/components/problems/ProblemList';
+import Pagination from '@/components/problems/Pagination';
 import classes from '../styles/ProblemsPage.module.scss';
 import useSort from '@/hooks/useSort';
 import CircleX from '@/components/icons/CircleX';
@@ -16,6 +17,7 @@ interface AllProblemsPageProps {
 
 const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
   const [currentProblems, setCurrentProblems] = useState(problems);
+  const [pageNumber, setPageNumber] = useState(1);
   const [showNotes, setShowNotes] = useState(false);
   const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>({
     category: '',
@@ -35,11 +37,25 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
     };
 
     try {
+      setPageNumber(1);
       fetchProblems();
     } catch (err) {
       console.error(err);
     }
   }, [searchCriteria]);
+
+  useEffect(() => {
+    const fetchPageProblems = async () => {
+      const data = await getProblems(pageNumber, searchCriteria);
+      setCurrentProblems(data);
+    };
+    try {
+      fetchPageProblems();
+    } catch (err) {
+      console.error(err);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNumber]);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -130,6 +146,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
             showNotes={showNotes}
           />
         )}
+        <Pagination selectedPage={pageNumber} onPageSelect={setPageNumber} className='mt-16'/>
       </section>
     </>
   );

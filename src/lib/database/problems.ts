@@ -129,3 +129,45 @@ export const getProblems = async (
   }
   return result;
 };
+
+export const getProblemsCount = async () => {
+  await connectDB();
+
+  const filters = [
+    {
+      $match: {
+        $or: [
+          { difficulty: 'Easy' },
+          { difficulty: 'Medium' },
+          { difficulty: 'Hard' }
+        ]
+      }
+    }
+  ];
+
+  const pipeline = [
+    {
+      $facet: {
+        easyCount: [
+          { $match: { difficulty: 'Easy' } },
+          { $count: 'easyCount' }
+        ],
+        mediumCount: [
+          { $match: { difficulty: 'Medium' } },
+          { $count: 'mediumCount' }
+        ],
+        hardCount: [{ $match: { difficulty: 'Hard' } }, { $count: 'hardCount' }]
+      }
+    }
+  ];
+
+  const result = await problemsCollection
+    .aggregate([...filters, ...pipeline])
+    .toArray();
+
+  return [
+    result[0].easyCount[0],
+    result[0].mediumCount[0],
+    result[0].hardCount[0]
+  ];
+};

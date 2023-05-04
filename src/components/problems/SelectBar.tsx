@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Tooltip } from 'react-tooltip';
 import { SearchCriteria } from '@/types/dataTypes';
-import classes from './SelectBar.module.css';
+import classes from './SelectBar.module.scss';
 
 import CategoryList from '@/components/problems/CategoryList';
 import DifficultyList from '@/components/problems/DifficultyList';
@@ -61,7 +60,7 @@ const SelectBar: React.FC<SelectBarProps> = ({
             width: '5rem',
             padding: '0'
           }}
-          color="secondary-200"
+          color="secondary"
         >
           <ShuffleIcon width={20} height={20} />
         </Button>
@@ -78,7 +77,7 @@ const SelectBar: React.FC<SelectBarProps> = ({
             width: '4rem',
             padding: '0'
           }}
-          color="primary-200"
+          color="primary"
         >
           <ResetIcon width={15} height={15} />
         </Button>
@@ -86,7 +85,7 @@ const SelectBar: React.FC<SelectBarProps> = ({
       <input
         data-tooltip="Show / Hide all notes"
         type="checkbox"
-        className={`toggle ${classes['note-switch']}`}
+        className={`toggle toggle-lg ${classes['note-switch']}`}
         checked={showNotes}
         onChange={() => setShowNotes((prev) => !prev)}
       />

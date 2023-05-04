@@ -4,17 +4,15 @@ import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
-import { setTheme, getTheme } from '@/store';
+import { setTheme, getTheme, getProblemCounts } from '@/store';
 import ConfirmPanel from '../reusables/ConfirmPanel';
 import UserMenu from '../user/UserMenu';
-import LightIcon from '../icons/LightIcon';
-import DarkIcon from '../icons/DarkIcon';
 import classes from './Header.module.scss';
 
 import LogoDark from './LogoDark';
 import LogoLight from './LogoLight';
-import LightIcon2 from '../icons/LightIcon';
-import DarkIcon2 from '../icons/DarkIcon';
+import LightIcon from '../icons/LightIcon';
+import DarkIcon from '../icons/DarkIcon';
 
 const Header = () => {
   const [userMenuVisible, setUserMenuVisible] = useState(false);
@@ -31,6 +29,7 @@ const Header = () => {
 
   useEffect(() => {
     dispatch(getTheme());
+    dispatch(getProblemCounts());
   }, [dispatch]);
 
   const handleLogout = () => {
@@ -42,7 +41,7 @@ const Header = () => {
       <Link href="/" className={classes.logo}>
         {theme === 'dark' ? <LogoDark /> : <LogoLight />}
       </Link>
-      <nav>
+      <nav className="h-full">
         <ul className={classes['main-nav']}>
           <li>
             <Link href="/about">Resources</Link>
@@ -53,11 +52,14 @@ const Header = () => {
         </ul>
       </nav>
       <div className="flex space-x-12">
-        <div className="cursor-pointer" onClick={() => dispatch(setTheme())}>
+        <div
+          className="cursor-pointer self-center"
+          onClick={() => dispatch(setTheme())}
+        >
           {theme === 'dark' ? (
-            <LightIcon2 width={33} height={33} />
+            <LightIcon width={30} height={30} />
           ) : (
-            <DarkIcon2 width={33} height={33} />
+            <DarkIcon width={30} height={30} />
           )}
         </div>
 

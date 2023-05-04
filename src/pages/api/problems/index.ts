@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     companies === undefined ||
     text === undefined
   ) {
-    return res.status(400).json({ message: 'Invalid input.' })
+    return res.status(400).json({ message: 'Invalid input.' });
   }
 
   try {
