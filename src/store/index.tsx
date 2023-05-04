@@ -8,7 +8,8 @@ import notesSlice, {
 import problemsReducer, {
   setSelectedProblem,
   addProblem,
-  updateProblem
+  updateProblem,
+  getProblemCounts
 } from './slices/problemsSlice';
 import themeReducer, { setTheme, getTheme } from './slices/themeSlice';
 
@@ -31,6 +32,7 @@ export {
   setSelectedProblem,
   addProblem,
   updateProblem,
+  getProblemCounts,
   setTheme,
   getTheme
 };

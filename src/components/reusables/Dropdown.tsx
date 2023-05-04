@@ -3,7 +3,9 @@ import { useTransition, animated } from 'react-spring';
 import Panel from './Panel';
 import ChevronUp from '@/components/icons/ChevronUp';
 import ChevronDown from '@/components/icons/ChevronDown';
-import classes from './DropDown.module.css';
+import classes from './DropDown.module.scss';
+import variables from '@/styles/variables.module.scss';
+import { useAppSelector } from '@/hooks/hooks';
 
 type Option = {
   value: string;
@@ -27,6 +29,8 @@ const DropDown: React.FC<DropDownProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const divEl = useRef<HTMLDivElement | null>(null);
+  const { theme } = useAppSelector((state) => state.theme);
+
   const transition = useTransition(isOpen, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
@@ -61,7 +65,7 @@ const DropDown: React.FC<DropDownProps> = ({
   const renderOptions = options.map((option, index) => (
     <div
       key={option.value + index}
-      className={`${classes['option-item']} text-gray-200 hover:bg-[#e64900b5] rounded-md cursor-pointer p-3`}
+      className={`${classes['option-item']} ${theme === 'dark' ? 'text-gray-200' : 'text-gray-500'} hover:bg-[#e64900b5] ${theme === 'dark' ? 'hover:text-gray-200' : 'hover:text-white'} rounded-md cursor-pointer p-3`}
       onClick={() => handleOptionClick(option)}
     >
       {option.label}
@@ -76,20 +80,36 @@ const DropDown: React.FC<DropDownProps> = ({
     >
       <Panel
         className={`
-          bg-[#454545] flex justify-between items-center cursor-pointer font-light rounded-md
+        ${
+          theme === 'dark'
+            ? `bg-[${variables.darkBackground100}]`
+            : `bg-[${variables.lightBackground200}]`
+        } flex justify-between items-center cursor-pointer font-light rounded-md
         `}
         onClick={handleToggle}
       >
-        <span className="px-5 font-medium text-gray-200">{defaultText}</span>
+        <span className={`px-5 font-medium text-gray-200 ${
+          theme === 'dark'
+            ? 'text-gray-200'
+            : 'text-gray-500'
+        }`}>{defaultText}</span>
         <div className={`flex items-center justify-center w-fit h-[3rem] px-1`}>
           <div className="relative w-7 h-full mr-3">
             <ChevronDown
-              className={`absolute top-[25%] left-[5%] text-lg text-white ${
+              className={`absolute top-[25%] left-[5%] text-lg ${
+                theme === 'dark'
+                  ? 'text-gray-200'
+                  : 'text-gray-500'
+              } ${
                 isOpen ? classes['arrow-down_hide'] : classes['arrow-down_show']
               }`}
             />
             <ChevronUp
-              className={`absolute top-[25%] left-[5%] text-lg text-white ${
+              className={`absolute top-[25%] left-[5%] text-lg ${
+                theme === 'dark'
+                  ? 'text-gray-200'
+                  : 'text-gray-500'
+              } ${
                 isOpen ? classes['arrow-up_show'] : classes['arrow-up_hide']
               }`}
             />
@@ -103,7 +123,11 @@ const DropDown: React.FC<DropDownProps> = ({
               // className={`absolute top-full p-3 mt-[3px] bg-[#3a3a3a] z-50 ${
               //   isOpen ? classes['options_show'] : classes['options_hide']
               // } rounded-md`}
-              className={`absolute top-full p-3 mt-[3px] bg-[#3a3a3a] z-50 rounded-md`}
+              className={`absolute top-full p-3 mt-[3px] z-50 rounded-md ${
+                theme === 'dark'
+                  ? 'bg-[#3a3a3a]'
+                  : `bg-white shadow-lg`
+              }`}
               onClick={() => {}}
             >
               {renderOptions}

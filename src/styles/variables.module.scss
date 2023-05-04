@@ -18,7 +18,8 @@ $color-gray-200: #b2adb8;
 $color-gray-300: #a7a3ae;
 $color-gray-400: #918d96;
 $color-gray-500: #87848b;
-$color-gray-600: #6a676f;
+// $color-gray-600: #6a676f;
+$color-gray-600: #656565;
 $color-gray-700: #4f4c52;
 $color-gray-800: #343036;
 $color-gray-900: #221f23;
@@ -34,6 +35,7 @@ $dark-background-700: #050505;
 
 // Light background colors:
 $light-background-0: #fff;
+$light-background-50: #eaeaea;
 $light-background-100: #f6f6f6de;
 $light-background-200: #e7e7e7;
 
@@ -113,4 +115,20 @@ $heatmap-color-4: #0cf283;
   stripColorDark: $strip-color-dark;
   stripColorLight: $strip-color-light;
   colorOffWhite: $color-off-white;
+
+  colorSuccess500: $color-success-500;
+  colorWarning100: $color-warning-100;
+  colorError300: $color-error-300;
+
+  darkBackground100: $dark-background-100;
+  darkBackground200: $dark-background-200;
+  darkBackground300: $dark-background-300;
+  darkBackground400: $dark-background-400;
+  darkBackground500: $dark-background-500;
+  darkBackground600: $dark-background-600;
+  darkBackground700: $dark-background-700;
+
+  lightBackground0: $light-background-0;
+  lightBackground100: $light-background-100;
+  lightBackground200: $light-background-200;
 }

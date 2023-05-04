@@ -74,7 +74,12 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
       if (['tags', 'companies'].includes(filter)) {
         (searchCriteria[filter] as string[]).map((el) =>
           renderedFilters.push(
-            <div key={el} className={classes['filter-badge']}>
+            <div
+              key={el}
+              className={`${classes['filter-badge']} ${
+                classes[`filter-badge--${theme}`]
+              }`}
+            >
               <span>{el}</span>
               <button onClick={() => handleRemoveFilters(el)}>
                 <CircleX />
@@ -86,7 +91,9 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
         renderedFilters.push(
           <div
             key={searchCriteria[filter] as string}
-            className={classes['filter-badge']}
+            className={`${classes['filter-badge']} ${
+              classes[`filter-badge--${theme}`]
+            }`}
           >
             <span>{searchCriteria[filter]}</span>
             <button
@@ -104,7 +111,9 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
 
   return (
     <>
-      <section className={`${classes['problems']} ${classes[`problems--${theme}`]}`}>
+      <section
+        className={`${classes['problems']} ${classes[`problems--${theme}`]}`}
+      >
         <div className={classes.selections}>
           <SelectBar
             showNotes={showNotes}

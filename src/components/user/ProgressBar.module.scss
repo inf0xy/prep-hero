@@ -1,3 +1,5 @@
+@import '@/styles/variables.module.scss';
+
 .progress-bar__container {
   display: flex;
   flex-direction: column;
@@ -10,6 +12,14 @@
   flex-direction: column;
   color: var(--color-off-white);
   gap: 0.5rem;
+
+  &--dark {
+    color: $text-off-white;
+  }
+
+  &--light {
+    color: $text-gray-700;
+  }
 }
 
 .bar__outer {

@@ -15,6 +15,10 @@ interface ProblemState {
     solution_link: string | undefined;
     description: string | undefined;
   };
+  allProblemCount: number;
+  easyProblemCount: number;
+  mediumProblemCount: number;
+  hardProblemCount: number;
   isLoading: boolean;
   error: undefined | string;
 }
@@ -43,6 +47,14 @@ export const updateProblem = createAsyncThunk(
   }
 );
 
+export const getProblemCounts = createAsyncThunk(
+  'problems/getProblemCounts',
+  async () => {
+    const { data } = await axios.get('/api/problems');
+    return data;
+  }
+);
+
 const initialState: ProblemState = {
   selectedProblem: {
     list_name: undefined,
@@ -55,6 +67,10 @@ const initialState: ProblemState = {
     solution_link: undefined,
     description: undefined
   },
+  allProblemCount: 0,
+  easyProblemCount: 0,
+  mediumProblemCount: 0,
+  hardProblemCount: 0,
   isLoading: false,
   error: undefined
 };
@@ -95,6 +111,21 @@ const problemsSlice = createSlice({
       state.error = undefined;
     });
     builder.addCase(updateProblem.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(getProblemCounts.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getProblemCounts.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = undefined;
+      // state.allProblemCount =
+      // state.easyProblemCount =
+      // state.mediumProblemCount =
+      // state.hardProblemCount =
+    });
+    builder.addCase(getProblemCounts.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message;
     });

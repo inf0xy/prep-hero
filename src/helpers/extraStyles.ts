@@ -1,9 +1,9 @@
 import variables from '@/styles/variables.module.scss';
 
 export const colors: { [key: string]: string } = {
-  Easy: '#25b384',
-  Medium: '#fbcb06',
-  Hard: '#be224c'
+  Easy: variables.colorSuccess500,
+  Medium: variables.colorWarning100,
+  Hard: variables.colorError300
 };
 
 export const noteStripStyle: { [key: string]: object } = {

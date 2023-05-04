@@ -2,7 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import Panel from './Panel';
 import ChevronUp from '@/components/icons/ChevronUp';
 import ChevronDown from '@/components/icons/ChevronDown';
-import classes from './DropDown.module.css';
+import classes from './DropDown.module.scss';
+import { useAppSelector } from '@/hooks/hooks';
+import variables from '@/styles/variables.module.scss';
 
 type Option = {
   value: string;
@@ -25,6 +27,7 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
   width
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { theme } = useAppSelector((state) => state.theme);
   const divEl = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -69,12 +72,12 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
   const renderOptions = options.map((option, index) => (
     <span
       key={option.value + index}
-      className="badge hover:bg-[#e64900b5] border-0 cursor-pointer text-[1.3rem] mr-3 mb-3 px-4 py-5"
+      className={`badge border-0 cursor-pointer text-[1.3rem] mr-3 mb-3 px-4 py-5 ${
+        value && value.includes(option)
+          ? classes[`tags__badge--${theme}--selected`]
+          : classes[`tags__badge--${theme}`]
+      }`}
       onClick={() => handleOptionClick(option)}
-      style={{
-        backgroundColor:
-          value && value.includes(option) ? '#e64900b5' : '#827a7763'
-      }}
     >
       {option.label}
     </span>
@@ -88,20 +91,38 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
     >
       <Panel
         className={`
-          bg-[#454545] flex justify-between items-center cursor-pointer font-light rounded-md
+        ${
+          theme === 'dark'
+            ? `bg-[${variables.darkBackground100}]`
+            : `bg-[${variables.lightBackground200}]`
+        } flex justify-between items-center cursor-pointer font-light rounded-md
         `}
         onClick={handleToggle}
       >
-        <span className="px-5 font-medium text-gray-200">{defaultText}</span>
+        <span
+          className={`px-5 font-medium ${
+            theme === 'dark' ? 'text-gray-200' : 'text-gray-500'
+          }`}
+        >
+          {defaultText}
+        </span>
         <div className={`flex items-center justify-center w-fit h-[3rem] px-1`}>
           <div className="relative w-7 h-full mr-3">
             <ChevronDown
-              className={`absolute top-[25%] left-[5%] text-lg text-white ${
+              className={`absolute top-[25%] left-[5%] text-lg ${
+                theme === 'dark'
+                  ? 'text-gray-200'
+                  : 'text-gray-500'
+              } ${
                 isOpen ? classes['arrow-down_hide'] : classes['arrow-down_show']
               }`}
             />
             <ChevronUp
-              className={`absolute top-[25%] left-[5%] text-lg text-white ${
+              className={`absolute top-[25%] left-[5%] text-lg ${
+                theme === 'dark'
+                  ? 'text-gray-200'
+                  : 'text-gray-500'
+              } ${
                 isOpen ? classes['arrow-up_show'] : classes['arrow-up_hide']
               }`}
             />
@@ -109,7 +130,9 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
         </div>
       </Panel>
       <Panel
-        className={`absolute top-full px-8 pt-6 pb-5 mt-[3px] bg-[#3a3a3a] z-50 ${
+        className={`absolute top-full px-8 pt-6 pb-5 mt-[3px] ${
+          theme === 'dark' ? 'bg-[#3a3a3a]' : `bg-[#fff] shadow-lg`
+        } z-50 ${
           isOpen ? classes['options_show'] : classes['options_hide']
         } rounded-md`}
         onClick={() => {}}

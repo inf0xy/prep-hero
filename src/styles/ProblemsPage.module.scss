@@ -30,8 +30,15 @@
   align-items: center;
   gap: 0.7rem;
   font-size: 1.4rem;
-  background-color: $color-primary-400;
-  color: $color-gray-200;
+  color: $color-gray-50;
   border-radius: 20px;
   padding: 0.3rem 1rem;
+
+  &--dark {
+    background-color: $color-primary-400;
+  }
+
+  &--light {
+    background-color: $color-primary-200;
+  }
 }
