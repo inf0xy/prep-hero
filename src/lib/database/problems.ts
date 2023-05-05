@@ -112,6 +112,8 @@ export const getProblems = async (
     ];
   }
 
+  let count = await problemsCollection.countDocuments(filters);
+
   let result = await problemsCollection
     .find(filters, { projection: { _id: 0 } })
     .skip(skipNum)
@@ -127,7 +129,7 @@ export const getProblems = async (
       .limit(ITEMS_PER_PAGE)
       .toArray();
   }
-  return result;
+  return { count, problems: result };
 };
 
 export const getProblemsCount = async () => {

@@ -36,7 +36,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div
       className={`flex px-5 h-[3rem] w-[15rem] rounded-md items-center space-x-3 ${
-        theme === 'dark' ? 'bg-[#454545]' : 'bg-gray-300'
+        theme === 'dark' ? 'bg-[#454545]' : 'bg-gray-100 border border-gray-400'
       }`}
     >
       <SearchIcon
@@ -46,7 +46,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         className={`w-full focus:outline-none text-[1.5rem] placeholder:text-gray-400 ${
           theme === 'dark'
             ? 'bg-[#454545] text-gray-100'
-            : 'bg-gray-300 text-gray-600'
+            : 'bg-gray-100 text-gray-600'
         }`}
         value={searchInput}
         placeholder={defaultText}

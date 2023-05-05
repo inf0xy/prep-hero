@@ -13,11 +13,13 @@ import { fetchUserData } from '@/store';
 
 interface AllProblemsPageProps {
   problems: Problem[];
+  count: number
 }
 
-const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
+const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems, count }) => {
   const [currentProblems, setCurrentProblems] = useState(problems);
   const [pageNumber, setPageNumber] = useState(1);
+  const [totalProblems, setTotalProblems] = useState(count);
   const [showNotes, setShowNotes] = useState(false);
   const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>({
     category: '',
@@ -29,11 +31,12 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
   const dispatch = useAppDispatch();
   const { theme } = useAppSelector((state) => state.theme);
   const handleSort = useSort(problems, setCurrentProblems);
-
+// console.log(count, currentProblems)
   useEffect(() => {
     const fetchProblems = async () => {
       const data = await getProblems(1, searchCriteria);
-      setCurrentProblems(data);
+      setCurrentProblems(data.problems);
+      setTotalProblems(data.count);
     };
 
     try {
@@ -47,7 +50,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
   useEffect(() => {
     const fetchPageProblems = async () => {
       const data = await getProblems(pageNumber, searchCriteria);
-      setCurrentProblems(data);
+      setCurrentProblems(data.problems);
     };
     try {
       fetchPageProblems();
@@ -146,14 +149,14 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems }) => {
             showNotes={showNotes}
           />
         )}
-        <Pagination selectedPage={pageNumber} onPageSelect={setPageNumber} className='mt-16'/>
+        <Pagination totalProblems={totalProblems} selectedPage={pageNumber} onPageSelect={setPageNumber} className='mt-16'/>
       </section>
     </>
   );
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const problems = await getProblems(1, {
+  const { count, problems } = await getProblems(1, {
     category: '',
     difficulty: '',
     tags: [],
@@ -162,7 +165,7 @@ export const getStaticProps: GetStaticProps = async () => {
   });
 
   return {
-    props: { problems },
+    props: { problems, count },
     revalidate: 3600
   };
 };

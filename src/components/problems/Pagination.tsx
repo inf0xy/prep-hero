@@ -4,6 +4,7 @@ import classes from './Pagination.module.scss';
 
 type PaginationProps = {
   selectedPage: number;
+  totalProblems: number;
   onPageSelect: Dispatch<SetStateAction<number>>;
   className?: string;
 };
@@ -12,16 +13,12 @@ const ITEM_PER_PAGE = 50;
 
 const Pagination: React.FC<PaginationProps> = ({
   selectedPage,
+  totalProblems,
   onPageSelect,
   className
 }) => {
-  const { allProblemsCount, theme } = useAppSelector((state) => {
-    const { allProblemsCount } = state.problems;
-    const { theme } = state.theme;
-    return { allProblemsCount, theme };
-  });
-
-  const totalPages = Math.ceil(allProblemsCount / ITEM_PER_PAGE);
+  const { theme } = useAppSelector(state => state.theme);
+  const totalPages = Math.ceil(totalProblems / ITEM_PER_PAGE);
 
   const getPages = () => {
     let pages = [];
