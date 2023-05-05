@@ -1,8 +1,8 @@
-import { GeneralFormData } from '@/types/dataTypes';
+import { SearchOrForm } from '@/types/dataTypes';
 import { Dispatch, SetStateAction } from 'react';
 
 type DifficultyProps = {
-  setGeneralInfo: Dispatch<SetStateAction<GeneralFormData>>;
+  setGeneralInfo: Dispatch<SetStateAction<SearchOrForm>>;
   currentSelectedDiffs: string
 };
 

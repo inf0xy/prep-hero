@@ -13,7 +13,7 @@ import { validateAddedProblems } from '@/helpers/validateProblemForm';
 import { companies as companiesTags } from '@/helpers/formFields';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { addProblem, updateProblem } from '@/store';
-import { GeneralFormData, Problem } from '@/types/dataTypes';
+import { GeneralFormData, Problem, SearchOrForm } from '@/types/dataTypes';
 import { NotificationType } from '@/types/dataTypes';
 import { formatString } from '@/helpers/formatString';
 
@@ -38,7 +38,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
     ? JSON.parse(problem?.description as string)
     : '';
 
-  const [generalInfo, setGeneralInfo] = useState<GeneralFormData>({
+  const [generalInfo, setGeneralInfo] = useState<SearchOrForm>({
     listName,
     title,
     difficulty,
@@ -106,7 +106,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
     }
     if (
       validateAddedProblems(
-        generalInfo,
+        generalInfo as GeneralFormData,
         description,
         selectedCompanies.join(',')
       )
@@ -123,9 +123,9 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
         description: JSON.stringify(description)
       };
       if (pathname.includes('/add')) {
-        await dispatch(addProblem(newProblem));
+        await dispatch(addProblem(newProblem as Problem));
       } else if (pathname.includes('/edit')) {
-        await dispatch(updateProblem(newProblem));
+        await dispatch(updateProblem(newProblem as Problem));
       }
       setSubmitted(true);
     } else {
@@ -167,7 +167,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
                 }))
               }
             />
-            <ListName setGeneralInfo={setGeneralInfo} />
+            <ListName setListName={setGeneralInfo} />
           </div>
         </div>
         <div className={classes['form-controls']}>

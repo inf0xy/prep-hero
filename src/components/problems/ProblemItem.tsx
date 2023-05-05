@@ -56,7 +56,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     useAppSelector((state) => state.user);
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
-  const { theme } = useAppSelector(state => state.theme);
+  const { theme } = useAppSelector((state) => state.theme);
   const router = useRouter();
 
   let problemNoteContent: string | undefined;
@@ -104,7 +104,11 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
 
   return (
     <>
-      <div className={`${classes.problem} ${oddCell ? classes[`problem--${theme}--odd-cell`]: undefined}`}>
+      <div
+        className={`${classes.problem} ${
+          oddCell ? classes[`problem--${theme}--odd-cell`] : undefined
+        }`}
+      >
         <div className={classes['solved-content']} style={solvedStatusStyle}>
           {session?.session.user.account_type === 'user' ? (
             <>

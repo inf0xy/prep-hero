@@ -4,6 +4,7 @@ import { SearchCriteria } from '@/types/dataTypes';
 export const getProblems = async (page: number, filters: SearchCriteria) => {
   const paramsConfig = {
     page,
+    listName: filters.listName,
     category: filters.category,
     difficulty: filters.difficulty,
     tags: JSON.stringify(filters.tags),

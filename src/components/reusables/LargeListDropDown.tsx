@@ -94,7 +94,7 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
         ${
           theme === 'dark'
             ? `bg-[${variables.darkBackground100}]`
-            : `bg-[${variables.lightBackground200}]`
+            : `bg-[${variables.lightBackground200}] shadow border`
         } flex justify-between items-center cursor-pointer font-light rounded-md
         `}
         onClick={handleToggle}
@@ -130,7 +130,7 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
         </div>
       </Panel>
       <Panel
-        className={`absolute top-full px-8 pt-6 pb-5 mt-[3px] ${
+        className={`absolute top-full px-8 pt-6 pb-5 mt-[4px] ${
           theme === 'dark' ? 'bg-[#3a3a3a]' : `bg-[#fff] shadow-lg`
         } z-50 ${
           isOpen ? classes['options_show'] : classes['options_hide']

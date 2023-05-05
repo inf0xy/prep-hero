@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { SearchCriteria } from '@/types/dataTypes';
+import { SearchCriteria, SearchOrForm } from '@/types/dataTypes';
 import classes from './SelectBar.module.scss';
 
 import CategoryList from '@/components/problems/CategoryList';
@@ -10,12 +10,14 @@ import SearchBar from '@/components/reusables/SearchBar';
 import Button from '@/components/reusables/Button';
 import ShuffleIcon from '@/components/icons/ShuffleIcon';
 import ResetIcon from '@/components/icons/ResetIcon';
+import { useSession } from 'next-auth/react';
+import ListName from '../admin/ListName';
 
 type SelectBarProps = {
   searchCriteria: SearchCriteria;
-  setSearchCriteria: Dispatch<SetStateAction<SearchCriteria>>;
+  setSearchCriteria: Dispatch<SetStateAction<SearchOrForm>>;
   setShowNotes: Dispatch<SetStateAction<boolean>>;
-  showNotes: boolean
+  showNotes: boolean;
 };
 
 const SelectBar: React.FC<SelectBarProps> = ({
@@ -24,9 +26,11 @@ const SelectBar: React.FC<SelectBarProps> = ({
   setShowNotes,
   showNotes
 }) => {
+  const { data: session } = useSession();
 
   const handleSearchReset = () => {
     setSearchCriteria({
+      listName: '',
       category: '',
       difficulty: '',
       tags: [],
@@ -37,6 +41,7 @@ const SelectBar: React.FC<SelectBarProps> = ({
 
   return (
     <>
+    <ListName setListName={setSearchCriteria}/>
       <CategoryList
         searchCriteria={searchCriteria}
         setCategory={setSearchCriteria}
@@ -82,13 +87,15 @@ const SelectBar: React.FC<SelectBarProps> = ({
           <ResetIcon width={15} height={15} />
         </Button>
       </div>
-      <input
-        data-tooltip="Show / Hide all notes"
-        type="checkbox"
-        className={`toggle toggle-lg ${classes['note-switch']}`}
-        checked={showNotes}
-        onChange={() => setShowNotes((prev) => !prev)}
-      />
+      {session && (
+        <input
+          data-tooltip="Show / Hide all notes"
+          type="checkbox"
+          className={`toggle toggle-lg ${classes['note-switch']}`}
+          checked={showNotes}
+          onChange={() => setShowNotes((prev) => !prev)}
+        />
+      )}
     </>
   );
 };

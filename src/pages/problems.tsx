@@ -1,27 +1,31 @@
 import { useState, useEffect } from 'react';
 import { GetStaticProps } from 'next';
 import { getProblems } from '@/helpers/problem-api-util';
-import { Problem, SearchCriteria } from '@/types/dataTypes';
+import { Problem, SearchCriteria, SearchOrForm } from '@/types/dataTypes';
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { fetchUserData } from '@/store';
 import ProblemList from '@/components/problems/ProblemList';
 import Pagination from '@/components/problems/Pagination';
 import classes from '../styles/ProblemsPage.module.scss';
 import useSort from '@/hooks/useSort';
 import CircleX from '@/components/icons/CircleX';
 import SelectBar from '@/components/problems/SelectBar';
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { fetchUserData } from '@/store';
 
 interface AllProblemsPageProps {
   problems: Problem[];
-  count: number
+  count: number;
 }
 
-const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems, count }) => {
+const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
+  problems,
+  count
+}) => {
   const [currentProblems, setCurrentProblems] = useState(problems);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalProblems, setTotalProblems] = useState(count);
   const [showNotes, setShowNotes] = useState(false);
-  const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>({
+  const [searchCriteria, setSearchCriteria] = useState<SearchOrForm>({
+    listName: '',
     category: '',
     difficulty: '',
     tags: [],
@@ -31,10 +35,10 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems, count }) =>
   const dispatch = useAppDispatch();
   const { theme } = useAppSelector((state) => state.theme);
   const handleSort = useSort(problems, setCurrentProblems);
-// console.log(count, currentProblems)
+
   useEffect(() => {
     const fetchProblems = async () => {
-      const data = await getProblems(1, searchCriteria);
+      const data = await getProblems(1, searchCriteria as SearchCriteria);
       setCurrentProblems(data.problems);
       setTotalProblems(data.count);
     };
@@ -49,7 +53,10 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems, count }) =>
 
   useEffect(() => {
     const fetchPageProblems = async () => {
-      const data = await getProblems(pageNumber, searchCriteria);
+      const data = await getProblems(
+        pageNumber,
+        searchCriteria as SearchCriteria
+      );
       setCurrentProblems(data.problems);
     };
     try {
@@ -57,7 +64,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems, count }) =>
     } catch (err) {
       console.error(err);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber]);
 
   useEffect(() => {
@@ -76,9 +83,11 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems, count }) =>
       if (key == 'tags' || key == 'companies') {
         setSearchCriteria((prev) => ({
           ...prev,
-          [key]: (prev[key] as string[]).filter((el) => el != value)
+          [key]: ((prev as SearchCriteria)[key] as string[]).filter(
+            (el) => el != value
+          )
         }));
-      } else if (searchCriteria[key].includes(value)) {
+      } else if ((searchCriteria as SearchCriteria)[key].includes(value)) {
         setSearchCriteria((prev) => ({
           ...prev,
           [key]: ''
@@ -89,9 +98,12 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems, count }) =>
 
   let renderedFilters = [];
   for (let filter in searchCriteria) {
-    if (searchCriteria[filter] !== '' || searchCriteria[filter].length) {
+    if (
+      (searchCriteria as SearchCriteria)[filter] !== '' ||
+      (searchCriteria as SearchCriteria)[filter].length
+    ) {
       if (['tags', 'companies'].includes(filter)) {
-        (searchCriteria[filter] as string[]).map((el) =>
+        ((searchCriteria as SearchCriteria)[filter] as string[]).map((el) =>
           renderedFilters.push(
             <div
               key={el}
@@ -109,15 +121,17 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems, count }) =>
       } else {
         renderedFilters.push(
           <div
-            key={searchCriteria[filter] as string}
+            key={(searchCriteria as SearchCriteria)[filter] as string}
             className={`${classes['filter-badge']} ${
               classes[`filter-badge--${theme}`]
             }`}
           >
-            <span>{searchCriteria[filter]}</span>
+            <span>{(searchCriteria as SearchCriteria)[filter]}</span>
             <button
               onClick={() =>
-                handleRemoveFilters(searchCriteria[filter] as string)
+                handleRemoveFilters(
+                  (searchCriteria as SearchCriteria)[filter] as string
+                )
               }
             >
               <CircleX />
@@ -137,7 +151,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems, count }) =>
           <SelectBar
             showNotes={showNotes}
             setShowNotes={setShowNotes}
-            searchCriteria={searchCriteria}
+            searchCriteria={searchCriteria as SearchCriteria}
             setSearchCriteria={setSearchCriteria}
           />
         </div>
@@ -149,7 +163,12 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems, count }) =>
             showNotes={showNotes}
           />
         )}
-        <Pagination totalProblems={totalProblems} selectedPage={pageNumber} onPageSelect={setPageNumber} className='mt-16'/>
+        <Pagination
+          totalProblems={totalProblems}
+          selectedPage={pageNumber}
+          onPageSelect={setPageNumber}
+          className="mt-16"
+        />
       </section>
     </>
   );
@@ -157,6 +176,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({ problems, count }) =>
 
 export const getStaticProps: GetStaticProps = async () => {
   const { count, problems } = await getProblems(1, {
+    listName: '',
     category: '',
     difficulty: '',
     tags: [],

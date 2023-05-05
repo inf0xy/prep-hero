@@ -73,6 +73,7 @@ export const updateProblem = async (problem: Problem) => {
 
 export const getProblems = async (
   page: number,
+  listNameFilter: string,
   categoryFilter: string,
   difficultyFilter: string,
   tagsFilter: string,
@@ -89,6 +90,9 @@ export const getProblems = async (
   if (categoryFilter !== '') {
     filters['category'] = categoryFilter;
   }
+  if (listNameFilter !== '') {
+    filters['list_name'] = listNameFilter;
+  }
   if (difficultyFilter !== '') {
     filters['difficulty'] = difficultyFilter;
   }
@@ -100,6 +104,7 @@ export const getProblems = async (
   }
   if (textFilter !== '') {
     filters['$or'] = [
+      { list_name: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
       { title: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
       { category: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
       { difficulty: { $regex: new RegExp(`^${textFilter}$`, 'i') } },

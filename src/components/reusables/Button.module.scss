@@ -13,11 +13,26 @@
 }
 
 .custom-button--dark--primary {
-  background-color: $color-primary-300;
+  background-color: $color-primary-200;
 }
 
 .custom-button--light--primary {
   background-color: $color-primary-200;
+}
+
+.custom-button--light--google,
+.custom-button--dark--google {
+  background-color: $google-background-100;
+}
+
+.custom-button--light--facebook,
+.custom-button--dark--facebook {
+  background-color: $facebook-background-100;
+}
+
+.custom-button--light--github,
+.custom-button--dark--github {
+  background-color: $github-background-100;
 }
 
 .custom-button--dark--secondary,
@@ -32,7 +47,10 @@
 
 .custom-button--dark--primary:hover,
 .custom-button--dark--secondary:hover,
-.custom-button--dark--gray:hover {
+.custom-button--dark--gray:hover,
+.custom-button--dark--google:hover,
+.custom-button--dark--facebook:hover,
+.custom-button--dark--github:hover {
   opacity: 0.8;
 }
 
@@ -48,3 +66,13 @@
   background-color: $color-gray-700;
 }
 
+.custom-button--light--google:hover {
+  background-color: $google-background-200;
+}
+
+.custom-button--light--facebook:hover {
+  background-color: $facebook-background-200;
+}
+.custom-button--light--github:hover {
+  background-color: $github-background-200;
+}

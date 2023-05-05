@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import LargeListDropDown from '../reusables/LargeListDropDown';
 import { tagListOptions } from '@/helpers/formFields';
-import { SearchCriteria } from '@/types/dataTypes';
+import { SearchCriteria, SearchOrForm } from '@/types/dataTypes';
 
 type Option = {
   label: string;
@@ -9,7 +9,7 @@ type Option = {
 };
 
 interface TagListProps {
-  setTags: Dispatch<SetStateAction<SearchCriteria>>;
+  setTags: Dispatch<SetStateAction<SearchOrForm>>;
   searchCriteria: SearchCriteria;
 }
 

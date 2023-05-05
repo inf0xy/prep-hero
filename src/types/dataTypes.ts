@@ -46,3 +46,5 @@ export type NotificationType = {
   status: 'success' | 'error' | 'warning' | undefined;
   message: string | undefined;
 };
+
+export type SearchOrForm = SearchCriteria | GeneralFormData;

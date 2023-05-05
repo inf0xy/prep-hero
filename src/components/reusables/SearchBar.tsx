@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import SearchIcon from '../icons/SearchIcon';
-import { SearchCriteria } from '@/types/dataTypes';
+import { SearchOrForm } from '@/types/dataTypes';
 import { useAppSelector } from '@/hooks/hooks';
 
 type SearchBarProps = {
-  setSearchTerm: Dispatch<SetStateAction<SearchCriteria>>;
+  setSearchTerm: Dispatch<SetStateAction<SearchOrForm>>;
   defaultText?: string;
   currentSearch: string;
 };
@@ -36,7 +36,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div
       className={`flex px-5 h-[3rem] w-[15rem] rounded-md items-center space-x-3 ${
-        theme === 'dark' ? 'bg-[#454545]' : 'bg-gray-100 border border-gray-400'
+        theme === 'dark' ? 'bg-[#454545]' : 'bg-slate-100 border self-center py-6'
       }`}
     >
       <SearchIcon

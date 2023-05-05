@@ -49,9 +49,12 @@ $text-gray-800: $color-gray-800;
 $text-gray-900: $color-gray-900;
 
 // Miscelaneous colors:
-$facebook-background: #2b70c0;
-$google-background: #35b46d;
-$github-background: #3b3b3b;
+$facebook-background-100: #2b70c0;
+$facebook-background-200: #2c517c;
+$google-background-100: #35b46d;
+$google-background-200: #2d7a4e;
+$github-background-100: #3b3b3b;
+$github-background-200: #1a1a1a;
 
 $color-success-100: #a2f0bc;
 $color-success-200: #6fc88d;
@@ -60,7 +63,7 @@ $color-success-500: #12bd4b;
 $color-error-50: #eac0d2;
 $color-error-100: #f1acc9;
 $color-error-200: #c55584;
-$color-error-300: #f6385b;
+$color-error-300: #e32447;
 $color-error-500: #a10c4a;
 
 $color-warning-100: #eea60c;

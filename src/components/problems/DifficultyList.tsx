@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import DropDown from '@/components/reusables/Dropdown';
 import { difficultyListOptions } from '@/helpers/formFields';
-import { SearchCriteria } from '@/types/dataTypes';
+import { SearchOrForm } from '@/types/dataTypes';
 
 type Option = {
   label: string;
@@ -9,7 +9,7 @@ type Option = {
 };
 
 interface DifficultyListProps {
-  setDifficulty: Dispatch<SetStateAction<SearchCriteria>>;
+  setDifficulty: Dispatch<SetStateAction<SearchOrForm>>;
 }
 
 const DifficultyList: React.FC<DifficultyListProps> = ({ setDifficulty }) => {

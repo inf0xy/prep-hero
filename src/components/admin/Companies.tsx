@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
-import { GeneralFormData } from '@/types/dataTypes';
+import { SearchOrForm } from '@/types/dataTypes';
 import { companies } from '@/helpers/formFields';
 
 type CompaniesProps = {
-  setGeneralInfo: Dispatch<SetStateAction<GeneralFormData>>;
+  setGeneralInfo: Dispatch<SetStateAction<SearchOrForm>>;
   currentSelectedCompanies: string[]
 };
 

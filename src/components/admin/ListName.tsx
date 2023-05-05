@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import DropDown from '@/components/reusables/Dropdown';
 import { listNameOptions } from '@/helpers/formFields';
-import { GeneralFormData } from '@/types/dataTypes';
+import { SearchOrForm } from '@/types/dataTypes';
 
 type Option = {
   label: string;
@@ -9,15 +9,15 @@ type Option = {
 };
 
 interface ListNameProps {
-  setGeneralInfo: Dispatch<SetStateAction<GeneralFormData>>
+  setListName: Dispatch<SetStateAction<SearchOrForm>>
 }
 
-const ListName: React.FC<ListNameProps> = ({ setGeneralInfo }) => {
+const ListName: React.FC<ListNameProps> = ({ setListName }) => {
   const [selected, setSelected] = useState<null | Option>(null);
 
   const handleSelectListName: (option: Option) => void = (option) => {
     setSelected(option);
-    setGeneralInfo(prev => ({
+    setListName(prev => ({
       ...prev,
       listName: option.value
     }));
@@ -28,8 +28,8 @@ const ListName: React.FC<ListNameProps> = ({ setGeneralInfo }) => {
       value={selected!}
       options={listNameOptions}
       onChange={handleSelectListName}
-      defaultText="Select List Name"
-      width='17rem'
+      defaultText="List"
+      width='12rem'
     />
   );
 };

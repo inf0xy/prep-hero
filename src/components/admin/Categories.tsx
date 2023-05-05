@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 import { categorySelection } from '@/helpers/formFields';
-import { GeneralFormData } from '@/types/dataTypes';
+import { SearchOrForm } from '@/types/dataTypes';
 
 type CategoriesProps = {
-  setGeneralInfo: Dispatch<SetStateAction<GeneralFormData>>;
+  setGeneralInfo: Dispatch<SetStateAction<SearchOrForm>>;
   currentSelectedCategory: string;
 };
 

@@ -83,7 +83,7 @@ const DropDown: React.FC<DropDownProps> = ({
         ${
           theme === 'dark'
             ? `bg-[${variables.darkBackground100}]`
-            : `bg-[${variables.lightBackground200}]`
+            : `bg-[${variables.lightBackground200}] shadow border`
         } flex justify-between items-center cursor-pointer font-light rounded-md
         `}
         onClick={handleToggle}
@@ -120,10 +120,7 @@ const DropDown: React.FC<DropDownProps> = ({
         item ? (
           <animated.div style={style}>
             <Panel
-              // className={`absolute top-full p-3 mt-[3px] bg-[#3a3a3a] z-50 ${
-              //   isOpen ? classes['options_show'] : classes['options_hide']
-              // } rounded-md`}
-              className={`absolute top-full p-3 mt-[3px] z-50 rounded-md ${
+              className={`absolute top-full p-3 mt-[4px] z-50 rounded-md ${
                 theme === 'dark'
                   ? 'bg-[#3a3a3a]'
                   : `bg-white shadow-lg`

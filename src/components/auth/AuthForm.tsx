@@ -2,14 +2,16 @@ import { useState, useRef, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/router';
 import { signIn, useSession, getSession } from 'next-auth/react';
 import Link from 'next/link';
-import classes from './AuthForm.module.css';
 import GoogleIcon from '../icons/GoogleIcon';
 import GithubIcon from '../icons/GithubIcon';
 import FacebookIcon from '../icons/FacebookIcon';
-import CircleX from '../icons/CircleX';
+import Button from '@/components/reusables/Button';
+import Alert from '../reusables/Alert';
+import { useAppSelector } from '@/hooks/hooks';
+import { NotificationType } from '@/types/dataTypes';
 import { validateFormData } from '@/helpers/validateFormData';
 import { registerUser } from '@/helpers/registerUser';
-import Button from '@/components/reusables/Button';
+import classes from './AuthForm.module.scss';
 
 const loginMessage = 'Sign in to you account';
 const signupMessage = 'Create your acount';
@@ -23,16 +25,20 @@ const AuthForm = () => {
     password: '',
     confirmPassword: ''
   });
-  const [notification, setNotification] = useState<null | string>(null);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [notification, setNotification] = useState<NotificationType>({
+    status: undefined,
+    message: undefined
+  });
   const [validation, setValidation] = useState({
     name: true,
     email: true,
     password: true,
     confirmPassword: true
   });
-  const [alertStatus, setAlertStatus] = useState<null | 'error' | 'success'>(
-    null
-  );
+
+  const { theme } = useAppSelector((state) => state.theme);
   const router = useRouter();
   const slug = router.query.slug;
 
@@ -89,9 +95,15 @@ const AuthForm = () => {
       }));
 
       if (message.length === 0) {
-        message = !loginForm
-          ? 'Password must be at least 8 characters and include at least 1 uppercase, 1 lowercase and one of these characters !@#$%^&*.'
-          : 'Invalid password.';
+        if (!loginForm) {
+          message =
+            'Password must be at least 8 characters and include at least 1 uppercase, 1 lowercase and one of these characters !@#$%^&*.';
+        } else {
+          message =
+            password.length === 0
+              ? 'Please provide a password'
+              : 'Invalid password.';
+        }
       }
     } else {
       setValidation((prev) => ({
@@ -117,8 +129,8 @@ const AuthForm = () => {
     }
 
     if (!validEmail || !validPassword || !validConfirmPassword) {
-      setAlertStatus('error');
-      setNotification(message);
+      setNotification({ status: 'error', message });
+      setShowAlert(true);
     } else {
       if (loginForm) {
         try {
@@ -135,27 +147,38 @@ const AuthForm = () => {
               router.push('/problems');
             }
           } else {
-            throw new Error('Cannot create new session.');
+            throw new Error('Something went wrong. Please try again.');
           }
         } catch (err: any) {
           console.error(err);
-          setAlertStatus('error');
-          setNotification('Something went wrong. Please try again.');
+          setShowAlert(true);
+          setNotification({
+            status: 'error',
+            message: 'Something went wrong. Please try again.'
+          });
         }
       } else {
         const result = await registerUser(name, email, password);
         if (result.message !== 'Success') {
-          setAlertStatus('error');
+          setShowAlert(true);
           if (result.message == 'Email existed.') {
-            setNotification('Email already exists. Please log in.');
+            setNotification({
+              status: 'error',
+              message: 'Email already exists. Please log in.'
+            });
           } else {
-            setNotification('Something went wrong. Please try again.');
+            setNotification({
+              status: 'error',
+              message: 'Something went wrong. Please try again.'
+            });
           }
         } else {
-          setAlertStatus('success');
-          setNotification(
-            'Your account has been successfuly created. Redirecting in 3 seconds...'
-          );
+          setShowAlert(true);
+          setNotification({
+            status: 'success',
+            message:
+              'Your account has been successfuly created. Redirecting in 3 seconds...'
+          });
           await signIn('credentials', {
             email,
             password,
@@ -176,9 +199,9 @@ const AuthForm = () => {
   };
 
   return (
-    <div className={classes['auth-form']}>
+    <div className={`${classes['auth-form']}`}>
       <form onSubmit={handleSubmit}>
-        <div className={classes.header}>
+        <div className={`${classes.header} ${classes[`header--${theme}`]}`}>
           <h1>{loginForm ? loginMessage : signupMessage}</h1>
           <p>
             Or{' '}
@@ -191,22 +214,14 @@ const AuthForm = () => {
             </span>
           </p>
         </div>
-        {notification && (
-          <div
-            className={`${classes.notification} ${
-              alertStatus === 'error' ? classes.error : classes.success
-            }`}
+        {showAlert && (
+          <Alert
+            onClose={setShowAlert}
+            setNotification={setNotification}
+            status={notification.status!}
           >
-            {notification}
-            <button
-              onClick={() => {
-                setAlertStatus(null);
-                setNotification(null);
-              }}
-            >
-              <CircleX />
-            </button>
-          </div>
+            {notification.message}
+          </Alert>
         )}
         <div className={classes['form-control']}>
           {!loginForm && (
@@ -281,16 +296,20 @@ const AuthForm = () => {
           </Button>
         </div>
       </form>
-      <div className={classes['oauth-actions']}>
+      <div
+        className={`${classes['oauth-actions']} ${
+          classes[`oauth-actions--${theme}`]
+        }`}
+      >
         <div className={classes.divider}>
-          <p className={classes.line}></p>
+          <p className={`${classes.line} ${classes[`line--${theme}`]}`}></p>
           <p>Or continue with</p>
-          <p className={classes.line}></p>
+          <p className={`${classes.line} ${classes[`line--${theme}`]}`}></p>
         </div>
         <div className={classes['oauth-buttons']}>
           <Button
             extraStyle={{ width: '100%', padding: '0.8rem' }}
-            color="#3b3b3b"
+            color="github"
             onClick={() =>
               signIn('github', { callbackUrl: '/problems', redirect: true })
             }
@@ -299,7 +318,7 @@ const AuthForm = () => {
           </Button>
           <Button
             extraStyle={{ width: '100%', padding: '0.8rem' }}
-            color="#35b46d"
+            color="google"
             onClick={() =>
               signIn('google', { callbackUrl: '/problems', redirect: true })
             }
@@ -308,7 +327,7 @@ const AuthForm = () => {
           </Button>
           <Button
             extraStyle={{ width: '100%', padding: '0.8rem' }}
-            color="#2b70c0"
+            color="facebook"
             onClick={() =>
               signIn('facebook', { callbackUrl: '/problems', redirect: true })
             }

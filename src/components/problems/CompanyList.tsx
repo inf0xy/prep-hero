@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import LargeListDropDown from '../reusables/LargeListDropDown';
 import { companyListOption } from '@/helpers/formFields';
-import { SearchCriteria } from '@/types/dataTypes';
+import { SearchCriteria, SearchOrForm } from '@/types/dataTypes';
 
 type Option = {
   label: string;
@@ -9,7 +9,7 @@ type Option = {
 };
 
 interface CompanyListProps {
-  setCompany: Dispatch<SetStateAction<SearchCriteria>>;
+  setCompany: Dispatch<SetStateAction<SearchOrForm>>;
   searchCriteria: SearchCriteria;
 }
 

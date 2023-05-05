@@ -1,9 +1,9 @@
 import { tagSelection } from '@/helpers/formFields';
-import { GeneralFormData } from '@/types/dataTypes';
+import { SearchOrForm } from '@/types/dataTypes';
 import { Dispatch, SetStateAction } from 'react';
 
 type TagsProps = {
-  setGeneralInfo: Dispatch<SetStateAction<GeneralFormData>>;
+  setGeneralInfo: Dispatch<SetStateAction<SearchOrForm>>;
   currentSelectedTags: string[]
 };
 

@@ -39,7 +39,7 @@ const ProblemList: React.FC<ProblemListProps> = ({
       <div className={classes['table-header']}>
         <div role="row" className={classes['solved-header']}>
           <div>
-            {session?.session.user.account_type === 'user' ? 'Status' : 'Edit'}
+            {session?.session.user.account_type === 'admin' ? 'Edit' : 'Status'}
           </div>
         </div>
         <div role="row" className={classes['category-header']}>

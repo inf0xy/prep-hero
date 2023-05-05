@@ -2,7 +2,7 @@ import { getProblems } from '@/lib/database/problems';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { page, category, difficulty, tags, companies, text } = req.query;
+  const { page, listName, category, difficulty, tags, companies, text } = req.query;
 
   if (req.method !== 'GET') {
     return res.status(400).json({ message: 'Invalid' });
@@ -10,6 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (
     page === undefined ||
+    listName === undefined ||
     category === undefined ||
     difficulty === undefined ||
     tags === undefined ||
@@ -22,6 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const result = await getProblems(
       +page!,
+      listName as string,
       category as string,
       difficulty as string,
       tags as string,
