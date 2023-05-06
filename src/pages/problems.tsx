@@ -154,7 +154,11 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
         className={`${classes['problems']} ${classes[`problems--${theme}`]}`}
       >
         {session && session.session.user.account_type === 'admin' && (
-          <Button color="secondary" className="self-start text-[1.5rem] mb-12" onClick={() => router.push('/admin')}>
+          <Button
+            color="secondary"
+            className="self-start text-[1.5rem] mb-12"
+            onClick={() => router.push('/admin')}
+          >
             <span className="mr-3">
               <ArrowLongLeft />
             </span>

@@ -13,6 +13,7 @@ import { deleteNote } from './notesSlice';
 
 interface User {
   notes: Note[];
+  list: string[];
   attempted_problems: AttemptedProblem[];
   submissions: Submission[];
   easy_solved: EasySolved[];
@@ -23,19 +24,84 @@ interface User {
   error?: string | undefined;
 }
 
+interface AddProblemToListResponse {
+  title: string;
+  message: string;
+}
+
+interface RemoveProblemToListResponse {
+  title: string;
+  message: string;
+}
+
 export const fetchUserData = createAsyncThunk(
   'user/fetchUserData',
   async () => {
-    const newSession = await getSession();
-    const id = newSession?.session.user._id;
-
+    const session = await getSession();
+    const id = session?.session.user._id;
+    if (!session) {
+      throw new Error('Unauthorized');
+    }
     const { data } = await axios.get<User>(`/api/users/${id}`);
+    return data;
+  }
+);
+
+export const addProblemToList = createAsyncThunk(
+  'user/addProblemToList',
+  async (title: string) => {
+    const session = await getSession();
+    const userId = session?.session.user._id;
+    if (!session) {
+      throw new Error('Unauthorized');
+    }
+    const { data } = await axios.post<AddProblemToListResponse>(
+      '/api/users/list',
+      {
+        userId,
+        title
+      }
+    );
+    return data;
+  }
+);
+
+export const resetList = createAsyncThunk(
+  'user/resetList',
+  async () => {
+    const session = await getSession();
+    const userId = session?.session.user._id;
+    if (!session) {
+      throw new Error('Unauthorized');
+    }
+    const { data } = await axios.put<{ message: string }>('/api/users/list', {
+      userId
+    });
+    return data;
+  }
+);
+
+export const removeProblemFromList = createAsyncThunk(
+  'user/removeProblemToList',
+  async (title: string) => {
+    const session = await getSession();
+    const userId = session?.session.user._id;
+    if (!session) {
+      throw new Error('Unauthorized');
+    }
+    const { data } = await axios.delete<RemoveProblemToListResponse>(
+      '/api/users/list',
+      {
+        params: { title, userId }
+      }
+    );
     return data;
   }
 );
 
 const initialState: User = {
   notes: [],
+  list: [],
   attempted_problems: [],
   submissions: [],
   easy_solved: [],
@@ -59,6 +125,7 @@ const userSlice = createSlice({
       if (action.payload) {
         state.isLoading = false;
         state.notes = action.payload.notes;
+        state.list = action.payload.list;
         state.attempted_problems = action.payload.attempted_problems;
         state.submissions = action.payload.submissions;
         state.easy_solved = action.payload.easy_solved;
@@ -72,11 +139,52 @@ const userSlice = createSlice({
       state.error = action.error.message;
     });
     builder.addCase(deleteNote.fulfilled, (state, action) => {
-      const noteIndex = state.notes.findIndex(el => el.title === action.payload.title);
+      const noteIndex = state.notes.findIndex(
+        (el) => el.title === action.payload.title
+      );
       if (noteIndex !== -1) {
         state.notes.splice(noteIndex, 1);
       }
-    })
+    });
+    builder.addCase(addProblemToList.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(addProblemToList.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = undefined;
+      state.list.push(action.payload.title);
+    });
+    builder.addCase(addProblemToList.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(removeProblemFromList.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(removeProblemFromList.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = undefined;
+      const removedIndex = state.list.findIndex(
+        (el) => el === action.payload.title
+      );
+      state.list.splice(removedIndex, 1);
+    });
+    builder.addCase(removeProblemFromList.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(resetList.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(resetList.fulfilled, (state) => {
+      state.isLoading = false;
+      state.error = undefined;
+      state.list = [];
+    });
+    builder.addCase(resetList.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    });
   }
 });
 

@@ -1,5 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer, { fetchUserData } from './slices/userSlice';
+import userReducer, {
+  fetchUserData,
+  addProblemToList,
+  removeProblemFromList,
+  resetList
+} from './slices/userSlice';
 import notesSlice, {
   setSelectedNote,
   addOrUpdateNote,
@@ -26,6 +31,9 @@ export type AppDispatch = typeof store.dispatch;
 
 export {
   fetchUserData,
+  addProblemToList,
+  removeProblemFromList,
+  resetList,
   setSelectedNote,
   addOrUpdateNote,
   deleteNote,

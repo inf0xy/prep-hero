@@ -16,7 +16,13 @@ import {
 } from '@/helpers/extraStyles';
 import { colors } from '@/helpers/extraStyles';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { deleteNote, setSelectedNote, setSelectedProblem } from '@/store';
+import {
+  addProblemToList,
+  deleteNote,
+  removeProblemFromList,
+  setSelectedNote,
+  setSelectedProblem
+} from '@/store';
 
 import VideoIcon from '../icons/VideoIcon';
 import CheckIcon from '@/components/icons/CheckIcon';
@@ -29,6 +35,7 @@ import CodeBracketIcon from '../icons/CodeBracketIcon';
 import PlusIconOutline from '../icons/PlusIconOutline';
 import CircleX from '../icons/CircleX';
 import BookmarkOutline from '../icons/BookmarkOutline';
+import BookmarkFill from '../icons/BookmarkFill';
 
 type ProblemItemProps = {
   problem: Problem;
@@ -54,11 +61,40 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     leetcode_link,
     solution_link
   } = problem;
-  const { attempted_problems, easy_solved, medium_solved, hard_solved, notes } =
-    useAppSelector((state) => state.user);
+  // const { attempted_problems, easy_solved, medium_solved, hard_solved, notes } =
+  //   useAppSelector((state) => state.user);
+  // const { theme } = useAppSelector((state) => state.theme);
+  const {
+    attempted_problems,
+    easy_solved,
+    medium_solved,
+    hard_solved,
+    notes,
+    list,
+    theme
+  } = useAppSelector((state) => {
+    const {
+      attempted_problems,
+      easy_solved,
+      medium_solved,
+      hard_solved,
+      notes,
+      list
+    } = state.user;
+    const { theme } = state.theme;
+    return {
+      attempted_problems,
+      easy_solved,
+      medium_solved,
+      hard_solved,
+      notes,
+      list,
+      theme
+    };
+  });
+
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
-  const { theme } = useAppSelector((state) => state.theme);
   const router = useRouter();
 
   let problemNoteContent: string | undefined;
@@ -76,12 +112,16 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   }, [showNotes]);
 
   const handleAddNote = () => {
-    dispatch(setSelectedNote({ list_names, title, content: problemNoteContent }));
+    dispatch(
+      setSelectedNote({ list_names, title, content: problemNoteContent })
+    );
     router.push('/notes/add');
   };
 
   const handleEditNote = () => {
-    dispatch(setSelectedNote({ list_names, title, content: problemNoteContent }));
+    dispatch(
+      setSelectedNote({ list_names, title, content: problemNoteContent })
+    );
     router.push('/notes/edit');
   };
 
@@ -134,9 +174,23 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         <div className={classes['title-content']}>
           {session && session.session.user.account_type === 'user' && (
             <div className={classes['action-icons']}>
-              <span className={classes['bookmark-icon']} data-tooltip="Add to list">
-                <BookmarkOutline />
-              </span>
+              {list.includes(title!) ? (
+                <span
+                  className={classes['bookmark-icon']}
+                  data-tooltip="Remove"
+                  onClick={() => dispatch(removeProblemFromList(title!))}
+                >
+                  <BookmarkFill className='text-primary' />
+                </span>
+              ) : (
+                <span
+                  className={classes['bookmark-icon']}
+                  data-tooltip="Add to list"
+                  onClick={() => dispatch(addProblemToList(title!))}
+                >
+                  <BookmarkOutline />
+                </span>
+              )}
               <span
                 data-tooltip="Note"
                 className={classes['note-icon']}
@@ -290,7 +344,11 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       )}
       {showModalNote && (
         <Modal
-          className={theme === 'dark' ? `bg-[${variables.darkBackground50}]` : `bg-[${variables.lightBackground0}]`}
+          className={
+            theme === 'dark'
+              ? `bg-[${variables.darkBackground50}]`
+              : `bg-[${variables.lightBackground0}]`
+          }
           type="blur"
           onClose={() => setShowModalNote(false)}
         >

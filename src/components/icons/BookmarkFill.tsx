@@ -1,15 +1,16 @@
 type BookmarkFillProps = {
   width?: number;
   height?: number;
+  className?: string;
 };
 
-const BookmarkFill: React.FC<BookmarkFillProps> = ({ width, height }) => {
+const BookmarkFill: React.FC<BookmarkFillProps> = ({ width, height, className }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className={`w-${width ? width : '6'} h-${height ? height : '6'}`}
+      className={`w-${width ? width : '6'} h-${height ? height : '6'} ${className}`}
     >
       <path
         fillRule="evenodd"

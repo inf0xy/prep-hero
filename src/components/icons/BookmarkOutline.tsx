@@ -1,9 +1,10 @@
 type BookmarOutlineProps = {
   width?: number;
   height?: number;
+  className?: string;
 };
 
-const BookmarkOutline: React.FC<BookmarOutlineProps> = ({ width, height }) => {
+const BookmarkOutline: React.FC<BookmarOutlineProps> = ({ width, height, className }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,7 +12,7 @@ const BookmarkOutline: React.FC<BookmarOutlineProps> = ({ width, height }) => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className={`w-${width ? width : '6'} h-${height ? height : '6'}`}
+      className={`w-${width ? width : '6'} h-${height ? height : '6'} ${className}`}
     >
       <path
         strokeLinecap="round"

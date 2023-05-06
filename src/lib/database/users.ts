@@ -166,3 +166,18 @@ export const deleteUserNote = async (userId: ObjectId, title: string) => {
     return { message: 'Unable to delete note.' };
   }
 };
+
+export const addProblemToList = async (_id: ObjectId, title: string) => {
+  await connectDB();
+  return usersCollection.updateOne({ _id }, { $push: { list: title } });
+};
+
+export const removeProbleFromlist = async (_id: ObjectId, title: string) => {
+  await connectDB();
+  return usersCollection.updateOne({ _id }, { $pull: { list: title } });
+};
+
+export const clearList = async (_id: ObjectId) => {
+  await connectDB();
+  return usersCollection.updateOne({ _id }, { $set: { list: [] } });
+};
