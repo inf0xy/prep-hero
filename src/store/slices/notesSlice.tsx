@@ -5,7 +5,7 @@ import { Note } from '@/types/dataTypes';
 
 interface NotesState {
   selectedNote: {
-    listName: string | undefined;
+    listName: string[] | undefined;
     title: string | undefined;
     content: string | undefined;
   };
@@ -56,7 +56,7 @@ const notesSlice = createSlice({
   initialState,
   reducers: {
     setSelectedNote(state, action) {
-      state.selectedNote.listName = action.payload.list_name;
+      state.selectedNote.listName = action.payload.list_names;
       state.selectedNote.title = action.payload.title;
       state.selectedNote.content = action.payload.content || '';
     }

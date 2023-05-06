@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { GetStaticProps } from 'next';
+import { useSession } from 'next-auth/react';
 import { getProblems } from '@/helpers/problem-api-util';
 import { Problem, SearchCriteria, SearchOrForm } from '@/types/dataTypes';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
@@ -10,6 +12,8 @@ import classes from '../styles/ProblemsPage.module.scss';
 import useSort from '@/hooks/useSort';
 import CircleX from '@/components/icons/CircleX';
 import SelectBar from '@/components/problems/SelectBar';
+import Button from '@/components/reusables/Button';
+import ArrowLongLeft from '@/components/icons/ArrowLongLeft';
 
 interface AllProblemsPageProps {
   problems: Problem[];
@@ -35,6 +39,8 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
   const dispatch = useAppDispatch();
   const { theme } = useAppSelector((state) => state.theme);
   const handleSort = useSort(problems, setCurrentProblems);
+  const { data: session } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchProblems = async () => {
@@ -147,6 +153,14 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
       <section
         className={`${classes['problems']} ${classes[`problems--${theme}`]}`}
       >
+        {session && session.session.user.account_type === 'admin' && (
+          <Button color="secondary" className="self-start text-[1.5rem] mb-12" onClick={() => router.push('/admin')}>
+            <span className="mr-3">
+              <ArrowLongLeft />
+            </span>
+            Dashboard
+          </Button>
+        )}
         <div className={classes.selections}>
           <SelectBar
             showNotes={showNotes}

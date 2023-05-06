@@ -11,9 +11,10 @@ import classes from '../../styles/AdminDashBoard.module.scss';
 
 type AdminDashBoardProps = {
   problems: Problem[];
+  count: number;
 };
 
-const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ problems }) => {
+const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ problems, count }) => {
   const [currentProblems, setCurrentProblems] = useState(problems);
   const handleSort = useSort(problems, setCurrentProblems);
   const { theme } = useAppSelector((state) => state.theme);
@@ -29,13 +30,19 @@ const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ problems }) => {
           Add problem
         </Link>
       </Button>
-      <ProblemList onSort={handleSort} problems={currentProblems} />
+      <Button>
+        <Link href="/problems">
+          Edit problem
+        </Link>
+      </Button>
+      {/* <ProblemList onSort={handleSort} problems={currentProblems} /> */}
     </div>
   );
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const problems = await getProblems(1, {
+  const {count, problems} = await getProblems(1, {
+    listName: '',
     category: '',
     difficulty: '',
     tags: [],
@@ -44,7 +51,7 @@ export const getStaticProps: GetStaticProps = async () => {
   });
 
   return {
-    props: { problems },
+    props: { problems, count },
     revalidate: 3600
   };
 };

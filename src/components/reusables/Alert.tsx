@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction } from 'react';
-import classes from './Alert.module.css';
+import classes from './Alert.module.scss';
 import CircleX from '@/components/icons/CircleX';
 import { selectedColors } from '@/helpers/extraStyles';
 import { NotificationType } from '@/types/dataTypes';

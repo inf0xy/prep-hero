@@ -5,7 +5,7 @@ import { Problem } from '@/types/dataTypes';
 
 interface ProblemState {
   selectedProblem: {
-    list_name: string | undefined;
+    list_names: string[] | undefined;
     title: string | undefined;
     difficulty: 'Easy' | 'Medium' | 'Hard' | undefined;
     category: string | undefined;
@@ -57,7 +57,7 @@ export const getProblemCounts = createAsyncThunk(
 
 const initialState: ProblemState = {
   selectedProblem: {
-    list_name: undefined,
+    list_names: undefined,
     title: undefined,
     difficulty: undefined,
     category: undefined,
@@ -80,7 +80,7 @@ const problemsSlice = createSlice({
   initialState,
   reducers: {
     setSelectedProblem(state, action) {
-      state.selectedProblem.list_name = action.payload.list_name;
+      state.selectedProblem.list_names = action.payload.list_names;
       state.selectedProblem.title = action.payload.title;
       state.selectedProblem.difficulty = action.payload.difficulty;
       state.selectedProblem.category = action.payload.category;

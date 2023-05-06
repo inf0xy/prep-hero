@@ -47,13 +47,8 @@
   color: $color-error-200;
 }
 
+.difficulty,
 .list-name {
-  display: flex;
-  width: fit-content;
-  gap: 2rem;
-}
-
-.difficulty {
   display: flex;
   align-items: center;
   gap: 1.5rem;

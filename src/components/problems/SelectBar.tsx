@@ -41,7 +41,7 @@ const SelectBar: React.FC<SelectBarProps> = ({
 
   return (
     <>
-    <ListName setListName={setSearchCriteria}/>
+      <ListName setListName={setSearchCriteria} />
       <CategoryList
         searchCriteria={searchCriteria}
         setCategory={setSearchCriteria}

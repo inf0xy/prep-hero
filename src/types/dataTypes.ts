@@ -1,5 +1,5 @@
 export type GeneralFormData = {
-  listName: string;
+  listNames: string[];
   title: string;
   difficulty: string;
   category: string;
@@ -10,7 +10,7 @@ export type GeneralFormData = {
 };
 
 export type Problem = {
-  list_name: string | undefined;
+  list_names: string[] | undefined;
   title: string | undefined;
   difficulty: 'Easy' | 'Medium' | 'Hard' | string | undefined;
   category: string | undefined;
@@ -23,6 +23,7 @@ export type Problem = {
 };
 
 export type SearchCriteria = {
+  listName: string;
   category: string;
   difficulty: string;
   tags: string[];

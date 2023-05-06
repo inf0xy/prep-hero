@@ -7,6 +7,7 @@ import Modal from '../reusables/Modal';
 import ConfirmPanel from '../reusables/ConfirmPanel';
 import EditorPreview from '../reusables/EditorPreview';
 import classes from './ProblemItem.module.scss';
+import variables from '@/styles/variables.module.scss';
 import { Problem } from '@/types/dataTypes';
 import {
   statusStyle,
@@ -27,6 +28,7 @@ import TrashIcon from '../icons/TrashIcon';
 import CodeBracketIcon from '../icons/CodeBracketIcon';
 import PlusIconOutline from '../icons/PlusIconOutline';
 import CircleX from '../icons/CircleX';
+import BookmarkOutline from '../icons/BookmarkOutline';
 
 type ProblemItemProps = {
   problem: Problem;
@@ -44,7 +46,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showProblemNote, setShowProblemNote] = useState(false);
   const {
-    list_name,
+    list_names,
     title,
     difficulty,
     category,
@@ -74,12 +76,12 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   }, [showNotes]);
 
   const handleAddNote = () => {
-    dispatch(setSelectedNote({ list_name, title, problemNoteContent }));
+    dispatch(setSelectedNote({ list_names, title, content: problemNoteContent }));
     router.push('/notes/add');
   };
 
   const handleEditNote = () => {
-    dispatch(setSelectedProblem(problem));
+    dispatch(setSelectedNote({ list_names, title, content: problemNoteContent }));
     router.push('/notes/edit');
   };
 
@@ -131,13 +133,18 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         <div className={classes['category-content']}>{category}</div>
         <div className={classes['title-content']}>
           {session && session.session.user.account_type === 'user' && (
-            <span
-              data-tooltip="Note"
-              className={classes['note-icon']}
-              onClick={() => setShowProblemNote(!showProblemNote)}
-            >
-              <NoteIcon className="cursor-pointer" />
-            </span>
+            <div className={classes['action-icons']}>
+              <span className={classes['bookmark-icon']} data-tooltip="Add to list">
+                <BookmarkOutline />
+              </span>
+              <span
+                data-tooltip="Note"
+                className={classes['note-icon']}
+                onClick={() => setShowProblemNote(!showProblemNote)}
+              >
+                <NoteIcon className="cursor-pointer" />
+              </span>
+            </div>
           )}
           <Link
             target="_blank"
@@ -283,7 +290,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       )}
       {showModalNote && (
         <Modal
-          className="bg-[#333]"
+          className={theme === 'dark' ? `bg-[${variables.darkBackground50}]` : `bg-[${variables.lightBackground0}]`}
           type="blur"
           onClose={() => setShowModalNote(false)}
         >
@@ -296,7 +303,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           <div className={classes['modal__full-note']}>
             <EditorPreview
               value={problemNoteContent!}
-              extraStyle={fullNoteStyle}
+              extraStyle={fullNoteStyle[theme]}
             />
           </div>
         </Modal>

@@ -7,7 +7,7 @@ export const validateAddedProblems = (
 ) => {
   let validFields = [
     companies,
-    formData.listName.trim(),
+    formData.listNames.join(','),
     formData.title.trim(),
     formData.leetcodeLink.trim(),
     formData.videoLink.trim(),

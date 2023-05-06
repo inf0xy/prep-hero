@@ -6,16 +6,22 @@ type ProgressCircleProps = {
 };
 
 const ProgressCircle: React.FC<ProgressCircleProps> = ({ progress }) => {
-  const { theme } = useAppSelector(state => state.theme);
+  const { theme } = useAppSelector((state) => state.theme);
   const circleStyle = {
-    strokeDashoffset: 472 - (3.7 * progress)
+    strokeDashoffset: 472 - 3.7 * progress
   };
+  const { allProblemsCount } = useAppSelector((state) => state.problems);
 
   return (
     <div className={classes['progress-circle__container']}>
-      <div className={`${classes['progress-text']} ${classes[`progress-text--${theme}`]}`}>
+      <div
+        className={`${classes['progress-text']} ${
+          classes[`progress-text--${theme}`]
+        }`}
+      >
         <p className={`${classes.solved} ${classes[`solved--${theme}`]}`}>20</p>
-        <p>Solved</p>
+        <p className={classes['solved-current']}>Solved</p>
+        <p className={classes['solved-total']}>{allProblemsCount}</p>
       </div>
       <svg className={classes['progress-circle']}>
         <circle

@@ -14,15 +14,22 @@ export const noteStripStyle: { [key: string]: object } = {
   },
   light: {
     backgroundColor: variables.stripColorLight,
-    color: variables.colorOffWhite,
+    color: variables.colorGray600,
     fontSize: '1.5rem'
   }
 };
 
-export const fullNoteStyle = {
-  backgroundColor: '#333',
-  color: '#ffffffde',
-  fontSize: '1.6rem'
+export const fullNoteStyle: { [key: string]: object } = {
+  dark: {
+    backgroundColor: variables.darkBackground50,
+    color: variables.colorOffWhite,
+    fontSize: '1.6rem'
+  },
+  light: {
+    backgroundColor: variables.lightBackground0,
+    color: variables.colorGray800,
+    fontSize: '1.6rem'
+  }
 };
 
 export const selectedColors = {
@@ -34,18 +41,18 @@ export const selectedColors = {
 export const statusStyle = {
   opacity: 1,
   visibility: 'visible',
-  pointerEvents: 'unset',
-}
+  pointerEvents: 'unset'
+};
 
 export const modalBackgroundClear = {
   opacity: '1',
   backgroundColor: '#282828b3'
-}
+};
 
 export const modalBackgroundBlur = {
   opacity: '0.8',
   backgroundColor: '#d3e8ff66'
-}
+};
 
 export const colorPrimary = {
   50: '#ff7230',
@@ -53,7 +60,7 @@ export const colorPrimary = {
   200: '#e64900',
   250: '#e64900b5',
   300: '#993507'
-}
+};
 
 export const grayColors = {
   50: 'hsl(265, 55%, 96%)',
@@ -66,4 +73,4 @@ export const grayColors = {
   700: 'hsl(265, 4%, 31%)',
   800: 'hsl(276, 5%, 20%)',
   900: 'hsl(280, 5%, 13%)'
-}
+};

@@ -13,7 +13,7 @@ type SearchFilter = {
 
 export default class Problem {
   constructor(
-    public list_name: string,
+    public list_names: string[],
     public title: string,
     public difficulty: string,
     public category: string,
@@ -23,7 +23,7 @@ export default class Problem {
     public solution_link: string,
     public description: string
   ) {
-    this.list_name = list_name;
+    this.list_names = list_names;
     this.title = title;
     this.difficulty = difficulty;
     this.category = category;
@@ -37,7 +37,7 @@ export default class Problem {
 
 export const addNewProblems = async (problem: Problem) => {
   const newProblem = new Problem(
-    problem.list_name,
+    problem.list_names.includes('comprehensive') ? [] : problem.list_names,
     problem.title,
     problem.difficulty,
     problem.category,
@@ -57,7 +57,9 @@ export const updateProblem = async (problem: Problem) => {
     { title: problem.title },
     {
       $set: {
-        list_name: problem.list_name,
+        list_names: problem.list_names.includes('comprehensive')
+          ? []
+          : problem.list_names,
         title: problem.title,
         difficulty: problem.difficulty,
         category: problem.category,
@@ -91,7 +93,7 @@ export const getProblems = async (
     filters['category'] = categoryFilter;
   }
   if (listNameFilter !== '') {
-    filters['list_name'] = listNameFilter;
+    filters['list_names'] = listNameFilter;
   }
   if (difficultyFilter !== '') {
     filters['difficulty'] = difficultyFilter;
@@ -104,7 +106,11 @@ export const getProblems = async (
   }
   if (textFilter !== '') {
     filters['$or'] = [
-      { list_name: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
+      {
+        list_names: {
+          $elemMatch: { $regex: new RegExp(`^${textFilter}$`, 'i') }
+        }
+      },
       { title: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
       { category: { $regex: new RegExp(`^${textFilter}$`, 'i') } },
       { difficulty: { $regex: new RegExp(`^${textFilter}$`, 'i') } },

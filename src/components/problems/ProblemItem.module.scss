@@ -42,14 +42,26 @@
 }
 
 .note-icon,
+.bookmark-icon,
 .expand,
 .edit,
 .clear {
   position: relative;
 }
 
-.note-icon .difficulty-content {
+.action-icons .difficulty-content {
   grid-column: span 1;
+}
+
+.action-icons {
+  display:flex;
+  align-items: center;
+  gap: 0.3rem;
+  width: fit-content;
+
+  & > * {
+    cursor: pointer;
+  }
 }
 
 .solution-content {
@@ -62,6 +74,7 @@
 }
 
 .note-icon:hover::after,
+.bookmark-icon:hover::after,
 .expand:hover:after,
 .edit:hover:after,
 .clear:hover:after {
@@ -79,6 +92,10 @@
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
+}
+
+.bookmark-icon:hover::after {
+  width: 7rem;
 }
 
 .companies-content {
@@ -175,6 +192,7 @@
 
 .title-link,
 .note-icon,
+.bookmark-icon,
 .expand,
 .edit,
 .clear,
@@ -184,6 +202,7 @@
 
 .title-link:hover,
 .note-icon:hover,
+.bookmark-icon:hover,
 .solution-content svg:hover,
 .expand:hover,
 .edit:hover,
@@ -203,5 +222,4 @@
 .modal__full-note {
   width: 60vw;
   margin: 6rem 5rem 5rem;
-  background-color: $strip-color-dark;
 }

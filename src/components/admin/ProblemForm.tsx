@@ -1,5 +1,12 @@
 import { useState, useRef, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { validateAddedProblems } from '@/helpers/validateProblemForm';
+import { companies as companiesTags } from '@/helpers/formFields';
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { addProblem, updateProblem } from '@/store';
+import { GeneralFormData, Problem, SearchOrForm } from '@/types/dataTypes';
+import { NotificationType } from '@/types/dataTypes';
+import { formatString } from '@/helpers/formatString';
 import classes from './ProblemForm.module.scss';
 import Difficulty from './Difficulty';
 import Tags from './Tags';
@@ -8,14 +15,8 @@ import Categories from './Categories';
 import TextEditor from '@/components/reusables/TextEditor';
 import Alert from '@/components/reusables/Alert';
 import Button from '@/components/reusables/Button';
-import ListName from './ListName';
-import { validateAddedProblems } from '@/helpers/validateProblemForm';
-import { companies as companiesTags } from '@/helpers/formFields';
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { addProblem, updateProblem } from '@/store';
-import { GeneralFormData, Problem, SearchOrForm } from '@/types/dataTypes';
-import { NotificationType } from '@/types/dataTypes';
-import { formatString } from '@/helpers/formatString';
+import ListSelection from './ListSelection';
+
 
 interface AddProblem {
   message: string;
@@ -26,7 +27,7 @@ type ProblemFormProps = {
 };
 
 const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
-  const listName = problem?.list_name || '';
+  const listNames = problem?.list_names || [];
   const title = problem?.title || '';
   const difficulty = problem?.difficulty || '';
   const category = problem?.category || '';
@@ -39,7 +40,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
     : '';
 
   const [generalInfo, setGeneralInfo] = useState<SearchOrForm>({
-    listName,
+    listNames,
     title,
     difficulty,
     category,
@@ -112,7 +113,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
       )
     ) {
       const newProblem = {
-        list_name: generalInfo.listName,
+        list_names: generalInfo.listNames,
         title: generalInfo.title,
         difficulty: generalInfo.difficulty,
         category: generalInfo.category,
@@ -157,17 +158,10 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
             List Name: <span className={classes.required}>*</span>
           </label>
           <div className={classes['list-name']}>
-            <input
-              className={`${classes.field} ${classes[`field--${theme}`]}`}
-              value={generalInfo.listName}
-              onChange={(e) =>
-                setGeneralInfo((prev) => ({
-                  ...prev,
-                  listName: e.target.value
-                }))
-              }
+            <ListSelection
+              setGeneralInfo={setGeneralInfo}
+              currentSelectedListName={generalInfo.listNames as string[]}
             />
-            <ListName setListName={setGeneralInfo} />
           </div>
         </div>
         <div className={classes['form-controls']}>

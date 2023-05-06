@@ -4,7 +4,7 @@ import { checkAuth } from '../checkAuth';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {
-    list_name,
+    list_names,
     title,
     difficulty,
     category,
@@ -17,7 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (req.method === 'POST') {
     if (
-      list_name &&
+      list_names &&
       title &&
       difficulty &&
       category &&
@@ -29,7 +29,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     ) {
       try {
         const result = await addNewProblems({
-          list_name,
+          list_names,
           title,
           difficulty,
           category,
@@ -53,7 +53,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } else if (req.method === 'PUT') {
     if (
-      list_name &&
+      list_names &&
       title &&
       difficulty &&
       category &&
@@ -65,7 +65,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     ) {
       try {
         const result = await updateProblem({
-          list_name,
+          list_names,
           title,
           difficulty,
           category,

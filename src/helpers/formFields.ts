@@ -1,7 +1,14 @@
 export const listNameOptions = [
   { label: 'Blind 75', value: 'Blind 75' },
-  { label: 'NeetCode 150', value: 'Neetcode 150' },
-  { label: 'NeetCode All', value: 'Neetcode All' }
+  { label: 'NeetCode 150', value: 'NeetCode 150' },
+  { label: 'NeetCode All', value: 'NeetCode All' }
+];
+
+export const listNameSelections = [
+  'Blind 75',
+  'NeetCode 150',
+  'NeetCode All',
+  'Comprehensive'
 ];
 
 export const difficultyListOptions = [

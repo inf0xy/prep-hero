@@ -2,9 +2,8 @@ import { FormEvent, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import TextEditor from '@/components/reusables/TextEditor';
 import Alert from '@/components/reusables/Alert';
-import classes from './NoteForm.module.css';
+import classes from './NoteForm.module.scss';
 import Button from '@/components/reusables/Button';
-import { grayColors } from '@/helpers/extraStyles';
 import { NotificationType } from '@/types/dataTypes';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { addOrUpdateNote, deleteNote } from '@/store';
@@ -13,7 +12,7 @@ import { Note } from '@/types/dataTypes';
 
 type NoteFormProps = {
   destination: string;
-  listName?: string;
+  listName?: string[];
   title?: string;
   content?: string;
   disableListName: boolean;
@@ -22,7 +21,7 @@ type NoteFormProps = {
 
 const noteFormDefaultProps: NoteFormProps = {
   destination: '/problems',
-  listName: '',
+  listName: [],
   title: '',
   content: '',
   disableListName: false,
@@ -38,7 +37,7 @@ const NoteForm: React.FC<NoteFormProps> = ({
   content
 }) => {
   const [note, setNote] = useState<Note>({
-    listName,
+    listName: listName?.join(', '),
     title,
     content
   });
@@ -51,6 +50,7 @@ const NoteForm: React.FC<NoteFormProps> = ({
   const router = useRouter();
   const { error } = useAppSelector((state) => state.notes);
   const dispatch = useAppDispatch();
+  const { theme } = useAppSelector(state => state.theme);
 
   useEffect(() => {
     if (error) {
@@ -95,7 +95,7 @@ const NoteForm: React.FC<NoteFormProps> = ({
   const submitText = router.pathname.includes('add') ? 'Add' : 'Save';
 
   return (
-    <div className={classes['add-notes']}>
+    <div className={`${classes['add-notes']} ${classes[`add-notes--${theme}`]}`}>
       {showAlert && (
         <Alert
           onClose={setShowAlert}
@@ -106,27 +106,30 @@ const NoteForm: React.FC<NoteFormProps> = ({
         </Alert>
       )}
       <form onSubmit={handleSubmitNote}>
-        <div className={classes['add-notes__form-controls']}>
+        <div className={`${classes['add-notes__form-controls']} ${classes[`add-notes__form-controls--${theme}`]}`}>
           <label>
             List Name: <span className={classes['add-notes__required']}>*</span>
           </label>
           <div className={classes['add-notes__list-name']}>
             <input
-              className={classes['add-notes__list-field']}
-              value={note.listName}
+              className={`${classes['add-notes__title-field']} ${classes[`add-notes__title-field--${theme}`]}`}
+              value={note.listName!}
               disabled={disableListName}
               onChange={(e) =>
-                setNote((prev) => ({ ...prev, listName: e.target.value }))
+                setNote((prev) => ({
+                  ...prev,
+                  listName: e.target.value
+                }))
               }
             />
           </div>
         </div>
-        <div className={classes['add-notes__form-controls']}>
+        <div className={`${classes['add-notes__form-controls']} ${classes[`add-notes__form-controls--${theme}`]}`}>
           <label>
             Title: <span className={classes['add-notes__required']}>*</span>
           </label>
           <input
-            className={classes['add-notes__title-field']}
+            className={`${classes['add-notes__title-field']} ${classes[`add-notes__title-field--${theme}`]}`}
             value={note.title}
             disabled={disableListName}
             onChange={(e) =>
@@ -145,7 +148,7 @@ const NoteForm: React.FC<NoteFormProps> = ({
       </form>
       <div className={classes['add-notes__actions']}>
         <Button
-          color={grayColors[400]}
+          color="gray"
           className="text-[1.3rem]"
           extraStyle={{ padding: '1rem 3.5rem' }}
           onClick={() => router.back()}

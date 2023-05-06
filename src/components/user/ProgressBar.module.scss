@@ -10,7 +10,7 @@
 .progress-bar {
   display: flex;
   flex-direction: column;
-  color: var(--color-off-white);
+  color: $text-off-white;
   gap: 0.5rem;
 
   &--dark {
@@ -22,11 +22,22 @@
   }
 }
 
+.progress-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-content__count {
+  color: $color-gray-100;
+  font-size: 1.3rem;
+}
+
 .bar__outer {
-  width: 10rem;
+  width: 13rem;
   height: 6px;
   border-radius: 10px;
-  background-color: rgb(191, 191, 191);
+  background-color: $color-gray-200;
 }
 
 .bar__inner {
