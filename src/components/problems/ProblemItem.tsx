@@ -36,6 +36,7 @@ import PlusIconOutline from '../icons/PlusIconOutline';
 import CircleX from '../icons/CircleX';
 import BookmarkOutline from '../icons/BookmarkOutline';
 import BookmarkFill from '../icons/BookmarkFill';
+import LogoList from './LogoList';
 
 type ProblemItemProps = {
   problem: Problem;
@@ -61,9 +62,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     leetcode_link,
     solution_link
   } = problem;
-  // const { attempted_problems, easy_solved, medium_solved, hard_solved, notes } =
-  //   useAppSelector((state) => state.user);
-  // const { theme } = useAppSelector((state) => state.theme);
+
   const {
     attempted_problems,
     easy_solved,
@@ -201,8 +200,9 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
             </div>
           )}
           <Link
-            target="_blank"
-            href={leetcode_link!}
+            // target="_blank"
+            // href={leetcode_link!}
+            href={`/problem/${title}`}
             className={classes['title-link']}
           >
             {title}
@@ -232,9 +232,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
         <div
           className={`${classes['companies-content']}`}
-          data-tooltip={companies!.join(', ')}
         >
-          <p className={classes.cell}>{companies!.join(', ')}</p>
+          <LogoList companyNames={companies!}/>
         </div>
       </div>
       {showProblemNote && (

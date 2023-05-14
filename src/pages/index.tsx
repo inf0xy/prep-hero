@@ -1,7 +1,6 @@
 import HeatMapCalendar from '@/components/user/HeatMapCalendar';
 import { useAppSelector } from '@/hooks/hooks';
 import classes from '@/styles/HomePage.module.scss';
-import { useEffect } from 'react';
 
 export const data = {
   '2023-05-01': 2,

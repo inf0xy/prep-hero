@@ -29,7 +29,7 @@ const ListName: React.FC<ListNameProps> = ({ setListName }) => {
       options={listNameOptions}
       onChange={handleSelectListName}
       defaultText="List"
-      width='12rem'
+      width='12.5rem'
     />
   );
 };

@@ -20,6 +20,8 @@ interface AllProblemsPageProps {
   count: number;
 }
 
+const ITEM_PER_PAGE = 50;
+
 const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
   problems,
   count
@@ -181,11 +183,16 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
             showNotes={showNotes}
           />
         )}
+        <div className={classes['page-number']}>
+          {(pageNumber - 1) * ITEM_PER_PAGE + 1} -{' '}
+          {pageNumber * ITEM_PER_PAGE > totalProblems ? totalProblems : pageNumber * ITEM_PER_PAGE}
+          &nbsp;/&nbsp;{totalProblems}
+        </div>
         <Pagination
           totalProblems={totalProblems}
           selectedPage={pageNumber}
           onPageSelect={setPageNumber}
-          className="mt-16"
+          className="mt-6"
         />
       </section>
     </>

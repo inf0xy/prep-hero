@@ -54,7 +54,7 @@
 }
 
 .action-icons {
-  display:flex;
+  display: flex;
   align-items: center;
   gap: 0.3rem;
   width: fit-content;
@@ -101,26 +101,7 @@
 .companies-content {
   grid-column: span 4;
   position: relative;
-}
-
-.companies-content::before {
-  transition: all 0.3s ease;
-}
-
-.companies-content:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 50%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  width: 30rem;
-  font-size: 1.3rem;
-  background-color: rgb(214, 111, 56);
-  color: $text-off-white;
-  padding: 1rem;
-  border-radius: 4px;
-  cursor: pointer;
+  overflow: visible;
 }
 
 .cell {

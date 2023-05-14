@@ -39,6 +39,7 @@ $light-background-0: #fff;
 $light-background-50: #eaeaea;
 $light-background-100: #f6f6f6de;
 $light-background-200: #e7e7e7;
+$light-background-300: #cccccc;
 
 // Text colors::after
 $text-off-white: #ffffffde;
@@ -136,4 +137,5 @@ $heatmap-color-4: #0cf283;
   lightBackground0: $light-background-0;
   lightBackground100: $light-background-100;
   lightBackground200: $light-background-200;
+  lightBackground300: $light-background-300;
 }

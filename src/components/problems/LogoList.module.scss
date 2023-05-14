@@ -1,0 +1,68 @@
+@import '@/styles/variables.module.scss';
+
+.all-companies {
+  position: absolute;
+  top: 3rem;
+  right: 1rem;
+  background-color: white;
+  padding: 1rem;
+  width: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  border-radius:  0.4rem;
+  z-index: 10;
+
+  & > * {
+    font-size: 1.2rem;
+  }
+
+  &--dark {
+    background-color: $dark-background-100;
+  }
+
+  &--light {
+    background-color: $light-background-300;
+  }
+}
+
+.logos {
+  display: flex;
+  gap: 1rem;
+  color: $color-off-white;
+  font-size: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.brand,
+.more {
+  border-radius: 10px;
+  padding: 0.2rem 0.8rem;
+
+  &--dark {
+    background-color: $color-gray-800;
+  }
+
+  &--light {
+    background-color: $color-gray-200;
+    color: $text-off-white;
+  }
+}
+
+.brand {
+  width: fit-content;
+  height: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  span {
+    width: 1.2rem;
+  }
+}
+
+.more {
+  font-weight: bold;
+  cursor: pointer;
+}

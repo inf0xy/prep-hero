@@ -184,3 +184,15 @@ export const getProblemsCount = async () => {
     result[0].hardCount[0]
   ];
 };
+
+export const getProblemTitles = async () => {
+  await connectDB();
+  return problemsCollection
+    .find({}, { projection: { title: 1, _id: 0 } })
+    .toArray();
+};
+
+export const getProblemByTitle = async (title: string) => {
+  await connectDB();
+  return problemsCollection.findOne({ title }, { projection: { _id: 0 } });
+};

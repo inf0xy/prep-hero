@@ -1,0 +1,28 @@
+@import '@/styles/variables.module.scss';
+
+.problem-detail-page {
+  min-height: calc(100vh - 150px);
+  padding: 5rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  overflow: hidden;
+
+  &--dark {
+    background-color: $dark-background-400;
+  }
+
+  &--light {
+    background-color: $light-background-0;
+  }
+}
+
+.detail {
+  grid-column: span 1;
+  width: fit-content;
+}
+
+.working {
+  grid-column: span 1;
+  width: fit-content;
+}

@@ -22,3 +22,24 @@ export const getProblems = async (page: number, filters: SearchCriteria) => {
     throw new Error(err.message);
   }
 };
+
+export const getAllTitles = async () => {
+  try {
+    const { data } = await axios.get('http://localhost:3000/api/problems/titles');
+    return data;
+  } catch (err: any) {
+    console.error(err.message);
+    throw new Error(err.message);
+  }
+}
+
+export const getSelectedProblem = async (title: string) => {
+  try {
+    const { data } = await axios.get(`http://localhost:3000/api/problems/${title}`);
+    return data;
+  } catch (err: any) {
+    console.error(err.message);
+    throw new Error(err.message);
+  }
+};
+
