@@ -1,4 +1,74 @@
+@import '@/styles/variables.module.scss';
+
 .problem-detail {
   display: flex;
   flex-direction: column;
+  padding: 2rem 1.5rem;
+
+  h1 {
+    font-size: 2.1rem;
+    font-weight: 500;
+  }
+
+  .general-info {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+
+    & > * {
+      font-size: 1.3rem;
+      font-weight: 500;
+      border-radius: 13px;
+      padding: 0.5rem 1.3rem;
+    }
+
+    .easy {
+      color: $color-success-300;
+      background-color: $color-success-600;
+    }
+
+    .medium {
+      color: $color-warning-100;
+      background-color: $color-warning-200;
+    }
+
+    .hard {
+      color: $color-error-300;
+      background-color: $color-error-600;
+    }
+
+    .category {
+      color: $text-off-white;
+      background-color: $color-gray-700;
+    }
+  }
+
+  .companies {
+    margin-top: 1.2rem;
+    margin-bottom: 2rem;
+    position: relative;
+
+    & > * > * {
+      padding: 0.5rem 1rem;
+    }
+  }
+}
+
+.solution {
+  padding: 2rem 1.5rem;
+
+  .video {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: calc(100% / (16 / 9));
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
 }

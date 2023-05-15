@@ -19,6 +19,19 @@ export const noteStripStyle: { [key: string]: object } = {
   }
 };
 
+export const problemDetailStyle: { [key: string]: object } = {
+  dark: {
+    backgroundColor: variables.darkBackground400,
+    color: variables.colorOffWhite,
+    fontSize: '1.5rem',
+  },
+  light: {
+    backgroundColor: variables.lightBackground0,
+    color: variables.colorGray800,
+    fontSize: '1.5rem'
+  }
+}
+
 export const fullNoteStyle: { [key: string]: object } = {
   dark: {
     backgroundColor: variables.darkBackground50,

@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { useRouter } from 'next/router';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -7,13 +8,15 @@ type LayoutProps = {
 };
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const router = useRouter();
+
   return (
     <main>
       <Header />
       {children}
-      <Footer />
+      {!router.pathname.includes('/problem') && <Footer />}
     </main>
-  )
+  );
 };
 
 export default Layout;

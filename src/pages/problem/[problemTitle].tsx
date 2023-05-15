@@ -1,10 +1,10 @@
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { getAllTitles, getSelectedProblem } from '@/helpers/problem-api-util';
+import { useAppSelector } from '@/hooks/hooks';
 import { Problem } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import classes from '@/styles/ProblemDetailPage.module.scss';
-import { useAppSelector } from '@/hooks/hooks';
 
 type ProblemDetailPageProps = {
   selectedProblem: Problem;
@@ -14,6 +14,8 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   selectedProblem
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
+  const [activeTab, setActiveTab] = useState('prompt');
+
   return (
     <Suspense fallback={`Loading...`}>
       {selectedProblem && (
@@ -22,11 +24,35 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
             classes[`problem-detail-page--${theme}`]
           }`}
         >
-          <div className={classes.detail}>
-            <ProblemDetail problem={selectedProblem} />
+          <div className={`${classes.detail} ${classes[`detail--${theme}`]}`}>
+            <ul className={`${classes.tabs} ${classes[`tabs--${theme}`]}`}>
+              <li
+                className={`rounded-tl-md ${
+                  activeTab === 'prompt' ? 'bg-accent' : ''
+                } ${
+                  activeTab === 'prompt' && theme == 'light' ? 'text-white' : ''
+                }`}
+                onClick={() => setActiveTab('prompt')}
+              >
+                Prompt
+              </li>
+              <li
+                className={`${activeTab === 'solution' ? 'bg-accent' : ''} ${
+                  activeTab === 'solution' && theme == 'light'
+                    ? 'text-white'
+                    : ''
+                }`}
+                onClick={() => setActiveTab('solution')}
+              >
+                Solution
+              </li>
+            </ul>
+            <div className={classes.description}>
+                <ProblemDetail tab={activeTab} problem={selectedProblem} />
+              </div>
           </div>
           <div className={classes.working}>
-            <ProblemDetail problem={selectedProblem} />
+            {/* <ProblemDetail problem={selectedProblem} /> */}
           </div>
         </div>
       )}

@@ -200,8 +200,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
             </div>
           )}
           <Link
-            // target="_blank"
-            // href={leetcode_link!}
             href={`/problem/${title}`}
             className={classes['title-link']}
           >

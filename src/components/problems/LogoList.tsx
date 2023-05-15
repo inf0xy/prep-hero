@@ -31,6 +31,7 @@ import TeslaIcon from '../icons/logos/TeslaIcon';
 import TiktokIcon from '../icons/logos/TiktokIcon';
 import TwitterIcon from '../icons/logos/TwitterIcon';
 import TwitchIcon from '../icons/logos/TwitchIcon';
+import RedditIcon from '../icons/logos/RedditIcon';
 import SalesforceIcon from '../icons/logos/SalesforceIcon';
 import SamsungIcon from '../icons/logos/SamsungIcon';
 import SpotifyIcon from '../icons/logos/SpotifyIcon';
@@ -73,6 +74,7 @@ const logos: { [key: string]: any } = {
   TikTok: { icon: TiktokIcon, width: 14, height: 14 },
   Twitter: { icon: TwitterIcon, width: 13, height: 13 },
   Twitch: { icon: TwitchIcon, width: 13, height: 13 },
+  Reddit: { icon: RedditIcon, width: 13, height: 13 },
   Salesforce: { icon: SalesforceIcon, width: 12, height: 12 },
   Samsung: { icon: SamsungIcon, width: 14, height: 14 },
   Spotify: { icon: SpotifyIcon, width: 13, height: 13 },
