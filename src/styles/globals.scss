@@ -60,3 +60,18 @@ body {
   top: 5px;
   right: 1px;
 }
+
+.decorationsOverviewRuler,
+.invisible.scrollbar.vertical.fade,
+.visible.scrollbar.vertical {
+  // width: 0.9rem !important;
+  width: 0 !important;
+}
+
+// .visible.scrollbar.vertical {
+//   width: 0 !important;
+// }
+
+.scroll-decoration {
+  width: 0 !important;
+}

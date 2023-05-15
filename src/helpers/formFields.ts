@@ -215,3 +215,23 @@ export const companies = [
   'Walmart',
   'Yahoo'
 ];
+
+export const fontOptions = [
+  { label: '12px', value: '12' },
+  { label: '13px', value: '13' },
+  { label: '14px', value: '14' },
+  { label: '15px', value: '15' },
+  { label: '16px', value: '16' },
+  { label: '17px', value: '17' },
+  { label: '18px', value: '18' },
+];
+
+export const tabSizeOptions = [
+  { label: '2 spaces', value: '2' },
+  { label: '4 spaces', value: '4' }
+];
+
+export const languageOptions = [
+  { label: 'Python', value: 'python' },
+  { label: 'Javascript', value: 'javascript' }
+];

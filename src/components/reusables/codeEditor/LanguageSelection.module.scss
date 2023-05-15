@@ -1,0 +1,17 @@
+.language-selection {
+  position: relative;
+  z-index: 10;
+
+  & > * {
+    font-size: 1.2rem;
+
+    span {
+      width: 2rem;
+    }
+
+    svg {
+      position: absolute;
+      left: 0.5rem;
+    }
+  }
+}

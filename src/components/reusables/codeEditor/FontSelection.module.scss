@@ -1,0 +1,12 @@
+.font-selection {
+  position: relative;
+  z-index: 20;
+
+  & > * {
+    font-size: 1.3rem;
+
+    svg {
+      position: absolute;
+    }
+  }
+}

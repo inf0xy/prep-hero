@@ -1,0 +1,88 @@
+@import '@/styles/variables.module.scss';
+
+.problem-editor {
+  &--dark {
+    background-color: $dark-background-400;
+  }
+
+  &--light {
+    background-color: $light-background-0;
+    color: $text-gray-800;
+  }
+}
+
+.editor-menu {
+  display: flex;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 0.2rem;
+  padding: 0.7rem 1rem;
+  gap: 1rem;
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: $text-gray-400;
+
+  // &--dark {
+
+  // }
+
+  // &--light {
+
+  // }
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 50vw;
+  // height: 20rem;
+  // max-height: 20rem;
+  overflow: hidden;
+  background-color: $dark-background-200;
+  padding: 4rem;
+  color: $text-off-white;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .font,
+  .tab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .font-description,
+  .tab-description {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    font-size: 1.5rem;
+    color: $text-gray-500;
+  }
+
+  .title {
+    font-size: 1.7rem;
+    color: $text-off-white;
+  }
+}
+
+.md-editor {
+  padding: 1rem 0;
+
+  &--dark {
+    background-color: $dark-background-350;
+  }
+
+  &--light {
+    background-color: $light-background-0;
+  }
+}

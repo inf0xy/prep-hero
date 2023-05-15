@@ -20,8 +20,8 @@
 .detail {
   grid-column: span 1;
   max-width: calc((100vw - 3rem) / 2);
+  // max-height: calc(100vh - 9rem);
   border-radius: 6px;
-  max-height: calc(100vh - 9rem);
   overflow: hidden;
 
   &--dark {
@@ -69,4 +69,5 @@
   max-width: calc((100vw - 3rem) / 2);
   background-color: $dark-background-400;
   border-radius: 6px;
+  overflow: hidden;
 }

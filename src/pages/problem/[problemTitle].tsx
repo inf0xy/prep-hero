@@ -5,6 +5,7 @@ import { useAppSelector } from '@/hooks/hooks';
 import { Problem } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import classes from '@/styles/ProblemDetailPage.module.scss';
+import ProblemEditor from '@/components/problems/ProblemEditor';
 
 type ProblemDetailPageProps = {
   selectedProblem: Problem;
@@ -52,7 +53,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
               </div>
           </div>
           <div className={classes.working}>
-            {/* <ProblemDetail problem={selectedProblem} /> */}
+              <ProblemEditor />
           </div>
         </div>
       )}

@@ -48,4 +48,9 @@ export type NotificationType = {
   message: string | undefined;
 };
 
+export type CodeOptions = {
+  fontSize: number;
+  tabSize: number
+}
+
 export type SearchOrForm = SearchCriteria | GeneralFormData;
