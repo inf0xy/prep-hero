@@ -26,7 +26,7 @@ const Header = () => {
   const handleLogout = () => {
     signOut({ redirect: true, callbackUrl: '/auth/login' });
   };
-  console.log(theme);
+
   return (
     <header className={`${classes.header} ${classes[`header--${theme}`]}`}>
       <Link href="/" className={classes.logo}>

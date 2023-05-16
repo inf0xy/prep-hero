@@ -7,6 +7,7 @@ type CodeEditorProps = {
   value?: string;
   options: CodeOptions;
   language: string;
+  height: string;
   setCodeInput: Dispatch<SetStateAction<string>>;
 };
 
@@ -14,6 +15,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   value,
   options,
   language,
+  height,
   setCodeInput
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
@@ -26,7 +28,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     <MonacoEditor
       theme={theme === 'dark' ? 'vs-dark' : 'light'}
       language={language}
-      height="70vh"
+      height={height}
       defaultValue={value}
       options={{
         wordWrap: 'on',
