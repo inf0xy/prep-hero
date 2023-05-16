@@ -52,7 +52,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
                 <ProblemDetail tab={activeTab} problem={selectedProblem} />
               </div>
           </div>
-          <div className={classes.working}>
+          <div className={`${classes.working} ${classes[`working--${theme}`]}`}>
               <ProblemEditor />
           </div>
         </div>

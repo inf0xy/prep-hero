@@ -11,12 +11,16 @@ type Option = {
 
 interface TabSizeSelectionProps {
   setTabSize: Dispatch<SetStateAction<CodeOptions>>;
+  options: CodeOptions;
 }
 
-const TabSizeSelection: React.FC<TabSizeSelectionProps> = ({ setTabSize }) => {
-  const [selected, setSelected] = useState<null | Option>({
-    label: '4 spaces', value: '4'
-  });
+const TabSizeSelection: React.FC<TabSizeSelectionProps> = ({ setTabSize, options }) => {
+  const currentOption = {
+    label: `${options.tabSize} spaces`,
+    value: options.tabSize.toString()
+  };
+
+  const [selected, setSelected] = useState<null | Option>(currentOption);
 
   const handleSelectTabSize: (option: Option) => void = (option) => {
     setSelected(option);

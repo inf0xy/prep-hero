@@ -67,7 +67,15 @@
 .working {
   grid-column: span 1;
   max-width: calc((100vw - 3rem) / 2);
-  background-color: $dark-background-400;
   border-radius: 6px;
   overflow: hidden;
+
+  &--dark {
+    background-color: $dark-background-400;
+  }
+
+  &--light {
+    background-color: $light-background-0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
 }

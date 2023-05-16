@@ -11,13 +11,16 @@ type Option = {
 
 interface FontSelectionProps {
   setFont: Dispatch<SetStateAction<CodeOptions>>;
+  options: CodeOptions
 }
 
-const FontSelection: React.FC<FontSelectionProps> = ({ setFont }) => {
-  const [selected, setSelected] = useState<null | Option>({
-    label: '14px',
-    value: '14'
-  });
+const FontSelection: React.FC<FontSelectionProps> = ({ setFont, options }) => {
+  const currentOption = {
+    label: `${options.fontSize}px`,
+    value: options.fontSize.toString()
+  };
+
+  const [selected, setSelected] = useState<null | Option>(currentOption);
 
   const handleSelectFont: (option: Option) => void = (option) => {
     setSelected(option);

@@ -33,7 +33,6 @@ import EditIcon from '../icons/EditIcon';
 import TrashIcon from '../icons/TrashIcon';
 import CodeBracketIcon from '../icons/CodeBracketIcon';
 import PlusIconOutline from '../icons/PlusIconOutline';
-import CircleX from '../icons/CircleX';
 import BookmarkOutline from '../icons/BookmarkOutline';
 import BookmarkFill from '../icons/BookmarkFill';
 import LogoList from './LogoList';
@@ -49,9 +48,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   showNotes,
   oddCell
 }) => {
-  const [showModalSolution, setShowModalSolution] = useState(false);
-  const [showModalNote, setShowModalNote] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showProblemNote, setShowProblemNote] = useState(false);
   const {
     list_names,
@@ -179,7 +175,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   data-tooltip="Remove"
                   onClick={() => dispatch(removeProblemFromList(title!))}
                 >
-                  <BookmarkFill className='text-primary' />
+                  <BookmarkFill className="text-primary" />
                 </span>
               ) : (
                 <span
@@ -199,10 +195,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
               </span>
             </div>
           )}
-          <Link
-            href={`/problem/${title}`}
-            className={classes['title-link']}
-          >
+          <Link href={`/problem/${title}`} className={classes['title-link']}>
             {title}
           </Link>
         </div>
@@ -218,20 +211,20 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
               <VideoIcon />
             </Link>
           ) : (
-            <span onClick={() => setShowModalSolution(true)}>
-              <CodeIcon
-                width={8}
-                height={8}
-                className="cursor-pointer"
-                extraStyle={{ transform: 'translateX(50%)' }}
-              />
+            <span>
+              <label htmlFor="modal-solution">
+                <CodeIcon
+                  width={8}
+                  height={8}
+                  className="cursor-pointer"
+                  extraStyle={{ transform: 'translateX(50%)' }}
+                />
+              </label>
             </span>
           )}
         </div>
-        <div
-          className={`${classes['companies-content']}`}
-        >
-          <LogoList companyNames={companies!}/>
+        <div className={`${classes['companies-content']}`}>
+          <LogoList companyNames={companies!} />
         </div>
       </div>
       {showProblemNote && (
@@ -246,12 +239,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           {notes && problemNoteContent ? (
             <ul className={classes['note-actions']}>
               <>
-                <li
-                  data-tooltip="Expand"
-                  className={classes.expand}
-                  onClick={() => setShowModalNote(true)}
-                >
-                  <ExpandIcon width={7} height={7} />
+                <li data-tooltip="Expand" className={classes.expand}>
+                  <label htmlFor="modal-note" className="cursor-pointer">
+                    <ExpandIcon width={7} height={7} />
+                  </label>
                 </li>
                 <li
                   data-tooltip="Edit"
@@ -260,12 +251,13 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 >
                   <EditIcon width={8} height={8} />
                 </li>
-                <li
-                  data-tooltip="Clear"
-                  className={classes.clear}
-                  onClick={() => setShowDeleteConfirm(true)}
-                >
-                  <TrashIcon width={8} height={8} />
+                <li data-tooltip="Clear" className={classes.clear}>
+                  <label
+                    htmlFor="note-delete-confirm-modal"
+                    className="cursor-pointer"
+                  >
+                    <TrashIcon width={8} height={8} />
+                  </label>
                 </li>
               </>
             </ul>
@@ -279,58 +271,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           )}
         </div>
       )}
-      {/* {transition((style, item) =>
-        item ? (
-          <animated.div style={style}>
-            <div className={classes.note}>
-              <div className={classes.strip}></div>
-              <div className={classes.content}>
-                <EditorPreview
-                  value={problemNoteContent ? problemNoteContent : ''}
-                  extraStyle={noteStripStyle}
-                />
-              </div>
-              {notes && problemNoteContent ? (
-                <ul className={classes['note-actions']}>
-                  <>
-                    <li
-                      data-tooltip="Expand"
-                      className={classes.expand}
-                      onClick={() => setShowModalNote(true)}
-                    >
-                      <ExpandIcon width={7} height={7} />
-                    </li>
-                    <li
-                      data-tooltip="Edit"
-                      className={classes.edit}
-                      onClick={handleEditNote}
-                    >
-                      <EditIcon width={8} height={8} />
-                    </li>
-                    <li
-                      data-tooltip="Clear"
-                      className={classes.clear}
-                      onClick={() => setShowDeleteConfirm(true)}
-                    >
-                      <TrashIcon width={8} height={8} />
-                    </li>
-                  </>
-                </ul>
-              ) : (
-                <div className={classes.add}>
-                  <span onClick={handleAddNote}>
-                    <PlusIconOutline width={8} height={8} />
-                  </span>
-                  <p>Add a note</p>
-                </div>
-              )}
-            </div>
-          </animated.div>
-        ) : null
-      )} */}
-
-      {showModalSolution && (
-        <Modal type="blur" onClose={() => setShowModalSolution(false)}>
+      {!solution_link!.includes('youtube.com') && (
+        <Modal id="modal-solution">
           <Image
             src={solution_link!}
             alt="solution code"
@@ -339,43 +281,32 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           />
         </Modal>
       )}
-      {showModalNote && (
-        <Modal
-          className={
-            theme === 'dark'
-              ? `bg-[${variables.darkBackground50}]`
-              : `bg-[${variables.lightBackground0}]`
-          }
-          type="blur"
-          onClose={() => setShowModalNote(false)}
-        >
-          <div
-            className="text-gray-300 hover:text-[#e64900] absolute top-12 right-12 cursor-pointer transition duration-300 ease"
-            onClick={() => setShowModalNote(false)}
-          >
-            <CircleX width={10} height={10} />
-          </div>
-          <div className={classes['modal__full-note']}>
-            <EditorPreview
-              value={problemNoteContent!}
-              extraStyle={fullNoteStyle[theme]}
-            />
-          </div>
-        </Modal>
-      )}
-      {showDeleteConfirm && (
-        <ConfirmPanel
-          onCancel={() => setShowDeleteConfirm(false)}
-          onConfirm={() => {
-            handleDeleteNote();
-            setShowDeleteConfirm(false);
-          }}
-          cancelText="Cancel"
-          confirmText="Confirm"
-          headerText="Are you sure?"
-          message="You are about to delete this note."
-        />
-      )}
+      <Modal
+        id="modal-note"
+        type="close-button"
+        className={`${
+          theme === 'dark'
+            ? `bg-[${variables.darkBackground50}]`
+            : `bg-[${variables.lightBackground0}]`
+        }`}
+      >
+        <div className={classes['modal__full-note']}>
+          <EditorPreview
+            value={problemNoteContent!}
+            extraStyle={fullNoteStyle[theme]}
+          />
+        </div>
+      </Modal>
+      <ConfirmPanel
+        id="note-delete-confirm-modal"
+        onConfirm={() => {
+          handleDeleteNote();
+        }}
+        cancelText="Cancel"
+        confirmText="Confirm"
+        headerText="Are you sure?"
+        message="You are about to delete this note."
+      />
     </>
   );
 };

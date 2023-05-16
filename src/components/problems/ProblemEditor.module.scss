@@ -1,18 +1,19 @@
 @import '@/styles/variables.module.scss';
 
 .problem-editor {
-  &--dark {
-    background-color: $dark-background-400;
-  }
+  // &--dark {
+  //   background-color: $dark-background-400;
+  // }
 
-  &--light {
-    background-color: $light-background-0;
-    color: $text-gray-800;
-  }
+  // &--light {
+  //   background-color: $light-background-0;
+  //   color: $text-gray-800;
+  // }
 }
 
 .editor-menu {
   display: flex;
+  justify-content: space-between;
   font-size: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   margin-bottom: 0.2rem;
@@ -23,16 +24,11 @@
 .options {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   color: $text-gray-400;
 
-  // &--dark {
-
-  // }
-
-  // &--light {
-
-  // }
+  & > * {
+    cursor: pointer;
+  }
 }
 
 .settings {
@@ -40,12 +36,19 @@
   flex-direction: column;
   gap: 2rem;
   width: 50vw;
-  // height: 20rem;
-  // max-height: 20rem;
-  overflow: hidden;
-  background-color: $dark-background-200;
+  overflow: visible;
+
   padding: 4rem;
   color: $text-off-white;
+
+  &--dark {
+    background-color: $dark-background-200;
+  }
+
+  &--light {
+    background-color: $light-background-0;
+    color: $text-gray-700;
+  }
 
   h1 {
     font-size: 2.5rem;
@@ -71,7 +74,14 @@
 
   .title {
     font-size: 1.7rem;
-    color: $text-off-white;
+
+    &--dark {
+      color: $text-off-white;
+    }
+
+    &--light {
+      color: $text-gray-700;
+    }
   }
 }
 

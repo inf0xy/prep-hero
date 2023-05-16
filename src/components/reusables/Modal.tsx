@@ -1,58 +1,54 @@
-import { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import {
-  modalBackgroundBlur,
-  modalBackgroundClear
-} from '@/helpers/extraStyles';
+import { ReactNode } from 'react';
+import Portal from './Portal';
 
-interface ModalProps {
-  children: any;
+type ModalProps = {
+  children: ReactNode;
+  id: string;
   className?: string;
-  type: 'clear' | 'blur';
-  onClose: () => void;
-}
+  type?: string;
+};
 
-const Modal: React.FC<ModalProps> = ({
-  children,
-  onClose,
-  className,
-  type
-}) => {
-  const [isVisible, setIsVisible] = useState(false);
+const Modal: React.FC<ModalProps> = ({ children, id, className, type }) => {
+  const modalWithoutCloseButton = (
+    <div>
+      <input type="checkbox" id={id} className="modal-toggle" />
+      <label htmlFor={id} className="modal cursor-pointer">
+        <label
+          className={`modal-box relative p-0 max-w-fit ${className}`}
+          htmlFor=""
+        >
+          {children}
+        </label>
+      </label>
+    </div>
+  );
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, []);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
-  const backgroundStyle =
-    type === 'clear' ? modalBackgroundClear : modalBackgroundBlur;
-
-  return createPortal(
-    <div
-      className={`transition-opacity duration-500 ${
-        isVisible ? 'opacity-100' : 'opacity-0'
-      }`}
-    >
-      <div
-        className="fixed inset-0"
-        onClick={onClose}
-        style={backgroundStyle}
-      ></div>
-      <div
-        className={`fixed inset-0 m-auto rounded-lg w-fit h-fit max-h-screen overflow-y-auto text-gray-800 shadow-xl ${className}`}
-      >
-        <div>{children}</div>
+  const modalWithCloseButton = (
+    <div>
+      <input type="checkbox" id={id} className="modal-toggle" />
+      <div className="modal">
+        <div className={`modal-box relative p-0 max-w-fit ${className}`}>
+          <label
+            htmlFor={id}
+            className="btn btn-sm btn-circle absolute right-8 top-8"
+          >
+            ✕
+          </label>
+          {children}
+        </div>
       </div>
-    </div>,
-    document.querySelector('#modal-container') as HTMLElement
+    </div>
+  );
+
+  const content =
+    type === 'close-button' ? modalWithCloseButton : modalWithoutCloseButton;
+
+  return (
+    <>
+      {typeof window !== 'undefined' && (
+        <Portal container={document.body}>{content}</Portal>
+      )}
+    </>
   );
 };
 

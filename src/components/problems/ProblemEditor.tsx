@@ -15,7 +15,6 @@ const ProblemEditor = () => {
   const [options, setOptions] = useState({ fontSize: 14, tabSize: 4 });
   const [language, setLanguage] = useState('python');
   const [codeInput, setCodeInput] = useState('');
-  const [showSettings, setShowSettings] = useState(false);
 
   return (
     <div
@@ -25,10 +24,11 @@ const ProblemEditor = () => {
     >
       <div className={classes['editor-menu']}>
         <LanguageSelection setLanguage={setLanguage} />
-
-        <ul className={`${classes.options} ${classes[`options--${theme}`]}`}>
-          <li onClick={() => setShowSettings(!showSettings)}>
-            <SettingsIcon width="8" height="8" />
+        <ul className={classes.options}>
+          <li>
+            <label htmlFor="modal-settings"  className='cursor-pointer'>
+              <SettingsIcon width="8" height="8" />
+            </label>
           </li>
         </ul>
       </div>
@@ -42,22 +42,26 @@ const ProblemEditor = () => {
           setCodeInput={setCodeInput}
         />
       </div>
-      <Modal onClose={() => setShowSettings(false)} type="blur">
-        <div className={classes.settings}>
+      <Modal id="modal-settings" className='overflow-visible'>
+        <div className={`${classes.settings} ${classes[`settings--${theme}`]}`}>
           <h1>Settings</h1>
           <div className={classes.font}>
             <div className={classes['font-description']}>
-              <p className={classes.title}>Font Size</p>
+              <p className={`${classes.title} ${classes[`title--${theme}`]}`}>
+                Font Size
+              </p>
               <p>Select font size for code editor.</p>
             </div>
-            <FontSelection setFont={setOptions} />
+            <FontSelection options={options} setFont={setOptions} />
           </div>
           <div className={classes.tab}>
             <div className={classes['tab-description']}>
-              <p className={classes.title}>Tab Size</p>
+              <p className={`${classes.title} ${classes[`title--${theme}`]}`}>
+                Tab Size
+              </p>
               <p>Select tab size for code editor.</p>
             </div>
-            <TabSizeSelection setTabSize={setOptions} />
+            <TabSizeSelection options={options} setTabSize={setOptions} />
           </div>
         </div>
       </Modal>

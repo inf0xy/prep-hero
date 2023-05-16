@@ -9,12 +9,13 @@ type LayoutProps = {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
+  const regex = /problem\/.*/;
 
   return (
     <main>
       <Header />
       {children}
-      {!router.pathname.includes('/problem') && <Footer />}
+      {!regex.test(router.pathname) && <Footer />}
     </main>
   );
 };
