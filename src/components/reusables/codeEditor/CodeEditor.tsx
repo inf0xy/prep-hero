@@ -1,10 +1,11 @@
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { useAppSelector } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
+import Loading from '../Loading';
 
 type CodeEditorProps = {
-  value?: string;
+  value: { [key: string]: string };
   options: CodeOptions;
   language: string;
   height: string;
@@ -19,6 +20,17 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   setCodeInput
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
+  const [code, setCode] = useState('');
+
+  useEffect(() => {
+    if (value) {
+      setCode(JSON.parse(value[language]));
+    } else {
+      setCode('');
+    }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language]);
 
   const handleEditorChange = (value: string | undefined) => {
     setCodeInput(value!);
@@ -29,7 +41,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       theme={theme === 'dark' ? 'vs-dark' : 'light'}
       language={language}
       height={height}
-      defaultValue={value}
+      value={code}
       options={{
         wordWrap: 'on',
         minimap: { enabled: false },
@@ -39,9 +51,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         renderWhitespace: 'none',
         folding: false,
         lineNumbersMinChars: 3,
-        ...options
+        ...options,
       }}
       onChange={handleEditorChange}
+      loading={<Loading width={40} height={40}/>}
     />
   );
 };

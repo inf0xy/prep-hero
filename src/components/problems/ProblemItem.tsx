@@ -55,7 +55,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     difficulty,
     category,
     companies,
-    leetcode_link,
     solution_link
   } = problem;
 

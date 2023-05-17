@@ -19,6 +19,7 @@ export type Problem = {
   description?: string | undefined;
   leetcode_link: string | undefined;
   solution_link: string | undefined;
+  prompts: { python: string; javascript: string };
   [key: string]: any;
 };
 
@@ -50,7 +51,18 @@ export type NotificationType = {
 
 export type CodeOptions = {
   fontSize: number;
-  tabSize: number
-}
+  tabSize: number;
+};
 
 export type SearchOrForm = SearchCriteria | GeneralFormData;
+
+export type Result = {
+  test: { [key: string]: any };
+  output: object;
+  result: string;
+}
+
+export type SubmissionResult = {
+  results: Result[],
+  runtime: string
+}

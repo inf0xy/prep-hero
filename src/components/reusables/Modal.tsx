@@ -5,7 +5,7 @@ type ModalProps = {
   children: ReactNode;
   id: string;
   className?: string;
-  type?: string;
+  type?: undefined | 'close-button';
 };
 
 const Modal: React.FC<ModalProps> = ({ children, id, className, type }) => {

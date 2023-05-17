@@ -185,7 +185,9 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
         )}
         <div className={classes['page-number']}>
           {(pageNumber - 1) * ITEM_PER_PAGE + 1} -{' '}
-          {pageNumber * ITEM_PER_PAGE > totalProblems ? totalProblems : pageNumber * ITEM_PER_PAGE}
+          {pageNumber * ITEM_PER_PAGE > totalProblems
+            ? totalProblems
+            : pageNumber * ITEM_PER_PAGE}
           &nbsp;/&nbsp;{totalProblems}
         </div>
         <Pagination

@@ -14,6 +14,7 @@ interface ProblemState {
     leetcode_link: string | undefined;
     solution_link: string | undefined;
     description: string | undefined;
+    prompts: { python: undefined | string; javascript: undefined | string };
   };
   allProblemsCount: number;
   easyProblemsCount: number;
@@ -65,7 +66,8 @@ const initialState: ProblemState = {
     tags: undefined,
     leetcode_link: undefined,
     solution_link: undefined,
-    description: undefined
+    description: undefined,
+    prompts: { python: undefined, javascript: undefined }
   },
   allProblemsCount: 0,
   easyProblemsCount: 0,
@@ -89,6 +91,7 @@ const problemsSlice = createSlice({
       state.selectedProblem.leetcode_link = action.payload.leetcode_link;
       state.selectedProblem.solution_link = action.payload.solution_link;
       state.selectedProblem.description = action.payload.description;
+      state.selectedProblem.prompts = action.payload.prompts;
     }
   },
   extraReducers: (builder) => {

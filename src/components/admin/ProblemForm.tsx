@@ -16,7 +16,7 @@ import TextEditor from '@/components/reusables/TextEditor';
 import Alert from '@/components/reusables/Alert';
 import Button from '@/components/reusables/Button';
 import ListSelection from './ListSelection';
-
+import CodeEditor from '../reusables/codeEditor/CodeEditor';
 
 interface AddProblem {
   message: string;
@@ -38,6 +38,12 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
   const noteDescription = problem?.description
     ? JSON.parse(problem?.description as string)
     : '';
+  const pythonCode = problem?.prompts
+    ? JSON.parse(problem?.prompts.python)
+    : '';
+  const javascriptCode = problem?.prompts
+    ? JSON.parse(problem?.prompts.javascript)
+    : '';
 
   const [generalInfo, setGeneralInfo] = useState<SearchOrForm>({
     listNames,
@@ -56,6 +62,8 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
     .trim();
 
   const [description, setDescription] = useState(noteDescription);
+  const [pythonPrompt, setPythonPrompt] = useState(pythonCode);
+  const [javascriptPrompt, setJavascriptPrompt] = useState(javascriptCode);
   const [extraCompanies, setExtraCompanies] = useState(otherCompanies);
   const [submitted, setSubmitted] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -64,7 +72,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
     message: undefined
   });
 
-  const { theme } = useAppSelector(state => state.theme);
+  const { theme } = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state) => state.problems);
   const router = useRouter();
@@ -101,7 +109,9 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
             (company) => company.toLowerCase() !== el.trim().toLowerCase()
           )
         ) {
-          selectedCompanies.push(el !== 'eBay' ? formatString(el.trim()) : el.trim());
+          selectedCompanies.push(
+            el !== 'eBay' ? formatString(el.trim()) : el.trim()
+          );
         }
       });
     }
@@ -121,7 +131,11 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
         companies: selectedCompanies,
         leetcode_link: generalInfo.leetcodeLink,
         solution_link: generalInfo.videoLink,
-        description: JSON.stringify(description)
+        description: JSON.stringify(description),
+        prompts: {
+          python: JSON.stringify(pythonPrompt),
+          javascript: JSON.stringify(javascriptPrompt)
+        }
       };
       if (pathname.includes('/add')) {
         await dispatch(addProblem(newProblem as Problem));
@@ -141,7 +155,9 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
   return (
     <>
       <form
-        className={`${classes['problem-form']} ${classes[`problem-form--${theme}`]}`}
+        className={`${classes['problem-form']} ${
+          classes[`problem-form--${theme}`]
+        }`}
         onSubmit={handleSubmit}
       >
         {showAlert && (
@@ -191,7 +207,9 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
           <legend>
             Category: <span className={classes.required}>*</span>
           </legend>
-          <div className={`${classes.category} ${classes[`category--${theme}`]}`}>
+          <div
+            className={`${classes.category} ${classes[`category--${theme}`]}`}
+          >
             <Categories
               setGeneralInfo={setGeneralInfo}
               currentSelectedCategory={generalInfo.category}
@@ -213,7 +231,9 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
           <legend>
             Companies: <span className={classes.required}>*</span>
           </legend>
-          <div className={`${classes.companies} ${classes[`companies--${theme}`]}`}>
+          <div
+            className={`${classes.companies} ${classes[`companies--${theme}`]}`}
+          >
             <Companies
               setGeneralInfo={setGeneralInfo}
               currentSelectedCompanies={generalInfo.companies}
@@ -223,7 +243,9 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
             <input
               value={extraCompanies}
               onChange={(e) => setExtraCompanies(e.target.value)}
-              className={`${classes.field} ${classes[`field--${theme}`]} ${classes['added-companies']}`}
+              className={`${classes.field} ${classes[`field--${theme}`]} ${
+                classes['added-companies']
+              }`}
               placeholder="Google, Facebook,..."
             />
             <p className="pt-4 italic">** If not listed above</p>
@@ -272,10 +294,38 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
             className={classes.description}
           />
         </div>
+        <div className={classes['form-controls']}>
+          <div className="flex space-x-4">
+            <div className="flex flex-col w-[49%] space-y-6">
+              <label>
+                Python Prompt: <span className={classes.required}>*</span>
+              </label>
+              <CodeEditor
+                value={pythonPrompt}
+                options={{ fontSize: 14, tabSize: 4 }}
+                language="python"
+                setCodeInput={setPythonPrompt}
+                height="200px"
+              />
+            </div>
+            <div className="flex flex-col w-[49%] space-y-6">
+              <label>
+                Javascript Prompt: <span className={classes.required}>*</span>
+              </label>
+              <CodeEditor
+                value={javascriptPrompt}
+                options={{ fontSize: 14, tabSize: 4 }}
+                language="javascript"
+                setCodeInput={setJavascriptPrompt}
+                height="200px"
+              />
+            </div>
+          </div>
+        </div>
       </form>
       <div className={classes['form-actions']}>
         <Button
-          color='gray'
+          color="gray"
           className="self-center"
           extraStyle={{ padding: '1rem 4.6rem' }}
           onClick={() => {
@@ -284,7 +334,11 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
         >
           Back
         </Button>
-        <Button className="self-center" extraStyle={{ padding: '1rem 4rem' }} onClick={handleSubmit}>
+        <Button
+          className="self-center"
+          extraStyle={{ padding: '1rem 4rem' }}
+          onClick={handleSubmit}
+        >
           Submit
         </Button>
       </div>

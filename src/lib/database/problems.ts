@@ -21,7 +21,8 @@ export default class Problem {
     public companies: string[],
     public leetcode_link: string,
     public solution_link: string,
-    public description: string
+    public description: string,
+    public prompts: { python: string, javascript: string}
   ) {
     this.list_names = list_names;
     this.title = title;
@@ -32,6 +33,7 @@ export default class Problem {
     this.leetcode_link = leetcode_link;
     this.solution_link = solution_link;
     this.description = description;
+    this.prompts = prompts
   }
 }
 
@@ -45,7 +47,8 @@ export const addNewProblems = async (problem: Problem) => {
     problem.companies,
     problem.leetcode_link,
     problem.solution_link,
-    problem.description
+    problem.description,
+    problem.prompts
   );
   await connectDB();
   return problemsCollection.insertOne(problem);
@@ -67,7 +70,8 @@ export const updateProblem = async (problem: Problem) => {
         companies: problem.companies,
         leetcode_link: problem.leetcode_link,
         solution_link: problem.solution_link,
-        description: problem.description
+        description: problem.description,
+        prompts: problem.prompts
       }
     }
   );

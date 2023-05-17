@@ -1,5 +1,5 @@
 type ChevronDownProps = {
-  className: string
+  className?: string
 }
 
 const ChevronDown: React.FC<ChevronDownProps> = ({ className }) => {

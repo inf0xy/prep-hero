@@ -6,6 +6,7 @@ import { Problem } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import classes from '@/styles/ProblemDetailPage.module.scss';
 import ProblemEditor from '@/components/problems/ProblemEditor';
+import Loading from '@/components/reusables/Loading';
 
 type ProblemDetailPageProps = {
   selectedProblem: Problem;
@@ -17,8 +18,15 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   const { theme } = useAppSelector((state) => state.theme);
   const [activeTab, setActiveTab] = useState('prompt');
 
+  const prompts = selectedProblem.prompts
+    ? selectedProblem.prompts
+    : {
+        python: '',
+        javascript: ''
+      };
+
   return (
-    <Suspense fallback={`Loading...`}>
+    <Suspense fallback={<Loading />}>
       {selectedProblem && (
         <div
           className={`${classes['problem-detail-page']} ${
@@ -49,11 +57,11 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
               </li>
             </ul>
             <div className={classes.description}>
-                <ProblemDetail tab={activeTab} problem={selectedProblem} />
-              </div>
+              <ProblemDetail tab={activeTab} problem={selectedProblem} />
+            </div>
           </div>
           <div className={`${classes.working} ${classes[`working--${theme}`]}`}>
-              <ProblemEditor />
+            <ProblemEditor prompts={prompts} title={selectedProblem.title!} />
           </div>
         </div>
       )}
