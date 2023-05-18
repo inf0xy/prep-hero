@@ -9,7 +9,7 @@ type CodeEditorProps = {
   options: CodeOptions;
   language: string;
   height: string;
-  setCodeInput: Dispatch<SetStateAction<string>>;
+  setCodeInput: (val: string) => void | Dispatch<SetStateAction<string>>;
 };
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -23,13 +23,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const [code, setCode] = useState('');
 
   useEffect(() => {
-    if (value) {
+    if (value && value[language] !== '') {
       setCode(JSON.parse(value[language]));
-    } else {
-      setCode('');
     }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language]);
 
   const handleEditorChange = (value: string | undefined) => {
@@ -51,10 +48,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         renderWhitespace: 'none',
         folding: false,
         lineNumbersMinChars: 3,
-        ...options,
+        ...options
       }}
       onChange={handleEditorChange}
-      loading={<Loading width={40} height={40}/>}
+      loading={<Loading width={40} height={40} />}
     />
   );
 };

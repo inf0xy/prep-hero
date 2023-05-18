@@ -17,7 +17,7 @@ const SubmissionResults: React.FC<SubmissionResultsProps> = ({
 
   const { theme } = useAppSelector((state) => state.theme);
 
-  const tabs = results.map((el, index) => (
+  const tabs = results.slice(0, 3).map((el, index) => (
     <div
       key={index}
       className={`${classes['tabs__item']} ${currentTest === index ? 'opacity-75' : 'opacity-100'}`}
@@ -43,7 +43,7 @@ const SubmissionResults: React.FC<SubmissionResultsProps> = ({
         ) : (
           <h1 className="text-[2rem] text-red-500">Failed</h1>
         )}
-        <p className="text-[1.5rem] mt-2">Runtime {runtime}ms</p>
+        <p className="text-[1.5rem] mt-2">Runtime {runtime} ms</p>
       </div>
       <div className="flex items-center space-x-8">{tabs}</div>
       <div

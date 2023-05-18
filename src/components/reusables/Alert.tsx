@@ -8,7 +8,7 @@ type AlertProps = {
   children: ReactNode;
   status: 'success' | 'error' | 'warning';
   onClose: Dispatch<SetStateAction<boolean>>;
-  setNotification: Dispatch<SetStateAction<NotificationType>>;
+  setNotification: Dispatch<SetStateAction<NotificationType| null>>;
 };
 
 const Alert: React.FC<AlertProps> = ({

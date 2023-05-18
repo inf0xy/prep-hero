@@ -60,9 +60,16 @@ export type Result = {
   test: { [key: string]: any };
   output: object;
   result: string;
-}
+};
 
 export type SubmissionResult = {
-  results: Result[],
-  runtime: string
-}
+  results: Result[];
+  runtime: string;
+};
+
+export type ResultMessage = {
+  passResult: boolean;
+  testPassed: string;
+  testFailed: string;
+  runtime: string;
+};

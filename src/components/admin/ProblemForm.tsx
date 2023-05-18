@@ -38,12 +38,12 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
   const noteDescription = problem?.description
     ? JSON.parse(problem?.description as string)
     : '';
-  const pythonCode = problem?.prompts
-    ? JSON.parse(problem?.prompts.python)
-    : '';
-  const javascriptCode = problem?.prompts
-    ? JSON.parse(problem?.prompts.javascript)
-    : '';
+  const problemPrompts = problem?.prompts
+    ? problem.prompts
+    : {
+        python: '',
+        javascript: ''
+      };
 
   const [generalInfo, setGeneralInfo] = useState<SearchOrForm>({
     listNames,
@@ -62,12 +62,11 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
     .trim();
 
   const [description, setDescription] = useState(noteDescription);
-  const [pythonPrompt, setPythonPrompt] = useState(pythonCode);
-  const [javascriptPrompt, setJavascriptPrompt] = useState(javascriptCode);
+  const [prompts, setPrompts] = useState(problemPrompts);
   const [extraCompanies, setExtraCompanies] = useState(otherCompanies);
   const [submitted, setSubmitted] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [notification, setNotification] = useState<NotificationType>({
+  const [notification, setNotification] = useState<NotificationType | null>({
     status: undefined,
     message: undefined
   });
@@ -133,8 +132,8 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
         solution_link: generalInfo.videoLink,
         description: JSON.stringify(description),
         prompts: {
-          python: JSON.stringify(pythonPrompt),
-          javascript: JSON.stringify(javascriptPrompt)
+          python: JSON.stringify(prompts.python),
+          javascript: JSON.stringify(prompts.javascript)
         }
       };
       if (pathname.includes('/add')) {
@@ -163,10 +162,10 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
         {showAlert && (
           <Alert
             onClose={setShowAlert}
-            status={notification.status!}
+            status={notification!.status!}
             setNotification={setNotification}
           >
-            {notification.message}
+            {notification!.message}
           </Alert>
         )}
         <div className={classes['form-controls']}>
@@ -301,10 +300,15 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
                 Python Prompt: <span className={classes.required}>*</span>
               </label>
               <CodeEditor
-                value={pythonPrompt}
+                value={prompts}
                 options={{ fontSize: 14, tabSize: 4 }}
                 language="python"
-                setCodeInput={setPythonPrompt}
+                setCodeInput={(val) =>
+                  setPrompts((prev) => ({
+                    ...prev,
+                    python: val
+                  }))
+                }
                 height="200px"
               />
             </div>
@@ -313,10 +317,15 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
                 Javascript Prompt: <span className={classes.required}>*</span>
               </label>
               <CodeEditor
-                value={javascriptPrompt}
+                value={prompts}
                 options={{ fontSize: 14, tabSize: 4 }}
                 language="javascript"
-                setCodeInput={setJavascriptPrompt}
+                setCodeInput={(val) =>
+                  setPrompts((prev) => ({
+                    ...prev,
+                    javascript: val
+                  }))
+                }
                 height="200px"
               />
             </div>

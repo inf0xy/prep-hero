@@ -16,17 +16,18 @@ export const runCode = async (submission: string) => {
   }
 };
 
-export const submitCode = async (submission: string, language: string, title: string) => {
+export const submitCode = async (submission: string, language: string, title: string, mode: string) => {
   const session = await getSession();
 
   if (!session) {
-    return 'Please log in';
+    return { error: 'Please log in' };
   }
 
   try {
     const result = await axios.post(`http://localhost:5000/submit/${language}`, {
       code: submission,
-      title
+      title,
+      mode
     });
     return result.data;
   } catch (err: any) {
