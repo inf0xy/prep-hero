@@ -13,7 +13,7 @@ interface ResizableProps {
 }
 
 const Resizable: React.FC<ResizableProps> = ({ children, setEditorHeight }) => {
-  const [height, setHeight] = useState(155);
+  const [height, setHeight] = useState(205);
 
   const handleResize = (
     event: React.SyntheticEvent,

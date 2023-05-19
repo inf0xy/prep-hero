@@ -42,7 +42,13 @@ export type AttemptedProblem = { title: string };
 export type EasySolved = { title: string };
 export type MediumSolved = { title: string };
 export type HardSolved = { title: string };
-export type Submission = { date: Date; title: string; code: string };
+export type Submission = {
+  date: Date;
+  title: string;
+  code: string;
+  language: string;
+  accepted: boolean;
+};
 
 export type NotificationType = {
   status: 'success' | 'error' | 'warning' | undefined;
@@ -62,7 +68,7 @@ export type Result = {
   result: string;
 };
 
-export type SubmissionResult = {
+export type RunResult = {
   results: Result[];
   runtime: string;
 };
@@ -71,5 +77,6 @@ export type ResultMessage = {
   passResult: boolean;
   testPassed: string;
   testFailed: string;
+  failedTestCases: Result[];
   runtime: string;
 };

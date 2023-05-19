@@ -3,7 +3,7 @@ import variables from '@/styles/variables.module.scss';
 export const colors: { [key: string]: string } = {
   Easy: variables.colorSuccess500,
   Medium: variables.colorWarning100,
-  Hard: variables.colorError300
+  Hard: variables.colorError400
 };
 
 export const noteStripStyle: { [key: string]: object } = {

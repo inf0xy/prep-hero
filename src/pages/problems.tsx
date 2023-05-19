@@ -75,16 +75,16 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber]);
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      await dispatch(fetchUserData());
-    };
-    try {
-      fetchUserInfo();
-    } catch (err) {
-      console.error(err);
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const fetchUserInfo = async () => {
+  //     await dispatch(fetchUserData());
+  //   };
+  //   try {
+  //     fetchUserInfo();
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }, [dispatch]);
 
   const handleRemoveFilters = (value: string) => {
     for (let key in searchCriteria) {

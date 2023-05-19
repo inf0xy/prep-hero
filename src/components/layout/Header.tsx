@@ -3,7 +3,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
-import { setTheme, getTheme, getProblemCounts } from '@/store';
+import { setTheme, getTheme, getProblemCounts, fetchUserData } from '@/store';
 import ConfirmPanel from '../reusables/ConfirmPanel';
 import UserMenu from '../user/UserMenu';
 import classes from './Header.module.scss';
@@ -18,9 +18,29 @@ const Header = () => {
   const avatarRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
 
+  // useEffect(() => {
+  //   const fetchUserInfo = async () => {
+  //     await dispatch(fetchUserData());
+  //   };
+  //   try {
+  //     fetchUserInfo();
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }, [dispatch]);
+
   useEffect(() => {
+    const fetchUserInfo = async () => {
+      await dispatch(fetchUserData());
+    };
+
+    try {
+      fetchUserInfo();
+      dispatch(getProblemCounts());
+    } catch (err) {
+      console.error(err);
+    }
     dispatch(getTheme());
-    dispatch(getProblemCounts());
   }, [dispatch]);
 
   const handleLogout = () => {

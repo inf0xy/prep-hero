@@ -1,0 +1,22 @@
+@import '@/styles/variables.module.scss';
+
+.editor-menu {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 0.2rem;
+  padding: 0.7rem 2rem;
+  gap: 1rem;
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  color: $text-gray-400;
+  gap: 1rem;
+
+  & > * {
+    cursor: pointer;
+  }
+}

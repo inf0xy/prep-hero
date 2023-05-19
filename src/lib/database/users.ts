@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { connectDB, usersCollection } from './db-util';
 import { hashPassword, comparePassword } from '@/lib/auth';
-import { Note } from '@/types/dataTypes';
+import { Note, Submission } from '@/types/dataTypes';
 
 type List = {
   problem_id: ObjectId;
@@ -180,4 +180,22 @@ export const removeProbleFromlist = async (_id: ObjectId, title: string) => {
 export const clearList = async (_id: ObjectId) => {
   await connectDB();
   return usersCollection.updateOne({ _id }, { $set: { list: [] } });
+};
+
+export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
+  await connectDB();
+  return usersCollection.updateOne(
+    { _id },
+    {
+      $push: {
+        submissions: {
+          title: submission.title,
+          language: submission.language,
+          code: submission.code,
+          accepted: submission.accepted,
+          date: new Date()
+        }
+      }
+    }
+  );
 };

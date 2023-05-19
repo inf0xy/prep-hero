@@ -69,7 +69,8 @@ $color-success-700: #104d24;
 $color-error-50: #eac0d2;
 $color-error-100: #f1acc9;
 $color-error-200: #c55584;
-$color-error-300: #e32447;
+$color-error-300: #ef4444;
+$color-error-400: #e32447;
 $color-error-500: #a10c4a;
 $color-error-600: #57112e;
 
@@ -133,6 +134,7 @@ $code-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation M
   colorSuccess500: $color-success-500;
   colorWarning100: $color-warning-100;
   colorError300: $color-error-300;
+  colorError400: $color-error-400;
 
   darkBackground50: $dark-background-50;
   darkBackground100: $dark-background-100;

@@ -1,0 +1,39 @@
+@import '@/styles/variables.module.scss';
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  z-index: 100;
+}
+
+.tooltip {
+  position: absolute;
+  transform: translateX(-50%);
+  color: $text-off-white;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.5s;
+  text-align: center;
+
+  &--top {
+    bottom: 130%;
+  }
+
+  &--bottom {
+    top: 130%;
+  }
+
+  &--dark {
+    background-color: $dark-background-200;
+  }
+
+  &--light {
+    background-color: $color-gray-600;
+  }
+}
+
+.tooltip-container:hover .tooltip {
+  opacity: 1;
+}

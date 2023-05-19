@@ -19,5 +19,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// export default checkAuth(handler);
-export default handler;
+export default checkAuth(handler);

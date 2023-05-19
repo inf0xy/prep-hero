@@ -5,7 +5,8 @@ import { CodeOptions } from '@/types/dataTypes';
 import Loading from '../Loading';
 
 type CodeEditorProps = {
-  value: { [key: string]: string };
+  // value: { [key: string]: string };
+  value: string;
   options: CodeOptions;
   language: string;
   height: string;
@@ -20,14 +21,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   setCodeInput
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
-  const [code, setCode] = useState('');
-
-  useEffect(() => {
-    if (value && value[language] !== '') {
-      setCode(JSON.parse(value[language]));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language]);
 
   const handleEditorChange = (value: string | undefined) => {
     setCodeInput(value!);
@@ -38,7 +31,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       theme={theme === 'dark' ? 'vs-dark' : 'light'}
       language={language}
       height={height}
-      value={code}
+      value={value}
       options={{
         wordWrap: 'on',
         minimap: { enabled: false },

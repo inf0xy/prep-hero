@@ -1,4 +1,5 @@
 import Portal from './Portal';
+import { useAppSelector } from '@/hooks/hooks';
 import classes from './ConfirmPanel.module.css';
 import InfoIcon from '@/components/icons/InfoIcon';
 
@@ -21,15 +22,25 @@ const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
   onConfirm,
   className
 }) => {
+  const { theme } = useAppSelector((state) => state.theme);
+
   return (
     <>
       {typeof window !== 'undefined' && (
         <Portal container={document.body}>
           <input type="checkbox" id={id} className="modal-toggle" />
           <div className="modal">
-            <div className="modal-box max-w-fit p-0 bg-[#333]">
-              <div className="card min-w-[50rem] bg-[#333] px-[1rem] ">
-                <div className="card-body text-white">
+            <div
+              className={`modal-box max-w-fit p-0 ${
+                theme === 'dark' ? 'bg-[#333]' : 'bg-white'
+              }`}
+            >
+              <div
+                className={`card z-[-1] h-56 min-w-[50vw] ${
+                  theme === 'dark' ? 'bg-[#333]' : 'bg-white'
+                } px-[1rem] ${className}`}
+              >
+                <div className={`card-body ${theme === 'dark' ? 'text-white' : 'text-gray-600'}`}>
                   <div className="flex space-x-[3rem] mt-[1rem] mx-[2rem] mb-[3rem]">
                     <div className={classes['confirm-panel__icon-container']}>
                       <div className={classes['confirm-panel__icon-wrapper']}>
@@ -42,16 +53,23 @@ const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
                       <h2 className="card-title text-[1.7rem] mb-[2rem]">
                         {headerText}
                       </h2>
-                      <p className="text-[1.6rem]">{message}</p>
+                      <p className="text-[1.6rem] leading-normal">{message}</p>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="modal-action mt-0 mb-10 pr-16 space-x-5">
-                <label htmlFor={id} className='btn btn-lg bg-gray-500 text-white text-xl'>
+                <label
+                  htmlFor={id}
+                  className="btn btn-lg bg-gray-500 border-0 text-white text-xl"
+                >
                   {cancelText}
                 </label>
-                <label htmlFor={id} className="btn btn-lg btn-accent text-white text-xl " onClick={onConfirm}>
+                <label
+                  htmlFor={id}
+                  className="btn btn-lg btn-accent text-white text-xl "
+                  onClick={onConfirm}
+                >
                   {confirmText}
                 </label>
               </div>

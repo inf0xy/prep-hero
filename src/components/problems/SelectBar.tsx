@@ -12,6 +12,7 @@ import ShuffleIcon from '@/components/icons/ShuffleIcon';
 import ResetIcon from '@/components/icons/ResetIcon';
 import { useSession } from 'next-auth/react';
 import ListName from '../admin/ListName';
+import Tooltip from '../reusables/Tooltip';
 
 type SelectBarProps = {
   searchCriteria: SearchCriteria;
@@ -57,44 +58,57 @@ const SelectBar: React.FC<SelectBarProps> = ({
         defaultText="Search"
         currentSearch={searchCriteria.text}
       />
-      <div className={classes.random} data-tooltip="Pick random question">
-        <Button
-          extraStyle={{
-            borderRadius: '8px',
-            height: '3rem',
-            width: '5rem',
-            padding: '0'
-          }}
-          color="secondary"
+      <div className={classes.random}>
+        <Tooltip
+          text="Random question"
+          direction="bottom"
+          className="w-[15rem] px-6 py-4"
         >
-          <ShuffleIcon width={20} height={20} />
-        </Button>
+          <Button
+            extraStyle={{
+              borderRadius: '8px',
+              height: '3rem',
+              width: '5rem',
+              padding: '0'
+            }}
+            color="secondary"
+          >
+            <ShuffleIcon width={20} height={20} />
+          </Button>
+        </Tooltip>
       </div>
-      <div
-        className={classes.reset}
-        data-tooltip="Pick random question"
-        onClick={handleSearchReset}
-      >
-        <Button
-          extraStyle={{
-            borderRadius: '8px',
-            height: '3rem',
-            width: '4rem',
-            padding: '0'
-          }}
-          color="primary"
+      <div className={classes.reset} onClick={handleSearchReset}>
+        <Tooltip
+          text="Reset search result"
+          direction="bottom"
+          className="w-[15rem] px-6 py-4"
         >
-          <ResetIcon width={15} height={15} />
-        </Button>
+          <Button
+            extraStyle={{
+              borderRadius: '8px',
+              height: '3rem',
+              width: '4rem',
+              padding: '0'
+            }}
+            color="primary"
+          >
+            <ResetIcon width={15} height={15} />
+          </Button>
+        </Tooltip>
       </div>
       {session && (
-        <input
-          data-tooltip="Show / Hide all notes"
-          type="checkbox"
-          className={`toggle toggle-lg ${classes['note-switch']}`}
-          checked={showNotes}
-          onChange={() => setShowNotes((prev) => !prev)}
-        />
+        <Tooltip
+          text="Show / Hide all notes"
+          direction="bottom"
+          className="w-[15rem] px-6 py-4"
+        >
+          <input
+            type="checkbox"
+            className={`toggle toggle-lg ${classes['note-switch']}`}
+            checked={showNotes}
+            onChange={() => setShowNotes((prev) => !prev)}
+          />
+        </Tooltip>
       )}
     </>
   );

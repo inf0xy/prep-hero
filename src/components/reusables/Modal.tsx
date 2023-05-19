@@ -30,9 +30,9 @@ const Modal: React.FC<ModalProps> = ({ children, id, className, type }) => {
         <div className={`modal-box relative p-0 max-w-fit ${className}`}>
           <label
             htmlFor={id}
-            className="btn btn-sm btn-circle absolute right-8 top-8"
+            className={`btn btn-circle absolute right-8 top-7 bg-[#474747]  hover:bg-[#404040] border-0`}
           >
-            ✕
+            <span className="text-2xl">✕</span>
           </label>
           {children}
         </div>

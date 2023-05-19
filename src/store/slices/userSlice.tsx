@@ -34,6 +34,11 @@ interface RemoveProblemToListResponse {
   message: string;
 }
 
+interface SaveSubmittedCodeResponse {
+  submission: Submission;
+  message: string;
+}
+
 export const fetchUserData = createAsyncThunk(
   'user/fetchUserData',
   async () => {
@@ -66,20 +71,17 @@ export const addProblemToList = createAsyncThunk(
   }
 );
 
-export const resetList = createAsyncThunk(
-  'user/resetList',
-  async () => {
-    const session = await getSession();
-    const userId = session?.session.user._id;
-    if (!session) {
-      throw new Error('Unauthorized');
-    }
-    const { data } = await axios.put<{ message: string }>('/api/users/list', {
-      userId
-    });
-    return data;
+export const resetList = createAsyncThunk('user/resetList', async () => {
+  const session = await getSession();
+  const userId = session?.session.user._id;
+  if (!session) {
+    throw new Error('Unauthorized');
   }
-);
+  const { data } = await axios.put<{ message: string }>('/api/users/list', {
+    userId
+  });
+  return data;
+});
 
 export const removeProblemFromList = createAsyncThunk(
   'user/removeProblemToList',
@@ -94,6 +96,22 @@ export const removeProblemFromList = createAsyncThunk(
       {
         params: { title, userId }
       }
+    );
+    return data;
+  }
+);
+
+export const saveSubmittedCode = createAsyncThunk(
+  'user/saveSubmittedCode',
+  async (submission: Submission) => {
+    const session = await getSession();
+    const userId = session?.session.user._id;
+    if (!session) {
+      throw new Error('Unauthorized');
+    }
+    const { data } = await axios.post<SaveSubmittedCodeResponse>(
+      '/api/users/submissions',
+      { submission, userId }
     );
     return data;
   }
@@ -182,6 +200,32 @@ const userSlice = createSlice({
       state.list = [];
     });
     builder.addCase(resetList.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(saveSubmittedCode.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(saveSubmittedCode.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = undefined;
+
+      const { submission } = action.payload;
+      const foundIndex = state.submissions.findIndex(
+        (item: Submission) =>
+          item.title === submission.title &&
+          item.language === submission.language
+      );
+
+      if (foundIndex !== -1) {
+        state.submissions.splice(foundIndex, 1);
+        state.submissions.push(submission);
+      } else {
+        state.submissions.push(submission);
+      }
+    });
+    builder.addCase(saveSubmittedCode.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message;
     });

@@ -1,31 +1,8 @@
 @import '@/styles/variables.module.scss';
 
-.random {
-  position: relative;
-}
-
 .note-switch {
-  position: relative;
   height: 2.5rem;
   width: 4.5rem;
   border-radius: 7px;
   align-self: center;
-}
-
-.random:hover::after,
-.note-switch:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: 120%;
-  left: 130%;
-  transform: translateX(-50%);
-  z-index: 10;
-  width: 9rem;
-  font-size: 1.2rem;
-  background-color: $dark-background-100;
-  color: $color-off-white;
-  padding: 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
 }

@@ -53,7 +53,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
                 }`}
                 onClick={() => setActiveTab('solution')}
               >
-                Solution
+                Solutions
               </li>
             </ul>
             <div className={classes.description}>
