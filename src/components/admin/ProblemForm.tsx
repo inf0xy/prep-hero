@@ -7,7 +7,6 @@ import { addProblem, updateProblem } from '@/store';
 import { GeneralFormData, Problem, SearchOrForm } from '@/types/dataTypes';
 import { NotificationType } from '@/types/dataTypes';
 import { formatString } from '@/helpers/formatString';
-import classes from './ProblemForm.module.scss';
 import Difficulty from './Difficulty';
 import Tags from './Tags';
 import Companies from './Companies';
@@ -17,6 +16,9 @@ import Alert from '@/components/reusables/Alert';
 import Button from '@/components/reusables/Button';
 import ListSelection from './ListSelection';
 import CodeEditor from '../reusables/codeEditor/CodeEditor';
+
+import variables from '@/styles/variables.module.scss';
+import classes from './ProblemForm.module.scss';
 
 interface AddProblem {
   message: string;
@@ -39,7 +41,20 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
     ? JSON.parse(problem?.description as string)
     : '';
   const problemPrompts = problem?.prompts
-    ? problem.prompts
+    ? {
+        python: JSON.parse(problem.prompts['python']),
+        javascript: JSON.parse(problem.prompts['javascript'])
+      }
+    : {
+        python: '',
+        javascript: ''
+      };
+
+  const problemSolutions = problem?.solution_codes
+    ? {
+        python: JSON.parse(problem.solution_codes['python']),
+        javascript: JSON.parse(problem.solution_codes['javascript'])
+      }
     : {
         python: '',
         javascript: ''
@@ -63,6 +78,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
 
   const [description, setDescription] = useState(noteDescription);
   const [prompts, setPrompts] = useState(problemPrompts);
+  const [solutionCodes, setSolutionCodes] = useState(problemSolutions);
   const [extraCompanies, setExtraCompanies] = useState(otherCompanies);
   const [submitted, setSubmitted] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -134,6 +150,10 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
         prompts: {
           python: JSON.stringify(prompts.python),
           javascript: JSON.stringify(prompts.javascript)
+        },
+        solution_codes: {
+          python: JSON.stringify(solutionCodes.python),
+          javascript: JSON.stringify(solutionCodes.javascript)
         }
       };
       if (pathname.includes('/add')) {
@@ -295,39 +315,102 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
         </div>
         <div className={classes['form-controls']}>
           <div className="flex space-x-4">
-            <div className="flex flex-col w-[49%] space-y-6">
+            <div className="flex flex-col w-[48%] space-y-6">
               <label>
                 Python Prompt: <span className={classes.required}>*</span>
               </label>
-              <CodeEditor
-                value={prompts}
-                options={{ fontSize: 14, tabSize: 4 }}
-                language="python"
-                setCodeInput={(val) =>
-                  setPrompts((prev) => ({
-                    ...prev,
-                    python: val
-                  }))
-                }
-                height="200px"
-              />
+              <div
+                className={`px-8 pb-8 rounded-lg ${
+                  theme === 'dark' ? 'bg-[#1e1e1e]' : 'bg-white border'
+                }`}
+              >
+                <CodeEditor
+                  value={prompts['python']}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  language="python"
+                  setCodeInput={(val) =>
+                    setPrompts((prev) => ({
+                      ...prev,
+                      python: val
+                    }))
+                  }
+                  height="200px"
+                />
+              </div>
             </div>
-            <div className="flex flex-col w-[49%] space-y-6">
+            <div className="flex flex-col w-[48%] space-y-6">
               <label>
                 Javascript Prompt: <span className={classes.required}>*</span>
               </label>
-              <CodeEditor
-                value={prompts}
-                options={{ fontSize: 14, tabSize: 4 }}
-                language="javascript"
-                setCodeInput={(val) =>
-                  setPrompts((prev) => ({
-                    ...prev,
-                    javascript: val
-                  }))
-                }
-                height="200px"
-              />
+              <div
+                className={`px-8 pb-8 rounded-lg ${
+                  theme === 'dark' ? 'bg-[#1e1e1e]' : 'bg-white border'
+                }`}
+              >
+                <CodeEditor
+                  value={prompts['javascript']}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  language="javascript"
+                  setCodeInput={(val) =>
+                    setPrompts((prev) => ({
+                      ...prev,
+                      javascript: val
+                    }))
+                  }
+                  height="200px"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={classes['form-controls']}>
+          <div className="flex space-x-4">
+            <div className="flex flex-col w-[48%] space-y-6">
+              <label>
+                Python Solution: <span className={classes.required}>*</span>
+              </label>
+              <div
+                className={`px-8 pb-8 rounded-lg ${
+                  theme === 'dark' ? 'bg-[#1e1e1e]' : 'bg-white border'
+                }`}
+              >
+                <CodeEditor
+                  value={solutionCodes['python']}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  language="python"
+                  setCodeInput={(val) =>
+                    setSolutionCodes((prev) => ({
+                      ...prev,
+                      python: val
+                    }))
+                  }
+                  height="200px"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col w-[48%] space-y-6">
+              <label>
+                Javascript Solution: <span className={classes.required}>*</span>
+              </label>
+              <div
+                className={`px-8 pb-8 rounded-lg ${
+                  theme === 'dark' ? 'bg-[#1e1e1e]' : 'bg-white border'
+                }`}
+              >
+                <CodeEditor
+                  value={solutionCodes['javascript']}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  language="javascript"
+                  setCodeInput={(val) =>
+                    setSolutionCodes((prev) => ({
+                      ...prev,
+                      javascript: val
+                    }))
+                  }
+                  height="200px"
+                />
+              </div>
             </div>
           </div>
         </div>

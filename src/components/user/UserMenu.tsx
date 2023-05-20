@@ -12,7 +12,7 @@ const UserMenu = () => {
   return (
     <ul
       tabIndex={0}
-      className={`dropdown-content shadow rounded-box w-[18rem] px-12 py-8 mt-3 flex flex-col space-y-3 ${
+      className={`dropdown-content shadow rounded-box w-[18rem] px-12 py-8 mt-3 flex flex-col space-y-3 ${classes['user-menu']} ${
         theme === 'dark'
           ? `bg-[${variables.darkBackground100}]`
           : 'bg-white text-gray-500'

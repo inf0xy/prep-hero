@@ -18,8 +18,8 @@ type EditorActionBarProps = {
   setLanguage: Dispatch<SetStateAction<string>>;
   title: string;
   prompts: { python: string; javascript: string; [key: string]: string };
-  setCodeInputPython: Dispatch<SetStateAction<string>>;
-  setCodeInputJavascript: Dispatch<SetStateAction<string>>;
+  setCodeInputPython: Dispatch<SetStateAction<string | undefined>>;
+  setCodeInputJavascript: Dispatch<SetStateAction<string | undefined>>;
   userPythonSubmission: Submission | undefined;
   userJavascriptSubmission: Submission | undefined;
 };

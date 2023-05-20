@@ -8,12 +8,12 @@ import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { fetchUserData } from '@/store';
 import ProblemList from '@/components/problems/ProblemList';
 import Pagination from '@/components/problems/Pagination';
-import classes from '../styles/ProblemsPage.module.scss';
 import useSort from '@/hooks/useSort';
 import CircleX from '@/components/icons/CircleX';
 import SelectBar from '@/components/problems/SelectBar';
 import Button from '@/components/reusables/Button';
 import ArrowLongLeft from '@/components/icons/ArrowLongLeft';
+import classes from '../styles/ProblemsPage.module.scss';
 
 interface AllProblemsPageProps {
   problems: Problem[];

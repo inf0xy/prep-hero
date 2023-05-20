@@ -1,11 +1,10 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { useAppSelector } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
 import Loading from '../Loading';
 
 type CodeEditorProps = {
-  // value: { [key: string]: string };
   value: string;
   options: CodeOptions;
   language: string;
@@ -27,25 +26,27 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   return (
-    <MonacoEditor
-      theme={theme === 'dark' ? 'vs-dark' : 'light'}
-      language={language}
-      height={height}
-      value={value}
-      options={{
-        wordWrap: 'on',
-        minimap: { enabled: false },
-        showUnused: false,
-        renderLineHighlight: 'none',
-        quickSuggestions: false,
-        renderWhitespace: 'none',
-        folding: false,
-        lineNumbersMinChars: 3,
-        ...options
-      }}
-      onChange={handleEditorChange}
-      loading={<Loading width={40} height={40} />}
-    />
+    <div className='code-editor'>
+      <MonacoEditor
+        theme={theme === 'dark' ? 'vs-dark' : 'light'}
+        language={language}
+        height={height}
+        value={value}
+        options={{
+          wordWrap: 'on',
+          minimap: { enabled: false },
+          showUnused: false,
+          renderLineHighlight: 'none',
+          quickSuggestions: false,
+          renderWhitespace: 'none',
+          folding: false,
+          lineNumbersMinChars: 3,
+          ...options
+        }}
+        onChange={handleEditorChange}
+        loading={<Loading width={40} height={40} />}
+      />
+    </div>
   );
 };
 

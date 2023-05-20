@@ -13,7 +13,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     leetcode_link,
     solution_link,
     description,
-    prompts
+    prompts,
+    solution_codes
   } = req.body;
 
   if (req.method === 'POST') {
@@ -27,7 +28,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       leetcode_link &&
       solution_link &&
       description &&
-      prompts
+      prompts &&
+      solution_codes
     ) {
       try {
         const result = await addNewProblems({
@@ -40,7 +42,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           leetcode_link,
           solution_link,
           description,
-          prompts
+          prompts,
+          solution_codes
         });
         res.status(201).json({ message: 'Successfully added new problem.' });
       } catch (err: any) {
@@ -64,7 +67,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       companies &&
       leetcode_link &&
       solution_link &&
-      description
+      description &&
+      prompts &&
+      solution_codes
     ) {
       try {
         const result = await updateProblem({
@@ -77,7 +82,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           leetcode_link,
           solution_link,
           description,
-          prompts
+          prompts,
+          solution_codes
         });
         res.status(200).json({ message: 'Successfully updated problem.' });
       } catch (err: any) {

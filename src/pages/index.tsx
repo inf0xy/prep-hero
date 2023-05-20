@@ -1,3 +1,4 @@
+import CodeSnippet from '@/components/reusables/CodeSnippet';
 import HeatMapCalendar from '@/components/user/HeatMapCalendar';
 import { useAppSelector } from '@/hooks/hooks';
 import classes from '@/styles/HomePage.module.scss';
@@ -36,12 +37,35 @@ export const data = {
   '2023-05-31': 62
 };
 
+const code = `class Solution {
+  public:
+      int numTrees(int n) {
+        int dp[n+1];
+        if(n==0 || n==1) return n;
+        dp[0]=1; dp[1]=1;
+        for(int i=2;i<=n;i++)
+        {
+            dp[i]=0;
+            for(int j=0;j<i;j++)
+            {
+                dp[i]+=dp[j]*dp[i-j-1];
+            }
+        }
+          return dp[n];
+      }
+  };`;
+
 const HomePage = () => {
   const { theme } = useAppSelector((state) => state.theme);
 
   return (
     <div className={`${classes.homepage} ${classes[`homepage--${theme}`]}`}>
       <HeatMapCalendar data={data} />
+      <div
+        className="p-16 h-fit"
+      >
+        <CodeSnippet value={code} language="python" />
+      </div>
     </div>
   );
 };

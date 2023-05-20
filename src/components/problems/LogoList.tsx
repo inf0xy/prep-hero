@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAppSelector } from '@/hooks/hooks';
+
 import AmazonIcon from '../icons/logos/AmazonIcon';
 import AccentureIcon from '../icons/logos/AccentureIcon';
 import AmericanExpressIcon from '../icons/logos/AmericanExpressIcon';
@@ -20,6 +21,7 @@ import IBMIcon from '../icons/logos/IBMIcon';
 import IntelIcon from '../icons/logos/IntelIcon';
 import InfosysIcon from '../icons/logos/InfosysIcon';
 import LinkedInIcon from '../icons/logos/LinkedInIcon';
+import JPMorganIcon from '../icons/logos/JPMorganIcon';
 import LyftIcon from '../icons/logos/LyftIcon';
 import MicrosoftIcon from '../icons/logos/MicrosoftIcon';
 import MetaIcon from '../icons/logos/MetaIcon';
@@ -40,6 +42,8 @@ import VisaIcon from '../icons/logos/VisaIcon';
 import VMIcon from '../icons/logos/VMIcon';
 import YahooIcon from '../icons/logos/YahooIcon';
 import WalmartIcon from '../icons/logos/WalmartIcon';
+
+import variables from '@/styles/variables.module.scss';
 import classes from './LogoList.module.scss';
 
 const logos: { [key: string]: any } = {
@@ -61,6 +65,7 @@ const logos: { [key: string]: any } = {
   IBM: { icon: IBMIcon, width: 15, height: 15 },
   Intel: { icon: IntelIcon, width: 14, height: 14 },
   Infosys: { icon: InfosysIcon, width: 15, height: 15 },
+  JPMorgan: { icon: JPMorganIcon, width: 15, height: 15 },
   LinkedIn: { icon: LinkedInIcon, width: 12, height: 12 },
   Lyft: { icon: LyftIcon, width: 12, height: 12 },
   Google: { icon: GoogleIcon, width: 13, height: 13 },
@@ -87,6 +92,7 @@ const logos: { [key: string]: any } = {
 
 type LogoListProps = {
   companyNames: string[];
+  className?: string;
 };
 
 type BrandProps = {
@@ -98,26 +104,19 @@ const Logo: React.FC<BrandProps> = ({ brand }) => {
   return <Brand width={logos[brand].width} height={logos[brand].height} />;
 };
 
-const LogoList: React.FC<LogoListProps> = ({ companyNames }) => {
-  const [showMore, setShowMore] = useState(false);
+const LogoList: React.FC<LogoListProps> = ({ companyNames, className }) => {
   const { theme } = useAppSelector((state) => state.theme);
-  const ref = useRef<HTMLDivElement>(null);
-  const moreRef = useRef<HTMLDivElement>(null);
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (ref.current && !ref.current.contains(event.target as Node) && !moreRef.current?.contains(event.target as Node)) {
-      setShowMore(false);
+  const getDropDownStyle = (extraCompanyNums: number) => {
+    let style = {};
+    if (extraCompanyNums > 3) {
+      style = {
+        flexWrap: 'wrap',
+        width: '30rem'
+      };
     }
+    return style;
   };
-
-  useEffect(() => {
-    document.body.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.body.removeEventListener('mousedown', handleClickOutside);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>
@@ -134,35 +133,40 @@ const LogoList: React.FC<LogoListProps> = ({ companyNames }) => {
           </div>
         ))}
         {companyNames.length > 3 && (
-          <div
-            ref={moreRef}
-            className={`${classes.more} ${classes[`brand--${theme}`]}`}
-            onClick={() => setShowMore(!showMore)}
-          >
-            ...
-          </div>
+          <div className="dropdown dropdown-end">
+            <label
+              tabIndex={0}
+              className={`${classes.more} ${classes[`brand--${theme}`]}`}
+            >
+              ...
+            </label>
+
+            <div
+              tabIndex={0}
+              className={`${className} dropdown-content shadow rounded-box mt-6 ${
+                classes['more-companies']
+              } ${classes[`more-companies--${theme}`]}`}
+              style={getDropDownStyle(companyNames.length - 3)}
+            >
+
+                {companyNames.slice(3).map((el) => (
+                  <div
+                    key={el}
+                    className={`space-y-4 ${classes.brand} ${
+                      classes[`brand--${theme}`]
+                    }`}
+                  >
+                    <span>
+                      <Logo brand={el === 'Facebook (Meta)' ? 'Meta' : el} />
+                    </span>
+
+                    {el === 'Facebook (Meta)' ? 'Meta' : el}
+                  </div>
+                ))}
+              </div>
+            </div>
         )}
       </div>
-      {showMore && (
-        <div
-          ref={ref}
-          className={`${classes['all-companies']} ${
-            classes[`all-companies--${theme}`]
-          }`}
-        >
-          {companyNames.slice(3).map((el) => (
-            <div
-              key={el}
-              className={`${classes.brand} ${classes[`brand--${theme}`]}`}
-            >
-              <span>
-                <Logo brand={el === 'Facebook (Meta)' ? 'Meta' : el} />
-              </span>
-              {el === 'Facebook (Meta)' ? 'Meta' : el}
-            </div>
-          ))}
-        </div>
-      )}
     </>
   );
 };

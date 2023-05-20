@@ -49,44 +49,19 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
   const [options, setOptions] = useState({ fontSize: 14, tabSize: 4 });
   const [language, setLanguage] = useState('python');
 
-  const foundSubmissions = submissions.filter((el) => el.title === title);
-
-  let pythonCode, javascriptCode: string;
-  let pythonSubmission: Submission[] = [];
-  let javascriptSubmission: Submission[] = [];
-  if (foundSubmissions.length) {
-    foundSubmissions.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-
-    pythonSubmission = foundSubmissions.filter(
-      (el) => el.language === 'python'
-    );
-
-    pythonCode = pythonSubmission.length
-      ? JSON.parse(pythonSubmission[0].code)
-      : JSON.parse(prompts['python']);
-
-    javascriptSubmission = foundSubmissions.filter(
-      (el) => el.language === 'javascript'
-    );
-    javascriptCode = javascriptSubmission.length
-      ? JSON.parse(javascriptSubmission[0].code)
-      : JSON.parse(prompts['javascript']);
-  } else {
-    pythonCode = JSON.parse(prompts['python']);
-    javascriptCode = JSON.parse(prompts['javascript']);
-  }
   const [userPythonSubmission, setUserPythonSubmission] = useState<
     Submission | undefined
-  >(pythonSubmission[0]);
+  >(undefined);
   const [userJavascriptSubmission, setUserJavascriptSubmission] = useState<
     Submission | undefined
-  >(javascriptSubmission[0]);
+  >(undefined);
 
-  const [codeInputPython, setCodeInputPython] = useState(pythonCode);
-  const [codeInputJavascript, setCodeInputJavascript] =
-    useState(javascriptCode);
+  const [codeInputPython, setCodeInputPython] = useState<string | undefined>(
+    undefined
+  );
+  const [codeInputJavascript, setCodeInputJavascript] = useState<
+    string | undefined
+  >(undefined);
   // const [output, setOutput] = useState('');
   const [showConsole, setShowConsole] = useState(false);
   const [editorHeight, setEditorHeight] = useState<string | null>(null);
@@ -98,13 +73,52 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setEditorHeight(`${window.innerHeight - 195}px`);
+      setEditorHeight(`${window.innerHeight - 188}px`);
     }
   }, []);
 
-  // const handleRunCode = async () => {
+  useEffect(() => {
+    const foundSubmissions = submissions.filter((el) => el.title === title);
+
+    let pythonCode, javascriptCode: string;
+    let pythonSubmission: Submission[] = [];
+    let javascriptSubmission: Submission[] = [];
+    if (foundSubmissions.length) {
+      foundSubmissions.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+
+      pythonSubmission = foundSubmissions.filter(
+        (el) => el.language === 'python'
+      );
+
+      pythonCode = pythonSubmission.length
+        ? JSON.parse(pythonSubmission[0].code)
+        : JSON.parse(prompts['python']);
+
+      javascriptSubmission = foundSubmissions.filter(
+        (el) => el.language === 'javascript'
+      );
+      javascriptCode = javascriptSubmission.length
+        ? JSON.parse(javascriptSubmission[0].code)
+        : JSON.parse(prompts['javascript']);
+    } else {
+      pythonCode = JSON.parse(prompts['python']);
+      javascriptCode = JSON.parse(prompts['javascript']);
+    }
+
+    setCodeInputPython(pythonCode);
+    setCodeInputJavascript(javascriptCode);
+
+    setUserPythonSubmission(pythonSubmission[0]);
+    setUserJavascriptSubmission(javascriptSubmission[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submissions]);
+
+  // const handleRunCodeManually = async () => {
   //   setShowConsole(true);
   //   setEditorHeight(`${window.innerHeight - 400}px`);
+  //   const codeInput = language === 'python' ? codeInputPython : codeInputJavascript;
   //   const result = await runCode(codeInput);
   //   if (typeof result !== 'string') {
   //     setOutput(result.output);
@@ -130,7 +144,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
 
     const codeInput =
       language === 'python' ? codeInputPython : codeInputJavascript;
-    const result = await submitCode(codeInput, language, title, action);
+    const result = await submitCode(codeInput!, language, title, action);
     setIsLoading(false);
 
     if (result.hasOwnProperty('error')) {
@@ -183,7 +197,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
 
   const handleShowConsole = () => {
     if (showConsole) {
-      setEditorHeight(`${window.innerHeight - 195}px`);
+      setEditorHeight(`${window.innerHeight - 188}px`);
       setShowConsole(false);
     } else {
       setEditorHeight(`${window.innerHeight - 400}px`);
@@ -208,17 +222,19 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
         }`}
       >
         <div className={classes['problem-editor__main']}>
-          <EditorActionBar
-            title={title}
-            language={language}
-            setLanguage={setLanguage}
-            setCodeInputPython={setCodeInputPython}
-            setCodeInputJavascript={setCodeInputJavascript}
-            userPythonSubmission={userPythonSubmission}
-            userJavascriptSubmission={userJavascriptSubmission}
-            prompts={prompts}
-          />
-          {editorHeight && (
+          {codeInputPython && codeInputJavascript && (
+            <EditorActionBar
+              title={title}
+              language={language}
+              setLanguage={setLanguage}
+              setCodeInputPython={setCodeInputPython}
+              setCodeInputJavascript={setCodeInputJavascript}
+              userPythonSubmission={userPythonSubmission}
+              userJavascriptSubmission={userJavascriptSubmission}
+              prompts={prompts}
+            />
+          )}
+          {codeInputPython && codeInputJavascript && editorHeight && (
             <>
               <div
                 className={`${classes['md-editor']} ${

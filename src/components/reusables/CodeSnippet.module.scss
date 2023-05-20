@@ -1,0 +1,15 @@
+@import '@/styles/variables.module.scss';
+
+.code-snippet-container {
+  padding: 2rem;
+  border-radius: 10px;
+  overflow: hidden;
+
+  &--dark {
+    background-color: $dark-background-50;
+  }
+
+  &--light {
+    background-color: $light-background-200;
+  }
+}

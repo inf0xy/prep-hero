@@ -20,7 +20,7 @@ const Resizable: React.FC<ResizableProps> = ({ children, setEditorHeight }) => {
     { size }: ResizeCallbackData
   ) => {
     setHeight(size.height);
-    setEditorHeight(`${window.innerHeight - 195 - size.height}px`);
+    setEditorHeight(`${window.innerHeight - 188 - size.height}px`);
   };
 
   return (

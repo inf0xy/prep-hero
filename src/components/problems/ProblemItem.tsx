@@ -223,7 +223,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           )}
         </div>
         <div className={`${classes['companies-content']}`}>
-          <LogoList companyNames={companies!} />
+          <LogoList companyNames={companies!} className='translate-x-8'/>
         </div>
       </div>
       {showProblemNote && (

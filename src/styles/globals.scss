@@ -61,18 +61,25 @@ body {
   right: 1px;
 }
 
-.decorationsOverviewRuler,
-.invisible.scrollbar.vertical.fade,
-.visible.scrollbar.vertical {
-  // width: 0.9rem !important;
-  width: 0 !important;
+.wmde-markdown pre {
+  position: relative;
 }
 
-// .visible.scrollbar.vertical {
-//   width: 0 !important;
-// }
+.editor-preview.light .copied {
+  background-color: $light-background-300;
+}
 
-.scroll-decoration {
+.code-editor {
+  padding-top: 1rem;
+}
+
+.code-editor .decorationsOverviewRuler,
+.code-editor .invisible.scrollbar.vertical.fade,
+.code-editor .visible.scrollbar.vertical {
+  width: 0.8rem !important;
+}
+
+.code-editor .scroll-decoration {
   width: 0 !important;
 }
 
@@ -119,3 +126,53 @@ body {
 //   cursor: col-resize;
 //   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
 // }
+
+// .code-snippet {
+//   &:has(> div.lines-content.monaco-editor-background) {
+//     background-color: $dark-background-50 !important;
+//   }
+
+//   &:has(> div.margin){
+//     background-color: $dark-background-50 !important;
+//   }
+// }
+
+// .code-snippet .lines-content.monaco-editor-background {
+//   background-color: $dark-background-50 !important;
+// }
+
+.code-snippet.dark .lines-content.monaco-editor-background,
+.code-snippet.dark .margin {
+  background-color: $dark-background-50 !important;
+}
+
+.code-snippet.light .lines-content.monaco-editor-background,
+.code-snippet.light .margin {
+  background-color: $light-background-200 !important;
+}
+
+.code-snippet.dark .core-guide.core-guide-indent.vertical,
+.code-snippet.dark .core-guide.core-guide-indent-active.vertical,
+.code-snippet.light .core-guide.core-guide-indent.vertical,
+.code-snippet.light .core-guide.core-guide-indent-active.vertical {
+  display: none !important;
+}
+
+.code-snippet.dark .decorationsOverviewRuler,
+.code-snippet.dark .invisible.scrollbar.vertical.fade,
+.code-snippet.dark .visible.scrollbar.vertical,
+.code-snippet.light .decorationsOverviewRuler,
+.code-snippet.light .invisible.scrollbar.vertical.fade,
+.code-snippet.light .visible.scrollbar.vertical {
+  width: 0 !important;
+}
+
+.code-snippet.dark .scroll-decoration,
+.code-snippet.light .scroll-decoration {
+  width: 0 !important;
+}
+
+.code-snippet.dark .monaco-editor,
+.code-snippet.light .monaco-editor {
+  pointer-events: none;
+}

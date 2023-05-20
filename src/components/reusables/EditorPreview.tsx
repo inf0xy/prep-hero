@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
+import { useAppSelector } from '@/hooks/hooks';
 
 interface EditorPreviewProps {
   value: string;
@@ -26,8 +27,11 @@ const EditorPreview: React.FC<EditorPreviewProps> = ({
   className,
   extraStyle
 }) => {
+  const { theme } = useAppSelector(state => state.theme);
   return (
-    <EditerMarkdown source={value} className={className} style={extraStyle} />
+    <div className={`editor-preview ${theme}`}>
+      <EditerMarkdown source={value} className={className} style={extraStyle} />
+    </div>
   );
 };
 
