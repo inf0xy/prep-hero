@@ -27,6 +27,7 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+
 }
 
 .category-content {
@@ -40,14 +41,6 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-}
-
-.note-icon,
-.bookmark-icon,
-.expand,
-.edit,
-.clear {
-  position: relative;
 }
 
 .action-icons .difficulty-content {
@@ -72,31 +65,6 @@
 .solution-content svg {
   transform: translateX(70%);
   transition: color 0.3s ease;
-}
-
-.note-icon:hover::after,
-.bookmark-icon:hover::after,
-.expand:hover:after,
-.edit:hover:after,
-.clear:hover:after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 120%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  width: fit-content;
-  font-size: 1.2rem;
-  background-color: $dark-background-200;
-  color: $text-off-white;
-  padding: 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
-}
-
-.bookmark-icon:hover::after {
-  width: 7rem;
 }
 
 .companies-content {

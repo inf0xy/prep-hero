@@ -1,12 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import DropDown from '@/components/reusables/Dropdown';
 import { difficultyListOptions } from '@/helpers/formFields';
-import { SearchOrForm } from '@/types/dataTypes';
-
-type Option = {
-  label: string;
-  value: string;
-};
+import { SearchOrForm, Option } from '@/types/dataTypes';
 
 interface DifficultyListProps {
   setDifficulty: Dispatch<SetStateAction<SearchOrForm>>;

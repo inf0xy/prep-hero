@@ -2,14 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import Panel from './Panel';
 import ChevronUp from '@/components/icons/ChevronUp';
 import ChevronDown from '@/components/icons/ChevronDown';
-import classes from './DropDown.module.scss';
 import { useAppSelector } from '@/hooks/hooks';
+import { Option } from '@/types/dataTypes';
 import variables from '@/styles/variables.module.scss';
-
-type Option = {
-  value: string;
-  label: string;
-};
+import classes from './DropDown.module.scss';
 
 interface LargeListDropDownProps {
   options: Option[];

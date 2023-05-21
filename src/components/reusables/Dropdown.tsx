@@ -3,14 +3,10 @@ import { useTransition, animated } from 'react-spring';
 import Panel from './Panel';
 import ChevronUp from '@/components/icons/ChevronUp';
 import ChevronDown from '@/components/icons/ChevronDown';
+import { useAppSelector } from '@/hooks/hooks';
+import { Option } from '@/types/dataTypes';
 import classes from './DropDown.module.scss';
 import variables from '@/styles/variables.module.scss';
-import { useAppSelector } from '@/hooks/hooks';
-
-type Option = {
-  value: string;
-  label: string;
-};
 
 interface DropDownProps {
   options: Option[];

@@ -1,12 +1,7 @@
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import LargeListDropDown from '../reusables/LargeListDropDown';
 import { companyListOption } from '@/helpers/formFields';
-import { SearchCriteria, SearchOrForm } from '@/types/dataTypes';
-
-type Option = {
-  label: string;
-  value: string;
-};
+import { SearchCriteria, SearchOrForm, Option } from '@/types/dataTypes';
 
 interface CompanyListProps {
   setCompany: Dispatch<SetStateAction<SearchOrForm>>;

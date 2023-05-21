@@ -46,14 +46,24 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
                 Prompt
               </li>
               <li
-                className={`${activeTab === 'solution' ? 'bg-accent' : ''} ${
-                  activeTab === 'solution' && theme == 'light'
+                className={`${activeTab === 'solutions' ? 'bg-accent' : ''} ${
+                  activeTab === 'solutions' && theme == 'light'
                     ? 'text-white'
                     : ''
                 }`}
-                onClick={() => setActiveTab('solution')}
+                onClick={() => setActiveTab('solutions')}
               >
                 Solutions
+              </li>
+              <li
+                className={`${activeTab === 'submissions' ? 'bg-accent' : ''} ${
+                  activeTab === 'submissions' && theme == 'light'
+                    ? 'text-white'
+                    : ''
+                }`}
+                onClick={() => setActiveTab('submissions')}
+              >
+                Submissions
               </li>
             </ul>
             <div className={classes.description}>

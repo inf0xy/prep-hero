@@ -38,7 +38,8 @@ const SubmissionResults: React.FC<SubmissionResultsProps> = ({ result }) => {
           type='submit'
           testResults={{
             results: result.failedTestCases,
-            runtime: result.runtime
+            runtime: result.runtime,
+            stdOut: result.stdOut
           }}
           totalTestFailed={`${result.testPassed}`}
         />

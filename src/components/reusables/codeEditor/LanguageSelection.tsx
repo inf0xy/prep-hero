@@ -1,21 +1,33 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 import { languageOptions } from '@/helpers/formFields';
+import { Option } from '@/types/dataTypes';
 import DropDown from '../Dropdown';
 import classes from './LanguageSelection.module.scss';
 
-type Option = {
-  label: string;
-  value: string;
-};
-
 interface LanguageSelectionProps {
   setLanguage: Dispatch<SetStateAction<string>>;
+  multiOptions: boolean;
+  width?: string;
+  className?: string;
 }
 
-const LanguageSelection: React.FC<LanguageSelectionProps> = ({ setLanguage }) => {
-  const [selected, setSelected] = useState<null | Option>({
-    label: 'Python', value: 'python'
-  });
+const LanguageSelection: React.FC<LanguageSelectionProps> = ({
+  setLanguage,
+  multiOptions,
+  width,
+  className
+}) => {
+  const intialSelection = multiOptions
+    ? {
+        label: 'All',
+        value: 'all'
+      }
+    : {
+        label: 'Python',
+        value: 'python'
+      };
+
+  const [selected, setSelected] = useState<null | Option>(intialSelection);
 
   const handleSelectLanguage: (option: Option) => void = (option) => {
     setSelected(option);
@@ -23,13 +35,19 @@ const LanguageSelection: React.FC<LanguageSelectionProps> = ({ setLanguage }) =>
   };
 
   return (
-    <div className={classes['language-selection']}>
+    <div
+      className={`${classes['language-selection']} text-[1.2rem] ${className}`}
+    >
       <DropDown
         value={selected!}
-        options={languageOptions}
+        options={
+          multiOptions
+            ? [{ label: 'All', value: 'all' }, ...languageOptions]
+            : languageOptions
+        }
         onChange={handleSelectLanguage}
         defaultText={selected?.label!}
-        width='10rem'
+        width={width ? width : '10rem'}
       />
     </div>
   );

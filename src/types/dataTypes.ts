@@ -50,6 +50,11 @@ export type Submission = {
   accepted: boolean;
 };
 
+export type Option = {
+  label: string;
+  value: string;
+};
+
 export type NotificationType = {
   status: 'success' | 'error' | 'warning' | undefined;
   message: string | undefined;
@@ -71,6 +76,7 @@ export type Result = {
 export type RunResult = {
   results: Result[];
   runtime: string;
+  stdOut: string[]
 };
 
 export type ResultMessage = {
@@ -79,4 +85,5 @@ export type ResultMessage = {
   testFailed: string;
   failedTestCases: Result[];
   runtime: string;
+  stdOut: string[]
 };

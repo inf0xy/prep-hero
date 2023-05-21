@@ -79,9 +79,9 @@ const SelectBar: React.FC<SelectBarProps> = ({
       </div>
       <div className={classes.reset} onClick={handleSearchReset}>
         <Tooltip
-          text="Reset search result"
+          text="Reset search"
           direction="bottom"
-          className="w-[15rem] px-6 py-4"
+          className="w-[12rem] px-6 py-4"
         >
           <Button
             extraStyle={{

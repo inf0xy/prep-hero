@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Image from 'next/image';
 import Modal from '../reusables/Modal';
 import ConfirmPanel from '../reusables/ConfirmPanel';
 import EditorPreview from '../reusables/EditorPreview';
@@ -36,6 +35,8 @@ import PlusIconOutline from '../icons/PlusIconOutline';
 import BookmarkOutline from '../icons/BookmarkOutline';
 import BookmarkFill from '../icons/BookmarkFill';
 import LogoList from './LogoList';
+import Tooltip from '../reusables/Tooltip';
+import Solutions from '../reusables/Solutions';
 
 type ProblemItemProps = {
   problem: Problem;
@@ -55,7 +56,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     difficulty,
     category,
     companies,
-    solution_link
+    solution_link,
+    solution_codes
   } = problem;
 
   const {
@@ -68,6 +70,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     theme
   } = useAppSelector((state) => {
     const {
+      submissions,
       attempted_problems,
       easy_solved,
       medium_solved,
@@ -177,21 +180,27 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   <BookmarkFill className="text-primary" />
                 </span>
               ) : (
-                <span
-                  className={classes['bookmark-icon']}
-                  data-tooltip="Add to list"
-                  onClick={() => dispatch(addProblemToList(title!))}
+                <Tooltip
+                  text="Add to list"
+                  direction="top"
+                  className="w-[10rem] px-6 py-2"
                 >
-                  <BookmarkOutline />
-                </span>
+                  <span
+                    className={classes['bookmark-icon']}
+                    onClick={() => dispatch(addProblemToList(title!))}
+                  >
+                    <BookmarkOutline />
+                  </span>
+                </Tooltip>
               )}
-              <span
-                data-tooltip="Note"
-                className={classes['note-icon']}
-                onClick={() => setShowProblemNote(!showProblemNote)}
-              >
-                <NoteIcon className="cursor-pointer" />
-              </span>
+              <Tooltip text="Note" direction="top" className="w-fit px-6 py-2">
+                <span
+                  className={classes['note-icon']}
+                  onClick={() => setShowProblemNote(!showProblemNote)}
+                >
+                  <NoteIcon className="cursor-pointer" />
+                </span>
+              </Tooltip>
             </div>
           )}
           <Link href={`/problem/${title}`} className={classes['title-link']}>
@@ -223,7 +232,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           )}
         </div>
         <div className={`${classes['companies-content']}`}>
-          <LogoList companyNames={companies!} className='translate-x-8'/>
+          <LogoList companyNames={companies!} className="translate-x-8" />
         </div>
       </div>
       {showProblemNote && (
@@ -238,26 +247,40 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           {notes && problemNoteContent ? (
             <ul className={classes['note-actions']}>
               <>
-                <li data-tooltip="Expand" className={classes.expand}>
-                  <label htmlFor="modal-note" className="cursor-pointer">
-                    <ExpandIcon width={7} height={7} />
-                  </label>
-                </li>
-                <li
-                  data-tooltip="Edit"
-                  className={classes.edit}
-                  onClick={handleEditNote}
+                <Tooltip
+                  text="Expand"
+                  direction="top"
+                  className="w-fit px-6 py-4"
                 >
-                  <EditIcon width={8} height={8} />
-                </li>
-                <li data-tooltip="Clear" className={classes.clear}>
-                  <label
-                    htmlFor="note-delete-confirm-modal"
-                    className="cursor-pointer"
-                  >
-                    <TrashIcon width={8} height={8} />
-                  </label>
-                </li>
+                  <li className={classes.expand}>
+                    <label htmlFor="modal-note" className="cursor-pointer">
+                      <ExpandIcon width={7} height={7} />
+                    </label>
+                  </li>
+                </Tooltip>
+                <Tooltip
+                  text="Edit"
+                  direction="top"
+                  className="w-fit px-6 py-4"
+                >
+                  <li className={classes.edit} onClick={handleEditNote}>
+                    <EditIcon width={8} height={8} />
+                  </li>
+                </Tooltip>
+                <Tooltip
+                  text="Clear"
+                  direction="top"
+                  className="w-fit px-6 py-4"
+                >
+                  <li className={classes.clear}>
+                    <label
+                      htmlFor="note-delete-confirm-modal"
+                      className="cursor-pointer"
+                    >
+                      <TrashIcon width={8} height={8} />
+                    </label>
+                  </li>
+                </Tooltip>
               </>
             </ul>
           ) : (
@@ -270,16 +293,24 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           )}
         </div>
       )}
-      {!solution_link!.includes('youtube.com') && (
-        <Modal id="modal-solution">
-          <Image
-            src={solution_link!}
-            alt="solution code"
-            width={700}
-            height={700}
+      <Modal
+        id="modal-solution"
+        className={`max-w-[70vw] h-full py-6 ${
+          theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
+        }`}
+      >
+        <div className="h-90% px-4">
+          <Solutions
+            videoURL={
+              solution_link !== ''
+                ? 'https://www.youtube.com/embed/' +
+                  solution_link?.split('=')[1]
+                : ''
+            }
+            solution_codes={solution_codes ? solution_codes : undefined}
           />
-        </Modal>
-      )}
+        </div>
+      </Modal>
       <Modal
         id="modal-note"
         type="close-button"

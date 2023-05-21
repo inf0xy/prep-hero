@@ -1,12 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import LargeListDropDown from '../reusables/LargeListDropDown';
 import { tagListOptions } from '@/helpers/formFields';
-import { SearchCriteria, SearchOrForm } from '@/types/dataTypes';
-
-type Option = {
-  label: string;
-  value: string;
-};
+import { SearchCriteria, SearchOrForm, Option } from '@/types/dataTypes';
 
 interface TagListProps {
   setTags: Dispatch<SetStateAction<SearchOrForm>>;

@@ -1,13 +1,8 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 import { tabSizeOptions } from '@/helpers/formFields';
-import { CodeOptions } from '@/types/dataTypes';
+import { CodeOptions, Option } from '@/types/dataTypes';
 import DropDown from '../Dropdown';
 import classes from './TabSizeSelection.module.scss';
-
-type Option = {
-  label: string;
-  value: string;
-};
 
 interface TabSizeSelectionProps {
   setTabSize: Dispatch<SetStateAction<CodeOptions>>;

@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { connectDB, usersCollection } from './db-util';
+import { getProblemByTitle } from './problems';
 import { hashPassword, comparePassword } from '@/lib/auth';
 import { Note, Submission } from '@/types/dataTypes';
 
@@ -184,9 +185,49 @@ export const clearList = async (_id: ObjectId) => {
 
 export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
   await connectDB();
+
+  const user = await usersCollection.findOne({ _id });
+  const problem = await getProblemByTitle(submission.title);
+
+  let easy_solved = user!['easy_solved'];
+  let medium_solved = user!['medium_solved'];
+  let hard_solved = user!['hard_solved'];
+
+  if (submission.accepted) {
+    easy_solved = user!['easy_solved'].filter(
+      (el: { title: string; date: Date }) => el.title !== submission.title
+    );
+
+    medium_solved = user!['easy_solved'].filter(
+      (el: { title: string; date: Date }) => el.title !== submission.title
+    );
+
+    hard_solved = user!['easy_solved'].filter(
+      (el: { title: string; date: Date }) => el.title !== submission.title
+    );
+
+    if (problem!.difficulty === 'Easy') {
+      easy_solved.push({
+        title: submission.title,
+        date: new Date(submission.date)
+      });
+    } else if (problem!.difficulty === 'Medium') {
+      medium_solved.push({
+        title: submission.title,
+        date: new Date(submission.date)
+      });
+    } else {
+      hard_solved.push({
+        title: submission.title,
+        date: new Date(submission.date)
+      });
+    }
+  }
+
   return usersCollection.updateOne(
     { _id },
     {
+      $set: { easy_solved, medium_solved, hard_solved },
       $push: {
         submissions: {
           title: submission.title,

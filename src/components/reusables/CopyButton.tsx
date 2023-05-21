@@ -1,9 +1,9 @@
 import { RefObject, useState, useEffect } from 'react';
-import { useTransition, animated } from 'react-spring';
+import { animated, useSpring } from 'react-spring';
 import ClipboardIcon from '../icons/ClipboardIcon';
 import ClipboardCopiedIcon from '../icons/ClipboardCopiedIcon';
 import classes from './CopyButton.module.scss';
-import variables from '@/styles/variables.module.scss';
+import Tooltip from './Tooltip';
 
 type CopyButtonProps = {
   content: string;
@@ -18,12 +18,11 @@ const CopyButton: React.FC<CopyButtonProps> = ({
 }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [visibleStyle, setVisibleStyle] = useState(false);
 
-  const transition = useTransition(isVisible, {
+  const fadeAnimation = useSpring({
+    opacity: isVisible ? 1 : 0,
     from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 }
+    config: { duration: 300 }
   });
 
   useEffect(() => {
@@ -57,74 +56,35 @@ const CopyButton: React.FC<CopyButtonProps> = ({
   };
 
   return (
-    <>
-      {/* {transition((style, item) =>
-        item ? (
-          <animated.div style={style}>
-            <div className={classes['copy-button-wrapper']}>
-              <div
-                className={`${classes['copy-button']} ${isCopied ? classes['is-copied'] : ''} ${className}`}
-                // style={{
-                //   backgroundColor: isCopied
-                //     ? variables.colorSuccess500
-                //     : variables.colorGray600
-                // }}
-              >
-                <button onClick={handleCopyClick}>
-                  {isCopied ? (
-                    <ClipboardCopiedIcon width="8" height="8" />
-                  ) : (
-                    <ClipboardIcon width="8" height="8" />
-                  )}
-                </button>
-              </div>
-            </div>
-          </animated.div>
-        ) : null
-      )} */}
-
-      <div className={classes['copy-button-wrapper']}>
-        <div
-          className={`${classes['copy-button']} ${
-            isCopied ? classes['is-copied'] : ''
-          } ${className}`}
-          // style={{
-          //   backgroundColor: isCopied
-          //     ? variables.colorSuccess500
-          //     : variables.colorGray600
-          // }}
-        >
-          <div onClick={handleCopyClick}>
-            {isCopied ? (
-              <ClipboardCopiedIcon width="8" height="8" />
-            ) : (
-              <ClipboardIcon width="8" height="8" />
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* {isVisible && (
-        <div
-          className={`absolute z-50 p-2 rounded-md ${className} ${
-            visibleStyle ? classes.visible : ''
-          }`}
+    <div className={`${classes['copy-button-wrapper']} ${className}`}>
+      <div className="relative">
+        <animated.div
           style={{
-            backgroundColor: isCopied
-              ? variables.colorSuccess500
-              : variables.colorGray600
+            ...fadeAnimation,
+            height: 'fit-content',
+            width: 'fit-content',
+            zIndex: 100,
+            position: 'absolute'
           }}
         >
-          <button onClick={handleCopyClick}>
-            {isCopied ? (
-              <ClipboardCopiedIcon width="8" height="8" />
-            ) : (
-              <ClipboardIcon width="8" height="8" />
-            )}
-          </button>
-        </div>
-      )} */}
-    </>
+          <Tooltip text={isCopied ? 'Copied' : 'Copy'} direction='bottom' className='left-[1rem] w-fit px-5 py-3'>
+            <div
+              className={`${classes['copy-button']} ${
+                isCopied ? classes['is-copied'] : ''
+              } `}
+            >
+              <div onClick={handleCopyClick}>
+                {isCopied ? (
+                  <ClipboardCopiedIcon width="8" height="8" />
+                ) : (
+                  <ClipboardIcon width="8" height="8" />
+                )}
+              </div>
+            </div>
+          </Tooltip>
+        </animated.div>
+      </div>
+    </div>
   );
 };
 

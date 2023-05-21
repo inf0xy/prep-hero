@@ -225,7 +225,7 @@ export const fontOptions = [
   { label: '15px', value: '15' },
   { label: '16px', value: '16' },
   { label: '17px', value: '17' },
-  { label: '18px', value: '18' },
+  { label: '18px', value: '18' }
 ];
 
 export const tabSizeOptions = [
@@ -236,4 +236,10 @@ export const tabSizeOptions = [
 export const languageOptions = [
   { label: 'Python', value: 'python' },
   { label: 'Javascript', value: 'javascript' }
+];
+
+export const submissionStatusOptions = [
+  { label: 'All', value: 'all' },
+  { label: 'Passed', value: 'passed' },
+  { label: 'Failed', value: 'failed' }
 ];

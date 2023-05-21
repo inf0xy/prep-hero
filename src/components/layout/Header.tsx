@@ -14,20 +14,7 @@ import LogoLight from './LogoLight';
 const Header = () => {
   const { theme } = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
-
-  const avatarRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
-
-  // useEffect(() => {
-  //   const fetchUserInfo = async () => {
-  //     await dispatch(fetchUserData());
-  //   };
-  //   try {
-  //     fetchUserInfo();
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }, [dispatch]);
 
   useEffect(() => {
     const fetchUserInfo = async () => {

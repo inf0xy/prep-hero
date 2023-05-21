@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import CodeEditor from '@/components/reusables/codeEditor/CodeEditor';
 import Resizable from '../reusables/Resizable';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { saveSubmittedCode } from '@/store/slices/userSlice';
+import { fetchUserData, saveSubmittedCode } from '@/store/slices/userSlice';
 import ConsoleActionBar from '../reusables/codeEditor/ConsoleActionBar';
 import FontSelection from '../reusables/codeEditor/FontSelection';
 import TabSizeSelection from '../reusables/codeEditor/TabSizeSelection';
@@ -62,7 +62,8 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
   const [codeInputJavascript, setCodeInputJavascript] = useState<
     string | undefined
   >(undefined);
-  // const [output, setOutput] = useState('');
+  const [output, setOutput] = useState('');
+  const [testCode, setTestCode] = useState(false);
   const [showConsole, setShowConsole] = useState(false);
   const [editorHeight, setEditorHeight] = useState<string | null>(null);
   const [runResults, setRunResults] = useState<RunResult | null>(null);
@@ -115,15 +116,25 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submissions]);
 
-  // const handleRunCodeManually = async () => {
-  //   setShowConsole(true);
-  //   setEditorHeight(`${window.innerHeight - 400}px`);
-  //   const codeInput = language === 'python' ? codeInputPython : codeInputJavascript;
-  //   const result = await runCode(codeInput);
-  //   if (typeof result !== 'string') {
-  //     setOutput(result.output);
-  //   }
-  // };
+  const handleRunCodeManually = async () => {
+    setCodeError(null);
+    setRunResults(null);
+    setResultMessage(null);
+    setTestCode(true);
+    setShowConsole(true);
+    setEditorHeight(`${window.innerHeight - 400}px`);
+    const codeInput =
+      language === 'python' ? codeInputPython : codeInputJavascript;
+
+    const result = await runCode(codeInput!);
+
+    if (result.hasOwnProperty('error')) {
+      setTestCode(false);
+      setCodeError(result.error);
+    } else {
+      setOutput(result.output);
+    }
+  };
 
   const handleSubmission = async (action: 'test' | 'submit') => {
     if (!showConsole) {
@@ -141,6 +152,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
     }
 
     setIsLoading(true);
+    setTestCode(false);
 
     const codeInput =
       language === 'python' ? codeInputPython : codeInputJavascript;
@@ -180,7 +192,8 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
           testPassed: `${totalPassedTests.length}/${results.length}`,
           testFailed: `${results.length - totalPassedTests.length}`,
           failedTestCases: totalFailedTest,
-          runtime: `${runtime}`
+          runtime: `${runtime}`,
+          stdOut: result.stdOut
         });
 
         const userSubmission = {
@@ -279,11 +292,18 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
                           </p>
                         </div>
                       )}
-                      {/* <code
-                      className={`${classes.code} ${classes[`code--${theme}`]}`}
-                    >
-                      {output}
-                    </code> */}
+                      {testCode && (
+                        <>
+                          <h2>Stdout:</h2>
+                          <code
+                            className={`${classes.code} ${
+                              classes[`code--${theme}`]
+                            }`}
+                          >
+                            {output}
+                          </code>
+                        </>
+                      )}
                       {!isLoading && codeError && (
                         <code
                           className={`${classes.code} ${
@@ -329,6 +349,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
           showConsole={showConsole}
           handleShowConsole={handleShowConsole}
           handleSubmission={handleSubmission}
+          handleRunCodeManually={handleRunCodeManually}
         />
         <Modal
           id="modal-settings"

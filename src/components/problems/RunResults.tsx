@@ -6,11 +6,10 @@ import FailIcon from '../icons/FailIcon';
 import variables from '@/styles/variables.module.scss';
 import classes from './RunResults.module.scss';
 
-
 type RunResultsProps = {
   testResults: RunResult;
   type: string;
-  totalTestFailed?: string
+  totalTestFailed?: string;
 };
 
 const RunResults: React.FC<RunResultsProps> = ({
@@ -19,14 +18,16 @@ const RunResults: React.FC<RunResultsProps> = ({
   totalTestFailed
 }) => {
   const [currentTest, setCurrentTest] = useState(0);
-  const { results, runtime } = testResults;
+  const { results, runtime, stdOut } = testResults;
 
   const { theme } = useAppSelector((state) => state.theme);
 
   const tabs = results.slice(0, 3).map((el, index) => (
     <div
       key={index}
-      className={`${classes['tabs__item']} ${currentTest === index ? 'opacity-75' : 'opacity-100'}`}
+      className={`${classes['tabs__item']} ${
+        currentTest === index ? 'opacity-75' : 'opacity-100'
+      }`}
       onClick={() => setCurrentTest(index)}
     >
       {el.result === 'passed' ? (
@@ -50,7 +51,14 @@ const RunResults: React.FC<RunResultsProps> = ({
           <h1 className="text-[2rem] text-red-500">Failed</h1>
         )}
         <p className="text-[1.5rem] mt-2">Runtime {runtime} ms</p>
-        {type === 'submit' && <p className="text-[1.5rem] mt-2 text-red-500" style={{ color: variables.colorError300}}>{totalTestFailed} testcases</p>}
+        {type === 'submit' && (
+          <p
+            className="text-[1.5rem] mt-2 text-red-500"
+            style={{ color: variables.colorError300 }}
+          >
+            {totalTestFailed} testcases
+          </p>
+        )}
       </div>
       <div className="flex items-center space-x-8">{tabs}</div>
       <div
@@ -85,6 +93,20 @@ const RunResults: React.FC<RunResultsProps> = ({
           </p>
         </code>
       </div>
+      {stdOut.length > 0 && (
+        <div
+          className={`${classes['results__output']} ${
+            classes[`results__output--${theme}`]
+          }`}
+        >
+          <h3>Stdout:</h3>
+          <code>
+            {stdOut.map((el) => (
+              <p key={el}>{el}</p>
+            ))}
+          </code>
+        </div>
+      )}
     </div>
   );
 };

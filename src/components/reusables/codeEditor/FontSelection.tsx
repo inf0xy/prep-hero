@@ -1,13 +1,8 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 import { fontOptions } from '@/helpers/formFields';
-import { CodeOptions } from '@/types/dataTypes';
+import { CodeOptions, Option } from '@/types/dataTypes';
 import DropDown from '../Dropdown';
 import classes from './FontSelection.module.scss';
-
-type Option = {
-  label: string;
-  value: string;
-};
 
 interface FontSelectionProps {
   setFont: Dispatch<SetStateAction<CodeOptions>>;

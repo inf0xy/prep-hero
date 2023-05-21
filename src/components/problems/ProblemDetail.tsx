@@ -1,14 +1,17 @@
-import { useState, useRef } from 'react';
-import { Problem, Submission } from '@/types/dataTypes';
+import { useEffect, useState } from 'react';
+import { Problem, Submission, Option } from '@/types/dataTypes';
 import { useAppSelector } from '@/hooks/hooks';
 import { problemDetailStyle } from '@/helpers/extraStyles';
 import EditorPreview from '../reusables/EditorPreview';
+import Solutions from '../reusables/Solutions';
+import LanguageSelection from '../reusables/codeEditor/LanguageSelection';
 import LogoList from './LogoList';
 import CheckIcon from '../icons/CheckIcon';
-import CopyButton from '../reusables/CopyButton';
 
 import classes from './ProblemDetail.module.scss';
-import CodeSnippet from '../reusables/CodeSnippet';
+import SubmissionSelection from './SubmissionSelection';
+
+import TimeAgo from 'react-timeago';
 
 type ProblemDetailProps = {
   problem: Problem;
@@ -27,24 +30,94 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ tab, problem }) => {
     solution_link,
     solution_codes
   } = problem;
+
   const { theme, submissions } = useAppSelector((state) => {
     const { theme } = state.theme;
     const { submissions } = state.user;
     return { theme, submissions };
   });
-  const [solutionLanguage, setSolutionLanguage] = useState('python');
-  const parentRef = useRef<HTMLDivElement>(null);
+
+  const [submissionStatus, setSubmissionStatus] = useState<
+    'all' | 'passed' | 'failed' | string
+  >('all');
+  const [submissionLanguage, setSubmissionLanguage] = useState<
+    'all' | 'python' | 'javascript' | string
+  >('all');
+  const [userSubmissions, setUserSubmissions] = useState(submissions);
+
+  useEffect(() => {
+    if (submissionLanguage === 'all' && submissionStatus === 'all') {
+      setUserSubmissions(submissions);
+    } else {
+      const filteredSubmissions = submissions
+        .slice()
+        .filter((el: Submission) => {
+          let filter = false;
+          const status = el.accepted ? 'passed' : 'failed';
+          if (submissionLanguage === 'all') {
+            filter = status === submissionStatus;
+          } else if (submissionStatus === 'all') {
+            filter = submissionLanguage === el.language;
+          } else {
+            filter =
+              status === submissionStatus && el.language === submissionLanguage;
+          }
+          return filter;
+        });
+      setUserSubmissions(filteredSubmissions);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submissionStatus, submissionLanguage, submissions]);
 
   const completed = submissions.some(
     (el: Submission) => el.title === title && el.accepted === true
   );
 
   const videoURL =
-    'https://www.youtube.com/embed/' + solution_link?.split('=')[1];
+    solution_link !== ''
+      ? 'https://www.youtube.com/embed/' + solution_link?.split('=')[1]
+      : '';
+
+  const renderedSubmissionList = userSubmissions
+    .slice()
+    .sort(
+      (a: Submission, b: Submission) =>
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+    )
+    .map((el: Submission, index: number) => {
+      const timePassed =
+        (new Date().getTime() - new Date(el.date).getTime()) / 1000;
+      return (
+        <div key={index} className={classes.submission}>
+          <h1 className={el.accepted ? classes.passed : classes.failed}>
+            {el.accepted ? 'Passed' : 'Failed'}
+          </h1>
+          <span
+            className={`${classes['submission-language']} ${
+              classes[el.language]
+            }`}
+          >
+            {el.language[0].toUpperCase() + el.language.slice(1)}
+          </span>
+          {timePassed > 3600 * 24 ? (
+            <p>{new Date(el.date).toDateString().slice(4)}</p>
+          ) : (
+            <>
+              {new Date().getTime() - new Date(el.date).getTime() <
+              60 * 1000 ? (
+                <p>less than 1 min ago</p>
+              ) : (
+                <TimeAgo date={new Date(el.date)} />
+              )}
+            </>
+          )}
+        </div>
+      );
+    });
 
   return (
     <>
-      {tab === 'prompt' ? (
+      {tab === 'prompt' && (
         <div className={classes['problem-detail']}>
           <h1>{title}</h1>
           <div className={classes['general-info']}>
@@ -66,63 +139,29 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ tab, problem }) => {
             extraStyle={problemDetailStyle[theme]}
           />
         </div>
-      ) : (
-        <div className={classes.solutions}>
-          <div className={classes.video}>
-            <iframe src={videoURL} allowFullScreen></iframe>
-          </div>
+      )}
 
-          <ul className={classes['language-selection']}>
-            <li
-              className={solutionLanguage === 'python' ? classes.active : ''}
-              onClick={() => setSolutionLanguage('python')}
-            >
-              Python
-            </li>
-            <li
-              className={
-                solutionLanguage === 'javascript' ? classes.active : ''
-              }
-              onClick={() => setSolutionLanguage('javascript')}
-            >
-              Javascript
-            </li>
-          </ul>
-          <div className={classes.codes} ref={parentRef}>
-            <CopyButton
-              content={
-                solutionLanguage === 'python'
-                  ? JSON.parse(solution_codes.python)
-                  : JSON.parse(solution_codes.javascript)
-              }
-              parentRef={parentRef}
-              className='top-6 right-6'
+      {tab === 'solutions' && (
+        <Solutions videoURL={videoURL} solution_codes={solution_codes} />
+      )}
+
+      {tab === 'submissions' && (
+        <div className={classes.submissions}>
+          <div className={classes.selections}>
+            <LanguageSelection
+              multiOptions={true}
+              setLanguage={setSubmissionLanguage}
+              width="12rem"
+              className="text-[1.4rem]"
             />
-            {solutionLanguage === 'python' ? (
-              <>
-                {solution_codes ? (
-                  <CodeSnippet
-                    key="pythonSnippet"
-                    value={solution_codes.python}
-                    language="python"
-                  />
-                ) : (
-                  <p>No solutions availabe</p>
-                )}
-              </>
-            ) : (
-              <>
-                {solution_codes ? (
-                  <CodeSnippet
-                    key="javascriptSnippet"
-                    value={solution_codes.javascript}
-                    language="javascript"
-                  />
-                ) : (
-                  <p>No solutions availabe</p>
-                )}
-              </>
-            )}
+            <SubmissionSelection
+              setSubmissionStatus={setSubmissionStatus}
+              width="12rem"
+              className="text-[1.4rem]"
+            />
+          </div>
+          <div className={classes['submissions__content']}>
+            {renderedSubmissionList}
           </div>
         </div>
       )}

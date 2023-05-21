@@ -60,7 +60,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
   return (
     <>
       <div className={classes['editor-menu']}>
-        <LanguageSelection setLanguage={setLanguage} />
+        <LanguageSelection setLanguage={setLanguage} multiOptions={false}/>
         <ul className={classes.options}>
           <li>
             <Tooltip

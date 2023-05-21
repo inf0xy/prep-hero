@@ -23,6 +23,11 @@
   }
 }
 
+.left-button-group {
+  display: flex;
+  gap: 1rem;
+}
+
 .up,
 .down {
   transition: all 0.3s ease;

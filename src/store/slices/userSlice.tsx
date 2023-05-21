@@ -212,18 +212,7 @@ const userSlice = createSlice({
       state.error = undefined;
 
       const { submission } = action.payload;
-      const foundIndex = state.submissions.findIndex(
-        (item: Submission) =>
-          item.title === submission.title &&
-          item.language === submission.language
-      );
-
-      if (foundIndex !== -1) {
-        state.submissions.splice(foundIndex, 1);
-        state.submissions.push(submission);
-      } else {
-        state.submissions.push(submission);
-      }
+      state.submissions.push(submission);
     });
     builder.addCase(saveSubmittedCode.rejected, (state, action) => {
       state.isLoading = false;
