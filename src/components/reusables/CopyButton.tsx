@@ -1,9 +1,15 @@
-import { RefObject, useState, useEffect } from 'react';
+import {
+  RefObject,
+  useState,
+  useEffect
+} from 'react';
 import { animated, useSpring } from 'react-spring';
 import ClipboardIcon from '../icons/ClipboardIcon';
 import ClipboardCopiedIcon from '../icons/ClipboardCopiedIcon';
 import classes from './CopyButton.module.scss';
 import Tooltip from './Tooltip';
+
+import useCopy from '@/hooks/useCopy';
 
 type CopyButtonProps = {
   content: string;
@@ -16,7 +22,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({
   className,
   parentRef
 }) => {
-  const [isCopied, setIsCopied] = useState(false);
+  const { isCopied, setIsCopied, handleCopyClick } = useCopy();
   const [isVisible, setIsVisible] = useState(false);
 
   const fadeAnimation = useSpring({
@@ -42,18 +48,8 @@ const CopyButton: React.FC<CopyButtonProps> = ({
       parentDiv!.removeEventListener('mouseenter', handleMouseEnter);
       parentDiv!.removeEventListener('mouseleave', handleMouseLeave);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [parentRef]);
-
-  const handleCopyClick = () => {
-    navigator.clipboard
-      .writeText(content)
-      .then(() => {
-        setIsCopied(true);
-      })
-      .catch((error) => {
-        console.error('Error copying content:', error);
-      });
-  };
 
   return (
     <div className={`${classes['copy-button-wrapper']} ${className}`}>
@@ -67,13 +63,17 @@ const CopyButton: React.FC<CopyButtonProps> = ({
             position: 'absolute'
           }}
         >
-          <Tooltip text={isCopied ? 'Copied' : 'Copy'} direction='bottom' className='left-[1rem] w-fit px-5 py-3'>
+          <Tooltip
+            text={isCopied ? 'Copied' : 'Copy'}
+            direction="bottom"
+            className="left-[1rem] w-fit px-5 py-3"
+          >
             <div
               className={`${classes['copy-button']} ${
                 isCopied ? classes['is-copied'] : ''
               } `}
             >
-              <div onClick={handleCopyClick}>
+              <div onClick={() => handleCopyClick(content)}>
                 {isCopied ? (
                   <ClipboardCopiedIcon width="8" height="8" />
                 ) : (

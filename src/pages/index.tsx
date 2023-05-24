@@ -61,11 +61,11 @@ const HomePage = () => {
   return (
     <div className={`${classes.homepage} ${classes[`homepage--${theme}`]}`}>
       <HeatMapCalendar data={data} />
-      <div
+      {/* <div
         className="p-16 h-fit"
       >
         <CodeSnippet value={code} language="python" />
-      </div>
+      </div> */}
     </div>
   );
 };

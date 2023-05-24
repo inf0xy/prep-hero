@@ -27,7 +27,7 @@ const Modal: React.FC<ModalProps> = ({ children, id, className, type }) => {
     <div>
       <input type="checkbox" id={id} className="modal-toggle" />
       <div className="modal">
-        <div className={`modal-box relative p-0 max-w-fit ${className}`}>
+        <div className={`modal-box relative p-0 ${!className?.includes('max-w') ? 'max-w-fit' : ''} ${className}`}>
           <label
             htmlFor={id}
             className={`btn btn-circle absolute right-8 top-7 bg-[#474747]  hover:bg-[#404040] border-0`}

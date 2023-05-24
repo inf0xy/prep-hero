@@ -9,7 +9,7 @@ type PaginationProps = {
   className?: string;
 };
 
-const ITEM_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 25;
 
 const Pagination: React.FC<PaginationProps> = ({
   selectedPage,
@@ -18,7 +18,7 @@ const Pagination: React.FC<PaginationProps> = ({
   className
 }) => {
   const { theme } = useAppSelector(state => state.theme);
-  const totalPages = Math.ceil(totalProblems / ITEM_PER_PAGE);
+  const totalPages = Math.ceil(totalProblems / ITEMS_PER_PAGE);
 
   const getPages = () => {
     let pages = [];

@@ -68,9 +68,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     notes,
     list,
     theme
-  } = useAppSelector((state) => {
+  } = useAppSelector(state => {
     const {
-      submissions,
       attempted_problems,
       easy_solved,
       medium_solved,
@@ -90,6 +89,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     };
   });
 
+  const [showSolutionModal, setShowSolutionModal] = useState(false);
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -214,22 +214,16 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           {difficulty}
         </div>
         <div className={classes['solution-content']}>
-          {solution_link!.includes('youtube') ? (
-            <Link target="_blank" href={solution_link!}>
-              <VideoIcon />
-            </Link>
-          ) : (
-            <span>
-              <label htmlFor="modal-solution">
-                <CodeIcon
-                  width={8}
-                  height={8}
-                  className="cursor-pointer"
-                  extraStyle={{ transform: 'translateX(50%)' }}
-                />
-              </label>
-            </span>
-          )}
+          <span onClick={() => setShowSolutionModal(true)}>
+            <label htmlFor={`modal-solution-${title}`} className='w-fit'>
+              <CodeIcon
+                width={8}
+                height={8}
+                className="cursor-pointer"
+                extraStyle={{ transform: 'translateX(50%)' }}
+              />
+            </label>
+          </span>
         </div>
         <div className={`${classes['companies-content']}`}>
           <LogoList companyNames={companies!} className="translate-x-8" />
@@ -294,21 +288,24 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
       )}
       <Modal
-        id="modal-solution"
-        className={`max-w-[70vw] h-full py-6 ${
+        id={`modal-solution-${title}`}
+        type="close-button"
+        className={`max-w-[100vw] w-[70vw] h-full pt-24 pb-8 pl-3 ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}
       >
-        <div className="h-90% px-4">
-          <Solutions
-            videoURL={
-              solution_link !== ''
-                ? 'https://www.youtube.com/embed/' +
-                  solution_link?.split('=')[1]
-                : ''
-            }
-            solution_codes={solution_codes ? solution_codes : undefined}
-          />
+        <div className="w-full h-full overflow-y-scroll">
+          {showSolutionModal && (
+            <Solutions
+              videoURL={
+                solution_link !== ''
+                  ? 'https://www.youtube.com/embed/' +
+                    solution_link?.split('=')[1]
+                  : ''
+              }
+              solution_codes={solution_codes ? solution_codes : undefined}
+            />
+          )}
         </div>
       </Modal>
       <Modal

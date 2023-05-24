@@ -8,6 +8,44 @@
 
 .problem-editor__main {
   height: calc(100vh - 13rem);
+
+  .submission-review {
+    display: flex;
+    align-items: center;
+    height: 4.5rem;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.2rem;
+    padding: 0 3rem;
+    width: 100%;
+
+    &--dark {
+      color: $text-off-white;
+    }
+
+    &--light {
+      color: $text-gray-700;
+    }
+
+    button {
+      background-color: inherit;
+    }
+
+    .editor__close-button {
+      font-size: 1.8rem;
+      transform: translateY(1px);
+      transition: color 0.3s ease;
+    }
+
+    .editor__close-button:hover {
+      color: $color-primary-100;
+    }
+
+    .editor__copy-button {
+      margin-left: auto;
+      justify-self: flex-end;
+    }
+  }
 }
 
 .settings {
@@ -66,7 +104,6 @@
 }
 
 .md-editor {
-
   &--dark {
     background-color: $dark-background-350;
   }
@@ -99,9 +136,8 @@
   .code {
     height: 100%;
     min-height: 9rem;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     padding: 1rem 2rem;
-
     border-radius: 5px;
     overflow: auto;
 
@@ -111,6 +147,11 @@
 
     &--light {
       background-color: $light-background-200;
+      color: $text-gray-800;
+    }
+
+    &--error {
+      background-color: $color-error-700;
     }
   }
 }

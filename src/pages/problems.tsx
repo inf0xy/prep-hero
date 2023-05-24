@@ -4,15 +4,12 @@ import { GetStaticProps } from 'next';
 import { useSession } from 'next-auth/react';
 import { getProblems } from '@/helpers/problem-api-util';
 import { Problem, SearchCriteria, SearchOrForm } from '@/types/dataTypes';
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { fetchUserData } from '@/store';
+import { useAppSelector } from '@/hooks/hooks';
 import ProblemList from '@/components/problems/ProblemList';
 import Pagination from '@/components/problems/Pagination';
 import useSort from '@/hooks/useSort';
 import CircleX from '@/components/icons/CircleX';
 import SelectBar from '@/components/problems/SelectBar';
-import Button from '@/components/reusables/Button';
-import ArrowLongLeft from '@/components/icons/ArrowLongLeft';
 import classes from '../styles/ProblemsPage.module.scss';
 
 interface AllProblemsPageProps {
@@ -20,7 +17,7 @@ interface AllProblemsPageProps {
   count: number;
 }
 
-const ITEM_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 25;
 
 const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
   problems,
@@ -38,7 +35,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
     companies: [],
     text: ''
   });
-  const dispatch = useAppDispatch();
+
   const { theme } = useAppSelector((state) => state.theme);
   const handleSort = useSort(problems, setCurrentProblems);
   const { data: session } = useSession();
@@ -155,18 +152,6 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
       <section
         className={`${classes['problems']} ${classes[`problems--${theme}`]}`}
       >
-        {session && session.session.user.account_type === 'admin' && (
-          <Button
-            color="secondary"
-            className="self-start text-[1.5rem] mb-12"
-            onClick={() => router.push('/admin')}
-          >
-            <span className="mr-3">
-              <ArrowLongLeft />
-            </span>
-            Dashboard
-          </Button>
-        )}
         <div className={classes.selections}>
           <SelectBar
             showNotes={showNotes}
@@ -184,10 +169,10 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
           />
         )}
         <div className={classes['page-number']}>
-          {(pageNumber - 1) * ITEM_PER_PAGE + 1} -{' '}
-          {pageNumber * ITEM_PER_PAGE > totalProblems
+          {(pageNumber - 1) * ITEMS_PER_PAGE + 1} -{' '}
+          {pageNumber * ITEMS_PER_PAGE > totalProblems
             ? totalProblems
-            : pageNumber * ITEM_PER_PAGE}
+            : pageNumber * ITEMS_PER_PAGE}
           &nbsp;/&nbsp;{totalProblems}
         </div>
         <Pagination

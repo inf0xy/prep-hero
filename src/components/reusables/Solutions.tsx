@@ -1,29 +1,28 @@
-import { useState, useRef, Suspense } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import CopyButton from './CopyButton';
 import CodeSnippet from './CodeSnippet';
 import classes from './Solutions.module.scss';
-import Loading from './Loading';
 
 type SolutionsProps = {
   videoURL: string;
-  solution_codes: {
-    python: string;
-    javascript: string;
-  };
+  solution_codes:
+    | {
+        python: string;
+        javascript: string;
+      }
+    | undefined;
 };
 
 const Solutions: React.FC<SolutionsProps> = ({ videoURL, solution_codes }) => {
   const [solutionLanguage, setSolutionLanguage] = useState('python');
   const parentRef = useRef<HTMLDivElement>(null);
-console.log(videoURL);
+
   return (
     <div className={classes.solutions}>
       {videoURL !== '' && (
-        <Suspense fallback={<Loading width={35} height={35} />}>
-          <div className={classes.video}>
-            <iframe src={videoURL} allowFullScreen></iframe>
-          </div>
-        </Suspense>
+        <div className={classes.video}>
+          <iframe src={videoURL} allowFullScreen></iframe>
+        </div>
       )}
       <ul className={classes['language-selection']}>
         <li
@@ -63,7 +62,7 @@ console.log(videoURL);
               )}
             </>
           ) : (
-            <>
+            <div className='overflow-y-scroll'>
               {solution_codes ? (
                 <CodeSnippet
                   key="javascriptSnippet"
@@ -73,7 +72,7 @@ console.log(videoURL);
               ) : (
                 <p>No solutions availabe</p>
               )}
-            </>
+            </div>
           )}
         </div>
       )}

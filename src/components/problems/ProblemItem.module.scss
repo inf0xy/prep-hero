@@ -3,7 +3,9 @@
 .problem {
   display: grid;
   grid-template-columns: repeat(13, 1fr);
+  min-height: 6rem;
   height: 6rem;
+  max-height: 10rem;
   padding: 0 2rem;
   align-items: center;
   line-height: 1.4;
@@ -37,7 +39,7 @@
 
 .title-content {
   grid-column: span 4;
-  padding-right: 1rem;
+  padding-right: 2rem;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -45,6 +47,10 @@
 
 .action-icons .difficulty-content {
   grid-column: span 1;
+}
+
+.difficulty-content {
+  transform: translateX(-1rem);
 }
 
 .action-icons {
@@ -60,10 +66,11 @@
 
 .solution-content {
   grid-column: span 1;
+  width: 100%;
+  padding-left: 1rem;
 }
 
 .solution-content svg {
-  transform: translateX(70%);
   transition: color 0.3s ease;
 }
 

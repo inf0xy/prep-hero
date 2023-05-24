@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef } from 'react';
 import { useAppSelector } from '@/hooks/hooks';
 
 import AmazonIcon from '../icons/logos/AmazonIcon';
@@ -43,17 +42,16 @@ import VMIcon from '../icons/logos/VMIcon';
 import YahooIcon from '../icons/logos/YahooIcon';
 import WalmartIcon from '../icons/logos/WalmartIcon';
 
-import variables from '@/styles/variables.module.scss';
 import classes from './LogoList.module.scss';
 
 const logos: { [key: string]: any } = {
   Accenture: { icon: AccentureIcon, width: 11, height: 11 },
-  Amazon: { icon: AmazonIcon, width: 11, height: 11 },
+  Amazon: { icon: AmazonIcon, width: 14, height: 14 },
   'American Express': { icon: AmericanExpressIcon, width: 11, height: 11 },
   Adobe: { icon: AdobeIcon, width: 11, height: 11 },
   AirBnB: { icon: AirBnBIcon, width: 11, height: 11 },
   Atlassian: { icon: AtlassianIcon, width: 11, height: 11 },
-  Apple: { icon: AppleIcon, width: 13, height: 13 },
+  Apple: { icon: AppleIcon, width: 14, height: 14 },
   Bloomberg: { icon: BloombergIcon, width: 11, height: 11 },
   Cisco: { icon: CiscoIcon, width: 14, height: 14 },
   Coinbase: { icon: CoinbaseIcon, width: 12, height: 12 },
@@ -159,7 +157,6 @@ const LogoList: React.FC<LogoListProps> = ({ companyNames, className }) => {
                     <span>
                       <Logo brand={el === 'Facebook (Meta)' ? 'Meta' : el} />
                     </span>
-
                     {el === 'Facebook (Meta)' ? 'Meta' : el}
                   </div>
                 ))}

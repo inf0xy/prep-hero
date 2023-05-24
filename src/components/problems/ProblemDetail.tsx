@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Problem, Submission, Option } from '@/types/dataTypes';
 import { useAppSelector } from '@/hooks/hooks';
 import { problemDetailStyle } from '@/helpers/extraStyles';
@@ -16,11 +16,18 @@ import TimeAgo from 'react-timeago';
 type ProblemDetailProps = {
   problem: Problem;
   tab: string;
+  setReviewCode: Dispatch<
+    SetStateAction<{ code: string; language: string } | undefined>
+  >;
 };
 
 const defaultProps = { tab: 'prompt' };
 
-const ProblemDetail: React.FC<ProblemDetailProps> = ({ tab, problem }) => {
+const ProblemDetail: React.FC<ProblemDetailProps> = ({
+  tab,
+  problem,
+  setReviewCode
+}) => {
   const {
     title,
     difficulty,
@@ -37,19 +44,25 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ tab, problem }) => {
     return { theme, submissions };
   });
 
+  const currentProblemSubmissions = submissions.filter(
+    (s) => s.title === title
+  );
+
   const [submissionStatus, setSubmissionStatus] = useState<
     'all' | 'passed' | 'failed' | string
   >('all');
   const [submissionLanguage, setSubmissionLanguage] = useState<
     'all' | 'python' | 'javascript' | string
   >('all');
-  const [userSubmissions, setUserSubmissions] = useState(submissions);
+  const [userSubmissions, setUserSubmissions] = useState(
+    currentProblemSubmissions
+  );
 
   useEffect(() => {
     if (submissionLanguage === 'all' && submissionStatus === 'all') {
-      setUserSubmissions(submissions);
+      setUserSubmissions(currentProblemSubmissions);
     } else {
-      const filteredSubmissions = submissions
+      const filteredSubmissions = currentProblemSubmissions
         .slice()
         .filter((el: Submission) => {
           let filter = false;
@@ -78,6 +91,10 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ tab, problem }) => {
       ? 'https://www.youtube.com/embed/' + solution_link?.split('=')[1]
       : '';
 
+  const handleReviewCode = (language: string, code: string) => {
+    setReviewCode({ language, code: JSON.parse(code) });
+  };
+
   const renderedSubmissionList = userSubmissions
     .slice()
     .sort(
@@ -88,7 +105,11 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ tab, problem }) => {
       const timePassed =
         (new Date().getTime() - new Date(el.date).getTime()) / 1000;
       return (
-        <div key={index} className={classes.submission}>
+        <div
+          key={index}
+          className={`${classes.submission} ${classes[`submission--${theme}`]}`}
+          onClick={() => handleReviewCode(el.language, el.code)}
+        >
           <h1 className={el.accepted ? classes.passed : classes.failed}>
             {el.accepted ? 'Passed' : 'Failed'}
           </h1>
@@ -100,14 +121,22 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ tab, problem }) => {
             {el.language[0].toUpperCase() + el.language.slice(1)}
           </span>
           {timePassed > 3600 * 24 ? (
-            <p>{new Date(el.date).toDateString().slice(4)}</p>
+            <p className={`${classes.date} ${classes[`date--${theme}`]}`}>
+              {new Date(el.date).toDateString().slice(4)}
+            </p>
           ) : (
             <>
               {new Date().getTime() - new Date(el.date).getTime() <
               60 * 1000 ? (
-                <p>less than 1 min ago</p>
+                <p className={`${classes.date} ${classes[`date--${theme}`]}`}>
+                  less than 1 min ago
+                </p>
               ) : (
-                <TimeAgo date={new Date(el.date)} />
+                <span
+                  className={`${classes.date} ${classes[`date--${theme}`]}`}
+                >
+                  <TimeAgo date={new Date(el.date)} />
+                </span>
               )}
             </>
           )}
@@ -142,7 +171,7 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ tab, problem }) => {
       )}
 
       {tab === 'solutions' && (
-        <Solutions videoURL={videoURL} solution_codes={solution_codes} />
+        <Solutions videoURL={videoURL} solution_codes={solution_codes!} />
       )}
 
       {tab === 'submissions' && (

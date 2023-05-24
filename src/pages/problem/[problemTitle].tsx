@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { getAllTitles, getSelectedProblem } from '@/helpers/problem-api-util';
 import { useAppSelector } from '@/hooks/hooks';
@@ -6,7 +6,6 @@ import { Problem } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import classes from '@/styles/ProblemDetailPage.module.scss';
 import ProblemEditor from '@/components/problems/ProblemEditor';
-import Loading from '@/components/reusables/Loading';
 
 type ProblemDetailPageProps = {
   selectedProblem: Problem;
@@ -17,6 +16,9 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
   const [activeTab, setActiveTab] = useState('prompt');
+  const [reviewCode, setReviewCode] = useState<
+    { code: string; language: string } | undefined
+  >(undefined);
 
   const prompts = selectedProblem.prompts
     ? selectedProblem.prompts
@@ -26,7 +28,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
       };
 
   return (
-    <Suspense fallback={<Loading />}>
+    <>
       {selectedProblem && (
         <div
           className={`${classes['problem-detail-page']} ${
@@ -67,15 +69,24 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
               </li>
             </ul>
             <div className={classes.description}>
-              <ProblemDetail tab={activeTab} problem={selectedProblem} />
+              <ProblemDetail
+                tab={activeTab}
+                problem={selectedProblem}
+                setReviewCode={setReviewCode}
+              />
             </div>
           </div>
           <div className={`${classes.working} ${classes[`working--${theme}`]}`}>
-            <ProblemEditor prompts={prompts} title={selectedProblem.title!} />
+            <ProblemEditor
+              prompts={prompts}
+              title={selectedProblem.title!}
+              reviewCode={reviewCode}
+              setReviewCode={setReviewCode}
+            />
           </div>
         </div>
       )}
-    </Suspense>
+    </>
   );
 };
 

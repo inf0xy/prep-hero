@@ -29,6 +29,7 @@
 
     & > * {
       background-color: $dark-background-200;
+      color: $text-off-white;
       padding: 1rem 2rem;
       border-radius: 8px;
       cursor: pointer;
@@ -40,6 +41,7 @@
 
     .active {
       background-color: $color-secondary-200;
+      color: $text-off-white;
     }
   }
 

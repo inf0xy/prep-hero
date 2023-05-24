@@ -16,13 +16,7 @@ import Alert from '@/components/reusables/Alert';
 import Button from '@/components/reusables/Button';
 import ListSelection from './ListSelection';
 import CodeEditor from '../reusables/codeEditor/CodeEditor';
-
-import variables from '@/styles/variables.module.scss';
 import classes from './ProblemForm.module.scss';
-
-interface AddProblem {
-  message: string;
-}
 
 type ProblemFormProps = {
   problem?: Problem;
@@ -137,29 +131,29 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
         selectedCompanies.join(',')
       )
     ) {
-      const newProblem = {
-        list_names: generalInfo.listNames,
-        title: generalInfo.title,
+      const newProblem: Problem = {
+        list_names: generalInfo.listNames as string[],
+        title: generalInfo.title as string,
         difficulty: generalInfo.difficulty,
         category: generalInfo.category,
         tags: generalInfo.tags,
         companies: selectedCompanies,
-        leetcode_link: generalInfo.leetcodeLink,
-        solution_link: generalInfo.videoLink,
+        leetcode_link: generalInfo.leetcodeLink as string,
+        solution_link: generalInfo.videoLink as string,
         description: JSON.stringify(description),
         prompts: {
           python: JSON.stringify(prompts.python),
           javascript: JSON.stringify(prompts.javascript)
         },
         solution_codes: {
-          python: JSON.stringify(solutionCodes.python),
+          python: JSON.stringify(solutionCodes.python) as string,
           javascript: JSON.stringify(solutionCodes.javascript)
         }
       };
       if (pathname.includes('/add')) {
-        await dispatch(addProblem(newProblem as Problem));
+        await dispatch(addProblem(newProblem));
       } else if (pathname.includes('/edit')) {
-        await dispatch(updateProblem(newProblem as Problem));
+        await dispatch(updateProblem(newProblem));
       }
       setSubmitted(true);
     } else {
@@ -326,7 +320,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
               >
                 <CodeEditor
                   value={prompts['python']}
-                  options={{ fontSize: 14, tabSize: 4 }}
+                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
                   language="python"
                   setCodeInput={(val) =>
                     setPrompts((prev) => ({
@@ -349,7 +343,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
               >
                 <CodeEditor
                   value={prompts['javascript']}
-                  options={{ fontSize: 14, tabSize: 4 }}
+                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
                   language="javascript"
                   setCodeInput={(val) =>
                     setPrompts((prev) => ({
@@ -377,7 +371,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
               >
                 <CodeEditor
                   value={solutionCodes['python']}
-                  options={{ fontSize: 14, tabSize: 4 }}
+                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
                   language="python"
                   setCodeInput={(val) =>
                     setSolutionCodes((prev) => ({
@@ -400,7 +394,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
               >
                 <CodeEditor
                   value={solutionCodes['javascript']}
-                  options={{ fontSize: 14, tabSize: 4 }}
+                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
                   language="javascript"
                   setCodeInput={(val) =>
                     setSolutionCodes((prev) => ({

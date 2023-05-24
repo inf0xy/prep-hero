@@ -1,6 +1,6 @@
 import { connectDB, problemsCollection } from './db-util';
 
-const ITEMS_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 25;
 
 type SearchFilter = {
   [key: string]: any;

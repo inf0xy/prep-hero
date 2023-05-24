@@ -16,6 +16,8 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
 
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
   useEffect(() => {
     const fetchUserInfo = async () => {
       await dispatch(fetchUserData());
@@ -33,7 +35,7 @@ const Header = () => {
   const handleLogout = () => {
     signOut({ redirect: true, callbackUrl: '/auth/login' });
   };
-
+console.log(showUserMenu);
   return (
     <header className={`${classes.header} ${classes[`header--${theme}`]}`}>
       <Link href="/" className={classes.logo}>
@@ -93,7 +95,7 @@ const Header = () => {
           </>
         ) : (
           <div className="dropdown dropdown-end">
-            <label tabIndex={0}>
+            <label tabIndex={0} onClick={() => setShowUserMenu(true)}>
               <Image
                 src="/user.png"
                 alt="avatar"
@@ -102,7 +104,7 @@ const Header = () => {
                 className="cursor-pointer"
               />
             </label>
-            <UserMenu />
+            <UserMenu onClose={setShowUserMenu} showMenu={showUserMenu} />
           </div>
         )}
       </div>

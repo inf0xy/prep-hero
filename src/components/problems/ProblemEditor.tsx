@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import CodeEditor from '@/components/reusables/codeEditor/CodeEditor';
 import Resizable from '../reusables/Resizable';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { fetchUserData, saveSubmittedCode } from '@/store/slices/userSlice';
+import useCopy from '@/hooks/useCopy';
+import useHandleCode from '@/hooks/useHandleCode';
+import { saveSubmittedCode } from '@/store/slices/userSlice';
 import ConsoleActionBar from '../reusables/codeEditor/ConsoleActionBar';
 import FontSelection from '../reusables/codeEditor/FontSelection';
 import TabSizeSelection from '../reusables/codeEditor/TabSizeSelection';
@@ -24,13 +26,25 @@ import {
   NotificationType,
   Submission
 } from '@/types/dataTypes';
+import ClipboardIcon from '../icons/ClipboardIcon';
+import Tooltip from '../reusables/Tooltip';
+import ClipboardCopiedIcon from '../icons/ClipboardCopiedIcon';
 
 type ProblemEditorProps = {
   prompts: { python: string; javascript: string; [key: string]: string };
   title: string;
+  reviewCode: { code: string; language: string } | undefined;
+  setReviewCode: Dispatch<
+    SetStateAction<{ code: string; language: string } | undefined>
+  >;
 };
 
-const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
+const ProblemEditor: React.FC<ProblemEditorProps> = ({
+  prompts,
+  title,
+  reviewCode,
+  setReviewCode
+}) => {
   const { theme, submissions } = useAppSelector((state) => {
     const { theme } = state.theme;
     const { submissions } = state.user;
@@ -40,13 +54,18 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
     };
   });
   const dispatch = useAppDispatch();
+  const { isCopied, setIsCopied, handleCopyClick } = useCopy();
 
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [options, setOptions] = useState({ fontSize: 14, tabSize: 4 });
+  const [options, setOptions] = useState({
+    fontSize: 14,
+    tabSize: 4,
+    readOnly: false
+  });
   const [language, setLanguage] = useState('python');
 
   const [userPythonSubmission, setUserPythonSubmission] = useState<
@@ -62,10 +81,37 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
   const [codeInputJavascript, setCodeInputJavascript] = useState<
     string | undefined
   >(undefined);
-  const [output, setOutput] = useState('');
-  const [testCode, setTestCode] = useState(false);
   const [showConsole, setShowConsole] = useState(false);
   const [editorHeight, setEditorHeight] = useState<string | null>(null);
+
+  // const {
+  //   isLoading,
+  //   testCode,
+  //   output,
+  //   codeError,
+  //   resultMessage,
+  //   runResults,
+  //   handleSubmission,
+  //   handleRunCodeManually,
+  //   codeInputPython,
+  //   codeInputJavascript,
+  //   setCodeInputPython,
+  //   setCodeInputJavascript
+  // } = useHandleCode({
+  //   title,
+  //   prompts,
+  //   reviewCode,
+  //   language,
+  //   showConsole,
+  //   setShowConsole,
+  //   setEditorHeight,
+  //   setShowAlert,
+  //   setNotification
+  // });
+
+  const [output, setOutput] = useState('');
+  const [testCode, setTestCode] = useState(false);
+
   const [runResults, setRunResults] = useState<RunResult | null>(null);
   const [resultMessage, setResultMessage] = useState<ResultMessage | null>(
     null
@@ -77,6 +123,20 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
       setEditorHeight(`${window.innerHeight - 188}px`);
     }
   }, []);
+
+  useEffect(() => {
+    if (reviewCode) {
+      setOptions((prev) => ({
+        ...prev,
+        readOnly: true
+      }));
+    } else {
+      setOptions((prev) => ({
+        ...prev,
+        readOnly: false
+      }));
+    }
+  }, [reviewCode]);
 
   useEffect(() => {
     const foundSubmissions = submissions.filter((el) => el.title === title);
@@ -123,8 +183,16 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
     setTestCode(true);
     setShowConsole(true);
     setEditorHeight(`${window.innerHeight - 400}px`);
-    const codeInput =
-      language === 'python' ? codeInputPython : codeInputJavascript;
+
+    let codeInput: string | undefined;
+    // let submitLanguage: string;
+    if (reviewCode) {
+      codeInput = reviewCode.code;
+      // submitLanguage = reviewCode.language;
+    } else {
+      codeInput = language === 'python' ? codeInputPython : codeInputJavascript;
+      // submitLanguage = language;
+    }
 
     const result = await runCode(codeInput!);
 
@@ -154,9 +222,18 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
     setIsLoading(true);
     setTestCode(false);
 
-    const codeInput =
-      language === 'python' ? codeInputPython : codeInputJavascript;
-    const result = await submitCode(codeInput!, language, title, action);
+    let codeInput: string | undefined;
+    let submitLanguage: string;
+    if (reviewCode) {
+      codeInput = reviewCode.code;
+      submitLanguage = reviewCode.language;
+    } else {
+      codeInput = language === 'python' ? codeInputPython : codeInputJavascript;
+      submitLanguage = language;
+    }
+
+    const result = await submitCode(codeInput!, submitLanguage , title, action);
+
     setIsLoading(false);
 
     if (result.hasOwnProperty('error')) {
@@ -235,115 +312,167 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({ prompts, title }) => {
         }`}
       >
         <div className={classes['problem-editor__main']}>
-          {codeInputPython && codeInputJavascript && (
-            <EditorActionBar
-              title={title}
-              language={language}
-              setLanguage={setLanguage}
-              setCodeInputPython={setCodeInputPython}
-              setCodeInputJavascript={setCodeInputJavascript}
-              userPythonSubmission={userPythonSubmission}
-              userJavascriptSubmission={userJavascriptSubmission}
-              prompts={prompts}
-            />
-          )}
-          {codeInputPython && codeInputJavascript && editorHeight && (
-            <>
-              <div
-                className={`${classes['md-editor']} ${
-                  classes[`md-editor--${theme}`]
-                }`}
+          {reviewCode ? (
+            <div
+              className={`${classes['submission-review']} ${
+                classes[`submission-review--${theme}`]
+              }`}
+            >
+              <button
+                className={classes['editor__close-button']}
+                onClick={() => {
+                  setReviewCode(undefined);
+                  setIsCopied(false);
+                }}
               >
-                <CodeEditor
-                  value={
-                    language === 'python'
-                      ? codeInputPython
-                      : codeInputJavascript
-                  }
-                  options={options}
-                  language={language}
-                  setCodeInput={
-                    language === 'python'
-                      ? setCodeInputPython
-                      : setCodeInputJavascript
-                  }
-                  height={editorHeight}
-                />
-              </div>
-              {showConsole && (
-                <Resizable setEditorHeight={setEditorHeight}>
-                  <div className={classes.console}>
-                    <div className={classes.output}>
-                      {isLoading && (
-                        <div className="flex items-center justify-center h-full space-x-4">
-                          <span className="w-[35px] h-[35px]">
-                            <Loading width={35} height={35} />
-                          </span>
-                          <p
-                            className="text-[1.8rem]"
-                            style={{
-                              color:
-                                theme === 'dark'
-                                  ? variables.textOffWhite
-                                  : variables.colorGray700
-                            }}
-                          >
-                            Hang tight...
-                          </p>
-                        </div>
-                      )}
-                      {testCode && (
-                        <>
-                          <h2>Stdout:</h2>
-                          <code
-                            className={`${classes.code} ${
-                              classes[`code--${theme}`]
-                            }`}
-                          >
-                            {output}
-                          </code>
-                        </>
-                      )}
-                      {!isLoading && codeError && (
-                        <code
-                          className={`${classes.code} ${
-                            classes[`code--${theme}`]
-                          }`}
-                        >
-                          {!codeError.includes('\n') ? (
-                            <p className="text-red-500 mt-4 mb-4 text-[1.4rem]">
-                              {codeError}
-                            </p>
-                          ) : (
-                            <div className="my-4 space-y-2">
-                              {codeError.split('\n').map((el, index) => (
-                                <p
-                                  key={index}
-                                  className={`text-red-500 ${
-                                    el.includes('Error')
-                                      ? 'text-[1.4rem]'
-                                      : 'ml-2'
-                                  }`}
-                                >
-                                  {el}
-                                </p>
-                              ))}
-                            </div>
-                          )}
-                        </code>
-                      )}
-                      {!isLoading && !codeError && resultMessage && (
-                        <SubmissionResults result={resultMessage} />
-                      )}
-                      {!isLoading && !resultMessage && runResults && (
-                        <RunResults type="test" testResults={runResults} />
-                      )}
-                    </div>
-                  </div>
-                </Resizable>
-              )}
+                ✕
+              </button>
+              <button
+                className={classes['editor__copy-button']}
+                onClick={() => handleCopyClick(reviewCode.code)}
+              >
+                <Tooltip
+                  text={isCopied ? 'Copied' : 'Copy'}
+                  direction="bottom"
+                  className="w-fit py-3 px-6"
+                >
+                  {isCopied ? (
+                    <ClipboardCopiedIcon width="8" height="8" />
+                  ) : (
+                    <ClipboardIcon width="8" height="8" />
+                  )}
+                </Tooltip>
+              </button>
+            </div>
+          ) : (
+            <>
+              {codeInputPython !== undefined &&
+                codeInputJavascript !== undefined && (
+                  <EditorActionBar
+                    title={title}
+                    language={language}
+                    setLanguage={setLanguage}
+                    setCodeInputPython={setCodeInputPython}
+                    setCodeInputJavascript={setCodeInputJavascript}
+                    userPythonSubmission={userPythonSubmission}
+                    userJavascriptSubmission={userJavascriptSubmission}
+                    prompts={prompts}
+                  />
+                )}
             </>
           )}
+
+          {codeInputPython !== undefined &&
+            codeInputJavascript !== undefined &&
+            editorHeight && (
+              <>
+                <div
+                  className={`${classes['md-editor']} ${
+                    classes[`md-editor--${theme}`]
+                  }`}
+                >
+                  <CodeEditor
+                    value={
+                      reviewCode
+                        ? reviewCode.code
+                        : language === 'python'
+                        ? codeInputPython
+                        : codeInputJavascript
+                    }
+                    options={options}
+                    language={reviewCode ? reviewCode.language : language}
+                    setCodeInput={
+                      language === 'python'
+                        ? setCodeInputPython
+                        : setCodeInputJavascript
+                    }
+                    height={editorHeight}
+                  />
+                </div>
+                {showConsole && (
+                  <Resizable setEditorHeight={setEditorHeight}>
+                    <div className={classes.console}>
+                      <div className={classes.output}>
+                        {isLoading && (
+                          <div className="flex items-center justify-center h-full space-x-4">
+                            <span className="w-[35px] h-[35px]">
+                              <Loading width={35} height={35} />
+                            </span>
+                            <p
+                              className="text-[1.8rem]"
+                              style={{
+                                color:
+                                  theme === 'dark'
+                                    ? variables.textOffWhite
+                                    : variables.colorGray700
+                              }}
+                            >
+                              Hang tight...
+                            </p>
+                          </div>
+                        )}
+                        {testCode && (
+                          <>
+                            <h2
+                              className={
+                                theme === 'light' ? `text-[#4f4c52]` : ''
+                              }
+                            >
+                              Stdout:
+                            </h2>
+                            <code
+                              className={`${classes.code} ${
+                                classes[`code--${theme}`]
+                              }`}
+                            >
+                              {output.includes('\n')
+                                ? output.split('\n').map((str, index) => (
+                                    <p key={index} className="mb-2">
+                                      {str}
+                                    </p>
+                                  ))
+                                : output}
+                            </code>
+                          </>
+                        )}
+                        {!isLoading && codeError && (
+                          <code
+                            className={`${classes.code} ${classes['code--error']}`}
+                          >
+                            {!codeError.includes('\n') ? (
+                              <p className="text-red-500 mt-4 mb-4 text-[1.4rem]">
+                                {codeError}
+                              </p>
+                            ) : (
+                              <div className="my-4 space-y-2">
+                                {codeError.split('\n').map((el, index) => (
+                                  <p
+                                    key={index}
+                                    className={`text-red-500 ${
+                                      el.includes('Error')
+                                        ? 'text-[1.4rem]'
+                                        : 'ml-2'
+                                    }`}
+                                  >
+                                    {el}
+                                  </p>
+                                ))}
+                              </div>
+                            )}
+                          </code>
+                        )}
+                        {!isLoading && !codeError && resultMessage && (
+                          <SubmissionResults result={resultMessage} />
+                        )}
+                        {!isLoading && !resultMessage && runResults && (
+                          <RunResults type="test" testResults={runResults} />
+                        )}
+                      </div>
+                    </div>
+                  </Resizable>
+                )}
+              </>
+            )}
         </div>
         <ConsoleActionBar
           showConsole={showConsole}

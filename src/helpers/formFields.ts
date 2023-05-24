@@ -112,7 +112,7 @@ export const companyListOption = [
   { label: 'Twitter', value: 'Twitter' },
   { label: 'Twitch', value: 'Twitch' },
   { label: 'Salesforce', value: 'Salesforce' },
-  { label: 'SpotifyUber', value: 'SpotifyUber' },
+  { label: 'Spotify', value: 'Spotify' },
   { label: 'TikTok', value: 'TikTok' },
   { label: 'Uber', value: 'Uber' },
   { label: 'Walmart', value: 'Walmart' },

@@ -21,12 +21,13 @@
   border-bottom: solid $color-gray-600 0.4px;
   margin-bottom: 1.5rem;
   padding: 0 2rem;
-  color: var(--color-grey-200);
+  color: $color-gray-300;
   gap: 1rem;
 }
 
 .category-header {
   grid-column: span 1;
+
 }
 
 .category-header {
@@ -39,7 +40,7 @@
 
 .difficulty-header {
   grid-column: span 1;
-  min-width: 7.7rem;
+  min-width: rem;
 }
 
 .solution-header {

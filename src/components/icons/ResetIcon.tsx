@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 type ResetIconProps = {
   width?: number;
-  height: number;
+  height?: number;
 };
 
 const ResetIcon: React.FC<ResetIconProps> = ({ width, height }) => {

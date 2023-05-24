@@ -47,7 +47,7 @@ const LanguageSelection: React.FC<LanguageSelectionProps> = ({
         }
         onChange={handleSelectLanguage}
         defaultText={selected?.label!}
-        width={width ? width : '10rem'}
+        width={width ? width : '11rem'}
       />
     </div>
   );

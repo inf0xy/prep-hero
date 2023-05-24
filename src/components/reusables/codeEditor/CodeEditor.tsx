@@ -22,11 +22,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const { theme } = useAppSelector((state) => state.theme);
 
   const handleEditorChange = (value: string | undefined) => {
-    setCodeInput(value!);
+    if (!options.readOnly) {
+      setCodeInput(value!);
+    }
   };
 
   return (
-    <div className='code-editor'>
+    <div className="code-editor">
       <MonacoEditor
         theme={theme === 'dark' ? 'vs-dark' : 'light'}
         language={language}
