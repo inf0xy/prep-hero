@@ -33,7 +33,7 @@ export const addProblem = createAsyncThunk(
   'problems/addProblem',
   async (problem: Problem) => {
     const session = await getSession();
-    if (!session && session!.session.user.account_type !== 'admin') {
+    if (!session || session!.session.user.account_type !== 'admin') {
       throw new Error('Unauthorized');
     }
     const { data } = await axios.post('/api/problems/new', problem);
@@ -45,7 +45,7 @@ export const updateProblem = createAsyncThunk(
   'problems/updateProblem',
   async (problem: Problem) => {
     const session = await getSession();
-    if (!session && session!.session.user.account_type !== 'admin') {
+    if (!session || session!.session.user.account_type !== 'admin') {
       throw new Error('Unauthorized');
     }
     const { data } = await axios.put('/api/problems/new', problem);

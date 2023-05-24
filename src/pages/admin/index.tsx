@@ -37,6 +37,24 @@ const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ titles }) => {
     }
   };
 
+  const handleSelectTest = (title: string) => {
+    router.push(`/admin/tests/${title}`);
+  };
+
+  const actionBar = (
+    <div className='flex w-full px-12 items-center'>
+      <p className='text-[1.8rem] pt-1'>Total: {titles.length}</p>
+      <Button extraStyle={{
+        height: '3rem',
+        marginLeft: 'auto',
+        justifySelf: 'flex-end',
+        color: 'white'
+      }}>
+        <Link href="/admin/add">Add problem</Link>
+      </Button>
+    </div>
+  );
+
   return (
     <>
       {showAlert && (
@@ -53,17 +71,13 @@ const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ titles }) => {
           classes[`admin-dashboard--${theme}`]
         }`}
       >
-        <Button>
-          <Link href="/admin/add">Add problem</Link>
-        </Button>
-        {/* <Button>
-          <Link href="/problems">Edit problem</Link>
-        </Button> */}
         <TitleList
           titles={titles}
           firstIconText="Edit"
           secondIconText="Test"
           firstIconAction={handleSelectTitle as () => Promise<void>}
+          secondIconAction={handleSelectTest as () => Promise<void>}
+          actionBar={actionBar}
         />
       </div>
     </>

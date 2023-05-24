@@ -12,11 +12,12 @@ import LogoDark from './LogoDark';
 import LogoLight from './LogoLight';
 
 const Header = () => {
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const avatarRef = useRef<HTMLLabelElement>(null);
+
   const { theme } = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
-
-  const [showUserMenu, setShowUserMenu] = useState(false);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -35,7 +36,7 @@ const Header = () => {
   const handleLogout = () => {
     signOut({ redirect: true, callbackUrl: '/auth/login' });
   };
-console.log(showUserMenu);
+
   return (
     <header className={`${classes.header} ${classes[`header--${theme}`]}`}>
       <Link href="/" className={classes.logo}>
@@ -95,7 +96,11 @@ console.log(showUserMenu);
           </>
         ) : (
           <div className="dropdown dropdown-end">
-            <label tabIndex={0} onClick={() => setShowUserMenu(true)}>
+            <label
+              tabIndex={0}
+              onClick={() => setShowUserMenu(!showUserMenu)}
+              ref={avatarRef}
+            >
               <Image
                 src="/user.png"
                 alt="avatar"
@@ -104,7 +109,11 @@ console.log(showUserMenu);
                 className="cursor-pointer"
               />
             </label>
-            <UserMenu onClose={setShowUserMenu} showMenu={showUserMenu} />
+            <UserMenu
+              showUserMenu={showUserMenu}
+              setShowUserMenu={setShowUserMenu}
+              parentRef={avatarRef}
+            />
           </div>
         )}
       </div>

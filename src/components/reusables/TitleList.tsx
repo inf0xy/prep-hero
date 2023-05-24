@@ -14,7 +14,7 @@ type TitleListProps = {
   secondIconText?: string;
   actionBar?: ReactNode;
   firstIconAction?: (val?: string) => Promise<void> | undefined;
-  secondIconAction?: () => Promise<void> | undefined;
+  secondIconAction?: (val?: string) => Promise<void> | undefined;
 };
 
 const TitleList: React.FC<TitleListProps> = ({
@@ -61,14 +61,14 @@ const TitleList: React.FC<TitleListProps> = ({
         </span>
       </div>
       <div className={classes['test-icon']}>
-        <span onClick={secondIconAction ? secondIconAction : undefined}>
+        <span
+          onClick={secondIconAction ? () => secondIconAction(title) : undefined}
+        >
           <BreakerIcon />
         </span>
       </div>
       <p className={classes['title-content']}>
-        <Link href={`/problem/${title}`}>
-          {title}
-        </Link>
+        <Link href={`/problem/${title}`}>{title}</Link>
       </p>
     </div>
   ));

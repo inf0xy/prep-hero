@@ -10,18 +10,22 @@ import { useAppSelector } from '@/hooks/hooks';
 const Footer = () => {
   const router = useRouter();
   const [footerStyle, setFooterStyle] = useState('fixed');
-  const { theme } = useAppSelector(state => state.theme);
+  const { theme } = useAppSelector((state) => state.theme);
 
   const staticStylePaths = [
     '/admin',
     '/admin/add',
     '/admin/edit',
     '/problems',
-    '/notes/add'
+    '/notes/add',
+    '/admin/tests'
   ];
 
   useEffect(() => {
-    if (staticStylePaths.includes(router.pathname)) {
+    if (
+      router.pathname &&
+      staticStylePaths.some((path) => router.pathname.includes(path))
+    ) {
       setFooterStyle('static');
     } else {
       setFooterStyle('fixed');
@@ -30,7 +34,11 @@ const Footer = () => {
   }, [router.pathname]);
 
   return (
-    <footer className={`${classes.footer} ${classes[`footer--${theme}`]} ${footerStyle}`}>
+    <footer
+      className={`${classes.footer} ${
+        classes[`footer--${theme}`]
+      } ${footerStyle}`}
+    >
       <div className={classes.disclaimer}>Copyright &copy; 2023 Prep Hero</div>
       <div className={classes.socials}>
         <InstagramIcon theme={theme} width="22px" height="22px" />

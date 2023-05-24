@@ -10,7 +10,8 @@ export const checkAuth =
     if (
       !session ||
       (session.session.user.account_type !== 'admin' &&
-        req.url === 'url /api/problems/new')
+        req.url === 'url /api/problems/new') ||
+      req.url === 'url /api/problems/tests'
     ) {
       return res.status(401).json({ error: 'Unauthorized from checkAuth' });
     }

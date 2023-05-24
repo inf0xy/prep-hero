@@ -3,7 +3,7 @@
 .titles-selection {
   display: flex;
   flex-direction: column;
-  width: 65vw;
+  width: 60vw;
   height: 52vh;
   padding: 2rem;
   border-radius: 10px;
@@ -20,7 +20,9 @@
   }
 
   .top-bar {
+    display: flex;
     height: 3rem;
+    gap: 1rem;
 
     & > * {
       height: 3rem;

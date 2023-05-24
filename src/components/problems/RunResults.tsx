@@ -40,7 +40,7 @@ const RunResults: React.FC<RunResultsProps> = ({
   ));
 
   const { test, output } = results[currentTest];
-  const keys = Object.keys(test);
+  const keys = Object.keys(test).slice(0, -1);
 
   return (
     <div className={classes.results}>
@@ -68,7 +68,7 @@ const RunResults: React.FC<RunResultsProps> = ({
       >
         <h3>Input:</h3>
         <code>
-          {keys.slice(0, 2).map((el: any, index: number) => (
+          {keys.map((el: any, index: number) => (
             <p key={index}>
               {keys[index]} = {JSON.stringify(test[el])}
             </p>
@@ -83,7 +83,7 @@ const RunResults: React.FC<RunResultsProps> = ({
       >
         <h3>Output:</h3>
         <code>
-          <p>expected = {JSON.stringify(test[keys[2]])}</p>
+          <p>expected = {JSON.stringify(test.expected)}</p>
           <p
             className={`${
               results[currentTest].result === 'failed' ? 'text-red-500' : ''

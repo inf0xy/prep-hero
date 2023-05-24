@@ -9,12 +9,14 @@ export let db: Db;
 
 export let usersCollection: Collection;
 export let problemsCollection: Collection;
+export let testCasesCollection: Collection;
 
 export const connectDB = async () => {
   await client.connect();
   db = client.db(MONGO_DBNAME);
   usersCollection = db.collection('users');
   problemsCollection = db.collection('problems');
+  testCasesCollection = db.collection('test-cases');
 };
 
 export const disconnectDB = async () => {
