@@ -42,7 +42,7 @@ const NoteForm: React.FC<NoteFormProps> = ({
     content
   });
   const [showAlert, setShowAlert] = useState(false);
-  const [notification, setNotification] = useState<NotificationType>({
+  const [notification, setNotification] = useState<NotificationType | null>({
     status: undefined,
     message: undefined
   });
@@ -99,10 +99,10 @@ const NoteForm: React.FC<NoteFormProps> = ({
       {showAlert && (
         <Alert
           onClose={setShowAlert}
-          status={notification.status!}
+          status={notification!.status!}
           setNotification={setNotification}
         >
-          {notification.message}
+          {notification!.message}
         </Alert>
       )}
       <form onSubmit={handleSubmitNote}>

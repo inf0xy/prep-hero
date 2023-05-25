@@ -23,7 +23,6 @@ const Categories: React.FC<CategoriesProps> = ({ setGeneralInfo, currentSelected
           }))
         }
       />
-      {/* <label className="text-gray-400">{el}</label> */}
       <label>{el}</label>
     </div>
   ));

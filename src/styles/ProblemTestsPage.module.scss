@@ -3,18 +3,26 @@
 .problem-tests-page {
   min-height: calc(100vh - 7rem);
   padding: 0 5rem 5rem 5rem;
+
+  &--dark {
+    background-color: $dark-background-400;
+  }
+
+  &--light {
+    background-color: $light-background-0;
+  }
 }
 
 .python-tests,
 .javascript-tests {
   display: flex;
   flex-direction: column;
-  margin-top: 4rem;;
+  padding-top: 4rem;
   font-size: 1.5rem;
 
   h1 {
     font-size: 1.5rem;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
     background-color: $color-primary-200;
     width: fit-content;
     padding: 1rem 3rem;
@@ -25,7 +33,15 @@
     margin-top: 2rem;
     padding: 2rem;
     border-radius: 10px;
-    background-color: $dark-background-350;
+
+    &--dark {
+      background-color: $dark-background-350;
+    }
+
+    &--light {
+      background-color: $light-background-0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
   }
 
   .test-cases {

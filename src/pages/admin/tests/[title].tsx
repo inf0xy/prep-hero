@@ -113,13 +113,17 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
           {notification?.message}
         </Alert>
       )}
-      <div className={classes['problem-tests-page']}>
+      <div
+        className={`${classes['problem-tests-page']} ${
+          classes[`problem-tests-page--${theme}`]
+        }`}
+      >
         <div className={classes['python-tests']}>
           <h1>Python</h1>
           <label className={classes.label} style={{ marginBottom: 'unset' }}>
             Test File
           </label>
-          <div className={classes['editor-wrapper']}>
+          <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
             <CodeEditor
               value={pythonTestFile}
               options={{ fontSize: 14, tabSize: 4, readOnly: false }}
@@ -131,7 +135,7 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
           <div className={classes['test-cases']}>
             <div>
               <label className={classes.label}>Base Testcases</label>
-              <div className={classes['editor-wrapper']}>
+              <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
                 <CodeEditor
                   value={pythonTests.base}
                   options={{ fontSize: 14, tabSize: 4, readOnly: false }}
@@ -148,7 +152,7 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
             </div>
             <div>
               <label className={classes.label}>All Testcases</label>
-              <div className={classes['editor-wrapper']}>
+              <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
                 <CodeEditor
                   value={pythonTests.all}
                   options={{ fontSize: 14, tabSize: 4, readOnly: false }}
@@ -170,7 +174,7 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
           <label className={classes.label} style={{ marginBottom: 'unset' }}>
             Test File
           </label>
-          <div className={classes['editor-wrapper']}>
+          <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
             <CodeEditor
               value={javascriptTestFile}
               options={{ fontSize: 14, tabSize: 4, readOnly: false }}
@@ -182,7 +186,7 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
           <div className={classes['test-cases']}>
             <div>
               <label className={classes.label}>Base Testcases</label>
-              <div className={classes['editor-wrapper']}>
+              <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
                 <CodeEditor
                   value={javascriptTests.base}
                   options={{ fontSize: 14, tabSize: 4, readOnly: false }}
@@ -199,7 +203,7 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
             </div>
             <div>
               <label className={classes.label}>All Testcases</label>
-              <div className={classes['editor-wrapper']}>
+              <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
                 <CodeEditor
                   value={javascriptTests.all}
                   options={{ fontSize: 14, tabSize: 4, readOnly: false }}

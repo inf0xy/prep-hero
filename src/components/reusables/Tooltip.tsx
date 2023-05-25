@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { useTransition, animated } from 'react-spring';
-import classes from './Tooltip.module.scss';
 import { useAppSelector } from '@/hooks/hooks';
+import classes from './Tooltip.module.scss';
 
 type TooltipProps = {
   text: string;

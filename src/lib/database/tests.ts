@@ -14,9 +14,6 @@ export default class Test {
 
 export const addNewTest = async (test: any) => {
   await connectDB();
-  // const newTest = new Test(test.title, test.python, test.javascript);
-  // return testCasesCollection.insertOne(newTest);
-
   const filter = { title: test.title };
   const update = {
     $set: {

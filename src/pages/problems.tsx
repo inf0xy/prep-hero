@@ -4,10 +4,11 @@ import { GetStaticProps } from 'next';
 import { useSession } from 'next-auth/react';
 import { getProblems } from '@/helpers/problem-api-util';
 import { Problem, SearchCriteria, SearchOrForm } from '@/types/dataTypes';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { fetchUserData } from '@/store';
+import useSort from '@/hooks/useSort';
 import ProblemList from '@/components/problems/ProblemList';
 import Pagination from '@/components/problems/Pagination';
-import useSort from '@/hooks/useSort';
 import CircleX from '@/components/icons/CircleX';
 import SelectBar from '@/components/problems/SelectBar';
 import classes from '../styles/ProblemsPage.module.scss';
@@ -40,6 +41,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
   const handleSort = useSort(problems, setCurrentProblems);
   const { data: session } = useSession();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchProblems = async () => {
@@ -72,16 +74,16 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber]);
 
-  // useEffect(() => {
-  //   const fetchUserInfo = async () => {
-  //     await dispatch(fetchUserData());
-  //   };
-  //   try {
-  //     fetchUserInfo();
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }, [dispatch]);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      await dispatch(fetchUserData());
+    };
+    try {
+      fetchUserInfo();
+    } catch (err) {
+      console.error(err);
+    }
+  }, [dispatch]);
 
   const handleRemoveFilters = (value: string) => {
     for (let key in searchCriteria) {

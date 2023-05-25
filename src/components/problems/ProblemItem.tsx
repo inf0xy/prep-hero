@@ -23,7 +23,6 @@ import {
   setSelectedProblem
 } from '@/store';
 
-import VideoIcon from '../icons/VideoIcon';
 import CheckIcon from '@/components/icons/CheckIcon';
 import NoteIcon from '../icons/NoteIcon';
 import CodeIcon from '../icons/CodeIcon';
@@ -183,7 +182,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 <Tooltip
                   text="Add to list"
                   direction="top"
-                  className="w-[10rem] px-6 py-2"
+                  className="w-[9rem] py-2"
                 >
                   <span
                     className={classes['bookmark-icon']}

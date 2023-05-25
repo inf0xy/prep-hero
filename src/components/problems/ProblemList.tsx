@@ -2,9 +2,9 @@ import { useSession } from 'next-auth/react';
 import { useAppSelector } from '@/hooks/hooks';
 import { Problem } from '@/types/dataTypes';
 import ProblemItem from './ProblemItem';
-import classes from './ProblemList.module.scss';
 import SortIconDark from '../icons/SortIconDark';
 import SortIconLight from '../icons/SortIconLight';
+import classes from './ProblemList.module.scss';
 
 interface ProblemListProps {
   problems: Problem[];

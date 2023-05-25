@@ -14,7 +14,7 @@ const Panel: React.FC<PanelProps> = ({ children, ...rest }) => {
     rest.className
   );
   return (
-    <div {...rest} className={classes}>
+    <div {...rest} className={classes} >
       {children}
     </div>
   );

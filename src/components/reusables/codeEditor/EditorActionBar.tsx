@@ -1,9 +1,12 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { removeProblemFromList, addProblemToList } from '@/store';
-import { Submission } from '@/types/dataTypes';
+import { NotificationType, Submission } from '@/types/dataTypes';
 import LanguageSelection from './LanguageSelection';
 import ConfirmPanel from '../ConfirmPanel';
+import Tooltip from '../Tooltip';
+import FullScreenButton from './FullScreenButton';
+import Alert from '../Alert';
 import classes from './EditorActionBar.module.scss';
 
 import SettingsIcon from '@/components/icons/SettingsIcon';
@@ -11,7 +14,6 @@ import BookmarkFill from '@/components/icons/BookmarkFill';
 import BookmarkOutline from '@/components/icons/BookmarkOutline';
 import SourceCode from '@/components/icons/SourceCodeIcon';
 import ArrowPathIcon from '@/components/icons/ArrowPathIcon';
-import Tooltip from '../Tooltip';
 
 type EditorActionBarProps = {
   language: string;
@@ -36,6 +38,10 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const { list } = useAppSelector((state) => state.user);
+  const [showAlert, setShowAlert] = useState(false);
+  const [notification, setNotification] = useState<NotificationType | null>(
+    null
+  );
 
   const handleReset = () => {
     if (language === 'python') {
@@ -47,20 +53,41 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
 
   const handleRetrieveLastSubmission = () => {
     if (language === 'python') {
-      userPythonSubmission
-        ? setCodeInputPython(JSON.parse(userPythonSubmission.code))
-        : setCodeInputPython(JSON.parse(prompts['python']));
+      if (userPythonSubmission) {
+        setCodeInputPython(JSON.parse(userPythonSubmission.code));
+      } else {
+        setNotification({
+          status: 'warning',
+          message: "You don't have any submissions to retrive."
+        });
+        setShowAlert(true);
+      }
     } else if (language === 'javascript') {
-      userJavascriptSubmission
-        ? setCodeInputJavascript(JSON.parse(userJavascriptSubmission.code))
-        : setCodeInputJavascript(JSON.parse(prompts['javascript']));
+      if (userJavascriptSubmission) {
+        setCodeInputPython(JSON.parse(userJavascriptSubmission.code));
+      } else {
+        setNotification({
+          status: 'warning',
+          message: "You don't have any submissions to retrive."
+        });
+        setShowAlert(true);
+      }
     }
   };
 
   return (
     <>
+      {showAlert && (
+        <Alert
+          status={notification!.status!}
+          onClose={() => setShowAlert(false)}
+          setNotification={setNotification}
+        >
+          {notification?.message}
+        </Alert>
+      )}
       <div className={classes['editor-menu']}>
-        <LanguageSelection setLanguage={setLanguage} multiOptions={false}/>
+        <LanguageSelection setLanguage={setLanguage} multiOptions={false} />
         <ul className={classes.options}>
           <li>
             <Tooltip
@@ -124,6 +151,11 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
               </label>
             </Tooltip>
           </li>
+          <li>
+            <label htmlFor="modal-settings" className="cursor-pointer">
+              <FullScreenButton width={7} height={7} />
+            </label>
+          </li>
         </ul>
       </div>
       <ConfirmPanel
@@ -139,9 +171,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
       />
       <ConfirmPanel
         id="restore-last-submission-confirm-modal"
-        onConfirm={() => {
-          handleRetrieveLastSubmission();
-        }}
+        onConfirm={handleRetrieveLastSubmission}
         cancelText="Cancel"
         confirmText="Confirm"
         headerText="Are you sure?"
