@@ -198,11 +198,11 @@ export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
       (el: { title: string; date: Date }) => el.title !== submission.title
     );
 
-    medium_solved = user!['easy_solved'].filter(
+    medium_solved = user!['medium_solved'].filter(
       (el: { title: string; date: Date }) => el.title !== submission.title
     );
 
-    hard_solved = user!['easy_solved'].filter(
+    hard_solved = user!['hard_solved'].filter(
       (el: { title: string; date: Date }) => el.title !== submission.title
     );
 
@@ -224,10 +224,12 @@ export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
     }
   }
 
+  const total_solved = easy_solved.length + medium_solved.length + hard_solved.length;
+
   return usersCollection.updateOne(
     { _id },
     {
-      $set: { easy_solved, medium_solved, hard_solved },
+      $set: { easy_solved, medium_solved, hard_solved, total_solved },
       $push: {
         submissions: {
           title: submission.title,

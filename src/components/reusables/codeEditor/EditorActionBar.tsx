@@ -14,6 +14,7 @@ import BookmarkFill from '@/components/icons/BookmarkFill';
 import BookmarkOutline from '@/components/icons/BookmarkOutline';
 import SourceCode from '@/components/icons/SourceCodeIcon';
 import ArrowPathIcon from '@/components/icons/ArrowPathIcon';
+import DocumentIcon from '@/components/icons/DocumentIcon';
 
 type EditorActionBarProps = {
   language: string;
@@ -22,6 +23,7 @@ type EditorActionBarProps = {
   prompts: { python: string; javascript: string; [key: string]: string };
   setCodeInputPython: Dispatch<SetStateAction<string | undefined>>;
   setCodeInputJavascript: Dispatch<SetStateAction<string | undefined>>;
+  setShowNote: Dispatch<SetStateAction<boolean>>;
   userPythonSubmission: Submission | undefined;
   userJavascriptSubmission: Submission | undefined;
 };
@@ -32,16 +34,23 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
   setLanguage,
   setCodeInputPython,
   setCodeInputJavascript,
+  setShowNote,
   userPythonSubmission,
   userJavascriptSubmission,
   title
 }) => {
   const dispatch = useAppDispatch();
-  const { list } = useAppSelector((state) => state.user);
+  const { list, notes, theme } = useAppSelector((state) => {
+    const { theme } = state.theme;
+    const { list, notes } = state.user;
+    return { theme, list, notes };
+  });
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
+
+
 
   const handleReset = () => {
     if (language === 'python') {
@@ -89,6 +98,16 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
       <div className={classes['editor-menu']}>
         <LanguageSelection setLanguage={setLanguage} multiOptions={false} />
         <ul className={classes.options}>
+          <li onClick={() => setShowNote(true)}>
+            <Tooltip text="Note" direction="bottom" className="w-fit px-6 py-4">
+              <label
+                htmlFor={`modal__editor-note-${title}`}
+                className="w-fit cursor-pointer"
+              >
+                <DocumentIcon width={7} height={7} />
+              </label>
+            </Tooltip>
+          </li>
           <li>
             <Tooltip
               text="Add to list"

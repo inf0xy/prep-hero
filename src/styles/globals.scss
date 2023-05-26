@@ -83,6 +83,68 @@ body {
   width: 0 !important;
 }
 
+.code-highlight {
+  overflow-x: hidden !important;
+  .code-line {
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    font-size: 1.4rem;
+  }
+}
+
+.code-editor__note {
+  .w-md-editor {
+    height: 50vh !important;
+    box-shadow: none;
+  }
+
+  .w-md-editor-bar {
+    display: none;
+  }
+
+  .w-md-editor-toolbar {
+    border-bottom: none;
+  }
+
+  button[data-name='fullscreen'],
+  .w-md-editor-toolbar-divider {
+    display: none;
+  }
+
+  .w-md-editor-show-preview .w-md-editor-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    min-height: 3.2rem !important;
+
+    ul:first-child {
+      display: none;
+    }
+  }
+}
+.code-editor__note--dark {
+  .w-md-editor-preview .code-highlight {
+    background-color: $color-code-hightlight-preview-dark !important;
+  }
+
+  .text-editor.dark,
+  .w-md-editor-toolbar,
+  .wmde-markdown.wmde-markdown-color {
+    background-color: $dark-background-200 !important;
+  }
+}
+
+.code-editor__note--light {
+  .w-md-editor-preview .code-highlight {
+    background-color: $color-code-hightlight-preview-light !important;
+  }
+
+  .text-editor.dark,
+  .w-md-editor-toolbar,
+  .wmde-markdown.wmde-markdown-color {
+    background-color: $light-background-0 !important;
+  }
+}
+
 .react-resizable {
   position: relative;
   padding: 2rem 0;

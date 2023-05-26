@@ -3,7 +3,8 @@ import userReducer, {
   fetchUserData,
   addProblemToList,
   removeProblemFromList,
-  resetList
+  resetList,
+  saveSubmittedCode
 } from './slices/userSlice';
 import notesSlice, {
   setSelectedNote,
@@ -34,6 +35,7 @@ export {
   addProblemToList,
   removeProblemFromList,
   resetList,
+  saveSubmittedCode,
   setSelectedNote,
   addOrUpdateNote,
   deleteNote,

@@ -292,6 +292,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         className={`max-w-[100vw] w-[70vw] h-full pt-24 pb-8 pl-3 ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}
+        onClose={() => setShowSolutionModal(false)}
       >
         <div className="w-full h-full overflow-y-scroll">
           {showSolutionModal && (

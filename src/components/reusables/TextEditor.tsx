@@ -1,18 +1,18 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import dynamic from 'next/dynamic';
 import '@uiw/react-markdown-preview/markdown.css';
 import '@uiw/react-md-editor/markdown-editor.css';
-import classes from './TextEditor.module.scss';
 
+import { useAppSelector } from '@/hooks/hooks';
 import DarkIcon from '../icons/DarkIcon';
 import LightIcon from '../icons/LightIcon';
-import { useAppSelector } from '@/hooks/hooks';
+import classes from './TextEditor.module.scss';
 
 interface TextEditorProps {
   value: string;
   setValue: (val: string) => void;
   className?: string;
-  defaultMode: boolean;
+  // changeMode?: boolean;
 }
 
 const MDEditor = dynamic(
@@ -25,37 +25,47 @@ const Markdown = dynamic(
   { ssr: false }
 );
 
+// const defaultProps = {
+//   changeMode: true
+// };
+
 const TextEditor: React.FC<TextEditorProps> = ({
   value,
   setValue,
   className,
-  defaultMode
+  // changeMode
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
-  const [mode, setMode] = useState(theme);
+  // const [mode, setMode] = useState(theme);
 
   return (
-    <div data-color-mode={mode} className={classes.editor}>
-      <div
-        className={`${classes['editor__mode-button']} ${
-          classes[`editor__mode-button--${mode}`]
-        }`}
-        onClick={() => setMode((prev) => (prev === 'dark' ? 'light' : 'dark'))}
-      >
-        {mode === 'dark' ? (
-          <LightIcon width={19} height={19} />
-        ) : (
-          <DarkIcon width={19} height={19} />
-        )}
-      </div>
+    <div data-color-mode={theme} className={classes.editor}>
+      {/* {changeMode && (
+        <div
+          className={`${classes['editor__mode-button']} ${
+            classes[`editor__mode-button--${mode}`]
+          }`}
+          onClick={() =>
+            setMode((prev) => (prev === 'dark' ? 'light' : 'dark'))
+          }
+        >
+          {mode === 'dark' ? (
+            <LightIcon width={19} height={19} />
+          ) : (
+            <DarkIcon width={19} height={19} />
+          )}
+        </div>
+      )} */}
       <MDEditor
         value={value}
         onChange={setValue as () => void}
-        className={`${className} text-editor ${mode}`}
+        className={`${className} text-editor ${theme}`}
         enableScroll={false}
       />
     </div>
   );
 };
+
+// TextEditor.defaultProps = defaultProps;
 
 export default TextEditor;

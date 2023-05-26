@@ -4,7 +4,8 @@ import Resizable from '../reusables/Resizable';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import useCopy from '@/hooks/useCopy';
 import useHandleCode from '@/hooks/useHandleCode';
-import { saveSubmittedCode } from '@/store/slices/userSlice';
+import useSubmitNote from '@/hooks/useSubmitNote';
+import { saveSubmittedCode, setSelectedNote } from '@/store';
 import ConsoleActionBar from '../reusables/codeEditor/ConsoleActionBar';
 import FontSelection from '../reusables/codeEditor/FontSelection';
 import TabSizeSelection from '../reusables/codeEditor/TabSizeSelection';
@@ -14,6 +15,7 @@ import RunResults from './RunResults';
 import SubmissionResults from './SubmissionResults';
 import EditorActionBar from '../reusables/codeEditor/EditorActionBar';
 import Alert from '../reusables/Alert';
+import TextEditor from '../reusables/TextEditor';
 
 import variables from '@/styles/variables.module.scss';
 import classes from './ProblemEditor.module.scss';
@@ -29,10 +31,12 @@ import {
 import ClipboardIcon from '../icons/ClipboardIcon';
 import Tooltip from '../reusables/Tooltip';
 import ClipboardCopiedIcon from '../icons/ClipboardCopiedIcon';
+import DocumentIcon from '../icons/DocumentIcon';
 
 type ProblemEditorProps = {
   prompts: { python: string; javascript: string; [key: string]: string };
   title: string;
+  listNames: string[];
   reviewCode: { code: string; language: string } | undefined;
   setReviewCode: Dispatch<
     SetStateAction<{ code: string; language: string } | undefined>
@@ -42,15 +46,17 @@ type ProblemEditorProps = {
 const ProblemEditor: React.FC<ProblemEditorProps> = ({
   prompts,
   title,
+  listNames,
   reviewCode,
   setReviewCode
 }) => {
-  const { theme, submissions } = useAppSelector((state) => {
+  const { theme, submissions, notes } = useAppSelector((state) => {
     const { theme } = state.theme;
-    const { submissions } = state.user;
+    const { submissions, notes } = state.user;
     return {
       theme,
-      submissions
+      submissions,
+      notes
     };
   });
   const dispatch = useAppDispatch();
@@ -84,6 +90,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   const [showConsole, setShowConsole] = useState(false);
   const [editorHeight, setEditorHeight] = useState<string | null>(null);
 
+  const { handleSubmitNote } = useSubmitNote(setShowAlert, setNotification);
   // const {
   //   isLoading,
   //   testCode,
@@ -117,6 +124,15 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     null
   );
   const [codeError, setCodeError] = useState<string | null>(null);
+
+  let problemNoteContent: string | undefined = '';
+  if (notes) {
+    const result = notes.find((el) => el.title === title);
+    problemNoteContent = result ? result.content : '';
+  }
+
+  const [noteContent, setNoteContent] = useState(problemNoteContent);
+  const [showNote, setShowNote] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -232,7 +248,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
       submitLanguage = language;
     }
 
-    const result = await submitCode(codeInput!, submitLanguage , title, action);
+    const result = await submitCode(codeInput!, submitLanguage, title, action);
 
     setIsLoading(false);
 
@@ -295,6 +311,16 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     }
   };
 
+  const handleCloseNoteModal = async () => {
+    const note = {
+      listName: listNames.join(', '),
+      title,
+      content: noteContent
+    };
+    await handleSubmitNote(undefined, note);
+    setShowNote(false);
+  };
+
   return (
     <>
       {showAlert && (
@@ -327,22 +353,46 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
               >
                 ✕
               </button>
-              <button
-                className={classes['editor__copy-button']}
-                onClick={() => handleCopyClick(reviewCode.code)}
-              >
-                <Tooltip
-                  text={isCopied ? 'Copied' : 'Copy'}
-                  direction="bottom"
-                  className="w-fit py-3 px-6"
-                >
-                  {isCopied ? (
-                    <ClipboardCopiedIcon width="8" height="8" />
-                  ) : (
-                    <ClipboardIcon width="8" height="8" />
-                  )}
-                </Tooltip>
-              </button>
+              <ul className="flex items-center pt-1 justify-end ml-auto space-x-4">
+                <li>
+                  <Tooltip
+                    text="Note"
+                    direction="bottom"
+                    className="w-fit px-6 py-4"
+                  >
+                    <label
+                      htmlFor={`modal__editor-note-${title}`}
+                      className="w-fit cursor-pointer"
+                    >
+                      <span className="opacity-[0.7]">
+                        <DocumentIcon width={7} height={7} />
+                      </span>
+                    </label>
+                  </Tooltip>
+                </li>
+                <li>
+                  <button
+                    className={classes['editor__copy-button']}
+                    onClick={() => handleCopyClick(reviewCode.code)}
+                  >
+                    <Tooltip
+                      text={isCopied ? 'Copied' : 'Copy'}
+                      direction="bottom"
+                      className="w-fit py-3 px-6"
+                    >
+                      {isCopied ? (
+                        <span className="opacity-[0.7]">
+                          <ClipboardCopiedIcon width="8" height="8" />
+                        </span>
+                      ) : (
+                        <span className="opacity-[0.7]">
+                          <ClipboardIcon width="8" height="8" />
+                        </span>
+                      )}
+                    </Tooltip>
+                  </button>
+                </li>
+              </ul>
             </div>
           ) : (
             <>
@@ -354,6 +404,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                     setLanguage={setLanguage}
                     setCodeInputPython={setCodeInputPython}
                     setCodeInputJavascript={setCodeInputJavascript}
+                    setShowNote={setShowNote}
                     userPythonSubmission={userPythonSubmission}
                     userJavascriptSubmission={userJavascriptSubmission}
                     prompts={prompts}
@@ -507,6 +558,20 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
               </div>
               <TabSizeSelection options={options} setTabSize={setOptions} />
             </div>
+          </div>
+        </Modal>
+        <Modal
+          id={`modal__editor-note-${title}`}
+          type="close-button"
+          className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
+            theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
+          }`}
+          onClose={handleCloseNoteModal}
+        >
+          <div className={`code-editor__note code-editor__note--${theme}`}>
+            {showNote && (
+              <TextEditor value={noteContent!} setValue={setNoteContent} />
+            )}
           </div>
         </Modal>
       </div>

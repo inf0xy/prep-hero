@@ -80,6 +80,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
             <ProblemEditor
               prompts={prompts}
               title={selectedProblem.title!}
+              listNames={selectedProblem.list_names!}
               reviewCode={reviewCode}
               setReviewCode={setReviewCode}
             />

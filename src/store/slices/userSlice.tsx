@@ -9,7 +9,7 @@ import {
   HardSolved,
   Submission
 } from '@/types/dataTypes';
-import { deleteNote } from './notesSlice';
+import { addOrUpdateNote, deleteNote } from './notesSlice';
 
 interface User {
   notes: Note[];
@@ -155,6 +155,14 @@ const userSlice = createSlice({
     builder.addCase(fetchUserData.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message;
+    });
+    builder.addCase(addOrUpdateNote.fulfilled, (state, action) => {
+      state.notes = state.notes.filter(
+        (el) =>
+          el.title !== action.payload.note.list_names &&
+          el.title !== action.payload.note.title
+      );
+      state.notes.push(action.payload.note);
     });
     builder.addCase(deleteNote.fulfilled, (state, action) => {
       const noteIndex = state.notes.findIndex(
