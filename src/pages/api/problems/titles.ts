@@ -7,8 +7,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const result = await getProblemTitles();
-    res.status(200).json(result.map(el => el.title));
+    const { titles, testTitles } = await getProblemTitles();
+    const titleList = titles.map(el => el.title);
+    const testTitleList = testTitles.map(el => el.title);
+    res.status(200).json({ titles: titleList, testTitles: testTitleList });
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ message: 'Something went wrong.' });

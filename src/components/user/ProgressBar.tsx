@@ -1,26 +1,47 @@
 import { useAppSelector } from '@/hooks/hooks';
-import classes from './ProgressBar.module.scss';
 import { colors } from '@/helpers/extraStyles';
+import classes from './ProgressBar.module.scss';
 
-type Progress = {
-  difficulty: string;
-  solved: number;
-};
+const ProgressBar = () => {
+  const {
+    theme,
+    easyProblemsCount,
+    mediumProblemsCount,
+    hardProblemsCount,
+    easy_solved,
+    medium_solved,
+    hard_solved
+  } = useAppSelector((state) => {
+    const { theme } = state.theme;
+    const { easyProblemsCount, mediumProblemsCount, hardProblemsCount } =
+      state.problems;
+    const { easy_solved, medium_solved, hard_solved } = state.user;
+    return {
+      theme,
+      easyProblemsCount,
+      mediumProblemsCount,
+      hardProblemsCount,
+      easy_solved,
+      medium_solved,
+      hard_solved
+    };
+  });
 
-type ProgressBarProps = { progress: Progress[] };
+  const progress = [
+    { difficulty: 'Easy', solved: easy_solved.length },
+    { difficulty: 'Medium', solved: medium_solved.length },
+    { difficulty: 'Hard', solved: hard_solved.length }
+  ];
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
-  const { theme } = useAppSelector((state) => state.theme);
-  const { easyProblemsCount, mediumProblemsCount, hardProblemsCount } =
-    useAppSelector((state) => state.problems);
-
-  const getDifficultyProblemCount = (difficulty: string) => {
+  const getDifficultyCount = (difficulty: string, collection: string) => {
     if (difficulty === 'Easy') {
-      return easyProblemsCount;
+      return collection === 'problems' ? easyProblemsCount : easy_solved.length;
     } else if (difficulty === 'Medium') {
-      return mediumProblemsCount;
+      return collection === 'problems'
+        ? mediumProblemsCount
+        : medium_solved.length;
     } else if (difficulty === 'Hard') {
-      return hardProblemsCount;
+      return collection === 'problems' ? hardProblemsCount : hard_solved.length;
     }
   };
 
@@ -34,7 +55,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
       <div className={classes['progress-content']}>
         <p>{item.difficulty}</p>
         <p className={classes['progress-content__count']}>
-          5/{getDifficultyProblemCount(item.difficulty)}
+          {getDifficultyCount(item.difficulty, 'user')}/
+          {getDifficultyCount(item.difficulty, 'problems')}
         </p>
       </div>
       <div className={classes['bar__outer']}>
@@ -42,7 +64,10 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
           className={classes['bar__inner']}
           style={{
             backgroundColor: colors[item.difficulty],
-            width: `${13 * 5 / getDifficultyProblemCount(item.difficulty)!}rem`
+            width: `${
+              (13 * getDifficultyCount(item.difficulty, 'user')!) /
+              getDifficultyCount(item.difficulty, 'problems')!
+            }rem`
           }}
         ></div>
       </div>

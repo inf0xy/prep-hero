@@ -61,7 +61,7 @@
 }
 
 .heatmap-day--light:hover:after {
-  background-color: $dark-background-500;
+  background-color: $dark-background-400;
   color: $text-off-white;
 }
 
@@ -87,4 +87,22 @@
 
 .heatmap-weekday {
   margin-right: 0.5rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

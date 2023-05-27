@@ -1,4 +1,4 @@
-import { connectDB, problemsCollection } from './db-util';
+import { connectDB, problemsCollection, testCasesCollection } from './db-util';
 
 const ITEMS_PER_PAGE = 25;
 
@@ -195,9 +195,12 @@ export const getProblemsCount = async () => {
 
 export const getProblemTitles = async () => {
   await connectDB();
-  return problemsCollection
+  const testTitles = await testCasesCollection.find({}, { projection: { title: 1, _id: 0 } }).toArray();
+  const titles = await problemsCollection
     .find({}, { projection: { title: 1, _id: 0 } })
     .toArray();
+
+  return { titles, testTitles };
 };
 
 export const getProblemByTitle = async (title: string) => {

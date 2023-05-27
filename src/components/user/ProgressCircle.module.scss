@@ -41,10 +41,11 @@
 .solved-current {
   border-bottom: solid $color-gray-300 1px;
   padding-bottom: 0.3rem;
+  font-size: 1.2rem;
 }
 
 .solved-total {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
 }
 
 .progress-circle {
@@ -53,15 +54,18 @@
 
 .progress-circle-background {
   fill: none;
-  stroke: $color-gray-200;
-  stroke-width: 5px;
+  // stroke: $color-gray-200;
+  stroke: $color-off-white;
+  // stroke-width: 5px;
+  stroke-width: 7px;
   stroke-linecap: round;
 }
 
 .progress-circle-progress {
   fill: none;
   stroke: $color-primary-100;
-  stroke-width: 6px;
+  // stroke-width: 6px;
+  stroke-width: 8px;
   stroke-dasharray: 472;
   stroke-dashoffset: 467.28;
   stroke-linecap: round;

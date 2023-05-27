@@ -103,7 +103,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const titles = await getAllTitles();
+  const { titles } = await getAllTitles();
+
   const paths = titles.map((title: string) => ({
     params: { problemTitle: title }
   }));

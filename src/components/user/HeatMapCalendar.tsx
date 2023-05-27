@@ -9,7 +9,6 @@ import {
 } from '@/helpers/heatmap-util';
 
 interface HeatmapCalendarProps {
-  data: { [key: string]: number }; // key format : 'YYYY-MM-DD'
   showWeekdays?: boolean;
   className?: string;
 }
@@ -17,15 +16,28 @@ interface HeatmapCalendarProps {
 const defaultProps = {
   data: {},
   showWeekdays: false,
-  className: '',
+  className: ''
 };
 
 const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({
-  data,
   showWeekdays,
-  className,
+  className
 }) => {
-  const { theme } = useAppSelector(state => state.theme);
+  const { theme, submissions } = useAppSelector((state) => {
+    const { theme } = state.theme;
+    const { submissions } = state.user;
+    return { theme, submissions };
+  });
+
+  const data = submissions
+    .slice()
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .map((s) => new Date(s.date).toISOString().slice(0, 10))
+    .reduce((acc: { [key:string]: number }, el: string) => {
+      acc[el] = acc[el] + 1 || 1;
+      return acc;
+    }, {});
+
   const today = new Date();
   const thisYear = today.getFullYear();
 
@@ -134,9 +146,7 @@ const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({
   ));
 
   return (
-    <div
-      className={`${classes['heatmap-calendar']} ${className}`}
-    >
+    <div className={`${classes['heatmap-calendar']} ${className}`}>
       {renderedCalendar}
     </div>
   );

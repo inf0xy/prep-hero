@@ -35,13 +35,13 @@
 
 .bar__outer {
   width: 13rem;
-  height: 6px;
-  border-radius: 10px;
-  background-color: $color-gray-200;
+  height: 0.8rem;
+  border-radius: 0.4rem;
+  background-color: $text-off-white;
 }
 
 .bar__inner {
   width: 20px;
-  height: 6px;
-  border-radius: 10px;
+  height: 0.8rem;
+  border-radius: 0.5rem;
 }

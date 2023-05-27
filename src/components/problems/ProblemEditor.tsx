@@ -26,7 +26,8 @@ import {
   Result,
   ResultMessage,
   NotificationType,
-  Submission
+  Submission,
+  Note
 } from '@/types/dataTypes';
 import ClipboardIcon from '../icons/ClipboardIcon';
 import Tooltip from '../reusables/Tooltip';
@@ -127,7 +128,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
 
   let problemNoteContent: string | undefined = '';
   if (notes) {
-    const result = notes.find((el) => el.title === title);
+    const result = notes.find((el: Note) => el.title === title);
     problemNoteContent = result ? result.content : '';
   }
 
@@ -354,7 +355,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                 ✕
               </button>
               <ul className="flex items-center pt-1 justify-end ml-auto space-x-4">
-                <li>
+                <li onClick={() => setShowNote(true)}>
                   <Tooltip
                     text="Note"
                     direction="bottom"

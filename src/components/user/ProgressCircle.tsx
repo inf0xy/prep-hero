@@ -1,14 +1,18 @@
 import { useAppSelector } from '@/hooks/hooks';
 import classes from './ProgressCircle.module.scss';
 
-type ProgressCircleProps = {
-  progress: number;
-};
+const ProgressCircle = () => {
+  const { theme, total_solved } = useAppSelector((state) => {
+    const { theme } = state.theme;
+    const { total_solved } = state.user;
+    return {
+      theme,
+      total_solved
+    };
+  });
 
-const ProgressCircle: React.FC<ProgressCircleProps> = ({ progress }) => {
-  const { theme } = useAppSelector((state) => state.theme);
   const circleStyle = {
-    strokeDashoffset: 472 - 3.7 * progress
+    strokeDashoffset: 472 - 3.7 * +total_solved
   };
   const { allProblemsCount } = useAppSelector((state) => state.problems);
 
@@ -19,7 +23,7 @@ const ProgressCircle: React.FC<ProgressCircleProps> = ({ progress }) => {
           classes[`progress-text--${theme}`]
         }`}
       >
-        <p className={`${classes.solved} ${classes[`solved--${theme}`]}`}>20</p>
+        <p className={`${classes.solved} ${classes[`solved--${theme}`]}`}>{total_solved.toString()}</p>
         <p className={classes['solved-current']}>Solved</p>
         <p className={classes['solved-total']}>{allProblemsCount}</p>
       </div>

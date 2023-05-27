@@ -14,10 +14,11 @@ import classes from '../../styles/AdminDashBoard.module.scss';
 
 type AdminDashBoardProps = {
   titles: string[];
+  testTitles: string[];
   actionBar?: ReactNode;
 };
 
-const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ titles }) => {
+const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ titles, testTitles }) => {
   const { theme } = useAppSelector((state) => state.theme);
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
@@ -73,6 +74,7 @@ const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ titles }) => {
       >
         <TitleList
           titles={titles}
+          testTitles={testTitles}
           firstIconText="Edit"
           secondIconText="Test"
           firstIconAction={handleSelectTitle as () => Promise<void>}
@@ -85,10 +87,10 @@ const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ titles }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const titles = await getAllTitles();
+  const { titles, testTitles } = await getAllTitles();
 
   return {
-    props: { titles },
+    props: { titles, testTitles },
     revalidate: 3600
   };
 };

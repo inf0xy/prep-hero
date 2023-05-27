@@ -49,11 +49,3 @@ const SubmissionResults: React.FC<SubmissionResultsProps> = ({ result }) => {
 };
 
 export default SubmissionResults;
-
-// <h1 className="text-red-500">
-//   <span>
-//     <FailedCircleIcon width={23} height={23} />
-//   </span>
-//   {`${result.testFailed} ${+result.testFailed > 1 ? 'tests' : 'test'}`}{' '}
-//   failed
-// </h1>

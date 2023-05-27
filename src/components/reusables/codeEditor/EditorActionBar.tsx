@@ -40,16 +40,11 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
   title
 }) => {
   const dispatch = useAppDispatch();
-  const { list, notes, theme } = useAppSelector((state) => {
-    const { theme } = state.theme;
-    const { list, notes } = state.user;
-    return { theme, list, notes };
-  });
+  const { list } = useAppSelector(state => state.user);
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
-
 
 
   const handleReset = () => {

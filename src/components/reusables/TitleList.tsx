@@ -12,6 +12,7 @@ type TitleListProps = {
   titles: string[];
   firstIconText: string;
   secondIconText?: string;
+  testTitles?: string[];
   actionBar?: ReactNode;
   firstIconAction?: (val?: string) => Promise<void> | undefined;
   secondIconAction?: (val?: string) => Promise<void> | undefined;
@@ -21,6 +22,7 @@ const TitleList: React.FC<TitleListProps> = ({
   titles,
   firstIconText,
   secondIconText,
+  testTitles,
   actionBar,
   firstIconAction,
   secondIconAction
@@ -63,6 +65,9 @@ const TitleList: React.FC<TitleListProps> = ({
       <div className={classes['test-icon']}>
         <span
           onClick={secondIconAction ? () => secondIconAction(title) : undefined}
+          className={`${
+            testTitles && testTitles.includes(title) ? 'text-cyan-500' : ''
+          }`}
         >
           <BreakerIcon />
         </span>
