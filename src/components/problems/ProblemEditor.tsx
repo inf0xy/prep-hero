@@ -1,11 +1,10 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
 import CodeEditor from '@/components/reusables/codeEditor/CodeEditor';
 import Resizable from '../reusables/Resizable';
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/hooks';
 import useCopy from '@/hooks/useCopy';
 import useHandleCode from '@/hooks/useHandleCode';
 import useSubmitNote from '@/hooks/useSubmitNote';
-import { saveSubmittedCode, setSelectedNote } from '@/store';
 import ConsoleActionBar from '../reusables/codeEditor/ConsoleActionBar';
 import FontSelection from '../reusables/codeEditor/FontSelection';
 import TabSizeSelection from '../reusables/codeEditor/TabSizeSelection';
@@ -20,19 +19,20 @@ import TextEditor from '../reusables/TextEditor';
 import variables from '@/styles/variables.module.scss';
 import classes from './ProblemEditor.module.scss';
 
-import { runCode, submitCode } from '@/helpers/submission-api-util';
 import {
   RunResult,
-  Result,
   ResultMessage,
   NotificationType,
   Submission,
-  Note
+  Note,
+  CodeLine
 } from '@/types/dataTypes';
 import ClipboardIcon from '../icons/ClipboardIcon';
 import Tooltip from '../reusables/Tooltip';
 import ClipboardCopiedIcon from '../icons/ClipboardCopiedIcon';
 import DocumentIcon from '../icons/DocumentIcon';
+import useCodeLines from '@/hooks/useCodeLines';
+import useCodeCustomEffect from '@/hooks/useCodeCustomEffect';
 
 type ProblemEditorProps = {
   prompts: { python: string; javascript: string; [key: string]: string };
@@ -60,9 +60,6 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
       notes
     };
   });
-  const dispatch = useAppDispatch();
-  const { isCopied, setIsCopied, handleCopyClick } = useCopy();
-
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
@@ -74,14 +71,12 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     readOnly: false
   });
   const [language, setLanguage] = useState('python');
-
   const [userPythonSubmission, setUserPythonSubmission] = useState<
     Submission | undefined
   >(undefined);
   const [userJavascriptSubmission, setUserJavascriptSubmission] = useState<
     Submission | undefined
   >(undefined);
-
   const [codeInputPython, setCodeInputPython] = useState<string | undefined>(
     undefined
   );
@@ -90,42 +85,14 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   >(undefined);
   const [showConsole, setShowConsole] = useState(false);
   const [editorHeight, setEditorHeight] = useState<string | null>(null);
-
-  const { handleSubmitNote } = useSubmitNote(setShowAlert, setNotification);
-  // const {
-  //   isLoading,
-  //   testCode,
-  //   output,
-  //   codeError,
-  //   resultMessage,
-  //   runResults,
-  //   handleSubmission,
-  //   handleRunCodeManually,
-  //   codeInputPython,
-  //   codeInputJavascript,
-  //   setCodeInputPython,
-  //   setCodeInputJavascript
-  // } = useHandleCode({
-  //   title,
-  //   prompts,
-  //   reviewCode,
-  //   language,
-  //   showConsole,
-  //   setShowConsole,
-  //   setEditorHeight,
-  //   setShowAlert,
-  //   setNotification
-  // });
-
+  const [codeError, setCodeError] = useState<string | null>(null);
+  const [codeErrorDetail, setCodeErrorDetail] = useState<string | null>(null);
   const [output, setOutput] = useState('');
   const [testCode, setTestCode] = useState(false);
-
   const [runResults, setRunResults] = useState<RunResult | null>(null);
   const [resultMessage, setResultMessage] = useState<ResultMessage | null>(
     null
   );
-  const [codeError, setCodeError] = useState<string | null>(null);
-  const [codeErrorDetail, setCodeErrorDetail] = useState<string | null>(null);
 
   let problemNoteContent: string | undefined = '';
   if (notes) {
@@ -135,220 +102,49 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
 
   const [noteContent, setNoteContent] = useState(problemNoteContent);
   const [showNote, setShowNote] = useState(false);
+  const editorRef = useRef<HTMLDivElement>(null);
+  const [codeLines, setCodeLines] = useState<CodeLine[]>([]);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setEditorHeight(`${window.innerHeight - 188}px`);
-    }
-  }, []);
+  const { getCodeLines, handleHighLightError } = useCodeLines(editorRef, setCodeErrorDetail);
+  const { handleSubmitNote } = useSubmitNote(setShowAlert, setNotification);
+  const { isCopied, setIsCopied, handleCopyClick } = useCopy();
+  const { handleRunCodeManually, handleSubmission } = useHandleCode({
+    title,
+    prompts,
+    showConsole,
+    setShowConsole,
+    setEditorHeight,
+    setShowAlert,
+    setNotification,
+    setCodeError,
+    setCodeErrorDetail,
+    setRunResults,
+    setResultMessage,
+    setTestCode,
+    setOutput,
+    setIsLoading
+  });
 
-  useEffect(() => {
-    if (reviewCode) {
-      setOptions((prev) => ({
-        ...prev,
-        readOnly: true
-      }));
-    } else {
-      setOptions((prev) => ({
-        ...prev,
-        readOnly: false
-      }));
-    }
-  }, [reviewCode]);
-
-  useEffect(() => {
-    const foundSubmissions = submissions.filter((el) => el.title === title);
-
-    let pythonCode, javascriptCode: string;
-    let pythonSubmission: Submission[] = [];
-    let javascriptSubmission: Submission[] = [];
-    if (foundSubmissions.length) {
-      foundSubmissions.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-
-      pythonSubmission = foundSubmissions.filter(
-        (el) => el.language === 'python'
-      );
-
-      pythonCode = pythonSubmission.length
-        ? JSON.parse(pythonSubmission[0].code)
-        : JSON.parse(prompts['python']);
-
-      javascriptSubmission = foundSubmissions.filter(
-        (el) => el.language === 'javascript'
-      );
-      javascriptCode = javascriptSubmission.length
-        ? JSON.parse(javascriptSubmission[0].code)
-        : JSON.parse(prompts['javascript']);
-    } else {
-      pythonCode = JSON.parse(prompts['python']);
-      javascriptCode = JSON.parse(prompts['javascript']);
-    }
-
-    setCodeInputPython(pythonCode);
-    setCodeInputJavascript(javascriptCode);
-
-    setUserPythonSubmission(pythonSubmission[0]);
-    setUserJavascriptSubmission(javascriptSubmission[0]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [submissions]);
-
-  useEffect(() => {
-    if (codeErrorDetail) {
-      setTimeout(() => {
-        handleHighLightError();
-      }, 0);
-      // handleHighLightError();
-    }
-  }, [codeErrorDetail]);
-
-  const handleHighLightError = () => {
-    const lineElems = document.querySelectorAll('.monaco-editor .view-line');
-
-    for (let lineElem of lineElems) {
-      let line = '';
-      const outerSpan = lineElem.querySelector('span');
-      if (outerSpan) {
-        const spanElems = Array.from(
-          outerSpan.querySelectorAll('span')
-        ) as HTMLSpanElement[];
-
-        if (spanElems && spanElems.length) {
-          line = spanElems
-            .reduce((acc, el) => (acc += el.innerText), '')
-            .trim();
-        }
-      }
-
-      if (codeErrorDetail === line) {
-        console.log('match ', line);
-      }
-
-      // if (foundError) {
-      //   line.classList.add('code-error-highlight');
-      //   console.log('ERROR LINE ', line);
-      //   break;
-      // }
-    }
-  };
-
-  const handleRunCodeManually = async () => {
-    setCodeError(null);
-    setCodeErrorDetail(null);
-    setRunResults(null);
-    setResultMessage(null);
-    setTestCode(true);
-    setShowConsole(true);
-    setEditorHeight(`${window.innerHeight - 400}px`);
-
-    let codeInput: string | undefined;
-    // let submitLanguage: string;
-    if (reviewCode) {
-      codeInput = reviewCode.code;
-      // submitLanguage = reviewCode.language;
-    } else {
-      codeInput = language === 'python' ? codeInputPython : codeInputJavascript;
-      // submitLanguage = language;
-    }
-
-    const result = await runCode(codeInput!);
-
-    if (result.hasOwnProperty('error')) {
-      setTestCode(false);
-      setCodeError(result.error);
-      if ('errorDetail' in result) {
-        setCodeErrorDetail(result.errorDetail);
-      }
-    } else {
-      setOutput(result.output);
-    }
-  };
-
-  const handleSubmission = async (action: 'test' | 'submit') => {
-    if (!showConsole) {
-      setShowConsole(true);
-      setEditorHeight(`${window.innerHeight - 400}px`);
-    }
-
-    if (
-      (language === 'python' &&
-        codeInputPython === JSON.parse(prompts['python'])) ||
-      (language === 'javascript' &&
-        codeInputPython === JSON.parse(prompts['javascript']))
-    ) {
-      return;
-    }
-
-    setIsLoading(true);
-    setTestCode(false);
-
-    let codeInput: string | undefined;
-    let submitLanguage: string;
-    if (reviewCode) {
-      codeInput = reviewCode.code;
-      submitLanguage = reviewCode.language;
-    } else {
-      codeInput = language === 'python' ? codeInputPython : codeInputJavascript;
-      submitLanguage = language;
-    }
-
-    const result = await submitCode(codeInput!, submitLanguage, title, action);
-
-    setIsLoading(false);
-
-    if (result.hasOwnProperty('error')) {
-      setResultMessage(null);
-      setRunResults(null);
-      if (result.errorType === 'code') {
-        setCodeError(result.error);
-        if ('errorDetail' in result) {
-          setCodeError(result.errorDetail);
-        }
-      } else {
-        setNotification({
-          status: 'error',
-          message: 'Something went wrong. Please try again.'
-        });
-        setShowAlert(true);
-      }
-    } else {
-      setCodeError(null);
-      setCodeErrorDetail(null);
-      if (action === 'test') {
-        setResultMessage(null);
-        setRunResults(result);
-      } else {
-        const { results, runtime } = result;
-        const isPassed = results.every((el: Result) => el.result === 'passed');
-        const totalPassedTests = results.filter(
-          (el: Result) => el.result === 'passed'
-        );
-
-        const totalFailedTest = results.filter(
-          (el: Result) => el.result === 'failed'
-        );
-
-        setResultMessage({
-          passResult: isPassed,
-          testPassed: `${totalPassedTests.length}/${results.length}`,
-          testFailed: `${results.length - totalPassedTests.length}`,
-          failedTestCases: totalFailedTest,
-          runtime: `${runtime}`,
-          stdOut: result.stdOut
-        });
-
-        const userSubmission = {
-          date: new Date(),
-          title,
-          language,
-          code: JSON.stringify(codeInput),
-          accepted: isPassed
-        };
-        await dispatch(saveSubmittedCode(userSubmission));
-      }
-    }
-  };
+  useCodeCustomEffect({
+    title,
+    prompts,
+    codeInputPython,
+    codeInputJavascript,
+    codeLines,
+    reviewCode,
+    submissions,
+    codeErrorDetail,
+    editorRef,
+    getCodeLines,
+    handleHighLightError,
+    setCodeInputPython,
+    setCodeInputJavascript,
+    setUserPythonSubmission,
+    setUserJavascriptSubmission,
+    setOptions,
+    setCodeLines,
+    setEditorHeight
+  });
 
   const handleShowConsole = () => {
     if (showConsole) {
@@ -472,6 +268,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                   }`}
                 >
                   <CodeEditor
+                    editorRef={editorRef}
                     value={
                       reviewCode
                         ? reviewCode.code
@@ -576,9 +373,13 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
         </div>
         <ConsoleActionBar
           showConsole={showConsole}
+          reviewCode={reviewCode}
+          language={language}
+          codeInputPython={codeInputPython}
+          codeInputJavascript={codeInputJavascript}
           handleShowConsole={handleShowConsole}
-          handleSubmission={handleSubmission}
           handleRunCodeManually={handleRunCodeManually}
+          handleSubmission={handleSubmission}
         />
         <Modal
           id="modal-settings"

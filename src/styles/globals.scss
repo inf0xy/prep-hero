@@ -83,6 +83,13 @@ body {
   width: 0 !important;
 }
 
+.code-editor .view-line.code-error-highlight {
+  background-color: $color-error-700 !important;
+  opacity: 0.7;
+  border: solid $color-error-500 1px;
+  width: calc(100% - 8px);
+}
+
 .code-highlight {
   overflow-x: hidden !important;
   .code-line {

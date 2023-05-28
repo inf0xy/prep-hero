@@ -7,14 +7,33 @@ import ChevronDown from '@/components/icons/ChevronDown';
 import Tooltip from '../Tooltip';
 
 type ConsoleActionBarProps = {
-  handleShowConsole: () => void;
-  handleRunCodeManually: () => void;
-  handleSubmission: (type: 'submit' | 'test') => void;
   showConsole: boolean;
+  reviewCode: { code: string; language: string } | undefined;
+  language: string;
+  codeInputPython: string | undefined;
+  codeInputJavascript: string | undefined;
+  handleShowConsole: () => void;
+  handleRunCodeManually: (
+    reviewCode: { code: string; language: string } | undefined,
+    language: string,
+    codeInputPython: string | undefined,
+    codeInputJavascript: string | undefined
+  ) => Promise<void>;
+  handleSubmission: (
+    action: 'test' | 'submit',
+    reviewCode: { code: string; language: string } | undefined,
+    language: string,
+    codeInputPython: string | undefined,
+    codeInputJavascript: string | undefined
+  ) => Promise<void>;
 };
 
 const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
   showConsole,
+  reviewCode,
+  language,
+  codeInputPython,
+  codeInputJavascript,
   handleShowConsole,
   handleSubmission,
   handleRunCodeManually
@@ -54,7 +73,14 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
               padding: '0 2rem',
               height: '2.5rem'
             }}
-            onClick={() => handleRunCodeManually()}
+            onClick={() =>
+              handleRunCodeManually(
+                reviewCode,
+                language,
+                codeInputPython,
+                codeInputJavascript
+              )
+            }
           >
             Execute
           </Button>
@@ -66,7 +92,15 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             backgroundColor: variables.colorGray500,
             padding: '0 2rem'
           }}
-          onClick={() => handleSubmission('test')}
+          onClick={() =>
+            handleSubmission(
+              'test',
+              reviewCode,
+              language,
+              codeInputPython,
+              codeInputJavascript
+            )
+          }
         >
           Run
         </Button>
@@ -75,7 +109,15 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             backgroundColor: variables.colorPrimary200,
             padding: '0 2rem'
           }}
-          onClick={() => handleSubmission('submit')}
+          onClick={() =>
+            handleSubmission(
+              'submit',
+              reviewCode,
+              language,
+              codeInputPython,
+              codeInputJavascript
+            )
+          }
         >
           Submit
         </Button>

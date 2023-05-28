@@ -67,6 +67,11 @@ export type CodeOptions = {
   readOnly: boolean
 };
 
+export type CodeLine = {
+  line: string;
+  node: Element;
+};
+
 export type SearchOrForm = SearchCriteria | GeneralFormData;
 
 export type Result = {

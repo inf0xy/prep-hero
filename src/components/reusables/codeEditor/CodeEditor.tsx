@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState, useEffect } from 'react';
+import { Dispatch, SetStateAction, RefObject } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { useAppSelector } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
@@ -11,6 +11,7 @@ type CodeEditorProps = {
   language: string;
   height: string;
   setCodeInput: (val: string) => void | Dispatch<SetStateAction<string>>;
+  editorRef?: RefObject<HTMLDivElement>
 };
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -18,7 +19,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   options,
   language,
   height,
-  setCodeInput
+  setCodeInput,
+  editorRef
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
 
@@ -28,12 +30,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   };
 
-  const handleEditorValidation = (markers: any) => {
-    markers.forEach((marker: any) => console.log('onValidate:', marker.message));
-  };
-
   return (
-    <div className="code-editor">
+    <div className="code-editor" ref={editorRef}>
       <MonacoEditor
         theme={theme === 'dark' ? 'vs-dark' : 'light'}
         language={language}
