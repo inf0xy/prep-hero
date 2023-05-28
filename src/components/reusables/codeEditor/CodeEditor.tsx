@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { useAppSelector } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
 import Loading from '../Loading';
+
 
 type CodeEditorProps = {
   value: string;
@@ -25,6 +26,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     if (!options.readOnly) {
       setCodeInput(value!);
     }
+  };
+
+  const handleEditorValidation = (markers: any) => {
+    markers.forEach((marker: any) => console.log('onValidate:', marker.message));
   };
 
   return (

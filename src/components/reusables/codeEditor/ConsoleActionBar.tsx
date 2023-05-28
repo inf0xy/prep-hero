@@ -44,9 +44,9 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
         </Button>
 
         <Tooltip
-          text="Execute Code"
+          text="Stdout"
           direction="top"
-          className="left-[3rem] w-[12rem] p-4"
+          className="left-[4.5rem] w-fit p-4"
         >
           <Button
             extraStyle={{
@@ -56,7 +56,7 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             }}
             onClick={() => handleRunCodeManually()}
           >
-            Eval
+            Execute
           </Button>
         </Tooltip>
       </div>

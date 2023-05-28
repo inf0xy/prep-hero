@@ -125,6 +125,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     null
   );
   const [codeError, setCodeError] = useState<string | null>(null);
+  const [codeErrorDetail, setCodeErrorDetail] = useState<string | null>(null);
 
   let problemNoteContent: string | undefined = '';
   if (notes) {
@@ -193,8 +194,48 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submissions]);
 
+  useEffect(() => {
+    if (codeErrorDetail) {
+      setTimeout(() => {
+        handleHighLightError();
+      }, 0);
+      // handleHighLightError();
+    }
+  }, [codeErrorDetail]);
+
+  const handleHighLightError = () => {
+    const lineElems = document.querySelectorAll('.monaco-editor .view-line');
+
+    for (let lineElem of lineElems) {
+      let line = '';
+      const outerSpan = lineElem.querySelector('span');
+      if (outerSpan) {
+        const spanElems = Array.from(
+          outerSpan.querySelectorAll('span')
+        ) as HTMLSpanElement[];
+
+        if (spanElems && spanElems.length) {
+          line = spanElems
+            .reduce((acc, el) => (acc += el.innerText), '')
+            .trim();
+        }
+      }
+
+      if (codeErrorDetail === line) {
+        console.log('match ', line);
+      }
+
+      // if (foundError) {
+      //   line.classList.add('code-error-highlight');
+      //   console.log('ERROR LINE ', line);
+      //   break;
+      // }
+    }
+  };
+
   const handleRunCodeManually = async () => {
     setCodeError(null);
+    setCodeErrorDetail(null);
     setRunResults(null);
     setResultMessage(null);
     setTestCode(true);
@@ -216,6 +257,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     if (result.hasOwnProperty('error')) {
       setTestCode(false);
       setCodeError(result.error);
+      if ('errorDetail' in result) {
+        setCodeErrorDetail(result.errorDetail);
+      }
     } else {
       setOutput(result.output);
     }
@@ -258,6 +302,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
       setRunResults(null);
       if (result.errorType === 'code') {
         setCodeError(result.error);
+        if ('errorDetail' in result) {
+          setCodeError(result.errorDetail);
+        }
       } else {
         setNotification({
           status: 'error',
@@ -267,6 +314,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
       }
     } else {
       setCodeError(null);
+      setCodeErrorDetail(null);
       if (action === 'test') {
         setResultMessage(null);
         setRunResults(result);
