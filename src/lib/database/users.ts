@@ -119,6 +119,7 @@ export const getUserData = async (_id: ObjectId) => {
 export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
   await connectDB();
   const { listName: list_name, title, content } = note;
+
   if (list_name && title && content) {
     const result = await usersCollection
       .find({ _id: userId, 'notes.title': title })
@@ -141,8 +142,8 @@ export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
         {
           $push: {
             notes: {
-              list_name,
-              title,
+              list_name: list_name,
+              title: title,
               content: content
             }
           }
@@ -161,9 +162,12 @@ export const deleteUserNote = async (userId: ObjectId, title: string) => {
     { _id: userId },
     { $pull: { notes: { title } } }
   );
+console.log('Deleted RESULT with title ', title, 'and result is ', result);
   if (result.modifiedCount === 1) {
+console.log('Deleted')
     return { message: 'Deleted', title };
   } else {
+console.log('Unable to delete note.')
     return { message: 'Unable to delete note.' };
   }
 };
@@ -224,7 +228,8 @@ export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
     }
   }
 
-  const total_solved = easy_solved.length + medium_solved.length + hard_solved.length;
+  const total_solved =
+    easy_solved.length + medium_solved.length + hard_solved.length;
 
   return usersCollection.updateOne(
     { _id },

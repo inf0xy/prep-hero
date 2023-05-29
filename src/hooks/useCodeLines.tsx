@@ -15,29 +15,36 @@ const useCodeLines = (
   const [selectedElem, setSelectedElem] = useState<Element | null>(null);
 
   useEffect(() => {
-    const handler = (event: React.MouseEvent<HTMLElement>) => {
-      if (!selectedElem) {
-        return;
-      }
-      const target = event.target as Node;
-      if (
-        selectedElem === target ||
-        selectedElem.contains(target) ||
-        selectedElem.contains(target.parentNode as Node)
-      ) {
-        console.log('clear');
-        selectedElem.classList.remove('code-error-highlight');
-        setSelectedElem(null);
-        setCodeErrorDetail(null);
-      } else {
-        return;
-      }
-    };
+    if (editorRef.current) {
+      const editorEl = editorRef.current?.querySelector(
+        '.monaco-mouse-cursor-text'
+      );
 
-    document.addEventListener('click', handler as any, true);
-    return () => {
-      document.removeEventListener('click', handler as any);
-    };
+      const handler = (event: React.MouseEvent<HTMLElement>) => {
+        if (!selectedElem) {
+          return;
+        }
+        const target = event.target as Node;
+
+        if (
+          editorEl === target ||
+          editorEl!.contains(target) ||
+          editorEl!.contains(target.parentNode as Node)
+        ) {
+          console.log('clear');
+          selectedElem.classList.remove('code-error-highlight');
+          setSelectedElem(null);
+          setCodeErrorDetail(null);
+        } else {
+          return;
+        }
+      };
+
+      editorEl!.addEventListener('click', handler as any, true);
+      return () => {
+        editorEl!.removeEventListener('click', handler as any);
+      };
+    }
   }, [selectedElem]);
 
   const getCodeLines = useCallback(() => {

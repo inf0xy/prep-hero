@@ -5,14 +5,8 @@ import Link from 'next/link';
 import Modal from '../reusables/Modal';
 import ConfirmPanel from '../reusables/ConfirmPanel';
 import EditorPreview from '../reusables/EditorPreview';
-import classes from './ProblemItem.module.scss';
-import variables from '@/styles/variables.module.scss';
-import { Problem } from '@/types/dataTypes';
-import {
-  statusStyle,
-  noteStripStyle,
-  fullNoteStyle
-} from '@/helpers/extraStyles';
+import TextEditor from '../reusables/TextEditor';
+import Alert from '../reusables/Alert';
 import { colors } from '@/helpers/extraStyles';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import {
@@ -22,6 +16,14 @@ import {
   setSelectedNote,
   setSelectedProblem
 } from '@/store';
+import { NotificationType, Problem } from '@/types/dataTypes';
+import {
+  statusStyle,
+  noteStripStyle,
+  fullNoteStyle
+} from '@/helpers/extraStyles';
+import classes from './ProblemItem.module.scss';
+import variables from '@/styles/variables.module.scss';
 
 import CheckIcon from '@/components/icons/CheckIcon';
 import NoteIcon from '../icons/NoteIcon';
@@ -36,6 +38,7 @@ import BookmarkFill from '../icons/BookmarkFill';
 import LogoList from './LogoList';
 import Tooltip from '../reusables/Tooltip';
 import Solutions from '../reusables/Solutions';
+import useSubmitNote from '@/hooks/useSubmitNote';
 
 type ProblemItemProps = {
   problem: Problem;
@@ -67,7 +70,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     notes,
     list,
     theme
-  } = useAppSelector(state => {
+  } = useAppSelector((state) => {
     const {
       attempted_problems,
       easy_solved,
@@ -89,15 +92,26 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   });
 
   const [showSolutionModal, setShowSolutionModal] = useState(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [notification, setNotification] = useState<NotificationType | null>(
+    null
+  );
+  const [showNote, setShowNote] = useState(false);
+
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
   const router = useRouter();
+
+  const { handleSubmitNote } = useSubmitNote(setShowAlert, setNotification);
 
   let problemNoteContent: string | undefined;
   if (notes) {
     const result = notes.filter((el) => el.title === title);
     problemNoteContent = result.length ? result[0].content : undefined;
   }
+
+  const [noteContent, setNoteContent] = useState(problemNoteContent);
+  const [currentTitle, setCurrentTitle] = useState(title);
 
   useEffect(() => {
     if (!showNotes) {
@@ -107,22 +121,37 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     }
   }, [showNotes]);
 
-  const handleAddNote = () => {
-    dispatch(
-      setSelectedNote({ list_names, title, content: problemNoteContent })
-    );
-    router.push('/notes/add');
-  };
+  useEffect(() => {
+    if (problemNoteContent) {
+      setNoteContent(problemNoteContent);
+    }
 
-  const handleEditNote = () => {
-    dispatch(
-      setSelectedNote({ list_names, title, content: problemNoteContent })
-    );
-    router.push('/notes/edit');
+    if(title) {
+      setCurrentTitle(title);
+    }
+  }, [problemNoteContent, title]);
+
+  // const handleAddNote = () => {
+  //   dispatch(
+  //     setSelectedNote({ list_names, title, content: problemNoteContent })
+  //   );
+  //   router.push('/notes/add');
+  // };
+
+  const handleCloseNoteModal = async () => {
+    const note = {
+      listName: list_names!.join(', '),
+      title,
+      content: noteContent
+    };
+    await handleSubmitNote(undefined, note);
+    setShowNote(false);
   };
 
   const handleDeleteNote = async () => {
+    // console.log('in handle delete note check TITLE ', currentTitle);
     await dispatch(deleteNote(title!));
+    setNoteContent(undefined);
   };
 
   const handleEditProblem = () => {
@@ -142,6 +171,15 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
 
   return (
     <>
+      {showAlert && (
+        <Alert
+          status="error"
+          onClose={() => setShowAlert(false)}
+          setNotification={setNotification}
+        >
+          {notification?.message}
+        </Alert>
+      )}
       <div
         className={`${classes.problem} ${
           oddCell ? classes[`problem--${theme}--odd-cell`] : undefined
@@ -214,7 +252,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
         <div className={classes['solution-content']}>
           <span onClick={() => setShowSolutionModal(true)}>
-            <label htmlFor={`modal-solution-${title}`} className='w-fit'>
+            <label htmlFor={`modal-solution-${title}`} className="w-fit">
               <CodeIcon
                 width={8}
                 height={8}
@@ -233,11 +271,11 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           <div className={classes.strip}></div>
           <div className={classes.content}>
             <EditorPreview
-              value={problemNoteContent ? problemNoteContent : ''}
+              value={noteContent!}
               extraStyle={noteStripStyle[theme]}
             />
           </div>
-          {notes && problemNoteContent ? (
+          {notes && noteContent && noteContent.length > 0 ? (
             <ul className={classes['note-actions']}>
               <>
                 <Tooltip
@@ -256,8 +294,18 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   direction="top"
                   className="w-fit px-6 py-4"
                 >
-                  <li className={classes.edit} onClick={handleEditNote}>
-                    <EditIcon width={8} height={8} />
+                  <li
+                    className={classes.edit}
+                    onClick={() => setShowNote(true)}
+                  >
+                    <label
+                      htmlFor={`modal__problems-note-${title}`}
+                      className="w-fit cursor-pointer"
+                    >
+                      <span className="opacity-[0.7]">
+                        <EditIcon width={8} height={8} />
+                      </span>
+                    </label>
                   </li>
                 </Tooltip>
                 <Tooltip
@@ -278,9 +326,14 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
             </ul>
           ) : (
             <div className={classes.add}>
-              <span onClick={handleAddNote}>
-                <PlusIconOutline width={8} height={8} />
-              </span>
+              <label
+                htmlFor={`modal__problems-note-${title}`}
+                onClick={() => setShowNote(true)}
+              >
+                <span className="opacity-[0.7]">
+                  <PlusIconOutline width={8} height={8} />
+                </span>
+              </label>
               <p>Add a note</p>
             </div>
           )}
@@ -324,11 +377,23 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           />
         </div>
       </Modal>
+      <Modal
+        id={`modal__problems-note-${title}`}
+        type="close-button"
+        className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
+          theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
+        }`}
+        onClose={handleCloseNoteModal}
+      >
+        <div className={`code-editor__note code-editor__note--${theme}`}>
+          {showNote && (
+            <TextEditor value={noteContent!} setValue={setNoteContent} />
+          )}
+        </div>
+      </Modal>
       <ConfirmPanel
         id="note-delete-confirm-modal"
-        onConfirm={() => {
-          handleDeleteNote();
-        }}
+        onConfirm={handleDeleteNote}
         cancelText="Cancel"
         confirmText="Confirm"
         headerText="Are you sure?"
