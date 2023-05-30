@@ -162,12 +162,10 @@ export const deleteUserNote = async (userId: ObjectId, title: string) => {
     { _id: userId },
     { $pull: { notes: { title } } }
   );
-console.log('Deleted RESULT with title ', title, 'and result is ', result);
+
   if (result.modifiedCount === 1) {
-console.log('Deleted')
     return { message: 'Deleted', title };
   } else {
-console.log('Unable to delete note.')
     return { message: 'Unable to delete note.' };
   }
 };

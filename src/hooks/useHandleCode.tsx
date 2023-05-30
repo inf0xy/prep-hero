@@ -102,7 +102,8 @@ const useHandleCode = ({
           setCodeErrorDetail(result.errorDetail);
         }
       } else {
-        setOutput(result.output);
+        const formattedStr = result.output.replace(/'None'/g, JSON.stringify(null));
+        setOutput(formattedStr);
       }
     },
     []

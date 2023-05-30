@@ -69,7 +69,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     hard_solved,
     notes,
     list,
-    theme
+    theme,
+    selectedNote
   } = useAppSelector((state) => {
     const {
       attempted_problems,
@@ -80,6 +81,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       list
     } = state.user;
     const { theme } = state.theme;
+    const { selectedNote } = state.notes;
     return {
       attempted_problems,
       easy_solved,
@@ -87,7 +89,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       hard_solved,
       notes,
       list,
-      theme
+      theme,
+      selectedNote
     };
   });
 
@@ -111,7 +114,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   }
 
   const [noteContent, setNoteContent] = useState(problemNoteContent);
-  const [currentTitle, setCurrentTitle] = useState(title);
 
   useEffect(() => {
     if (!showNotes) {
@@ -125,18 +127,16 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     if (problemNoteContent) {
       setNoteContent(problemNoteContent);
     }
+  }, [problemNoteContent]);
 
-    if(title) {
-      setCurrentTitle(title);
+  useEffect(() => {
+    let problemNoteContent: string | undefined;
+    if (notes) {
+      const result = notes.filter((el) => el.title === title);
+      problemNoteContent = result.length ? result[0].content : undefined;
     }
-  }, [problemNoteContent, title]);
-
-  // const handleAddNote = () => {
-  //   dispatch(
-  //     setSelectedNote({ list_names, title, content: problemNoteContent })
-  //   );
-  //   router.push('/notes/add');
-  // };
+    setNoteContent(problemNoteContent);
+  }, [notes]);
 
   const handleCloseNoteModal = async () => {
     const note = {
@@ -149,9 +149,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   };
 
   const handleDeleteNote = async () => {
-    // console.log('in handle delete note check TITLE ', currentTitle);
     await dispatch(deleteNote(title!));
-    setNoteContent(undefined);
   };
 
   const handleEditProblem = () => {
@@ -315,7 +313,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 >
                   <li className={classes.clear}>
                     <label
-                      htmlFor="note-delete-confirm-modal"
+                      // htmlFor="note-delete-confirm-modal"
+                      htmlFor={`note-delete-confirm-modal-${title}`}
                       className="cursor-pointer"
                     >
                       <TrashIcon width={8} height={8} />
@@ -392,7 +391,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
       </Modal>
       <ConfirmPanel
-        id="note-delete-confirm-modal"
+        // id="note-delete-confirm-modal"
+        id={`note-delete-confirm-modal-${title}`}
         onConfirm={handleDeleteNote}
         cancelText="Cancel"
         confirmText="Confirm"

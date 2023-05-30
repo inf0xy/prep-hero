@@ -33,6 +33,7 @@ export const deleteNote = createAsyncThunk(
     if (!session) {
       return rejectWithValue(new Error('Required login'));
     }
+
     const userId = session?.session.user._id;
     const { data } = await axios.delete('/api/users/notes/delete', {
       params: { title, userId }

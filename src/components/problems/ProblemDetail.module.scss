@@ -52,6 +52,14 @@
     & > * > * {
       padding: 0.5rem 1rem;
     }
+
+    & > div > div > div > div {
+      padding: 0.5rem 1rem;
+    }
+
+    & > div > div > label {
+      padding: 0.35rem 1rem 0.35rem;
+    }
   }
 }
 

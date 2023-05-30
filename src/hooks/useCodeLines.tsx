@@ -31,7 +31,6 @@ const useCodeLines = (
           editorEl!.contains(target) ||
           editorEl!.contains(target.parentNode as Node)
         ) {
-          console.log('clear');
           selectedElem.classList.remove('code-error-highlight');
           setSelectedElem(null);
           setCodeErrorDetail(null);

@@ -1,9 +1,10 @@
-import { CodeLine, CodeOptions, Submission } from '@/types/dataTypes';
+import { CodeLine, CodeOptions, Note, Submission } from '@/types/dataTypes';
 import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 
 type UseCodeCustomEffectProps = {
   title: string;
   prompts: { python: string; javascript: string; [key: string]: string };
+  notes: Note[],
   codeInputPython: string | undefined;
   codeInputJavascript: string | undefined;
   codeLines: CodeLine[];
@@ -27,11 +28,13 @@ type UseCodeCustomEffectProps = {
   setOptions: Dispatch<SetStateAction<CodeOptions>>;
   setCodeLines: Dispatch<SetStateAction<CodeLine[]>>;
   setEditorHeight: Dispatch<SetStateAction<string | null>>;
+  setNoteContent: Dispatch<SetStateAction<string | null>>;
 };
 
 const useCodeCustomEffect = ({
   title,
   prompts,
+  notes,
   codeInputPython,
   codeInputJavascript,
   codeLines,
@@ -47,13 +50,27 @@ const useCodeCustomEffect = ({
   setUserJavascriptSubmission,
   setOptions,
   setCodeLines,
-  setEditorHeight
+  setEditorHeight,
+  setNoteContent
 }: UseCodeCustomEffectProps) => {
+
+  let problemNoteContent: string | undefined = '';
+  if (notes) {
+    const result = notes.find((el: Note) => el.title === title);
+    problemNoteContent = result ? result.content : '';
+  }
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setEditorHeight(`${window.innerHeight - 188}px`);
     }
   }, []);
+
+  useEffect(() => {
+    if (problemNoteContent) {
+      setNoteContent(problemNoteContent);
+    }
+  }, [problemNoteContent]);
 
   useEffect(() => {
     if (codeInputPython) {

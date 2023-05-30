@@ -94,13 +94,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     null
   );
 
-  let problemNoteContent: string | undefined = '';
-  if (notes) {
-    const result = notes.find((el: Note) => el.title === title);
-    problemNoteContent = result ? result.content : '';
-  }
-
-  const [noteContent, setNoteContent] = useState(problemNoteContent);
+  const [noteContent, setNoteContent] = useState<string | null>(null);
   const [showNote, setShowNote] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
   const [codeLines, setCodeLines] = useState<CodeLine[]>([]);
@@ -128,6 +122,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   useCodeCustomEffect({
     title,
     prompts,
+    notes,
     codeInputPython,
     codeInputJavascript,
     codeLines,
@@ -143,7 +138,8 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     setUserJavascriptSubmission,
     setOptions,
     setCodeLines,
-    setEditorHeight
+    setEditorHeight,
+    setNoteContent
   });
 
   const handleShowConsole = () => {
@@ -160,7 +156,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     const note = {
       listName: listNames.join(', '),
       title,
-      content: noteContent
+      content: noteContent!
     };
     await handleSubmitNote(undefined, note);
     setShowNote(false);

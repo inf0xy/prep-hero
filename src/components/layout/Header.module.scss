@@ -1,7 +1,8 @@
 @import '@/styles/variables.module.scss';
 
 .header {
-  max-width: 120rem;
+  // max-width: 120rem;
+  max-width: 100vw;
   height: 7rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;

@@ -70,7 +70,7 @@ const RunResults: React.FC<RunResultsProps> = ({
         <code>
           {keys.map((el: any, index: number) => (
             <p key={index}>
-              {keys[index]} = {JSON.stringify(test[el])}
+              {keys[index]} = {JSON.stringify(test[el]).replace(/"None"/g, JSON.stringify(null))}
             </p>
           ))}
         </code>
@@ -83,13 +83,13 @@ const RunResults: React.FC<RunResultsProps> = ({
       >
         <h3>Output:</h3>
         <code>
-          <p>expected = {JSON.stringify(test.expected)}</p>
+          <p>expected = {JSON.stringify(test.expected).replace(/"None"/g, JSON.stringify(null))}</p>
           <p
             className={`${
               results[currentTest].result === 'failed' ? 'text-red-500' : ''
             }`}
           >
-            output = {JSON.stringify(output)}
+            output = {JSON.stringify(output).replace(/"None"/g, JSON.stringify(null))}
           </p>
         </code>
       </div>
@@ -102,7 +102,7 @@ const RunResults: React.FC<RunResultsProps> = ({
           <h3>Stdout:</h3>
           <code>
             {stdOut.map((el) => (
-              <p key={el}>{el}</p>
+              <p key={el}>{el.replace(/'None'/g, JSON.stringify(null))}</p>
             ))}
           </code>
         </div>

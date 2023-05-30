@@ -11,7 +11,6 @@ type ConfirmPanelProps = {
   cancelText: string;
   onConfirm: () => void | Promise<void>;
   className?: string;
-  title?: string;
 };
 
 const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
@@ -21,8 +20,7 @@ const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
   confirmText,
   cancelText,
   onConfirm,
-  className,
-  title
+  className
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
 
