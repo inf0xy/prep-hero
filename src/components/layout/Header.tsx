@@ -10,6 +10,12 @@ import classes from './Header.module.scss';
 
 import LogoDark from './LogoDark';
 import LogoLight from './LogoLight';
+import HourglassIconDark from '../icons/HourglassIconDark';
+import HourglassIconLight from '../icons/HourglassIconLight';
+import Time from '../reusables/codeEditor/Time';
+
+import variables from '@/styles/variables.module.scss';
+import TimeSetter from '../reusables/codeEditor/TimeSetter';
 
 const Header = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -53,6 +59,18 @@ const Header = () => {
         </ul>
       </nav>
       <div className="flex space-x-10">
+        <span className='self-center'><Time /></span>
+        <div className="dropdown dropdown-bottom dropdown-end self-center">
+          <label tabIndex={0} className="cursor-pointer">
+            {theme === 'dark' ? <HourglassIconDark /> : <HourglassIconLight />}
+          </label>
+          <div
+            tabIndex={0}
+            className={`dropdown-content mt-4 px-8 py-12 shadow rounded-box w-fit bg-[${theme === 'dark' ? variables.darkBackground100 : variables.lightBackground0}]`}
+          >
+            <TimeSetter />
+          </div>
+        </div>
         <label
           className="swap swap-rotate cursor-pointer self-center mt-1"
           onClick={() => dispatch(setTheme())}
