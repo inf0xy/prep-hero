@@ -49,6 +49,7 @@ export type Submission = {
   code: string;
   language: string;
   accepted: boolean;
+  duration?: number
 };
 
 export type Option = {

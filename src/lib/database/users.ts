@@ -226,6 +226,18 @@ export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
     }
   }
 
+  const userSubmission: Submission = {
+    title: submission.title,
+    language: submission.language,
+    code: submission.code,
+    accepted: submission.accepted,
+    date: new Date()
+  };
+
+  if ('duration' in submission) {
+    userSubmission.duration = submission.duration;
+  }
+
   const total_solved =
     easy_solved.length + medium_solved.length + hard_solved.length;
 
@@ -234,13 +246,7 @@ export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
     {
       $set: { easy_solved, medium_solved, hard_solved, total_solved },
       $push: {
-        submissions: {
-          title: submission.title,
-          language: submission.language,
-          code: submission.code,
-          accepted: submission.accepted,
-          date: new Date()
-        }
+        submissions: userSubmission
       }
     }
   );

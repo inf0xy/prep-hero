@@ -91,18 +91,24 @@ const useHandleCode = ({
 
       if (result.hasOwnProperty('error')) {
         setTestCode(false);
-        const errMessage = result.error.split('\n').reduce((acc: string[], line: string) => {
-          if (!acc.includes(line)) {
-            acc.push(line);
-          }
-          return acc;
-        }, []).join('\n');
+        const errMessage = result.error
+          .split('\n')
+          .reduce((acc: string[], line: string) => {
+            if (!acc.includes(line)) {
+              acc.push(line);
+            }
+            return acc;
+          }, [])
+          .join('\n');
         setCodeError(errMessage);
         if ('errorDetail' in result) {
           setCodeErrorDetail(result.errorDetail);
         }
       } else {
-        const formattedStr = result.output.replace(/'None'/g, JSON.stringify(null));
+        const formattedStr = result.output.replace(
+          /'None'/g,
+          JSON.stringify(null)
+        );
         setOutput(formattedStr);
       }
     },
@@ -115,7 +121,8 @@ const useHandleCode = ({
       reviewCode: { code: string; language: string } | undefined,
       language: string,
       codeInputPython: string | undefined,
-      codeInputJavascript: string | undefined
+      codeInputJavascript: string | undefined,
+      duration?: number
     ) => {
       if (!showConsole) {
         setShowConsole(true);
@@ -161,12 +168,15 @@ const useHandleCode = ({
         setRunResults(null);
 
         if (result.errorType === 'code') {
-          const errMessage = result.error.split('\n').reduce((acc: string[], line: string) => {
-            if (!acc.includes(line)) {
-              acc.push(line);
-            }
-            return acc;
-          }, []).join('\n');
+          const errMessage = result.error
+            .split('\n')
+            .reduce((acc: string[], line: string) => {
+              if (!acc.includes(line)) {
+                acc.push(line);
+              }
+              return acc;
+            }, [])
+            .join('\n');
           setCodeError(errMessage);
           if ('errorDetail' in result) {
             setCodeErrorDetail(result.errorDetail);
@@ -204,13 +214,23 @@ const useHandleCode = ({
             stdOut: result.stdOut
           });
 
-          const userSubmission = {
+          const userSubmission: {
+            date: Date;
+            title: string;
+            language: string;
+            code: string;
+            accepted: boolean;
+            duration?: number;
+          } = {
             date: new Date(),
             title,
             language,
             code: JSON.stringify(codeInput),
             accepted: isPassed
           };
+          if (duration) {
+            userSubmission.duration = duration;
+          }
           await dispatch(saveSubmittedCode(userSubmission));
         }
       }
