@@ -42,6 +42,11 @@ const RunResults: React.FC<RunResultsProps> = ({
   const { test, output } = results[currentTest];
   const keys = Object.keys(test).slice(0, -1);
 
+  const expectedOutput = JSON.stringify(test.expected)
+    .replace(/"None"/g, JSON.stringify(null))
+    .replace(/"True"/g, JSON.stringify(true))
+    .replace(/"False"/g, JSON.stringify(false));
+
   return (
     <div className={classes.results}>
       <div className={`${classes.header} ${classes[`header--${theme}`]}`}>
@@ -70,7 +75,11 @@ const RunResults: React.FC<RunResultsProps> = ({
         <code>
           {keys.map((el: any, index: number) => (
             <p key={index}>
-              {keys[index]} = {JSON.stringify(test[el]).replace(/"None"/g, JSON.stringify(null))}
+              {keys[index]} ={' '}
+              {JSON.stringify(test[el])
+                .replace(/"None"/g, JSON.stringify(null))
+                .replace(/"True"/g, JSON.stringify(true))
+                .replace(/"False"/g, JSON.stringify(false))}
             </p>
           ))}
         </code>
@@ -83,13 +92,14 @@ const RunResults: React.FC<RunResultsProps> = ({
       >
         <h3>Output:</h3>
         <code>
-          <p>expected = {JSON.stringify(test.expected).replace(/"None"/g, JSON.stringify(null))}</p>
+          <p>expected = {expectedOutput}</p>
           <p
             className={`${
               results[currentTest].result === 'failed' ? 'text-red-500' : ''
             }`}
           >
-            output = {JSON.stringify(output).replace(/"None"/g, JSON.stringify(null))}
+            output ={' '}
+            {JSON.stringify(output).replace(/"None"/g, JSON.stringify(null))}
           </p>
         </code>
       </div>

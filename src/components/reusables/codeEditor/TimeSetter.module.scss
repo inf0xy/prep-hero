@@ -2,6 +2,7 @@
 
 .time-setter {
   width: 20rem;
+  min-height: 100%;
 }
 
 .tabs {
@@ -52,6 +53,10 @@
     outline: none;
   }
 
+  .inactive {
+    background-color: $color-gray-100;
+  }
+
   &--dark input {
     background-color: $light-background-0;
     color: $color-gray-800;
@@ -60,4 +65,16 @@
   &--light input {
     background-color: $color-input-light;
   }
+}
+
+.stopwatch {
+  height: 10.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-bar {
+  align-self: center;
+  margin-top: 1rem;
 }

@@ -10,16 +10,20 @@ import classes from './Header.module.scss';
 
 import LogoDark from './LogoDark';
 import LogoLight from './LogoLight';
-import HourglassIconDark from '../icons/HourglassIconDark';
-import HourglassIconLight from '../icons/HourglassIconLight';
+import ClockIconDark from '../icons/ClockIconDark';
+import ClockIconLight from '../icons/ClockIconLight';
 import Time from '../reusables/codeEditor/Time';
 
 import variables from '@/styles/variables.module.scss';
 import TimeSetter from '../reusables/codeEditor/TimeSetter';
+import { useRouter } from 'next/router';
 
 const Header = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [time, setTime] = useState(0);
   const avatarRef = useRef<HTMLLabelElement>(null);
+
+  const router = useRouter();
 
   const { theme } = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
@@ -59,18 +63,32 @@ const Header = () => {
         </ul>
       </nav>
       <div className="flex space-x-10">
-        <span className='self-center'><Time /></span>
-        <div className="dropdown dropdown-bottom dropdown-end self-center">
-          <label tabIndex={0} className="cursor-pointer">
-            {theme === 'dark' ? <HourglassIconDark /> : <HourglassIconLight />}
-          </label>
-          <div
-            tabIndex={0}
-            className={`dropdown-content mt-4 px-8 py-12 shadow rounded-box w-fit bg-[${theme === 'dark' ? variables.darkBackground100 : variables.lightBackground0}]`}
-          >
-            <TimeSetter />
+        {router.pathname.match(/^(.*?)\/problem\/(.*?)$/) && (
+          <div className='flex space-x-4'>
+            <span className="self-center  pt-[2px]">
+              <Time time={time} />
+            </span>
+            <div className="dropdown dropdown-bottom dropdown-end self-center pt-[1px]">
+              <label tabIndex={0} className="cursor-pointer">
+                {theme === 'dark' ? (
+                  <ClockIconDark height={23} width={23} />
+                ) : (
+                  <ClockIconLight height={23} width={23} />
+                )}
+              </label>
+              <div
+                tabIndex={0}
+                className={`dropdown-content mt-4 px-8 py-12 shadow rounded-box w-fit h-[22rem] bg-[${
+                  theme === 'dark'
+                    ? variables.darkBackground100
+                    : variables.lightBackground0
+                }]`}
+              >
+                <TimeSetter time={time} setTime={setTime} />
+              </div>
+            </div>
           </div>
-        </div>
+        )}
         <label
           className="swap swap-rotate cursor-pointer self-center mt-1"
           onClick={() => dispatch(setTheme())}

@@ -313,7 +313,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 >
                   <li className={classes.clear}>
                     <label
-                      // htmlFor="note-delete-confirm-modal"
                       htmlFor={`note-delete-confirm-modal-${title}`}
                       className="cursor-pointer"
                     >
@@ -391,7 +390,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
       </Modal>
       <ConfirmPanel
-        // id="note-delete-confirm-modal"
         id={`note-delete-confirm-modal-${title}`}
         onConfirm={handleDeleteNote}
         cancelText="Cancel"

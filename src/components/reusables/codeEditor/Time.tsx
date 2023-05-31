@@ -1,15 +1,24 @@
 import { useAppSelector } from '@/hooks/hooks';
-import classes from './Time.module.scss';
 
-const Time = () => {
-  const { theme } = useAppSelector(state => state.theme);
-  return <div className={`${classes.time} ${classes[`time-${theme}`]}`}>
-    <p className={classes.hour}>00</p>
-    <p>:</p>
-    <p className={classes.minute}>00</p>
-    <p>:</p>
-    <p className={classes.second}>00</p>
-  </div>
+type TimeProps = {
+  time: number;
+};
+
+const Time: React.FC<TimeProps> = ({ time }) => {
+  const hours = Math.floor(time / 3600);
+  const minutes = Math.floor((time % 3600) / 60);
+  const seconds = time % 60;
+
+  const { theme } = useAppSelector((state) => state.theme);
+  return (
+    <div className='flex text-[2rem] font-light'>
+      <p>{hours.toString().padStart(2, '0')}</p>
+      <p>:</p>
+      <p>{minutes.toString().padStart(2, '0')}</p>
+      <p>:</p>
+      <p>{seconds.toString().padStart(2, '0')}</p>
+    </div>
+  );
 };
 
 export default Time;
