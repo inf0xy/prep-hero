@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { setDuration } from '@/store';
 import ArrowPathIcon from '@/components/icons/ArrowPathIcon';
 import PlayIcon from '@/components/icons/PlayIcon';
 import PauseIcon from '@/components/icons/PauseIcon';
@@ -7,32 +8,33 @@ import PauseIcon from '@/components/icons/PauseIcon';
 type TimerControlBarProps = {
   mode: string;
   start: boolean;
-  time: number;
   id: number | undefined;
   setId: Dispatch<SetStateAction<number | undefined>>;
   setStart: Dispatch<SetStateAction<boolean>>;
-  setMinutes: Dispatch<SetStateAction<number>>;
-  setTime: Dispatch<SetStateAction<number>>;
+  setMinutes: Dispatch<SetStateAction<number>>
 };
 
 const TimerControlBar: React.FC<TimerControlBarProps> = ({
   mode,
   start,
-  time,
   id,
   setId,
   setStart,
-  setMinutes,
-  setTime
+  setMinutes
 }) => {
-  const { theme } = useAppSelector((state) => state.theme);
+  const { theme, duration } = useAppSelector(state => {
+    const { theme } = state.theme;
+    const { duration } = state.user;
+    return { theme, duration };
+  });
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (start) {
       if (mode === 'timer') {
         const timeoutId = setTimeout(() => {
-          if (time > 0) {
-            setTime(time - 1);
+          if (duration! > 0) {
+            dispatch(setDuration(duration! - 1));
           } else {
             handleStop();
             alert("Time's up!");
@@ -41,12 +43,12 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
         setId(timeoutId);
       } else {
         const timeoutId = setTimeout(() => {
-          setTime(time + 1);
+          dispatch(setDuration(duration! + 1));
         }, 1000) as unknown as number;
         setId(timeoutId);
       }
     }
-  }, [time, start]);
+  }, [duration, start]);
 
   const handleStart = () => {
     setStart(true);
@@ -60,7 +62,7 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
 
   const handleReset = () => {
     handleStop();
-    setTime(0);
+    dispatch(setDuration(0));
     if (mode === 'timer') {
       setMinutes(0);
     }
@@ -75,7 +77,7 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
   };
 
   let startButtonColor = '';
-  if ((time === 0 && mode === 'timer') || !start) {
+  if ((duration === 0 && mode === 'timer') || !start) {
     startButtonColor = theme === 'dark' ? 'bg-[#656565]' : 'bg-[#a7a3ae]';
   } else if (start) {
     startButtonColor = 'bg-[#e65715]';
@@ -85,10 +87,10 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
     <div className="flex space-x-6">
       <button
         className={`${startButtonColor} px-8 py-2 rounded-md ${
-          (time !== 0 && mode === 'timer') || mode === 'stopwatch' ? 'hover:bg-primary' : ''
+          (duration !== 0 && mode === 'timer') || mode === 'stopwatch' ? 'hover:bg-primary' : ''
         }`}
         onClick={handleOnClick}
-        disabled={time === 0 && mode === 'timer' ? true : false}
+        disabled={duration === 0 && mode === 'timer' ? true : false}
       >
         {!start ? (
           <span className="text-white">

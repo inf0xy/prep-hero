@@ -20,7 +20,6 @@ import { useRouter } from 'next/router';
 
 const Header = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [time, setTime] = useState(0);
   const avatarRef = useRef<HTMLLabelElement>(null);
 
   const router = useRouter();
@@ -64,9 +63,9 @@ const Header = () => {
       </nav>
       <div className="flex space-x-10">
         {router.pathname.match(/^(.*?)\/problem\/(.*?)$/) && (
-          <div className='flex space-x-4'>
+          <div className="flex space-x-4">
             <span className="self-center  pt-[2px]">
-              <Time time={time} />
+              <Time />
             </span>
             <div className="dropdown dropdown-bottom dropdown-end self-center pt-[1px]">
               <label tabIndex={0} className="cursor-pointer">
@@ -84,7 +83,7 @@ const Header = () => {
                     : variables.lightBackground0
                 }]`}
               >
-                <TimeSetter time={time} setTime={setTime} />
+                <TimeSetter />
               </div>
             </div>
           </div>

@@ -24,7 +24,8 @@ type ConsoleActionBarProps = {
     reviewCode: { code: string; language: string } | undefined,
     language: string,
     codeInputPython: string | undefined,
-    codeInputJavascript: string | undefined
+    codeInputJavascript: string | undefined,
+    duration?: number
   ) => Promise<void>;
 };
 
@@ -38,7 +39,11 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
   handleSubmission,
   handleRunCodeManually
 }) => {
-  const { theme } = useAppSelector((state) => state.theme);
+  const { theme, duration } = useAppSelector(state => {
+    const { theme } = state.theme;
+    const { duration } = state.user;
+    return { theme, duration };
+  });
 
   return (
     <div
@@ -115,7 +120,8 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
               reviewCode,
               language,
               codeInputPython,
-              codeInputJavascript
+              codeInputJavascript,
+              duration
             )
           }
         >

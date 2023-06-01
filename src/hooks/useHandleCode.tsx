@@ -39,7 +39,8 @@ type UseHandleCodeReturnType = {
     reviewCode: { code: string; language: string } | undefined,
     language: string,
     codeInputPython: string | undefined,
-    codeInputJavascript: string | undefined
+    codeInputJavascript: string | undefined,
+    duration?: number
   ) => Promise<void>;
 };
 

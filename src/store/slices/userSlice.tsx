@@ -22,6 +22,8 @@ interface User {
   total_solved: Number;
   isLoading?: boolean;
   error?: string | undefined;
+  duration?: number;
+
 }
 
 interface AddProblemToListResponse {
@@ -127,13 +129,18 @@ const initialState: User = {
   hard_solved: [],
   total_solved: 0,
   isLoading: false,
-  error: undefined
+  error: undefined,
+  duration: 0
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    setDuration(state, action) {
+      state.duration = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchUserData.pending, (state) => {
       state.isLoading = true;
@@ -229,4 +236,5 @@ const userSlice = createSlice({
   }
 });
 
+export const { setDuration } = userSlice.actions;
 export default userSlice.reducer;

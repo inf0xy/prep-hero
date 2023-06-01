@@ -1,17 +1,18 @@
 import { useAppSelector } from '@/hooks/hooks';
 
-type TimeProps = {
-  time: number;
-};
+const Time = () => {
+  const { theme, duration } = useAppSelector((state) => {
+    const { theme } = state.theme;
+    const { duration } = state.user;
+    return { theme, duration };
+  });
 
-const Time: React.FC<TimeProps> = ({ time }) => {
-  const hours = Math.floor(time / 3600);
-  const minutes = Math.floor((time % 3600) / 60);
-  const seconds = time % 60;
+  const hours = Math.floor(duration! / 3600);
+  const minutes = Math.floor((duration! % 3600) / 60);
+  const seconds = duration! % 60;
 
-  const { theme } = useAppSelector((state) => state.theme);
   return (
-    <div className='flex text-[2rem] font-light'>
+    <div className="flex text-[2rem] font-light">
       <p>{hours.toString().padStart(2, '0')}</p>
       <p>:</p>
       <p>{minutes.toString().padStart(2, '0')}</p>

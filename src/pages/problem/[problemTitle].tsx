@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { getAllTitles, getSelectedProblem } from '@/helpers/problem-api-util';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { setDuration } from '@/store';
 import { Problem } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import classes from '@/styles/ProblemDetailPage.module.scss';
@@ -19,6 +20,11 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   const [reviewCode, setReviewCode] = useState<
     { code: string; language: string } | undefined
   >(undefined);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setDuration(0));
+  }, []);
 
   const prompts = selectedProblem.prompts
     ? selectedProblem.prompts

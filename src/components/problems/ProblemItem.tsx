@@ -282,7 +282,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   className="w-fit px-6 py-4"
                 >
                   <li className={classes.expand}>
-                    <label htmlFor="modal-note" className="cursor-pointer">
+                    <label
+                      htmlFor={`modal-note-${title}`}
+                      className="cursor-pointer"
+                    >
                       <ExpandIcon width={7} height={7} />
                     </label>
                   </li>
@@ -360,7 +363,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
       </Modal>
       <Modal
-        id="modal-note"
+        id={`modal-note-${title}`}
         type="close-button"
         className={`${
           theme === 'dark'
