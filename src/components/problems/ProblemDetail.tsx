@@ -1,17 +1,16 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import TimeAgo from 'react-timeago';
 import { Problem, Submission, Option } from '@/types/dataTypes';
 import { useAppSelector } from '@/hooks/hooks';
 import { problemDetailStyle } from '@/helpers/extraStyles';
 import EditorPreview from '../reusables/EditorPreview';
 import Solutions from '../reusables/Solutions';
 import LanguageSelection from '../reusables/codeEditor/LanguageSelection';
+import SubmissionSelection from './SubmissionSelection';
 import LogoList from './LogoList';
 import CheckIcon from '../icons/CheckIcon';
 
 import classes from './ProblemDetail.module.scss';
-import SubmissionSelection from './SubmissionSelection';
-
-import TimeAgo from 'react-timeago';
 
 type ProblemDetailProps = {
   problem: Problem;
@@ -153,9 +152,8 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({
             <span className={classes[`${difficulty?.toLowerCase()}`]}>
               {difficulty}
             </span>
-            <span className={classes.category}>{category}</span>
             {completed && (
-              <span className="absolute left-[20rem] top-[-0.4rem]">
+              <span className="absolute left-[8rem] top-[-0.4rem]">
                 <CheckIcon width="20" height="20" />
               </span>
             )}
