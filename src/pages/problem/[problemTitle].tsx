@@ -5,8 +5,9 @@ import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { setDuration } from '@/store';
 import { Problem } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
-import classes from '@/styles/ProblemDetailPage.module.scss';
 import ProblemEditor from '@/components/problems/ProblemEditor';
+import classes from '@/styles/ProblemDetailPage.module.scss';
+import variables from '@/styles/variables.module.scss';
 
 type ProblemDetailPageProps = {
   selectedProblem: Problem;
@@ -15,8 +16,16 @@ type ProblemDetailPageProps = {
 const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   selectedProblem
 }) => {
-  const { theme } = useAppSelector((state) => state.theme);
+  const { theme, timerReminder, timerDuration, duration } = useAppSelector(
+    (state) => {
+      const { theme } = state.theme;
+      const { timerReminder, timerDuration, duration } = state.user;
+      return { theme, timerReminder, timerDuration, duration };
+    }
+  );
+
   const [activeTab, setActiveTab] = useState('prompt');
+  const [timerAlert, setTimerAlert] = useState(false);
   const [reviewCode, setReviewCode] = useState<
     { code: string; language: string } | undefined
   >(undefined);
@@ -24,6 +33,9 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
 
   useEffect(() => {
     dispatch(setDuration(0));
+    if (timerReminder) {
+      setTimerAlert(true);
+    }
   }, []);
 
   const prompts = selectedProblem.prompts
@@ -33,6 +45,10 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
         javascript: ''
       };
 
+  const timerAlertMessage = timerAlert
+    ? 'Start stopwatch to record session.'
+    : "Time's up!";
+
   return (
     <>
       {selectedProblem && (
@@ -41,6 +57,35 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
             classes[`problem-detail-page--${theme}`]
           }`}
         >
+          {(timerAlert || (timerDuration! > 0 && duration! === 0)) && (
+            <div
+              className={`${classes['timer-alert']} ${
+                timerAlert ? 'bg-[#008aa9]' : 'bg-[#c59a01]'
+              }`}
+            >
+              <p>{timerAlertMessage}</p>
+              <button
+                className="btn btn-sm btn-circle hover:bg-base-content hover:border-base-content"
+                onClick={() => setTimerAlert(false)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
+
           <div className={`${classes.detail} ${classes[`detail--${theme}`]}`}>
             <ul className={`${classes.tabs} ${classes[`tabs--${theme}`]}`}>
               <li

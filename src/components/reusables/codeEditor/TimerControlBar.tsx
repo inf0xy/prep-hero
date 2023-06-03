@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { setDuration } from '@/store';
+import { setDuration, setTimerDuration } from '@/store';
 import ArrowPathIcon from '@/components/icons/ArrowPathIcon';
 import PlayIcon from '@/components/icons/PlayIcon';
 import PauseIcon from '@/components/icons/PauseIcon';
@@ -11,7 +11,6 @@ type TimerControlBarProps = {
   id: number | undefined;
   setId: Dispatch<SetStateAction<number | undefined>>;
   setStart: Dispatch<SetStateAction<boolean>>;
-  setMinutes: Dispatch<SetStateAction<number>>
 };
 
 const TimerControlBar: React.FC<TimerControlBarProps> = ({
@@ -19,10 +18,9 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
   start,
   id,
   setId,
-  setStart,
-  setMinutes
+  setStart
 }) => {
-  const { theme, duration } = useAppSelector(state => {
+  const { theme, duration } = useAppSelector((state) => {
     const { theme } = state.theme;
     const { duration } = state.user;
     return { theme, duration };
@@ -37,7 +35,6 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
             dispatch(setDuration(duration! - 1));
           } else {
             handleStop();
-            alert("Time's up!");
           }
         }, 1000) as unknown as number;
         setId(timeoutId);
@@ -64,7 +61,7 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
     handleStop();
     dispatch(setDuration(0));
     if (mode === 'timer') {
-      setMinutes(0);
+      dispatch(setTimerDuration(0));
     }
   };
 
@@ -87,7 +84,9 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
     <div className="flex space-x-6">
       <button
         className={`${startButtonColor} px-8 py-2 rounded-md ${
-          (duration !== 0 && mode === 'timer') || mode === 'stopwatch' ? 'hover:bg-primary' : ''
+          (duration !== 0 && mode === 'timer') || mode === 'stopwatch'
+            ? 'hover:bg-primary'
+            : ''
         }`}
         onClick={handleOnClick}
         disabled={duration === 0 && mode === 'timer' ? true : false}

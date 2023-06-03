@@ -5,7 +5,9 @@ import userReducer, {
   removeProblemFromList,
   resetList,
   saveSubmittedCode,
-  setDuration
+  setDuration,
+  setTimerDuration,
+  setTimerReminder
 } from './slices/userSlice';
 import notesSlice, {
   setSelectedNote,
@@ -38,6 +40,8 @@ export {
   resetList,
   saveSubmittedCode,
   setDuration,
+  setTimerDuration,
+  setTimerReminder,
   setSelectedNote,
   addOrUpdateNote,
   deleteNote,

@@ -77,7 +77,10 @@ $color-error-600: #57112e;
 $color-error-700: #5d2525;
 
 $color-warning-100: #eea60c;
-$color-warning-200: #705926;
+$color-warning-200: #c59a01;
+$color-warning-300: #705926;
+
+$color-info-100: #008aa9;
 
 $color-python: #2767b9;
 $color-javascript: #95950c;
@@ -142,6 +145,9 @@ $code-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation M
 
   colorSuccess500: $color-success-500;
   colorWarning100: $color-warning-100;
+  colorWarning200: $color-warning-200;
+  colorWarning300: $color-warning-300;
+  colorInfo100: $color-info-100;
   colorError300: $color-error-300;
   colorError400: $color-error-400;
 

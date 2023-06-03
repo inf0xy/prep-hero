@@ -1,25 +1,24 @@
 import { useState, ChangeEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { setDuration } from '@/store';
+import { setDuration, setTimerDuration } from '@/store';
 import TimerControlBar from './TimerControlBar';
 import classes from './TimeSetter.module.scss';
 import ConfirmPanel from '../ConfirmPanel';
 
 const TimeSetter = () => {
   const [mode, setMode] = useState('timer');
-  const [minutes, setMinutes] = useState(0);
   const [start, setStart] = useState(false);
   const [id, setId] = useState<number | undefined>(undefined);
-  const { theme, duration } = useAppSelector((state) => {
+  const { theme, timerDuration } = useAppSelector((state) => {
     const { theme } = state.theme;
-    const { duration } = state.user;
-    return { theme, duration };
+    const { timerDuration } = state.user;
+    return { theme, timerDuration };
   });
 
   const dispatch = useAppDispatch();
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setMinutes(e.target.value.length > 0 ? +e.target.value : 0);
+    dispatch(setTimerDuration(e.target.value.length > 0 ? +e.target.value : 0));
     dispatch(setDuration(e.target.value.length > 0 ? +e.target.value * 60 : 0));
   };
 
@@ -28,7 +27,7 @@ const TimeSetter = () => {
     setId(undefined);
     setStart(false);
     dispatch(setDuration(0));
-    setMinutes(0);
+    dispatch(setTimerDuration(0));
     setMode(mode === 'timer' ? 'stopwatch' : 'timer');
   };
 
@@ -48,7 +47,7 @@ const TimeSetter = () => {
               ? () => {
                   setMode('timer');
                   dispatch(setDuration(0));
-                  setMinutes(0);
+                  dispatch(setTimerDuration(0));
                   dispatch(setDuration(0));
                 }
               : () => {}
@@ -74,7 +73,7 @@ const TimeSetter = () => {
               ? () => {
                   setMode('stopwatch');
                   dispatch(setDuration(0));
-                  setMinutes(0);
+                  dispatch(setTimerDuration(0));
                   dispatch(setDuration(0));
                 }
               : () => {}
@@ -98,7 +97,7 @@ const TimeSetter = () => {
           <input
             type="number"
             min="0"
-            value={minutes}
+            value={timerDuration}
             onChange={handleOnChange}
             disabled={start ? true : false}
             className={start ? classes.inactive : ''}
@@ -110,7 +109,6 @@ const TimeSetter = () => {
               id={id}
               setId={setId}
               setStart={setStart}
-              setMinutes={setMinutes}
             />
           </div>
         </div>
@@ -122,7 +120,6 @@ const TimeSetter = () => {
             id={id}
             setId={setId}
             setStart={setStart}
-            setMinutes={setMinutes}
           />
         </div>
       )}

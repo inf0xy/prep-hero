@@ -20,10 +20,11 @@ interface User {
   medium_solved: MediumSolved[];
   hard_solved: HardSolved[];
   total_solved: Number;
+  timerReminder: boolean;
   isLoading?: boolean;
   error?: string | undefined;
   duration?: number;
-
+  timerDuration?: number;
 }
 
 interface AddProblemToListResponse {
@@ -128,9 +129,11 @@ const initialState: User = {
   medium_solved: [],
   hard_solved: [],
   total_solved: 0,
+  timerReminder: true,
   isLoading: false,
   error: undefined,
-  duration: 0
+  duration: 0,
+  timerDuration: 0
 };
 
 const userSlice = createSlice({
@@ -139,6 +142,12 @@ const userSlice = createSlice({
   reducers: {
     setDuration(state, action) {
       state.duration = action.payload;
+    },
+    setTimerDuration(state, action) {
+      state.timerDuration = action.payload;
+    },
+    setTimerReminder(state, action) {
+      state.timerReminder = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -236,5 +245,6 @@ const userSlice = createSlice({
   }
 });
 
-export const { setDuration } = userSlice.actions;
+export const { setDuration, setTimerDuration, setTimerReminder } =
+  userSlice.actions;
 export default userSlice.reducer;

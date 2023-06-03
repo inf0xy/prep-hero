@@ -2,6 +2,7 @@
 
 .problem-detail-page {
   height: calc(100vh - 7rem);
+  position: relative;
   padding: 1rem;
   display: grid;
   gap: 1rem;
@@ -14,6 +15,34 @@
 
   &--light {
     background-color: $light-background-0;
+  }
+}
+
+.timer-alert {
+  position: absolute;
+  left: 50%;
+  width: fit-content;
+  z-index: 200;
+  border-radius: 0.5rem;
+  font-size: 1.6rem;
+  transform: translateX(-50%);
+  display: flex;
+  padding: 1rem;
+  color: $light-background-200;
+
+  button {
+    background-color: transparent;
+    align-self: flex-end;
+    border: solid $light-background-200 2px;
+
+    & > * {
+      color: $light-background-200;
+    }
+  }
+
+  p {
+    align-self: center;
+    padding: 0 2rem;
   }
 }
 
@@ -59,7 +88,7 @@
 }
 
 .description {
-  position:relative;
+  position: relative;
   height: calc(100% - 3rem);
   overflow-y: auto;
   padding-bottom: 1rem;

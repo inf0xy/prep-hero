@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useState } from 'react';
-import { useAppDispatch } from './hooks';
+import { useAppDispatch, useAppSelector } from './hooks';
 import { runCode, submitCode } from '@/helpers/submission-api-util';
 import { saveSubmittedCode } from '@/store/slices/userSlice';
 
@@ -40,7 +40,8 @@ type UseHandleCodeReturnType = {
     language: string,
     codeInputPython: string | undefined,
     codeInputJavascript: string | undefined,
-    duration?: number
+    duration?: number,
+    timer?: number
   ) => Promise<void>;
 };
 
@@ -123,7 +124,8 @@ const useHandleCode = ({
       language: string,
       codeInputPython: string | undefined,
       codeInputJavascript: string | undefined,
-      duration?: number
+      duration?: number,
+      timer?: number
     ) => {
       if (!showConsole) {
         setShowConsole(true);
@@ -230,7 +232,10 @@ const useHandleCode = ({
             accepted: isPassed
           };
           if (duration) {
-            userSubmission.duration = duration;
+            userSubmission.duration =
+              timer && timer > 0
+                ? timer * 60 - duration
+                : duration;
           }
           await dispatch(saveSubmittedCode(userSubmission));
         }

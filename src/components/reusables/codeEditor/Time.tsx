@@ -1,11 +1,7 @@
 import { useAppSelector } from '@/hooks/hooks';
 
 const Time = () => {
-  const { theme, duration } = useAppSelector((state) => {
-    const { theme } = state.theme;
-    const { duration } = state.user;
-    return { theme, duration };
-  });
+  const { duration } = useAppSelector((state) => state.user);
 
   const hours = Math.floor(duration! / 3600);
   const minutes = Math.floor((duration! % 3600) / 60);
