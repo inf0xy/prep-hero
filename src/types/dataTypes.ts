@@ -49,7 +49,7 @@ export type Submission = {
   code: string;
   language: string;
   accepted: boolean;
-  duration?: number
+  duration?: number;
 };
 
 export type Option = {
@@ -65,7 +65,7 @@ export type NotificationType = {
 export type CodeOptions = {
   fontSize: number;
   tabSize: number;
-  readOnly: boolean
+  readOnly: boolean;
 };
 
 export type CodeLine = {
@@ -79,12 +79,12 @@ export type Result = {
   test: { [key: string]: any };
   output: object;
   result: string;
+  stdOut: string;
 };
 
 export type RunResult = {
   results: Result[];
   runtime: string;
-  stdOut: string[];
 };
 
 export type ResultMessage = {
@@ -93,5 +93,4 @@ export type ResultMessage = {
   testFailed: string;
   failedTestCases: Result[];
   runtime: string;
-  stdOut: string[];
 };

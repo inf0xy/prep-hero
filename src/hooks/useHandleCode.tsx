@@ -93,28 +93,39 @@ const useHandleCode = ({
 
       if (result.hasOwnProperty('error')) {
         setTestCode(false);
-        const errMessage = result.error
-          .split('\n')
-          .reduce((acc: string[], line: string) => {
-            if (!acc.includes(line)) {
-              acc.push(line);
-            }
-            return acc;
-          }, [])
-          .join('\n');
-        setCodeError(errMessage);
-        if ('errorDetail' in result) {
-          setCodeErrorDetail(result.errorDetail);
-        }
+        // const errMessage = result.error
+        //   .split('\n')
+        //   .reduce((acc: string[], line: string) => {
+        //     if (!acc.includes(line)) {
+        //       acc.push(line);
+        //     }
+        //     return acc;
+        //   }, [])
+        //   .join('\n');
+        // setCodeError(errMessage);
+        setCodeError(result.error);
+        // if ('errorDetail' in result) {
+        //   setCodeErrorDetail(result.errorDetail);
+        // }
       } else {
-        const formattedStr = result.output.replace(
-          /'None'/g,
-          JSON.stringify(null)
-        );
+        const formattedStr = result.output
+          .replace(/"None"/g, JSON.stringify(null))
+          .replace(/"True"/g, JSON.stringify(true))
+          .replace(/"False"/g, JSON.stringify(false));
         setOutput(formattedStr);
       }
     },
-    []
+
+    [
+      setCodeError,
+      setCodeErrorDetail,
+      setEditorHeight,
+      setOutput,
+      setResultMessage,
+      setRunResults,
+      setShowConsole,
+      setTestCode
+    ]
   );
 
   const handleSubmission = useCallback(
@@ -144,7 +155,7 @@ const useHandleCode = ({
       setIsLoading(true);
       setTestCode(false);
       setCodeError(null);
-      setCodeErrorDetail(null);
+      // setCodeErrorDetail(null);
 
       let codeInput: string | undefined;
       let submitLanguage: string;
@@ -171,19 +182,19 @@ const useHandleCode = ({
         setRunResults(null);
 
         if (result.errorType === 'code') {
-          const errMessage = result.error
-            .split('\n')
-            .reduce((acc: string[], line: string) => {
-              if (!acc.includes(line)) {
-                acc.push(line);
-              }
-              return acc;
-            }, [])
-            .join('\n');
-          setCodeError(errMessage);
-          if ('errorDetail' in result) {
-            setCodeErrorDetail(result.errorDetail);
-          }
+          // const errMessage = result.error
+          //   .split('\n')
+          //   .reduce((acc: string[], line: string) => {
+          //     if (!acc.includes(line)) {
+          //       acc.push(line);
+          //     }
+          //     return acc;
+          //   }, [])
+          //   .join('\n');
+          setCodeError(result.error);
+          // if ('errorDetail' in result) {
+          //   setCodeErrorDetail(result.errorDetail);
+          // }
         } else {
           setNotification({
             status: 'error',
@@ -196,7 +207,7 @@ const useHandleCode = ({
           setResultMessage(null);
           setRunResults(result);
         } else {
-          const { results, runtime } = result;
+          const { results, runtime, totalTests } = result;
           const isPassed = results.every(
             (el: Result) => el.result === 'passed'
           );
@@ -204,17 +215,16 @@ const useHandleCode = ({
             (el: Result) => el.result === 'passed'
           );
 
-          const totalFailedTest = results.filter(
-            (el: Result) => el.result === 'failed'
+          const totalFailedTest = results.filter((el: Result) =>
+            el.result.includes('failed')
           );
 
           setResultMessage({
             passResult: isPassed,
-            testPassed: `${totalPassedTests.length}/${results.length}`,
-            testFailed: `${results.length - totalPassedTests.length}`,
+            testPassed: `${totalPassedTests.length}/${totalTests}`,
+            testFailed: `${totalTests - totalPassedTests.length}`,
             failedTestCases: totalFailedTest,
-            runtime: `${runtime}`,
-            stdOut: result.stdOut
+            runtime: `${runtime}`
           });
 
           const userSubmission: {
@@ -233,16 +243,28 @@ const useHandleCode = ({
           };
           if (duration) {
             userSubmission.duration =
-              timer && timer > 0
-                ? timer * 60 - duration
-                : duration;
+              timer && timer > 0 ? timer * 60 - duration : duration;
           }
           await dispatch(saveSubmittedCode(userSubmission));
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    []
+    [
+      dispatch,
+      prompts,
+      setCodeError,
+      setEditorHeight,
+      setIsLoading,
+      setNotification,
+      setResultMessage,
+      setRunResults,
+      setShowAlert,
+      setShowConsole,
+      setTestCode,
+      showConsole,
+      title
+    ]
   );
 
   return {

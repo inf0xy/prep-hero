@@ -36,6 +36,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
     if (timerReminder) {
       setTimerAlert(true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const prompts = selectedProblem.prompts

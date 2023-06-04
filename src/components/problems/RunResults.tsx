@@ -18,7 +18,7 @@ const RunResults: React.FC<RunResultsProps> = ({
   totalTestFailed
 }) => {
   const [currentTest, setCurrentTest] = useState(0);
-  const { results, runtime, stdOut } = testResults;
+  const { results, runtime } = testResults;
 
   const { theme } = useAppSelector((state) => state.theme);
 
@@ -39,7 +39,7 @@ const RunResults: React.FC<RunResultsProps> = ({
     </div>
   ));
 
-  const { test, output } = results[currentTest];
+  const { test, output, stdOut } = results[currentTest];
   const keys = Object.keys(test).slice(0, -1);
 
   const expectedOutput = JSON.stringify(test.expected)
@@ -47,15 +47,34 @@ const RunResults: React.FC<RunResultsProps> = ({
     .replace(/"True"/g, JSON.stringify(true))
     .replace(/"False"/g, JSON.stringify(false));
 
+  const printOutput = stdOut
+    .replace(/"None"/g, JSON.stringify(null))
+    .replace(/"True"/g, JSON.stringify(true))
+    .replace(/"False"/g, JSON.stringify(false));
+
+  const getFailedMessage = (resultText: string) => {
+    let res = '';
+    if (resultText.includes('timeout')) {
+      res = 'Time Limit Exceeded';
+    } else {
+      res = 'Failed';
+    }
+    return res;
+  };
+
   return (
     <div className={classes.results}>
       <div className={`${classes.header} ${classes[`header--${theme}`]}`}>
-        {results.every((el) => el.result === 'passed') ? (
+        {results[currentTest].result === 'passed' ? (
           <h1 className="text-[2rem] text-green-500">Passed</h1>
         ) : (
-          <h1 className="text-[2rem] text-red-500">Failed</h1>
+          <h1 className="text-[2rem] text-red-500">
+            {getFailedMessage(results[currentTest].result)}
+          </h1>
         )}
-        <p className="text-[1.5rem] mt-2">Runtime {runtime} ms</p>
+        {results[currentTest].result === 'passed' && (
+          <p className="text-[1.5rem] mt-2">Runtime {runtime} ms</p>
+        )}
         {type === 'submit' && (
           <p
             className="text-[1.5rem] mt-2 text-red-500"
@@ -84,26 +103,27 @@ const RunResults: React.FC<RunResultsProps> = ({
           ))}
         </code>
       </div>
-
-      <div
-        className={`${classes['results__output']} ${
-          classes[`results__output--${theme}`]
-        }`}
-      >
-        <h3>Output:</h3>
-        <code>
-          <p>expected = {expectedOutput}</p>
-          <p
-            className={`${
-              results[currentTest].result === 'failed' ? 'text-red-500' : ''
-            }`}
-          >
-            output ={' '}
-            {JSON.stringify(output).replace(/"None"/g, JSON.stringify(null))}
-          </p>
-        </code>
-      </div>
-      {stdOut.length > 0 && (
+      {output && (
+        <div
+          className={`${classes['results__output']} ${
+            classes[`results__output--${theme}`]
+          }`}
+        >
+          <h3>Output:</h3>
+          <code>
+            <p>expected = {expectedOutput}</p>
+            <p
+              className={`${
+                results[currentTest].result === 'failed' ? 'text-red-500' : ''
+              }`}
+            >
+              output ={' '}
+              {JSON.stringify(output).replace(/"None"/g, JSON.stringify(null))}
+            </p>
+          </code>
+        </div>
+      )}
+      {printOutput.length > 0 && (
         <div
           className={`${classes['results__output']} ${
             classes[`results__output--${theme}`]
@@ -111,8 +131,8 @@ const RunResults: React.FC<RunResultsProps> = ({
         >
           <h3>Stdout:</h3>
           <code>
-            {stdOut.map((el) => (
-              <p key={el}>{el.replace(/'None'/g, JSON.stringify(null))}</p>
+            {printOutput.split('\n').map((el, index) => (
+              <p key={`${el}${index}`}>{el}</p>
             ))}
           </code>
         </div>

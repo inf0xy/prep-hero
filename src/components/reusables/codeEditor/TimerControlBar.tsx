@@ -45,6 +45,7 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
         setId(timeoutId);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration, start]);
 
   const handleStart = () => {
