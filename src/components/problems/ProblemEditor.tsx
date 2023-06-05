@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
+import { useState, useRef, Dispatch, SetStateAction } from 'react';
 import CodeEditor from '@/components/reusables/codeEditor/CodeEditor';
 import Resizable from '../reusables/Resizable';
 import { useAppSelector } from '@/hooks/hooks';
@@ -86,7 +86,6 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   const [showConsole, setShowConsole] = useState(false);
   const [editorHeight, setEditorHeight] = useState<string | null>(null);
   const [codeError, setCodeError] = useState<string | null>(null);
-  const [codeErrorDetail, setCodeErrorDetail] = useState<string | null>(null);
   const [output, setOutput] = useState('');
   const [testCode, setTestCode] = useState(false);
   const [runResults, setRunResults] = useState<RunResult | null>(null);
@@ -99,7 +98,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   const editorRef = useRef<HTMLDivElement>(null);
   const [codeLines, setCodeLines] = useState<CodeLine[]>([]);
 
-  const { getCodeLines, handleHighLightError } = useCodeLines(editorRef, setCodeErrorDetail);
+  const { getCodeLines, handleHighLightError } = useCodeLines(editorRef);
   const { handleSubmitNote } = useSubmitNote(setShowAlert, setNotification);
   const { isCopied, setIsCopied, handleCopyClick } = useCopy();
   const { handleRunCodeManually, handleSubmission } = useHandleCode({
@@ -111,7 +110,6 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     setShowAlert,
     setNotification,
     setCodeError,
-    setCodeErrorDetail,
     setRunResults,
     setResultMessage,
     setTestCode,
@@ -128,7 +126,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     codeLines,
     reviewCode,
     submissions,
-    codeErrorDetail,
+    codeError,
     editorRef,
     getCodeLines,
     handleHighLightError,
@@ -304,7 +302,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                             </p>
                           </div>
                         )}
-                        {testCode && (
+                        {!isLoading && testCode && (
                           <>
                             <h2
                               className={
@@ -369,6 +367,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
         </div>
         <ConsoleActionBar
           showConsole={showConsole}
+          isLoading={isLoading}
           reviewCode={reviewCode}
           language={language}
           codeInputPython={codeInputPython}

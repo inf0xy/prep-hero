@@ -3,7 +3,8 @@
 .user-dashboard {
   min-height: calc(100vh - 150px);
   display: flex;
-  flex-direction: column;
+  padding: 2rem;
+  gap: 2rem;
 
   font-size: 1.5rem;
 
@@ -16,27 +17,67 @@
   }
 }
 
-.records {
+.profile {
+  width: 30rem;
+  background-color: $dark-background-200;
+  border-radius: 1rem;
 }
 
 .overview {
   display: flex;
+  flex-direction: column;
   gap: 2rem;
-  justify-content: center;
-  margin-top: 3rem;
-  align-items: center;
 }
+
+.records {
+}
+
+// .overview {
+//   display: flex;
+//   gap: 2rem;
+//   justify-content: center;
+//   margin-top: 3rem;
+//   align-items: center;
+// }
 
 .heatmap {
+  background-color: $dark-background-200;
+  border-radius: 1rem;
+  padding: 3rem 2rem 1rem;
+
+  h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.7rem;
+  }
+
+  .heatmap-container {
+    display: inline-block;
+    width: calc(100vw - 40rem);
+    overflow-x: auto;
+    padding: 2rem 0;
+
+    & > *:hover {
+      overflow-x: visible;
+    }
+  }
 }
 
-.vl {
-  width: 1px;
-  height: 13rem;
-  background-color: var(--color-grey-300);
-}
+// .vl {
+//   width: 1px;
+//   height: 13rem;
+//   background-color: var(--color-grey-300);
+// }
 
 .progress {
   display: flex;
-  justify-content: center;
+  gap: 1.5rem;
+  background-color: $dark-background-200;
+  border-radius: 1rem;
+  padding: 2rem 3rem 2rem 2rem;
+}
+
+.saved-list {
+  & > div {
+    width: calc(100vw - 36rem);
+  }
 }

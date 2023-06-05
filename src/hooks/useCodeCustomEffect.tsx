@@ -4,13 +4,13 @@ import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 type UseCodeCustomEffectProps = {
   title: string;
   prompts: { python: string; javascript: string; [key: string]: string };
-  notes: Note[],
+  notes: Note[];
   codeInputPython: string | undefined;
   codeInputJavascript: string | undefined;
   codeLines: CodeLine[];
   reviewCode: { code: string; language: string } | undefined;
   submissions: Submission[];
-  codeErrorDetail: string | null;
+  codeError: string | null;
   editorRef: RefObject<HTMLDivElement>;
   getCodeLines: () => CodeLine[];
   handleHighLightError: (
@@ -40,7 +40,7 @@ const useCodeCustomEffect = ({
   codeLines,
   reviewCode,
   submissions,
-  codeErrorDetail,
+  codeError,
   editorRef,
   getCodeLines,
   handleHighLightError,
@@ -53,7 +53,6 @@ const useCodeCustomEffect = ({
   setEditorHeight,
   setNoteContent
 }: UseCodeCustomEffectProps) => {
-
   let problemNoteContent: string | undefined = '';
   if (notes) {
     const result = notes.find((el: Note) => el.title === title);
@@ -64,13 +63,13 @@ const useCodeCustomEffect = ({
     if (typeof window !== 'undefined') {
       setEditorHeight(`${window.innerHeight - 188}px`);
     }
-  }, []);
+  }, [setEditorHeight]);
 
   useEffect(() => {
     if (problemNoteContent) {
       setNoteContent(problemNoteContent);
     }
-  }, [problemNoteContent]);
+  }, [problemNoteContent, setNoteContent]);
 
   useEffect(() => {
     if (codeInputPython) {
@@ -79,7 +78,7 @@ const useCodeCustomEffect = ({
         setCodeLines(codes);
       }, 500);
     }
-  }, [codeInputPython, codeInputJavascript]);
+  }, [codeInputPython, codeInputJavascript, getCodeLines, setCodeLines]);
 
   useEffect(() => {
     if (reviewCode) {
@@ -93,7 +92,7 @@ const useCodeCustomEffect = ({
         readOnly: false
       }));
     }
-  }, [reviewCode]);
+  }, [reviewCode, setOptions]);
 
   useEffect(() => {
     const foundSubmissions = submissions.filter((el) => el.title === title);
@@ -134,10 +133,10 @@ const useCodeCustomEffect = ({
   }, [submissions]);
 
   useEffect(() => {
-    if (codeErrorDetail && editorRef.current) {
-      handleHighLightError(codeLines, codeErrorDetail);
+    if (codeError && editorRef.current) {
+      handleHighLightError(codeLines, codeError);
     }
-  }, [codeErrorDetail, codeLines]);
+  }, [codeError, codeLines, editorRef, handleHighLightError]);
 };
 
 export default useCodeCustomEffect;

@@ -1,6 +1,11 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import TimeAgo from 'react-timeago';
-import { Problem, Submission, Option } from '@/types/dataTypes';
+import {
+  Problem,
+  Submission,
+  Option,
+  AttemptedProblem
+} from '@/types/dataTypes';
 import { useAppSelector } from '@/hooks/hooks';
 import { problemDetailStyle } from '@/helpers/extraStyles';
 import EditorPreview from '../reusables/EditorPreview';
@@ -11,6 +16,7 @@ import LogoList from './LogoList';
 import CheckIcon from '../icons/CheckIcon';
 
 import classes from './ProblemDetail.module.scss';
+import InProgressIcon from '../icons/InProgressIcon';
 
 type ProblemDetailProps = {
   problem: Problem;
@@ -30,17 +36,16 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({
   const {
     title,
     difficulty,
-    category,
     companies,
     description,
     solution_link,
     solution_codes
   } = problem;
 
-  const { theme, submissions } = useAppSelector((state) => {
+  const { theme, submissions, attempted_problems } = useAppSelector((state) => {
     const { theme } = state.theme;
-    const { submissions } = state.user;
-    return { theme, submissions };
+    const { submissions, attempted_problems } = state.user;
+    return { theme, submissions, attempted_problems };
   });
 
   const currentProblemSubmissions = submissions.filter(
@@ -83,6 +88,10 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({
 
   const completed = submissions.some(
     (el: Submission) => el.title === title && el.accepted === true
+  );
+
+  const attemped = attempted_problems.some(
+    (el: AttemptedProblem) => el.title === title
   );
 
   const videoURL =
@@ -155,6 +164,11 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({
             {completed && (
               <span className="absolute left-[8rem] top-[-0.4rem]">
                 <CheckIcon width="20" height="20" />
+              </span>
+            )}
+            {attemped && (
+              <span className="absolute left-[8rem] top-[-0.5rem]">
+                <InProgressIcon width={22} height={22} />
               </span>
             )}
           </div>

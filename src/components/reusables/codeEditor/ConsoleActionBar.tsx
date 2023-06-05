@@ -8,6 +8,7 @@ import Tooltip from '../Tooltip';
 
 type ConsoleActionBarProps = {
   showConsole: boolean;
+  isLoading: boolean;
   reviewCode: { code: string; language: string } | undefined;
   language: string;
   codeInputPython: string | undefined;
@@ -32,6 +33,7 @@ type ConsoleActionBarProps = {
 
 const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
   showConsole,
+  isLoading,
   reviewCode,
   language,
   codeInputPython,
@@ -69,15 +71,18 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
         </Button>
 
         <Tooltip
-          text="Stdout"
+          // text="Stdout"
+          text={!isLoading ? 'Execute' : 'Unavailable during execution'}
           direction="top"
-          className="left-[4.5rem] w-fit p-4"
+          className={`left-[4.5rem] ${!isLoading ? 'w-fit' : 'w-[20rem]'} p-4`}
         >
           <Button
+            disabled={isLoading ? true : false}
             extraStyle={{
               backgroundColor: variables.colorSecondary200,
               padding: '0 2rem',
-              height: '2.5rem'
+              height: '2.5rem',
+              opacity: isLoading ? '0.5' : '1'
             }}
             onClick={() =>
               handleRunCodeManually(
@@ -94,9 +99,11 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
       </div>
       <div className="flex space-x-5">
         <Button
+          disabled={isLoading ? true : false}
           extraStyle={{
             backgroundColor: variables.colorGray500,
-            padding: '0 2rem'
+            padding: '0 2rem',
+            opacity: isLoading ? '0.5' : '1'
           }}
           onClick={() =>
             handleSubmission(
@@ -111,9 +118,11 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
           Run
         </Button>
         <Button
+          disabled={isLoading ? true : false}
           extraStyle={{
             backgroundColor: variables.colorPrimary200,
-            padding: '0 2rem'
+            padding: '0 2rem',
+            opacity: isLoading ? '0.5' : '1'
           }}
           onClick={() =>
             handleSubmission(

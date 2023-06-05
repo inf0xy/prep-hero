@@ -7,7 +7,6 @@ import { Problem } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import ProblemEditor from '@/components/problems/ProblemEditor';
 import classes from '@/styles/ProblemDetailPage.module.scss';
-import variables from '@/styles/variables.module.scss';
 
 type ProblemDetailPageProps = {
   selectedProblem: Problem;

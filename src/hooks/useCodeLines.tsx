@@ -2,15 +2,12 @@ import {
   useState,
   useEffect,
   useCallback,
-  RefObject,
-  Dispatch,
-  SetStateAction
+  RefObject
 } from 'react';
 import { CodeLine } from '@/types/dataTypes';
 
 const useCodeLines = (
-  editorRef: RefObject<HTMLDivElement>,
-  setCodeErrorDetail: Dispatch<SetStateAction<string | null>>
+  editorRef: RefObject<HTMLDivElement>
 ) => {
   const [selectedElem, setSelectedElem] = useState<Element | null>(null);
 
@@ -33,7 +30,6 @@ const useCodeLines = (
         ) {
           selectedElem.classList.remove('code-error-highlight');
           setSelectedElem(null);
-          setCodeErrorDetail(null);
         } else {
           return;
         }
@@ -44,7 +40,7 @@ const useCodeLines = (
         editorEl!.removeEventListener('click', handler as any);
       };
     }
-  }, [selectedElem]);
+  }, [editorRef, selectedElem]);
 
   const getCodeLines = useCallback(() => {
     const lines: CodeLine[] = [];
@@ -71,12 +67,17 @@ const useCodeLines = (
       }
     }
     return lines;
-  }, []);
+  }, [editorRef]);
 
   const handleHighLightError = useCallback(
-    (codeLines: CodeLine[], codeErrorDetail: string) => {
+    (codeLines: CodeLine[], codeError: string) => {
+      let codeErrorLine = codeError
+        .replace(/\r/g, '')
+        .split('\n')
+        .filter((el) => el.match(/.*[a-zA-Z0-9].*[a-zA-Z0-9].*/g))
+        .at(-2)?.trim();
       for (let codeLine of codeLines) {
-        if (codeLine.line === codeErrorDetail) {
+        if (codeLine.line === codeErrorLine) {
           codeLine.node.classList.add('code-error-highlight');
           setSelectedElem(codeLine.node);
           break;

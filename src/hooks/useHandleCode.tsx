@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  useCallback,
+  useState
+} from 'react';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { runCode, submitCode } from '@/helpers/submission-api-util';
 import { saveSubmittedCode } from '@/store/slices/userSlice';
@@ -19,7 +25,6 @@ type UseHandleCodeProps = {
   setShowAlert: Dispatch<SetStateAction<boolean>>;
   setNotification: Dispatch<SetStateAction<NotificationType | null>>;
   setCodeError: Dispatch<SetStateAction<string | null>>;
-  setCodeErrorDetail: Dispatch<SetStateAction<string | null>>;
   setRunResults: Dispatch<SetStateAction<RunResult | null>>;
   setResultMessage: Dispatch<SetStateAction<ResultMessage | null>>;
   setTestCode: Dispatch<SetStateAction<boolean>>;
@@ -54,7 +59,6 @@ const useHandleCode = ({
   setShowAlert,
   setNotification,
   setCodeError,
-  setCodeErrorDetail,
   setRunResults,
   setResultMessage,
   setTestCode,
@@ -70,8 +74,8 @@ const useHandleCode = ({
       codeInputPython: string | undefined,
       codeInputJavascript: string | undefined
     ) => {
+      setIsLoading(true);
       setCodeError(null);
-      setCodeErrorDetail(null);
       setRunResults(null);
       setResultMessage(null);
       setTestCode(true);
@@ -90,23 +94,13 @@ const useHandleCode = ({
       }
 
       const result = await runCode(codeInput!);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
 
       if (result.hasOwnProperty('error')) {
         setTestCode(false);
-        // const errMessage = result.error
-        //   .split('\n')
-        //   .reduce((acc: string[], line: string) => {
-        //     if (!acc.includes(line)) {
-        //       acc.push(line);
-        //     }
-        //     return acc;
-        //   }, [])
-        //   .join('\n');
-        // setCodeError(errMessage);
         setCodeError(result.error);
-        // if ('errorDetail' in result) {
-        //   setCodeErrorDetail(result.errorDetail);
-        // }
       } else {
         const formattedStr = result.output
           .replace(/"None"/g, JSON.stringify(null))
@@ -118,8 +112,8 @@ const useHandleCode = ({
 
     [
       setCodeError,
-      setCodeErrorDetail,
       setEditorHeight,
+      setIsLoading,
       setOutput,
       setResultMessage,
       setRunResults,
@@ -155,7 +149,6 @@ const useHandleCode = ({
       setIsLoading(true);
       setTestCode(false);
       setCodeError(null);
-      // setCodeErrorDetail(null);
 
       let codeInput: string | undefined;
       let submitLanguage: string;
@@ -175,26 +168,16 @@ const useHandleCode = ({
         action
       );
 
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
 
       if (result.hasOwnProperty('error')) {
         setResultMessage(null);
         setRunResults(null);
 
         if (result.errorType === 'code') {
-          // const errMessage = result.error
-          //   .split('\n')
-          //   .reduce((acc: string[], line: string) => {
-          //     if (!acc.includes(line)) {
-          //       acc.push(line);
-          //     }
-          //     return acc;
-          //   }, [])
-          //   .join('\n');
           setCodeError(result.error);
-          // if ('errorDetail' in result) {
-          //   setCodeErrorDetail(result.errorDetail);
-          // }
         } else {
           setNotification({
             status: 'error',

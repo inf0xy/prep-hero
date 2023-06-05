@@ -103,7 +103,7 @@ const RunResults: React.FC<RunResultsProps> = ({
           ))}
         </code>
       </div>
-      {output && (
+      {output !== null && (
         <div
           className={`${classes['results__output']} ${
             classes[`results__output--${theme}`]

@@ -8,6 +8,7 @@ type ButtonProps = {
   className?: string;
   extraStyle?: object;
   [rest: string]: any;
+  disable?: boolean
 };
 
 const defaultProps = {
@@ -19,6 +20,7 @@ const Button: React.FC<ButtonProps> = ({
   children,
   className,
   extraStyle,
+  disable,
   ...rest
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
@@ -32,6 +34,7 @@ const Button: React.FC<ButtonProps> = ({
       className={`${classes[`custom-button--${theme}`]} ${
         classes[`custom-button--${theme}--${color}`]
       } ${className || ''}`}
+      disabled={disable}
       {...rest}
     >
       {children}

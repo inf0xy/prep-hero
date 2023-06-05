@@ -18,7 +18,8 @@ const Footer = () => {
     '/admin/edit',
     '/problems',
     '/notes/add',
-    '/admin/tests'
+    '/admin/tests',
+    '/dashboard'
   ];
 
   useEffect(() => {

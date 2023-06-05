@@ -8,9 +8,12 @@ import { getAllTitles, getSelectedProblem } from '@/helpers/problem-api-util';
 import { NotificationType, Problem } from '@/types/dataTypes';
 import Button from '@/components/reusables/Button';
 import TitleList from '@/components/reusables/TitleList';
+import BreakerIcon from '@/components/icons/BreakerIcon';
+import EditIcon from '@/components/icons/EditIcon';
 // import useSort from '@/hooks/useSort';
 import Alert from '@/components/reusables/Alert';
 import classes from '../../styles/AdminDashBoard.module.scss';
+
 
 type AdminDashBoardProps = {
   titles: string[];
@@ -73,10 +76,13 @@ const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ titles, testTitles }) =
         }`}
       >
         <TitleList
+          listType='problems'
           titles={titles}
           testTitles={testTitles}
           firstIconText="Edit"
           secondIconText="Test"
+          firstIcon={<BreakerIcon />}
+          secondIcon={<EditIcon />}
           firstIconAction={handleSelectTitle as () => Promise<void>}
           secondIconAction={handleSelectTest as () => Promise<void>}
           actionBar={actionBar}

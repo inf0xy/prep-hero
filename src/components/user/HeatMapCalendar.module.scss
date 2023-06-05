@@ -32,19 +32,22 @@
 }
 
 .heatmap-day--dark,
-.heatmap-day--light {
+.heatmap-day--light,
+.heatmap-day--dark.middle,
+.heatmap-day--light.middle {
   width: 0.8rem;
   height: 0.8rem;
   position: relative;
 }
 
 .heatmap-day--dark:hover:after,
-.heatmap-day--light:hover:after {
+.heatmap-day--light:hover:after,
+.heatmap-day--dark.middle:hover:after,
+.heatmap-day--light.middle:hover:after {
   content: attr(data-tooltip);
   position: absolute;
   bottom: 120%;
   left: 50%;
-  transform: translateX(-50%);
   z-index: 10;
   width: 25rem;
   max-width: 28rem;
@@ -55,12 +58,19 @@
   text-align: center;
 }
 
-.heatmap-day--dark:hover:after {
+.heatmap-day--dark.middle:hover:after,
+.heatmap-day--light.middle:hover:after {
+  transform: translateX(-50%);
+}
+
+.heatmap-day--dark:hover::after,
+.heatmap-day--dark.middle:hover::after {
   background-color: $light-background-200;
   color: $text-gray-800;
 }
 
-.heatmap-day--light:hover:after {
+.heatmap-day--light:hover:after,
+.heatmap-day--light.middle:hover::after {
   background-color: $dark-background-400;
   color: $text-off-white;
 }

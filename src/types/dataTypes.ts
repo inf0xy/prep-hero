@@ -39,7 +39,7 @@ export type Note = {
   title: string | undefined;
   content: string | undefined;
 };
-export type AttemptedProblem = { title: string };
+export type AttemptedProblem = { title: string, date: Date };
 export type EasySolved = { title: string };
 export type MediumSolved = { title: string };
 export type HardSolved = { title: string };

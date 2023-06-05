@@ -237,6 +237,11 @@ const userSlice = createSlice({
 
       const { submission } = action.payload;
       state.submissions.push(submission);
+      if (!submission.accepted) {
+        state.attempted_problems.push(submission);
+      } else {
+        state.attempted_problems = state.attempted_problems.filter(el => el.title !== submission.title);
+      }
     });
     builder.addCase(saveSubmittedCode.rejected, (state, action) => {
       state.isLoading = false;

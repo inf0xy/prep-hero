@@ -194,6 +194,7 @@ export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
   let easy_solved = user!['easy_solved'];
   let medium_solved = user!['medium_solved'];
   let hard_solved = user!['hard_solved'];
+  let attempted_problems = user!['attempted_problems'];
 
   if (submission.accepted) {
     easy_solved = user!['easy_solved'].filter(
@@ -224,6 +225,15 @@ export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
         date: new Date(submission.date)
       });
     }
+
+    attempted_problems = attempted_problems.filter(
+      (el: { title: string }) => el.title !== submission.title
+    );
+  } else {
+    attempted_problems = attempted_problems.filter(
+      (el: { title: string }) => el.title !== submission.title
+    );
+    attempted_problems.push({ title: submission.title, date: new Date() });
   }
 
   const userSubmission: Submission = {
@@ -244,7 +254,13 @@ export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
   return usersCollection.updateOne(
     { _id },
     {
-      $set: { easy_solved, medium_solved, hard_solved, total_solved },
+      $set: {
+        easy_solved,
+        medium_solved,
+        hard_solved,
+        total_solved,
+        attempted_problems
+      },
       $push: {
         submissions: userSubmission
       }

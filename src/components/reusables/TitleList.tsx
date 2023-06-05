@@ -4,26 +4,32 @@ import { useAppSelector } from '@/hooks/hooks';
 import SearchBar from '@/components/reusables/SearchBar';
 import Button from '@/components/reusables/Button';
 import ResetIcon from '@/components/icons/ResetIcon';
-import EditIcon from '@/components/icons/EditIcon';
-import BreakerIcon from '@/components/icons/BreakerIcon';
 import classes from './TitleList.module.scss';
 
 type TitleListProps = {
+  listType: 'problems' | 'notes' | string;
   titles: string[];
   firstIconText: string;
   secondIconText?: string;
+  firstIcon?: ReactNode,
+  secondIcon?: ReactNode,
   testTitles?: string[];
   actionBar?: ReactNode;
+  titleAction?: () => {};
   firstIconAction?: (val?: string) => Promise<void> | undefined;
   secondIconAction?: (val?: string) => Promise<void> | undefined;
 };
 
 const TitleList: React.FC<TitleListProps> = ({
+  listType,
   titles,
   firstIconText,
   secondIconText,
+  firstIcon,
+  secondIcon,
   testTitles,
   actionBar,
+  titleAction,
   firstIconAction,
   secondIconAction
 }) => {
@@ -59,7 +65,7 @@ const TitleList: React.FC<TitleListProps> = ({
         <span
           onClick={firstIconAction ? () => firstIconAction(title) : undefined}
         >
-          <EditIcon />
+          {secondIcon}
         </span>
       </div>
       <div className={classes['test-icon']}>
@@ -69,11 +75,11 @@ const TitleList: React.FC<TitleListProps> = ({
             testTitles && testTitles.includes(title) ? 'text-cyan-500' : ''
           }`}
         >
-          <BreakerIcon />
+          {firstIcon}
         </span>
       </div>
-      <p className={classes['title-content']}>
-        <Link href={`/problem/${title}`}>{title}</Link>
+      <p className={classes['title-content']} onClick={titleAction}>
+        {!titleAction && <Link href={`/problem/${title}`}>{title}</Link>}
       </p>
     </div>
   ));
@@ -111,10 +117,10 @@ const TitleList: React.FC<TitleListProps> = ({
             {firstIconText}
           </div>
           <div role="row" className={classes['tests-header']}>
-            Test
+            {secondIconText}
           </div>
           <div role="row" className={classes['title-header']}>
-            <span> {secondIconText}</span>
+            Title
           </div>
         </div>
         <div role="table-body" className={classes['title-table__body']}>
