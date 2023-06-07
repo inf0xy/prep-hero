@@ -30,15 +30,29 @@
 }
 
 .progress-content__count {
-  color: $color-gray-100;
   font-size: 1.3rem;
+
+  &--dark {
+    color: $color-gray-100;
+  }
+
+  &--light {
+    color: $text-gray-600
+  }
 }
 
 .bar__outer {
   width: 100%;
   height: 0.8rem;
   border-radius: 0.4rem;
-  background-color: $text-off-white;
+
+  &--dark {
+    background-color: $color-off-white;
+  }
+
+  &--light {
+    background-color: $color-gray-300;
+  }
 }
 
 .bar__inner {

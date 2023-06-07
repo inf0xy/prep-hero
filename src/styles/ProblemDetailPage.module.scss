@@ -79,18 +79,20 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   height: 4.5rem;
 
+
   & > * {
     display: flex;
     align-items: center;
     padding: 0 2rem;
     cursor: pointer;
+    transition: background-color 0.3s ease-in;
   }
 }
 
 .description {
   position: relative;
   height: calc(100% - 3rem);
-  overflow-y: auto;
+  overflow-y: scroll;
   padding-bottom: 1rem;
 }
 

@@ -40,6 +40,8 @@ const RunResults: React.FC<RunResultsProps> = ({
   ));
 
   const { test, output, stdOut } = results[currentTest];
+
+  // Get all test input keys except expected output
   const keys = Object.keys(test).slice(0, -1);
 
   const expectedOutput = JSON.stringify(test.expected)
@@ -103,15 +105,16 @@ const RunResults: React.FC<RunResultsProps> = ({
           ))}
         </code>
       </div>
-      {output !== null && (
-        <div
-          className={`${classes['results__output']} ${
-            classes[`results__output--${theme}`]
-          }`}
-        >
-          <h3>Output:</h3>
-          <code>
-            <p>expected = {expectedOutput}</p>
+
+      <div
+        className={`${classes['results__output']} ${
+          classes[`results__output--${theme}`]
+        }`}
+      >
+        <h3>Output:</h3>
+        <code>
+          <p>expected = {expectedOutput}</p>
+          {output !== null && output !== undefined && (
             <p
               className={`${
                 results[currentTest].result === 'failed' ? 'text-red-500' : ''
@@ -120,9 +123,10 @@ const RunResults: React.FC<RunResultsProps> = ({
               output ={' '}
               {JSON.stringify(output).replace(/"None"/g, JSON.stringify(null))}
             </p>
-          </code>
-        </div>
-      )}
+          )}
+        </code>
+      </div>
+
       {printOutput.length > 0 && (
         <div
           className={`${classes['results__output']} ${

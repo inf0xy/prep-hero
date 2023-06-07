@@ -29,7 +29,7 @@ const ProgressCircle = () => {
       </div>
       <svg className={classes['progress-circle']}>
         <circle
-          className={classes['progress-circle-background']}
+          className={`${classes['progress-circle-background']} ${classes[`progress-circle-background--${theme}`]}`}
           cx="50%"
           cy="50%"
           r="25%"

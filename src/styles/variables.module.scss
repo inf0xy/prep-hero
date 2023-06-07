@@ -41,6 +41,7 @@ $light-background-50: #eaeaea;
 $light-background-100: #f6f6f6de;
 $light-background-200: #e7e7e7;
 $light-background-300: #cccccc;
+$light-background-400: #c5ced4;
 
 // Text colors::after
 $text-off-white: #ffffffde;
@@ -88,6 +89,12 @@ $color-searchbar: #ffa88e;
 $color-code-hightlight-preview-dark: #404040;
 $color-code-hightlight-preview-light: #e7e7e7;
 $color-input-light: #f1f5f9;
+$color-fullstack-cafe: #f78823;
+$color-neetcode: #1d1e21;
+
+$color-progress-easy: #5e7a68;
+$color-progress-medium: #7b795f;
+$color-progress-hard: #7d6161;
 
 $color-black: #000;
 $color-white: #fff;
@@ -151,6 +158,10 @@ $code-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation M
   colorError300: $color-error-300;
   colorError400: $color-error-400;
 
+  colorProgressEasy: $color-progress-easy;
+  colorProgressMedium: $color-progress-medium;
+  colorProgressHard: $color-progress-hard;
+
   darkBackground50: $dark-background-50;
   darkBackground100: $dark-background-100;
   darkBackground200: $dark-background-200;
@@ -165,4 +176,7 @@ $code-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation M
   lightBackground100: $light-background-100;
   lightBackground200: $light-background-200;
   lightBackground300: $light-background-300;
+
+  colorFullStackCafe: $color-fullstack-cafe;
+  colorNeetcode: $color-neetcode;
 }

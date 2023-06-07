@@ -3,7 +3,6 @@ import TimeAgo from 'react-timeago';
 import {
   Problem,
   Submission,
-  Option,
   AttemptedProblem
 } from '@/types/dataTypes';
 import { useAppSelector } from '@/hooks/hooks';
@@ -14,9 +13,10 @@ import LanguageSelection from '../reusables/codeEditor/LanguageSelection';
 import SubmissionSelection from './SubmissionSelection';
 import LogoList from './LogoList';
 import CheckIcon from '../icons/CheckIcon';
+import InProgressIcon from '../icons/InProgressIcon';
 
 import classes from './ProblemDetail.module.scss';
-import InProgressIcon from '../icons/InProgressIcon';
+
 
 type ProblemDetailProps = {
   problem: Problem;
@@ -168,7 +168,7 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({
             )}
             {attemped && (
               <span className="absolute left-[8rem] top-[-0.5rem]">
-                <InProgressIcon width={22} height={22} />
+                <InProgressIcon width={20} height={20} />
               </span>
             )}
           </div>

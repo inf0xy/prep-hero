@@ -76,7 +76,7 @@ const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ titles, testTitles }) =
         }`}
       >
         <TitleList
-          listType='problems'
+          listType='admin'
           titles={titles}
           testTitles={testTitles}
           firstIconText="Edit"

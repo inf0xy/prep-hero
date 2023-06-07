@@ -4,6 +4,8 @@ import { useAppSelector } from '@/hooks/hooks';
 import SearchBar from '@/components/reusables/SearchBar';
 import Button from '@/components/reusables/Button';
 import ResetIcon from '@/components/icons/ResetIcon';
+import CheckIcon from '../icons/CheckIcon';
+import InProgressIcon from '../icons/InProgressIcon';
 import classes from './TitleList.module.scss';
 
 type TitleListProps = {
@@ -11,13 +13,13 @@ type TitleListProps = {
   titles: string[];
   firstIconText: string;
   secondIconText?: string;
-  firstIcon?: ReactNode,
-  secondIcon?: ReactNode,
+  firstIcon?: ReactNode;
+  secondIcon?: ReactNode;
   testTitles?: string[];
   actionBar?: ReactNode;
   titleAction?: () => {};
-  firstIconAction?: (val?: string) => Promise<void> | undefined;
-  secondIconAction?: (val?: string) => Promise<void> | undefined;
+  firstIconAction?: (val?: string) => Promise<any> | undefined;
+  secondIconAction?: (val?: string) => Promise<any> | undefined;
 };
 
 const TitleList: React.FC<TitleListProps> = ({
@@ -36,7 +38,11 @@ const TitleList: React.FC<TitleListProps> = ({
   const [currentTitles, setCurrentTitles] = useState(titles);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { theme } = useAppSelector((state) => state.theme);
+  const { theme, submissions } = useAppSelector((state) => {
+    const { theme } = state.theme;
+    const { submissions } = state.user;
+    return { theme, submissions };
+  });
 
   const handleSearch = useCallback(() => {
     if (searchTerm === '') {
@@ -55,20 +61,29 @@ const TitleList: React.FC<TitleListProps> = ({
     setCurrentTitles(searchResults);
   }, [searchTerm, titles]);
 
+  const getStatusIcon = (title: string) => {
+    if (submissions.some((el) => el.title === title && el.accepted)) {
+      return <CheckIcon width="17" height="17" />;
+    } else if (submissions.some((el) => el.title === title && !el.accepted)) {
+      return <InProgressIcon width={25} height={25}/>;
+    }
+    return null;
+  };
+
   useEffect(() => {
     handleSearch();
   }, [handleSearch, searchTerm]);
 
   const renderedTitles = currentTitles.map((title) => (
     <div key={title} className={classes['title__cell']}>
-      <div className={classes['edit-icon']}>
+      <div className={classes['first-col-icon']}>
         <span
           onClick={firstIconAction ? () => firstIconAction(title) : undefined}
         >
-          {secondIcon}
+          {listType !== 'problems' ? secondIcon : getStatusIcon(title)}
         </span>
       </div>
-      <div className={classes['test-icon']}>
+      <div className={classes['second-col-icon']}>
         <span
           onClick={secondIconAction ? () => secondIconAction(title) : undefined}
           className={`${
@@ -113,10 +128,10 @@ const TitleList: React.FC<TitleListProps> = ({
         }`}
       >
         <div className={classes['titles-table__header']}>
-          <div role="row" className={classes['edit-header']}>
+          <div role="row" className={classes['first-col-header']}>
             {firstIconText}
           </div>
-          <div role="row" className={classes['tests-header']}>
+          <div role="row" className={classes['second-col-header']}>
             {secondIconText}
           </div>
           <div role="row" className={classes['title-header']}>

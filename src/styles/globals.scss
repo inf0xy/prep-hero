@@ -11,7 +11,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: $dark-background-200;
+  background: $dark-background-100;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -244,4 +244,44 @@ body {
 .code-snippet.dark .monaco-editor,
 .code-snippet.light .monaco-editor {
   pointer-events: none;
+}
+
+.heatmap-day {
+  width: 0.8rem;
+  height: 0.8rem;
+  position: relative;
+
+  &:hover:after {
+    content: attr(data-tooltip);
+    position: absolute;
+    // bottom: 120%;
+    bottom: 200%;
+    left: 50%;
+    z-index: 10;
+    width: 25rem;
+    max-width: 28rem;
+    font-size: 1.3rem;
+    padding: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  &--dark:hover:after {
+    background-color: $light-background-400;
+    color: $text-gray-800;
+  }
+
+  &--light:hover:after {
+    background-color: $dark-background-50;
+    color: $text-off-white;
+  }
+
+  &.middle:hover:after {
+    transform: translateX(-50%);
+  }
+
+  &.right:hover:after {
+    transform: translateX(-100%);
+  }
 }

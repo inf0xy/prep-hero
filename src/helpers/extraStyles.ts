@@ -1,9 +1,15 @@
 import variables from '@/styles/variables.module.scss';
 
-export const colors: { [key: string]: string } = {
-  Easy: variables.colorSuccess500,
-  Medium: variables.colorWarning100,
-  Hard: variables.colorError400
+export const colors: { [key: string]: { inner: string; outer: string } } = {
+  Easy: {
+    inner: variables.colorSuccess500,
+    outer: variables.colorProgressEasy
+  },
+  Medium: {
+    inner: variables.colorWarning100,
+    outer: variables.colorProgressMedium
+  },
+  Hard: { inner: variables.colorError400, outer: variables.colorProgressHard }
 };
 
 export const noteStripStyle: { [key: string]: object } = {
@@ -23,14 +29,14 @@ export const problemDetailStyle: { [key: string]: object } = {
   dark: {
     backgroundColor: variables.darkBackground400,
     color: variables.colorOffWhite,
-    fontSize: '1.5rem',
+    fontSize: '1.5rem'
   },
   light: {
     backgroundColor: variables.lightBackground0,
     color: variables.colorGray800,
     fontSize: '1.5rem'
   }
-}
+};
 
 export const fullNoteStyle: { [key: string]: object } = {
   dark: {

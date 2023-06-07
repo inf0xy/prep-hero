@@ -1,7 +1,5 @@
 import CodeSnippet from '@/components/reusables/CodeSnippet';
-import HeatMapCalendar from '@/components/user/HeatMapCalendar';
-import ProgressBar from '@/components/user/ProgressBar';
-import ProgressCircle from '@/components/user/ProgressCircle';
+import SpeedChart from '@/components/dashboard/SpeedChart';
 import { useAppSelector } from '@/hooks/hooks';
 import classes from '@/styles/HomePage.module.scss';
 
@@ -44,11 +42,7 @@ const HomePage = () => {
 
   return (
     <div className={`${classes.homepage} ${classes[`homepage--${theme}`]}`}>
-      <HeatMapCalendar />
-      <div className='flex ml-8 mt-8 bg-[#303030] shadow-lg w-fit pl-10 pr-16 py-6 rounded-lg overflow-hidden'>
-        <ProgressCircle />
-        <ProgressBar />
-      </div>
+      <SpeedChart />
     </div>
   );
 };

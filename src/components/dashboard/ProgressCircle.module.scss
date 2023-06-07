@@ -54,11 +54,16 @@
 
 .progress-circle-background {
   fill: none;
-  // stroke: $color-gray-200;
-  stroke: $color-off-white;
-  // stroke-width: 5px;
   stroke-width: 7px;
   stroke-linecap: round;
+
+  &--dark {
+    stroke: $color-off-white;
+  }
+
+  &--light {
+    stroke: $color-gray-300;
+  }
 }
 
 .progress-circle-progress {

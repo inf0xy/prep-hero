@@ -54,16 +54,25 @@ const ProgressBar = () => {
     >
       <div className={classes['progress-content']}>
         <p>{item.difficulty}</p>
-        <p className={classes['progress-content__count']}>
+        <p
+          className={`${classes['progress-content__count']} ${
+            classes[`progress-content__count--${theme}`]
+          }`}
+        >
           {getDifficultyCount(item.difficulty, 'user')}/
           {getDifficultyCount(item.difficulty, 'problems')}
         </p>
       </div>
-      <div className={classes['bar__outer']}>
+      <div
+        className={`${classes['bar__outer']} ${
+          classes[`bar__outer--${theme}`]
+        }`}
+        style={{ backgroundColor: colors[item.difficulty].outer }}
+      >
         <div
           className={classes['bar__inner']}
           style={{
-            backgroundColor: colors[item.difficulty],
+            backgroundColor: colors[item.difficulty].inner,
             width: `${
               (13 * getDifficultyCount(item.difficulty, 'user')!) /
               getDifficultyCount(item.difficulty, 'problems')!

@@ -1,7 +1,7 @@
 import Portal from './Portal';
 import { useAppSelector } from '@/hooks/hooks';
-import classes from './ConfirmPanel.module.css';
 import InfoIcon from '@/components/icons/InfoIcon';
+import classes from './ConfirmPanel.module.scss';
 
 type ConfirmPanelProps = {
   id: string;
@@ -31,9 +31,7 @@ const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
           <input type="checkbox" id={id} className="modal-toggle" />
           <div className="modal">
             <div
-              className={`modal-box max-w-fit p-0 ${
-                theme === 'dark' ? 'bg-[#333]' : 'bg-white'
-              }`}
+              className={` modal-box p-0 ${classes['confirm-panel']} ${classes[`confirm-panel--${theme}`]}`}
             >
               <div
                 className={`card z-[-1] h-56 min-w-[50vw] ${
@@ -61,13 +59,13 @@ const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
               <div className="modal-action mt-0 mb-10 pr-16 space-x-5">
                 <label
                   htmlFor={id}
-                  className="btn btn-lg bg-gray-500 border-0 text-white text-xl"
+                  className="btn bg-gray-500 border-0 text-white text-[1.5rem] normal-case font-normal w-[9rem] h-[3.5rem]"
                 >
                   {cancelText}
                 </label>
                 <label
                   htmlFor={id}
-                  className="btn btn-lg btn-accent text-white text-xl "
+                  className="btn btn-accent text-white text-[1.5rem] normal-case font-normal w-[9rem] h-[3.5rem]"
                   onClick={onConfirm}
                 >
                   {confirmText}
