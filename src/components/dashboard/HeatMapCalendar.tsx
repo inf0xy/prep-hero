@@ -35,26 +35,26 @@ const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({
   const handleMouseEnter = (e: MouseEvent<HTMLDivElement>) => {
     const parentDiv = parentRef!.current;
     const heatmapCell = e.target as HTMLDivElement;
+    const customTooltipDiv = heatmapCell.parentNode as HTMLDivElement;
 
     if (parentDiv && heatmapCell) {
       const parentRect = parentDiv.getBoundingClientRect();
       const pseudoRect = heatmapCell.getBoundingClientRect();
-
       const positionX = pseudoRect.left - parentRect.left;
 
-      if (positionX < 121) {
-        heatmapCell.classList.remove('middle');
-        heatmapCell.classList.remove('right');
-      } else if (parentDiv.offsetWidth - positionX >= 136 && positionX >= 121) {
+      if (positionX < 131) {
+        customTooltipDiv.classList.remove('middle');
+        customTooltipDiv.classList.remove('right');
+      } else if (parentDiv.offsetWidth - positionX >= 133 && positionX >= 131) {
         if (!heatmapCell.classList.contains('middle')) {
-          heatmapCell.classList.add('middle');
+          customTooltipDiv.classList.add('middle');
         }
-        heatmapCell.classList.remove('right');
-      } else if (parentDiv.offsetWidth - positionX < 136) {
+        customTooltipDiv.classList.remove('right');
+      } else if (parentDiv.offsetWidth - positionX < 133) {
         if (!heatmapCell.classList.contains('right')) {
-          heatmapCell.classList.add('right');
+          customTooltipDiv.classList.add('right');
         }
-        heatmapCell.classList.remove('middle');
+        customTooltipDiv.classList.remove('middle');
       }
     }
   };
@@ -118,17 +118,20 @@ const HeatMapCalendar: React.FC<HeatmapCalendarProps> = ({
         count++;
 
         days.push(
-          <div
-            key={dayOfWeek}
-            className={`rounded heatmap-day heatmap-day--${theme}`}
-            style={{
-              backgroundColor: color as string,
-              visibility:
-                count > months[monthIndex].totalDays ? 'hidden' : 'visible'
-            }}
-            data-tooltip={tooltip}
-            onMouseEnter={handleMouseEnter}
-          />
+          <div key={tooltip} className="custom-tooltip">
+            <div
+              key={dayOfWeek}
+              className={`rounded heatmap-day heatmap-day--${theme}`}
+              style={{
+                backgroundColor: color as string,
+                visibility:
+                  count > months[monthIndex].totalDays ? 'hidden' : 'visible',
+                display: count > months[monthIndex].totalDays ? 'none' : 'block'
+              }}
+              onMouseEnter={handleMouseEnter}
+            />
+            <div className={`tooltip-content ${theme}`}>{tooltip}</div>
+          </div>
         );
         weekdayCount++;
       }

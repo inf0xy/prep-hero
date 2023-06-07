@@ -244,7 +244,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
         <div
           className={classes['difficulty-content']}
-          style={{ color: colors[difficulty!] }}
+          style={{ color: colors[difficulty!].inner }}
         >
           {difficulty}
         </div>
@@ -348,7 +348,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         }`}
         onClose={() => setShowSolutionModal(false)}
       >
-        <div className="w-full h-full overflow-y-scroll">
+        <div className={`solution-modal-wrapper--${theme} w-full h-full overflow-y-scroll`}>
           {showSolutionModal && (
             <Solutions
               videoURL={

@@ -119,7 +119,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
                 Submissions
               </li>
             </ul>
-            <div className={classes.description}>
+            <div className={`problem-description-wrapper--light ${classes.description}`}>
               <ProblemDetail
                 tab={activeTab}
                 problem={selectedProblem}

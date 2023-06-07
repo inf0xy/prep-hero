@@ -59,7 +59,7 @@ const RunResults: React.FC<RunResultsProps> = ({
     if (resultText.includes('timeout')) {
       res = 'Time Limit Exceeded';
     } else {
-      res = 'Failed';
+      res = 'Wrong Answer';
     }
     return res;
   };
@@ -82,7 +82,8 @@ const RunResults: React.FC<RunResultsProps> = ({
             className="text-[1.5rem] mt-2 text-red-500"
             style={{ color: variables.colorError300 }}
           >
-            {totalTestFailed} testcases
+            {totalTestFailed}{' '}
+            <span className="text-[1.4rem]">testcases passed</span>
           </p>
         )}
       </div>

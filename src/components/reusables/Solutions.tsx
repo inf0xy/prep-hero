@@ -62,7 +62,7 @@ const Solutions: React.FC<SolutionsProps> = ({ videoURL, solution_codes }) => {
               )}
             </>
           ) : (
-            <div className='overflow-y-scroll'>
+            <div className="overflow-y-scroll">
               {solution_codes ? (
                 <CodeSnippet
                   key="javascriptSnippet"

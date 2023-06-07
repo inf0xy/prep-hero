@@ -6,6 +6,7 @@ import { getProblems } from '@/helpers/problem-api-util';
 import { Problem, SearchCriteria, SearchOrForm } from '@/types/dataTypes';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { fetchUserData } from '@/store';
+import { getScrollbarStyles } from '@/helpers/extraStyles';
 import useSort from '@/hooks/useSort';
 import ProblemList from '@/components/problems/ProblemList';
 import Pagination from '@/components/problems/Pagination';
@@ -153,6 +154,7 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
     <>
       <section
         className={`${classes['problems']} ${classes[`problems--${theme}`]}`}
+        style={getScrollbarStyles(theme)}
       >
         <div className={classes.selections}>
           <SelectBar

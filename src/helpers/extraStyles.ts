@@ -1,5 +1,14 @@
 import variables from '@/styles/variables.module.scss';
 
+export const getScrollbarStyles = (theme: string) => {
+  const scrollbarStyles: any = {
+    '--webkit-scrollbar-track': theme === 'dark' ? variables.darkBackground100 : variables.lightBackground100,
+    '--webkit-scrollbar-thumb': theme === 'dark' ? variables.colorGray700 : variables.lightBackground200,
+    '--webkit-scrollbar-thumb-hover': theme === 'dark' ? variables.colorGray600 : variables.lightBackground300
+  };
+  return scrollbarStyles;
+}
+
 export const colors: { [key: string]: { inner: string; outer: string } } = {
   Easy: {
     inner: variables.colorSuccess500,

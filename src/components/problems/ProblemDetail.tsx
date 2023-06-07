@@ -119,7 +119,7 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({
           onClick={() => handleReviewCode(el.language, el.code)}
         >
           <h1 className={el.accepted ? classes.passed : classes.failed}>
-            {el.accepted ? 'Passed' : 'Failed'}
+            {el.accepted ? 'Passed' : 'Wrong Answer'}
           </h1>
           <span
             className={`${classes['submission-language']} ${

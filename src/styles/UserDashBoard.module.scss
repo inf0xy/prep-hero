@@ -119,6 +119,7 @@
     display: inline-block;
     width: calc(100vw - 40rem);
     overflow-x: auto;
+    overflow-y: hidden;
     padding: 2.5rem 0;
 
     & > *:hover {

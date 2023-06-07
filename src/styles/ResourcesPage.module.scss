@@ -4,8 +4,11 @@
   min-height: calc(100vh - 7rem);
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  padding: 5rem 6rem;
+  // justify-content: space-around;
+  justify-content: center;
+  // padding: 5rem 6rem;
+  padding: 5rem;
+  gap: 4rem;
   font-size: 2rem;
   font-weight: 500;
   line-height: 1.3;

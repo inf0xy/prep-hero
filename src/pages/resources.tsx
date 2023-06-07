@@ -1,4 +1,5 @@
 import ResourceCard from '@/components/reusables/ResourceCard';
+import { getScrollbarStyles } from '@/helpers/extraStyles';
 import { useAppSelector } from '@/hooks/hooks';
 import classes from '@/styles/ResourcesPage.module.scss';
 import variables from '@/styles/variables.module.scss';
@@ -38,6 +39,7 @@ const ResourcesPage = () => {
       className={`${classes['resources-page']} ${
         classes[`resources-page--${theme}`]
       }`}
+      style={getScrollbarStyles(theme)}
     >
       <ResourceCard
         image="/technterviewhandbookimage.webp"

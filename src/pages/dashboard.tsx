@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { removeProblemFromList, setTimerReminder } from '@/store';
+import { getScrollbarStyles } from '@/helpers/extraStyles';
 import ProgressBar from '@/components/dashboard/ProgressBar';
 import ProgressCircle from '@/components/dashboard/ProgressCircle';
 import HeatMapCalendar from '@/components/dashboard/HeatMapCalendar';
@@ -10,9 +11,11 @@ import TitleList from '@/components/reusables/TitleList';
 import TitleListActionBar from '@/components/dashboard/TitleListActionBar';
 import Button from '@/components/reusables/Button';
 import BookmarkFill from '@/components/icons/BookmarkFill';
-import classes from '../styles/UserDashBoard.module.scss';
 import SpeedChart from '@/components/dashboard/SpeedChart';
 import NoteBookIcon from '@/components/icons/NoteBookIcon';
+import classes from '../styles/UserDashBoard.module.scss';
+
+import variables from '@/styles/variables.module.scss';
 
 const DashBoard = () => {
   const { theme, submissions, list, timerReminder } = useAppSelector(
@@ -87,7 +90,7 @@ const DashBoard = () => {
       <div className={classes.overview}>
         <div className={`${classes.heatmap} ${classes[`heatmap--${theme}`]}`}>
           <h2>{submissions.length} submissions last year</h2>
-          <div className={classes['heatmap-container']} ref={parentDiv}>
+          <div className={`heatmap-wrapper--${theme} ${classes['heatmap-container']}`} ref={parentDiv}>
             <HeatMapCalendar parentRef={parentDiv} />
           </div>
         </div>
