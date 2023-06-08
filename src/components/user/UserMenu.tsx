@@ -38,7 +38,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
     return () => {
       document.removeEventListener('click', handler as any);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -96,6 +96,14 @@ const UserMenu: React.FC<UserMenuProps> = ({
         >
           Dashboard
         </Link>
+      </li>
+      <li
+        className={`transition duration-300 ease-in-out hover:bg-primary ${
+          theme === 'light' ? 'hover:text-white' : ''
+        } w-full px-5 py-3 rounded-md cursor-pointer`}
+        onClick={() => setShowUserMenu(false)}
+      >
+        <Link href="/notebook">Notebook</Link>
       </li>
       <li
         className={`transition duration-300 ease-in-out hover:bg-primary ${

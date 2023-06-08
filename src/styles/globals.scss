@@ -144,12 +144,16 @@ body {
 
   .w-md-editor-toolbar {
     border-bottom: none;
+
+    & > ul:nth-child(2) {
+      transform: translateX(-1.5rem);
+    }
   }
 
-  // button[data-name='fullscreen'],
-  // .w-md-editor-toolbar-divider {
-  //   display: none;
-  // }
+  button[data-name='fullscreen'],
+  .w-md-editor-toolbar-divider {
+    display: none;
+  }
 
   .w-md-editor-show-preview .w-md-editor-toolbar {
     display: flex;

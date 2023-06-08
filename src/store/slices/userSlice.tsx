@@ -176,9 +176,9 @@ const userSlice = createSlice({
       const { note } = action.payload;
       const noteIndex = state.notes.findIndex(el => el.title === note.title && el.list_name === note.list_name);
 
-      if (noteIndex) {
+      if (noteIndex !== -1) {
         state.notes.splice(noteIndex, 1, note);
-      } else if (noteIndex === -1) {
+      } else {
         state.notes.push(note);
       }
     });

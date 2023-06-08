@@ -1,37 +1,17 @@
-import { useEffect, useState, useRef } from 'react';
 import { useAppSelector } from '@/hooks/hooks';
-import useSubmitNote from '@/hooks/useSubmitNote';
-import { NotificationType, Note } from '@/types/dataTypes';
 import TitleList from '@/components/reusables/TitleList';
-import Modal from '@/components/reusables/Modal';
-import TextEditor from '@/components/reusables/TextEditor';
 import EditIcon from '@/components/icons/EditIcon';
 import MenuIcon from '@/components/icons/MenuIcon';
 import TrashIcon from '@/components/icons/TrashIcon';
 import classes from '@/styles/NotebookPage.module.scss';
-import variables from '@/styles/variables.module.scss';
+import PlusIcon from '@/components/icons/PlusIcon';
 
 const NotebookPage = () => {
-
-
   const { theme, notes } = useAppSelector((state) => {
     const { theme } = state.theme;
     const { notes } = state.user;
     return { theme, notes };
   });
-
-  const editorRef = useRef<HTMLDivElement>(null);
-
-
-  // useEffect(() => {
-  //   if (editorRef.current) {
-  //     console.log('editor ref ', editorRef.current);
-  //   }
-  // }, [showNote, editorRef.current]);
-// console.log(note);
-
-
-
 
   return (
     <div
@@ -49,6 +29,39 @@ const NotebookPage = () => {
         >
           <MenuIcon width={8} height={8} />
         </button>
+        {/* <div className={`dropdown dropdown-bottom ${classes['create-button']}`}>
+          <label tabIndex={0}>
+            <PlusIcon width={40} height={40}/>
+          </label>
+          <ul
+            tabIndex={0}
+            className="dropdown-content mt-4 menu p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <a>Item 1</a>
+            </li>
+            <li>
+              <a>Item 2</a>
+            </li>
+          </ul>
+        </div> */}
+        <div className={`dropdown ${classes['create-button']}`}>
+          <label tabIndex={0}>
+            <PlusIcon width={40} height={40} />
+            <span>New</span>
+          </label>
+          <ul
+            tabIndex={0}
+            className="dropdown-content translate-x-[-2rem] mt-6 menu p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <a>Item 1</a>
+            </li>
+            <li>
+              <a>Item 2</a>
+            </li>
+          </ul>
+        </div>
       </div>
       <div className={classes['note-list']}>
         <TitleList
@@ -61,14 +74,8 @@ const NotebookPage = () => {
           firstIconAction={undefined}
           secondIconAction={undefined}
           actionBar={undefined}
-          // titleAction={(val: string) => handleOpenNote(val)}
-          // handleCloseNote={handleCloseNote}
-          // note={note}
-          // showNote={showNote}
-          // setNote={}
         />
       </div>
-
     </div>
   );
 };

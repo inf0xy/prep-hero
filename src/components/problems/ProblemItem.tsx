@@ -367,7 +367,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       </Modal>
       <Modal
         id={`modal__full-note-${title}`}
-        type="close-button"
+        buttonSize='btn-sm'
         className={`${
           theme === 'dark'
             ? `bg-[${variables.darkBackground50}]`
@@ -384,6 +384,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       <Modal
         id={`modal__problems-note-${title}`}
         type="close-button"
+        buttonSize='btn-sm'
         className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}

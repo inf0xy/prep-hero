@@ -1,4 +1,3 @@
-import { RefObject } from 'react';
 import dynamic from 'next/dynamic';
 import '@uiw/react-markdown-preview/markdown.css';
 import '@uiw/react-md-editor/markdown-editor.css';
@@ -9,8 +8,7 @@ import classes from './TextEditor.module.scss';
 interface TextEditorProps {
   value: string;
   setValue: (val: string) => void;
-  className?: string;
-  editorRef?: RefObject<HTMLDivElement>
+  className?: string
 }
 
 const MDEditor = dynamic(
@@ -26,14 +24,14 @@ const Markdown = dynamic(
 const TextEditor: React.FC<TextEditorProps> = ({
   value,
   setValue,
-  className,
-  editorRef
+  className
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
 
   return (
     <div data-color-mode={theme} className={classes.editor}>
       <MDEditor
+        itemRef=''
         value={value}
         onChange={setValue as () => void}
         className={`${className} text-editor ${theme}`}

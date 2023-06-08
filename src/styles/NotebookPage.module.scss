@@ -23,6 +23,8 @@
   min-width: 4rem;
   width: 30rem;
   max-width: 20vw;
+  display: flex;
+  flex-direction: column;
 
   &--dark {
     background-color: $dark-background-200;
@@ -49,6 +51,31 @@
     &--light {
       // border-bottom: solid $color-gray-100 0.1px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .create-button {
+    align-self: center;
+    background-color: $light-background-500;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 3rem;
+    border-radius: 1rem;
+    color: $color-primary-100;
+    font-size: 1.8rem;
+    margin-top: 2rem;
+
+    &,
+    label {
+      cursor: pointer;
+    }
+
+    label {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      span {
+        font-size: 2rem;
+      }
     }
   }
 }

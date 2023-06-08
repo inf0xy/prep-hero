@@ -1,4 +1,4 @@
-import { ReactNode, useState, useCallback, useEffect } from 'react';
+import { ReactNode, useState, useCallback, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAppSelector } from '@/hooks/hooks';
 import SearchBar from '@/components/reusables/SearchBar';
@@ -26,6 +26,7 @@ import TextEditor from './TextEditor';
 import { NotificationType } from '@/types/dataTypes';
 import useSubmitNote from '@/hooks/useSubmitNote';
 import { Note } from '@/types/dataTypes';
+import Alert from './Alert';
 
 const TitleList: React.FC<TitleListProps> = ({
   listType,
@@ -157,16 +158,16 @@ const TitleList: React.FC<TitleListProps> = ({
       <Modal
         id={`modal__notebook-note-${title}`}
         type="close-button"
+        buttonSize='btn-sm'
         className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}
         onClose={() => handleCloseNote(title)}
-        // editorRef={editorRef}
+        fullScreenToggle={listType === 'notes'}
       >
         <div className={`code-editor__note code-editor__note--${theme}`}>
           {showNote && note.content && (
             <TextEditor
-              // editorRef={editorRef}
               value={note.content}
               setValue={(val: string) =>
                 setNote((prev) => ({ ...prev, content: val }))
@@ -179,56 +180,71 @@ const TitleList: React.FC<TitleListProps> = ({
   ));
 
   return (
-    <div
-      className={`${classes['titles-selection']} ${
-        classes[`titles-selection--${theme}`]
-      }`}
-    >
-      <div className={classes['top-bar']}>
-        <div className={classes['title__searchbar']}>
-          <SearchBar
-            setSingleSearchTerm={setSearchTerm}
-            currentSearch={searchTerm}
-          />
-          <Button
-            color="secondary"
-            extraStyle={{ padding: '1rem' }}
-            onClick={() => setSearchTerm('')}
-          >
-            <ResetIcon />
-          </Button>
-        </div>
-        {actionBar && actionBar}
-      </div>
+    <>
+      {showAlert && (
+        <Alert
+          status={notification?.status!}
+          onClose={() => setShowAlert(false)}
+          setNotification={setNotification}
+        >
+          {notification?.message}
+        </Alert>
+      )}
       <div
-        role="table"
-        className={`${classes['titles__table']} ${
-          classes[`titles-table--${theme}`]
+        className={`${classes['titles-selection']} ${
+          classes[`titles-selection--${theme}`]
         }`}
       >
-        <div className={classes['titles-table__header']}>
-          {firstIconText && (
-            <div role="row" className={classes['first-col-header']} style={{}}>
-              {firstIconText}
-            </div>
-          )}
-          {secondIconText && (
-            <div role="row" className={classes['second-col-header']}>
-              {secondIconText}
-            </div>
-          )}
-          <div role="row" className={classes['title-header']}>
-            Title
+        <div className={classes['top-bar']}>
+          <div className={classes['title__searchbar']}>
+            <SearchBar
+              setSingleSearchTerm={setSearchTerm}
+              currentSearch={searchTerm}
+            />
+            <Button
+              color="secondary"
+              extraStyle={{ padding: '1rem' }}
+              onClick={() => setSearchTerm('')}
+            >
+              <ResetIcon />
+            </Button>
           </div>
+          {actionBar && actionBar}
         </div>
         <div
-          role="table-body"
-          className={`title-list-wrapper--${theme} ${classes['title-table__body']}`}
+          role="table"
+          className={`${classes['titles__table']} ${
+            classes[`titles-table--${theme}`]
+          }`}
         >
-          {renderedTitles}
+          <div className={classes['titles-table__header']}>
+            {firstIconText && (
+              <div
+                role="row"
+                className={classes['first-col-header']}
+                style={{}}
+              >
+                {firstIconText}
+              </div>
+            )}
+            {secondIconText && (
+              <div role="row" className={classes['second-col-header']}>
+                {secondIconText}
+              </div>
+            )}
+            <div role="row" className={classes['title-header']}>
+              Title
+            </div>
+          </div>
+          <div
+            role="table-body"
+            className={`title-list-wrapper--${theme} ${classes['title-table__body']}`}
+          >
+            {renderedTitles}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

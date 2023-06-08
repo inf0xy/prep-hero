@@ -379,6 +379,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
         <Modal
           id="modal-settings"
           type="close-button"
+          buttonSize='btn-sm'
           className="overflow-visible"
         >
           <div
@@ -408,10 +409,12 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
         <Modal
           id={`modal__editor-note-${title}`}
           type="close-button"
+          buttonSize='btn-sm'
           className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
             theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
           }`}
           onClose={handleCloseNoteModal}
+          fullScreenToggle={true}
         >
           <div className={`code-editor__note code-editor__note--${theme}`}>
             {showNote && (
