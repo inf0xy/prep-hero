@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ExpandIcon from '@/components/icons/ExpandIcon';
 import Tooltip from '../Tooltip';
 import MinimizeIcon from '@/components/icons/MinimizeIcon';
+import useFullScreen from '@/hooks/useFullScreen';
 
 type FullScreenButtonProps = {
   className?: string;
@@ -15,38 +16,7 @@ const FullScreenButton: React.FC<FullScreenButtonProps> = ({
   height
 }) => {
   const [expand, setExpand] = useState(false);
-  const handleFullscreenToggle = () => {
-    const elem = document.documentElement;
-    if (elem.requestFullscreen) {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        elem.requestFullscreen();
-      }
-    }
-  };
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setExpand(!!document.fullscreenElement);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-    document.addEventListener('msfullscreenchange', handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-      document.removeEventListener(
-        'webkitfullscreenchange',
-        handleFullscreenChange
-      );
-      document.removeEventListener(
-        'msfullscreenchange',
-        handleFullscreenChange
-      );
-    };
-  }, []);
+  const handleFullscreenToggle = useFullScreen(setExpand);
 
   return (
     <Tooltip

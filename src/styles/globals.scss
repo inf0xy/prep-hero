@@ -22,24 +22,38 @@
   background: $color-gray-600;
 }
 
+.scrollbar-light::-webkit-scrollbar-track {
+  background: $color-scrollbar-track-light;
+}
+
+.scrollbar-light::-webkit-scrollbar-thumb {
+  background: $color-scrollbar-thumb-light;
+}
+
+.scrollbar-light::-webkit-scrollbar-thumb:hover {
+  background: $color-scrollbar-thumb-hover-light;
+}
+
 .heatmap-wrapper--light::-webkit-scrollbar-track,
 .solution-modal-wrapper--light::-webkit-scrollbar-track,
-.problem-description-wrapper--light::-webkit-scrollbar-track {
+.problem-description-wrapper--light::-webkit-scrollbar-track,
+.title-list-wrapper--light::-webkit-scrollbar-track {
   background: $color-scrollbar-track-light;
 }
 
 .heatmap-wrapper--light::-webkit-scrollbar-thumb,
 .solution-modal-wrapper--light::-webkit-scrollbar-thumb,
-.problem-description-wrapper--light::-webkit-scrollbar-thumb {
+.problem-description-wrapper--light::-webkit-scrollbar-thumb,
+.title-list-wrapper--light::-webkit-scrollbar-thumb {
   background: $color-scrollbar-thumb-light;
 }
 
 .heatmap-wrapper--light::-webkit-scrollbar-thumb:hover,
 .solution-modal-wrapper--light::-webkit-scrollbar-thumb:hover,
-.problem-description-wrapper--light::-webkit-scrollbar-thumb:hover {
+.problem-description-wrapper--light::-webkit-scrollbar-thumb:hover,
+.title-list-wrapper--light::-webkit-scrollbar-thumb:hover {
   background: $color-scrollbar-thumb-hover-light;
 }
-
 
 *,
 *::before,
@@ -132,10 +146,10 @@ body {
     border-bottom: none;
   }
 
-  button[data-name='fullscreen'],
-  .w-md-editor-toolbar-divider {
-    display: none;
-  }
+  // button[data-name='fullscreen'],
+  // .w-md-editor-toolbar-divider {
+  //   display: none;
+  // }
 
   .w-md-editor-show-preview .w-md-editor-toolbar {
     display: flex;

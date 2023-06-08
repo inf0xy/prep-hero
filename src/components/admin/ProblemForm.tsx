@@ -301,7 +301,6 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
             Description: <span className={classes.required}>*</span>
           </label>
           <TextEditor
-            defaultMode={true}
             value={description}
             setValue={setDescription}
             className={classes.description}

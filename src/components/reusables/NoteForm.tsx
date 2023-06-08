@@ -36,7 +36,7 @@ const NoteForm: React.FC<NoteFormProps> = ({
   content
 }) => {
   const [note, setNote] = useState<Note>({
-    listName: listName?.join(', '),
+    list_name: listName?.join(', '),
     title,
     content
   });
@@ -103,7 +103,7 @@ const NoteForm: React.FC<NoteFormProps> = ({
               className={`${classes['add-notes__title-field']} ${
                 classes[`add-notes__title-field--${theme}`]
               }`}
-              value={note.listName!}
+              value={note.list_name}
               disabled={disableListName}
               onChange={(e) =>
                 setNote((prev) => ({

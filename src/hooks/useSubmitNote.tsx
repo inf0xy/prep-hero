@@ -35,7 +35,7 @@ const useSubmitNote: UseSubmitNote = (
       if (checkForm.valid) {
         await dispatch(
           addOrUpdateNote({
-            listName: note.listName!,
+            list_name: note.list_name!,
             title: note.title!,
             content: note.content!
           })
@@ -47,7 +47,7 @@ const useSubmitNote: UseSubmitNote = (
           message: checkForm.message
         });
       }
-    }, []);
+    }, [dispatch, setNotification, setShowAlert, setSubmitted]);
 
   return { handleSubmitNote };
 };

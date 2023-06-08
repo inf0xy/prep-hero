@@ -8,12 +8,12 @@ import EditorPreview from '../reusables/EditorPreview';
 import TextEditor from '../reusables/TextEditor';
 import Alert from '../reusables/Alert';
 import { colors } from '@/helpers/extraStyles';
+import { config } from '@/helpers/config';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import {
   addProblemToList,
   deleteNote,
   removeProblemFromList,
-  setSelectedNote,
   setSelectedProblem
 } from '@/store';
 import { NotificationType, Problem } from '@/types/dataTypes';
@@ -45,6 +45,8 @@ type ProblemItemProps = {
   showNotes: boolean;
   oddCell: boolean;
 };
+
+const YOUTUBE_URL = config.YOUTUBE_URL;
 
 const ProblemItem: React.FC<ProblemItemProps> = ({
   problem,
@@ -136,11 +138,11 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       problemNoteContent = result.length ? result[0].content : undefined;
     }
     setNoteContent(problemNoteContent);
-  }, [notes]);
+  }, [notes, title]);
 
   const handleCloseNoteModal = async () => {
     const note = {
-      listName: list_names!.join(', '),
+      list_name: list_names!.join(', '),
       title,
       content: noteContent
     };
@@ -283,7 +285,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 >
                   <li className={classes.expand}>
                     <label
-                      htmlFor={`modal-note-${title}`}
+                      htmlFor={`modal__full-note-${title}`}
                       className="cursor-pointer"
                     >
                       <ExpandIcon width={7} height={7} />
@@ -348,13 +350,14 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         }`}
         onClose={() => setShowSolutionModal(false)}
       >
-        <div className={`solution-modal-wrapper--${theme} w-full h-full overflow-y-scroll`}>
+        <div
+          className={`solution-modal-wrapper--${theme} w-full h-full overflow-y-scroll`}
+        >
           {showSolutionModal && (
             <Solutions
               videoURL={
                 solution_link !== ''
-                  ? 'https://www.youtube.com/embed/' +
-                    solution_link?.split('=')[1]
+                  ? YOUTUBE_URL + solution_link?.split('=')[1]
                   : ''
               }
               solution_codes={solution_codes ? solution_codes : undefined}
@@ -363,7 +366,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
       </Modal>
       <Modal
-        id={`modal-note-${title}`}
+        id={`modal__full-note-${title}`}
         type="close-button"
         className={`${
           theme === 'dark'

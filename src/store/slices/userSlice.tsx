@@ -173,12 +173,14 @@ const userSlice = createSlice({
       state.error = action.error.message;
     });
     builder.addCase(addOrUpdateNote.fulfilled, (state, action) => {
-      state.notes = state.notes.filter(
-        (el) =>
-          el.title !== action.payload.note.list_names &&
-          el.title !== action.payload.note.title
-      );
-      state.notes.push(action.payload.note);
+      const { note } = action.payload;
+      const noteIndex = state.notes.findIndex(el => el.title === note.title && el.list_name === note.list_name);
+
+      if (noteIndex) {
+        state.notes.splice(noteIndex, 1, note);
+      } else if (noteIndex === -1) {
+        state.notes.push(note);
+      }
     });
     builder.addCase(deleteNote.fulfilled, (state, action) => {
       const noteIndex = state.notes.findIndex(

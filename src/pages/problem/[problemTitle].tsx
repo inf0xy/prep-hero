@@ -35,7 +35,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
     if (timerReminder) {
       setTimerAlert(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const prompts = selectedProblem.prompts
@@ -119,7 +119,9 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
                 Submissions
               </li>
             </ul>
-            <div className={`problem-description-wrapper--light ${classes.description}`}>
+            <div
+              className={`problem-description-wrapper--light ${classes.description}`}
+            >
               <ProblemDetail
                 tab={activeTab}
                 problem={selectedProblem}

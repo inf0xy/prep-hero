@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { GetStaticProps } from 'next';
-import { useSession } from 'next-auth/react';
 import { getProblems } from '@/helpers/problem-api-util';
 import { Problem, SearchCriteria, SearchOrForm } from '@/types/dataTypes';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { fetchUserData } from '@/store';
-import { getScrollbarStyles } from '@/helpers/extraStyles';
+import { config } from '@/helpers/config';
 import useSort from '@/hooks/useSort';
 import ProblemList from '@/components/problems/ProblemList';
 import Pagination from '@/components/problems/Pagination';
@@ -19,7 +17,7 @@ interface AllProblemsPageProps {
   count: number;
 }
 
-const ITEMS_PER_PAGE = 25;
+const ITEMS_PER_PAGE = config.ITEMS_PER_PAGE;
 
 const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
   problems,
@@ -40,8 +38,6 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
 
   const { theme } = useAppSelector((state) => state.theme);
   const handleSort = useSort(problems, setCurrentProblems);
-  const { data: session } = useSession();
-  const router = useRouter();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -154,7 +150,6 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
     <>
       <section
         className={`${classes['problems']} ${classes[`problems--${theme}`]}`}
-        style={getScrollbarStyles(theme)}
       >
         <div className={classes.selections}>
           <SelectBar

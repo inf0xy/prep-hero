@@ -1,6 +1,7 @@
 import { connectDB, problemsCollection, testCasesCollection } from './db-util';
+import { config } from '@/helpers/config';
 
-const ITEMS_PER_PAGE = 25;
+const ITEMS_PER_PAGE = config.ITEMS_PER_PAGE;
 
 type SearchFilter = {
   [key: string]: any;

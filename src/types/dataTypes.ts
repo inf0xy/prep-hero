@@ -35,7 +35,7 @@ export type SearchCriteria = {
 };
 
 export type Note = {
-  listName: string | undefined;
+  list_name: string | undefined;
   title: string | undefined;
   content: string | undefined;
 };

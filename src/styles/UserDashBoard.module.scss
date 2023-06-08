@@ -79,7 +79,9 @@
   .timer-reminder-switch {
   }
 
-  .notebook span {
+  .notebook span,
+  .saved-list span,
+  .completed-list span {
     padding-right: 0.3rem;
     cursor: pointer;
     transition: opacity 0.3s ease;

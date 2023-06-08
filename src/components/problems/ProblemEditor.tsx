@@ -152,7 +152,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
 
   const handleCloseNoteModal = async () => {
     const note = {
-      listName: listNames.join(', '),
+      list_name: listNames.join(', '),
       title,
       content: noteContent!
     };

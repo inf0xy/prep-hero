@@ -7,6 +7,7 @@ import {
 } from '@/types/dataTypes';
 import { useAppSelector } from '@/hooks/hooks';
 import { problemDetailStyle } from '@/helpers/extraStyles';
+import { config } from '@/helpers/config';
 import EditorPreview from '../reusables/EditorPreview';
 import Solutions from '../reusables/Solutions';
 import LanguageSelection from '../reusables/codeEditor/LanguageSelection';
@@ -17,6 +18,7 @@ import InProgressIcon from '../icons/InProgressIcon';
 
 import classes from './ProblemDetail.module.scss';
 
+const YOUTUBE_URL = config.YOUTUBE_URL;
 
 type ProblemDetailProps = {
   problem: Problem;
@@ -96,7 +98,7 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({
 
   const videoURL =
     solution_link !== ''
-      ? 'https://www.youtube.com/embed/' + solution_link?.split('=')[1]
+      ? YOUTUBE_URL + solution_link?.split('=')[1]
       : '';
 
   const handleReviewCode = (language: string, code: string) => {

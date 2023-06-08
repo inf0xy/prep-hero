@@ -17,10 +17,15 @@ type TitleListProps = {
   secondIcon?: ReactNode;
   testTitles?: string[];
   actionBar?: ReactNode;
-  titleAction?: () => {};
   firstIconAction?: (val?: string) => Promise<any> | undefined;
   secondIconAction?: (val?: string) => Promise<any> | undefined;
 };
+
+import Modal from './Modal';
+import TextEditor from './TextEditor';
+import { NotificationType } from '@/types/dataTypes';
+import useSubmitNote from '@/hooks/useSubmitNote';
+import { Note } from '@/types/dataTypes';
 
 const TitleList: React.FC<TitleListProps> = ({
   listType,
@@ -31,18 +36,53 @@ const TitleList: React.FC<TitleListProps> = ({
   secondIcon,
   testTitles,
   actionBar,
-  titleAction,
   firstIconAction,
   secondIconAction
 }) => {
   const [currentTitles, setCurrentTitles] = useState(titles);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { theme, submissions } = useAppSelector((state) => {
+  const { theme, submissions, notes } = useAppSelector((state) => {
     const { theme } = state.theme;
-    const { submissions } = state.user;
-    return { theme, submissions };
+    const { submissions, notes } = state.user;
+    return { theme, submissions, notes };
   });
+
+  const [showNote, setShowNote] = useState(false);
+  const [note, setNote] = useState<{
+    list_name: string | undefined;
+    content: string | undefined;
+  }>({
+    list_name: undefined,
+    content: undefined
+  });
+  const [showAlert, setShowAlert] = useState(false);
+  const [notification, setNotification] = useState<NotificationType | null>(
+    null
+  );
+
+  const { handleSubmitNote } = useSubmitNote(setShowAlert, setNotification);
+
+  const handleOpenNote = (title: string) => {
+    const selectedNote = notes.find((el) => el.title === title) as Note;
+    if (selectedNote) {
+      setNote({
+        list_name: selectedNote.list_name,
+        content: selectedNote.content
+      });
+      setShowNote(true);
+    }
+  };
+
+  const handleCloseNote = async (title: string) => {
+    const savingNote = {
+      list_name: note.list_name,
+      title,
+      content: note.content
+    };
+    await handleSubmitNote(undefined, savingNote);
+    setShowNote(false);
+  };
 
   const handleSearch = useCallback(() => {
     if (searchTerm === '') {
@@ -65,7 +105,7 @@ const TitleList: React.FC<TitleListProps> = ({
     if (submissions.some((el) => el.title === title && el.accepted)) {
       return <CheckIcon width="17" height="17" />;
     } else if (submissions.some((el) => el.title === title && !el.accepted)) {
-      return <InProgressIcon width={25} height={25}/>;
+      return <InProgressIcon width={25} height={25} />;
     }
     return null;
   };
@@ -76,26 +116,65 @@ const TitleList: React.FC<TitleListProps> = ({
 
   const renderedTitles = currentTitles.map((title) => (
     <div key={title} className={classes['title__cell']}>
-      <div className={classes['first-col-icon']}>
-        <span
-          onClick={firstIconAction ? () => firstIconAction(title) : undefined}
-        >
-          {listType !== 'problems' ? secondIcon : getStatusIcon(title)}
-        </span>
-      </div>
-      <div className={classes['second-col-icon']}>
-        <span
-          onClick={secondIconAction ? () => secondIconAction(title) : undefined}
-          className={`${
-            testTitles && testTitles.includes(title) ? 'text-cyan-500' : ''
-          }`}
-        >
-          {firstIcon}
-        </span>
-      </div>
-      <p className={classes['title-content']} onClick={titleAction}>
-        {!titleAction && <Link href={`/problem/${title}`}>{title}</Link>}
+      {firstIconText && (
+        <div className={classes['first-col-icon']}>
+          <span
+            onClick={firstIconAction ? () => firstIconAction(title) : undefined}
+          >
+            {listType !== 'problems' ? firstIcon : getStatusIcon(title)}
+          </span>
+        </div>
+      )}
+      {secondIconText && (
+        <div className={classes['second-col-icon']}>
+          <span
+            onClick={
+              secondIconAction ? () => secondIconAction(title) : undefined
+            }
+            className={`${
+              testTitles && testTitles.includes(title) ? 'text-cyan-500' : ''
+            }`}
+          >
+            {secondIcon}
+          </span>
+        </div>
+      )}
+      <p
+        className={classes['title-content']}
+        onClick={listType === 'notes' ? () => handleOpenNote(title) : undefined}
+      >
+        {listType !== 'notes' ? (
+          <Link href={`/problem/${title}`}>{title}</Link>
+        ) : (
+          <label
+            htmlFor={`modal__notebook-note-${title}`}
+            className="cursor-pointer"
+          >
+            {title}
+          </label>
+        )}
       </p>
+      <Modal
+        id={`modal__notebook-note-${title}`}
+        type="close-button"
+        className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
+          theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
+        }`}
+        onClose={() => handleCloseNote(title)}
+        // editorRef={editorRef}
+      >
+        <div className={`code-editor__note code-editor__note--${theme}`}>
+          {showNote && note.content && (
+            <TextEditor
+              // editorRef={editorRef}
+              value={note.content}
+              setValue={(val: string) =>
+                setNote((prev) => ({ ...prev, content: val }))
+              }
+            />
+          )}
+        </div>
+      </Modal>
     </div>
   ));
 
@@ -128,17 +207,24 @@ const TitleList: React.FC<TitleListProps> = ({
         }`}
       >
         <div className={classes['titles-table__header']}>
-          <div role="row" className={classes['first-col-header']}>
-            {firstIconText}
-          </div>
-          <div role="row" className={classes['second-col-header']}>
-            {secondIconText}
-          </div>
+          {firstIconText && (
+            <div role="row" className={classes['first-col-header']} style={{}}>
+              {firstIconText}
+            </div>
+          )}
+          {secondIconText && (
+            <div role="row" className={classes['second-col-header']}>
+              {secondIconText}
+            </div>
+          )}
           <div role="row" className={classes['title-header']}>
             Title
           </div>
         </div>
-        <div role="table-body" className={classes['title-table__body']}>
+        <div
+          role="table-body"
+          className={`title-list-wrapper--${theme} ${classes['title-table__body']}`}
+        >
           {renderedTitles}
         </div>
       </div>

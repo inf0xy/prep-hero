@@ -118,7 +118,7 @@ export const getUserData = async (_id: ObjectId) => {
 
 export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
   await connectDB();
-  const { listName: list_name, title, content } = note;
+  const { list_name, title, content } = note;
 
   if (list_name && title && content) {
     const result = await usersCollection
@@ -142,9 +142,9 @@ export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
         {
           $push: {
             notes: {
-              list_name: list_name,
-              title: title,
-              content: content
+              list_name,
+              title,
+              content
             }
           }
         }

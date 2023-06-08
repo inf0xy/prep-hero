@@ -1,36 +1,39 @@
 import ResourceCard from '@/components/reusables/ResourceCard';
-import { getScrollbarStyles } from '@/helpers/extraStyles';
 import { useAppSelector } from '@/hooks/hooks';
+import { config } from '@/helpers/config';
 import classes from '@/styles/ResourcesPage.module.scss';
 import variables from '@/styles/variables.module.scss';
+
+const {
+  INTERVIEW_HANDBOOK_URL,
+  INTERVIEW_GUIDE,
+  FULLSTACK_CAFE_URL,
+  NEETCODEIO_URL
+} = config;
 
 const ResourcesPage = () => {
   const { theme } = useAppSelector((state) => state.theme);
 
   const techHandBookResourceContent = (
-    <a
-      href="https://www.techinterviewhandbook.org/"
-      target="_blank"
-      style={{ width: '21rem' }}
-    >
+    <a href={INTERVIEW_HANDBOOK_URL} target="_blank" style={{ width: '21rem' }}>
       Free curated interview preparation materials
     </a>
   );
 
   const interviewGuideContent = (
-    <a href="https://interviewguide.dev/" target="_blank">
+    <a href={INTERVIEW_GUIDE} target="_blank">
       Interview Guide
     </a>
   );
 
   const fullstackCafeContent = (
-    <a href="https://www.fullstack.cafe/" target="_blank">
+    <a href={FULLSTACK_CAFE_URL} target="_blank">
       Full Stack Interview Questions
     </a>
   );
 
   const neetcodeContent = (
-    <a href="https://neetcode.io/" target="_blank">
+    <a href={NEETCODEIO_URL} target="_blank">
       NeetCode IO
     </a>
   );
@@ -39,19 +42,18 @@ const ResourcesPage = () => {
       className={`${classes['resources-page']} ${
         classes[`resources-page--${theme}`]
       }`}
-      style={getScrollbarStyles(theme)}
     >
       <ResourceCard
         image="/technterviewhandbookimage.webp"
         imageAlt="Technical Interview Book Image"
-        link="https://www.techinterviewhandbook.org/"
+        link={INTERVIEW_HANDBOOK_URL}
         content={techHandBookResourceContent}
         backgroundColor={variables.lightBackground0}
       />
       <ResourceCard
         image="/interviewguide.svg"
         imageAlt="Interview Guide Image"
-        link="https://interviewguide.dev/"
+        link={INTERVIEW_GUIDE}
         content={interviewGuideContent}
         backgroundColor={variables.lightBackground0}
         className="translate-y-[2rem]"
@@ -59,7 +61,7 @@ const ResourcesPage = () => {
       <ResourceCard
         image="/fullstackcafe.webp"
         imageAlt="Fullstack Cafe Image"
-        link="https://www.fullstack.cafe/"
+        link={FULLSTACK_CAFE_URL}
         content={fullstackCafeContent}
         backgroundColor={variables.colorFullStackCafe}
         className="translate-y-[-1rem]"
@@ -67,7 +69,7 @@ const ResourcesPage = () => {
       <ResourceCard
         image="/neetcodeio.webp"
         imageAlt="Neetcode IO Image"
-        link="https://neetcode.io/"
+        link={NEETCODEIO_URL}
         content={neetcodeContent}
         backgroundColor={variables.colorNeetcode}
       />

@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, Fragment } from 'react';
 import { useAppSelector } from '@/hooks/hooks';
+import { config } from '@/helpers/config';
 import classes from './Pagination.module.scss';
 
 type PaginationProps = {
@@ -9,7 +10,7 @@ type PaginationProps = {
   className?: string;
 };
 
-const ITEMS_PER_PAGE = 25;
+const ITEMS_PER_PAGE = config.ITEMS_PER_PAGE;
 
 const Pagination: React.FC<PaginationProps> = ({
   selectedPage,
