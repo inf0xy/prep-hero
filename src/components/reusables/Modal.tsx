@@ -11,6 +11,7 @@ type ModalProps = {
   buttonSize?: string;
   onClose?: MouseEventHandler<HTMLLabelElement> | undefined | null;
   fullScreenToggle?: boolean;
+  showCloseButton?: boolean;
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -20,7 +21,8 @@ const Modal: React.FC<ModalProps> = ({
   type,
   buttonSize,
   onClose,
-  fullScreenToggle
+  fullScreenToggle,
+  showCloseButton
 }) => {
   const [fullScreen, setFullScreen] = useState(false);
 
@@ -49,8 +51,8 @@ const Modal: React.FC<ModalProps> = ({
       <div className="modal">
         <div
           className={`modal-box relative p-0 ${
-            !className?.includes('max-w') ? 'max-w-fit' : ''
-          } ${className}`}
+            fullScreenToggle && fullScreen ? 'full-screen' : ''
+          } ${!className?.includes('max-w') ? 'max-w-fit' : ''} ${className}`}
           style={fullScreenToggle ? modalStyle : {}}
         >
           {fullScreenToggle && (
@@ -61,13 +63,15 @@ const Modal: React.FC<ModalProps> = ({
               <FullScreenButton />
             </span>
           )}
-          <label
-            htmlFor={id}
-            className={`btn ${buttonSize} btn-circle absolute right-8 top-7 bg-[#474747]  hover:bg-[#404040] border-0`}
-            onClick={onClose ?? undefined}
-          >
-            <span className="text-xl">✕</span>
-          </label>
+          {(showCloseButton === undefined || showCloseButton === true) && (
+            <label
+              htmlFor={id}
+              className={`btn ${buttonSize} btn-circle absolute right-8 top-7 bg-[#474747]  hover:bg-[#404040] border-0`}
+              onClick={onClose ?? undefined}
+            >
+              <span className="text-xl">✕</span>
+            </label>
+          )}
           {children}
         </div>
       </div>

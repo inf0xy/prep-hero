@@ -3,6 +3,7 @@ import ExpandIcon from '@/components/icons/ExpandIcon';
 import Tooltip from '../Tooltip';
 import MinimizeIcon from '@/components/icons/MinimizeIcon';
 import useFullScreen from '@/hooks/useFullScreen';
+import { useAppSelector } from '@/hooks/hooks';
 
 type FullScreenButtonProps = {
   className?: string;
@@ -17,6 +18,7 @@ const FullScreenButton: React.FC<FullScreenButtonProps> = ({
 }) => {
   const [expand, setExpand] = useState(false);
   const handleFullscreenToggle = useFullScreen(setExpand);
+  const { theme } = useAppSelector(state => state.theme);
 
   return (
     <Tooltip
@@ -24,7 +26,7 @@ const FullScreenButton: React.FC<FullScreenButtonProps> = ({
       direction="bottom"
       className="left-[-1.7rem] w-[10rem] px-6 py-4"
     >
-      <button onClick={handleFullscreenToggle} className={className}>
+      <button onClick={handleFullscreenToggle} className={`${className} ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
         {!expand ? (
           <ExpandIcon width={width ? width : 6} height={height ? height : 6} />
         ) : (

@@ -81,8 +81,8 @@ const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ titles, testTitles }) =
           testTitles={testTitles}
           firstIconText="Edit"
           secondIconText="Test"
-          firstIcon={<BreakerIcon />}
-          secondIcon={<EditIcon />}
+          firstIcon={<EditIcon />}
+          secondIcon={<BreakerIcon />}
           firstIconAction={handleSelectTitle as () => Promise<void>}
           secondIconAction={handleSelectTest as () => Promise<void>}
           actionBar={actionBar}

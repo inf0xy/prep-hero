@@ -12,6 +12,7 @@ import Tags from './Tags';
 import Companies from './Companies';
 import Categories from './Categories';
 import TextEditor from '@/components/reusables/TextEditor';
+import FullScreenButton from '../reusables/codeEditor/FullScreenButton';
 import Alert from '@/components/reusables/Alert';
 import Button from '@/components/reusables/Button';
 import ListSelection from './ListSelection';
@@ -80,6 +81,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
     status: undefined,
     message: undefined
   });
+  const [fullScreen, setFullScreen] = useState(false);
 
   const { theme } = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
@@ -300,11 +302,17 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
           <label>
             Description: <span className={classes.required}>*</span>
           </label>
-          <TextEditor
-            value={description}
-            setValue={setDescription}
-            className={classes.description}
-          />
+          <div
+            className={`problem-form relative p-8 overflow-hidden ${
+              theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white shadow-lg'
+            } rounded-xl`}
+          >
+            <TextEditor
+              value={description}
+              setValue={setDescription}
+              className={classes.description}
+            />
+          </div>
         </div>
         <div className={classes['form-controls']}>
           <div className="flex space-x-4">

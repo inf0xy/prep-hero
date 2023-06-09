@@ -4,12 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { removeProblemFromList, setTimerReminder } from '@/store';
-import { Submission } from '@/types/dataTypes';
+import { NotificationType, Submission } from '@/types/dataTypes';
 import ProgressBar from '@/components/dashboard/ProgressBar';
 import ProgressCircle from '@/components/dashboard/ProgressCircle';
 import HeatMapCalendar from '@/components/dashboard/HeatMapCalendar';
 import TitleList from '@/components/reusables/TitleList';
 import TitleListActionBar from '@/components/dashboard/TitleListActionBar';
+import Alert from '@/components/reusables/Alert';
 import Button from '@/components/reusables/Button';
 import BookmarkFill from '@/components/icons/BookmarkFill';
 import SpeedChart from '@/components/dashboard/SpeedChart';
@@ -19,15 +20,19 @@ import SavedListIcon from '@/components/icons/SavedListIcon';
 import classes from '../styles/UserDashBoard.module.scss';
 
 const DashBoard = () => {
-  const { theme, submissions, list, timerReminder } = useAppSelector(
+  const [showAlert, setShowAlert] = useState(false);
+  const [notification, setNotification] = useState<NotificationType | null>(
+    null
+  );
+  const { theme, submissions, list, timer_reminder } = useAppSelector(
     (state) => {
       const { theme } = state.theme;
-      const { submissions, list, timerReminder } = state.user;
+      const { submissions, list, timer_reminder } = state.user;
       return {
         theme,
         submissions,
         list,
-        timerReminder
+        timer_reminder
       };
     }
   );
@@ -58,115 +63,137 @@ const DashBoard = () => {
     </div>
   );
 
+  const handleSetTimerReminder = async () => {
+    try {
+      await dispatch(setTimerReminder(!timer_reminder));
+    } catch (err: any) {
+      setShowAlert(true);
+    }
+  };
+
   return (
-    <div
-      className={`${classes['user-dashboard']} ${
-        classes[`user-dashboard--${theme}`]
-      }`}
-    >
+    <>
+      {showAlert && (
+        <Alert
+          status={notification?.status!}
+          setNotification={setNotification}
+          onClose={() => setShowAlert(false)}
+        >
+          {notification!.message}
+        </Alert>
+      )}
+
       <div
-        className={`${classes['dashboard-left']} ${
-          classes[`dashboard-left--${theme}`]
+        className={`${classes['user-dashboard']} ${
+          classes[`user-dashboard--${theme}`]
         }`}
       >
-        <div className={`${classes.profile} ${classes[`profile--${theme}`]}`}>
-          <h1>{session && session.session.user.name}</h1>
-          <Image
-            src="/user.png"
-            alt="avatar"
-            width={100}
-            height={100}
-            className="white"
-          />
-          <Button color="secondary" extraStyle={{ width: '70%', zIndex: 10 }}>
-            Edit Profile
-          </Button>
-        </div>
-        <div className={`${classes.progress} ${classes[`progress--${theme}`]}`}>
-          <div className={classes['progress-cirlce-container']}>
-            <ProgressCircle />
-          </div>
-          <div className={classes['progress-bar-container']}>
-            <ProgressBar />
-          </div>
-        </div>
-        <ul
-          className={`${classes.utilities} ${classes[`utilities--${theme}`]}`}
-        >
-          <li className={classes['timer-reminder-switch']}>
-            <h3>Timer reminder</h3>
-            <input
-              type="checkbox"
-              className="toggle toggle-info"
-              checked={timerReminder}
-              onChange={() => dispatch(setTimerReminder(!timerReminder))}
-            />
-          </li>
-          <li className={classes.notebook}>
-            <h3>Notebook</h3>
-            <span>
-              <Link href="/notebook">
-                <NoteBookIcon width={25} height={25} />
-              </Link>
-            </span>
-          </li>
-          <li className={classes['completed-list']}>
-            <h3>Completed List</h3>
-            <span onClick={() => setListType('completed')}>
-              <ListIcon width={25} height={25} />
-            </span>
-          </li>
-          <li className={classes['saved-list']}>
-            <h3>Saved List</h3>
-            <span onClick={() => setListType('saved')}>
-              <SavedListIcon width={25} height={25} />
-            </span>
-          </li>
-        </ul>
-      </div>
-      <div className={classes.overview}>
-        <div className={`${classes.heatmap} ${classes[`heatmap--${theme}`]}`}>
-          <h2>{submissions.length} submissions last year</h2>
-          <div
-            className={`heatmap-wrapper--${theme} ${classes['heatmap-container']}`}
-            ref={parentDiv}
-          >
-            <HeatMapCalendar parentRef={parentDiv} />
-          </div>
-        </div>
-
         <div
-          className={`${classes['speed-records']} ${
-            classes[`speed-records--${theme}`]
+          className={`${classes['dashboard-left']} ${
+            classes[`dashboard-left--${theme}`]
           }`}
         >
-          <SpeedChart />
+          <div className={`${classes.profile} ${classes[`profile--${theme}`]}`}>
+            <h1>{session && session.session.user.name}</h1>
+            <Image
+              src="/user.png"
+              alt="avatar"
+              width={100}
+              height={100}
+              className="white"
+            />
+            <Button color="secondary" extraStyle={{ width: '70%', zIndex: 10 }}>
+              Edit Profile
+            </Button>
+          </div>
+          <div
+            className={`${classes.progress} ${classes[`progress--${theme}`]}`}
+          >
+            <div className={classes['progress-cirlce-container']}>
+              <ProgressCircle />
+            </div>
+            <div className={classes['progress-bar-container']}>
+              <ProgressBar />
+            </div>
+          </div>
+          <ul
+            className={`${classes.utilities} ${classes[`utilities--${theme}`]}`}
+          >
+            <li className={classes['timer-reminder-switch']}>
+              <h3>Timer reminder</h3>
+              <input
+                type="checkbox"
+                className="toggle toggle-info"
+                checked={timer_reminder}
+                onChange={handleSetTimerReminder}
+              />
+            </li>
+            <li className={classes.notebook}>
+              <h3>Notebook</h3>
+              <span>
+                <Link href="/notebook">
+                  <NoteBookIcon width={25} height={25} />
+                </Link>
+              </span>
+            </li>
+            <li className={classes['completed-list']}>
+              <h3>Completed List</h3>
+              <span onClick={() => setListType('completed')}>
+                <ListIcon width={25} height={25} />
+              </span>
+            </li>
+            <li className={classes['saved-list']}>
+              <h3>Saved List</h3>
+              <span onClick={() => setListType('saved')}>
+                <SavedListIcon width={25} height={25} />
+              </span>
+            </li>
+          </ul>
         </div>
-        <span className={classes['saved-list']}>
-          <TitleList
-            listType="problems"
-            titles={listType === 'saved' ? savedList : completedList}
-            firstIconText="Status"
-            secondIconText={listType === 'saved' ? 'Remove' : undefined}
-            firstIcon={<BookmarkFill className="text-primary" />}
-            secondIcon={<BookmarkFill className="text-primary" />}
-            firstIconAction={undefined}
-            secondIconAction={
-              listType === 'saved'
-                ? (title) => dispatch(removeProblemFromList(title!))
-                : undefined
-            }
-            actionBar={
-              listType === 'saved' ? (
-                <TitleListActionBar setTitles={setSavedList} />
-              ) : (
-                completedListActionBar
-              )
-            }
-          />
-        </span>
+        <div className={classes.overview}>
+          <div className={`${classes.heatmap} ${classes[`heatmap--${theme}`]}`}>
+            <h2>{submissions.length} submissions last year</h2>
+            <div
+              className={`heatmap-wrapper--${theme} ${classes['heatmap-container']}`}
+              ref={parentDiv}
+            >
+              <HeatMapCalendar parentRef={parentDiv} />
+            </div>
+          </div>
+
+          <div
+            className={`${classes['speed-records']} ${
+              classes[`speed-records--${theme}`]
+            }`}
+          >
+            <SpeedChart />
+          </div>
+          <span className={classes['saved-list']}>
+            <TitleList
+              listType="problems"
+              titles={listType === 'saved' ? savedList : completedList}
+              firstIconText="Status"
+              secondIconText={listType === 'saved' ? 'Remove' : undefined}
+              firstIcon={<BookmarkFill className="text-primary" />}
+              secondIcon={<BookmarkFill className="text-primary" />}
+              firstIconAction={undefined}
+              secondIconAction={
+                listType === 'saved'
+                  ? (title) => dispatch(removeProblemFromList(title!))
+                  : undefined
+              }
+              actionBar={
+                listType === 'saved' ? (
+                  <TitleListActionBar setTitles={setSavedList} />
+                ) : (
+                  completedListActionBar
+                )
+              }
+            />
+          </span>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

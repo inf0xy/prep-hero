@@ -15,11 +15,11 @@ type ProblemDetailPageProps = {
 const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   selectedProblem
 }) => {
-  const { theme, timerReminder, timerDuration, duration } = useAppSelector(
+  const { theme, timer_reminder, timerDuration, duration } = useAppSelector(
     (state) => {
       const { theme } = state.theme;
-      const { timerReminder, timerDuration, duration } = state.user;
-      return { theme, timerReminder, timerDuration, duration };
+      const { timer_reminder, timerDuration, duration } = state.user;
+      return { theme, timer_reminder, timerDuration, duration };
     }
   );
 
@@ -32,7 +32,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
 
   useEffect(() => {
     dispatch(setDuration(0));
-    if (timerReminder) {
+    if (timer_reminder) {
       setTimerAlert(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,7 +120,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
               </li>
             </ul>
             <div
-              className={`problem-description-wrapper--light ${classes.description}`}
+              className={`problem-description-wrapper--${theme} ${classes.description}`}
             >
               <ProblemDetail
                 tab={activeTab}

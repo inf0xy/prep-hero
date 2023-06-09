@@ -20,7 +20,7 @@ interface User {
   medium_solved: MediumSolved[];
   hard_solved: HardSolved[];
   total_solved: Number;
-  timerReminder: boolean;
+  timer_reminder: boolean;
   isLoading?: boolean;
   error?: string | undefined;
   duration?: number;
@@ -120,6 +120,22 @@ export const saveSubmittedCode = createAsyncThunk(
   }
 );
 
+export const setTimerReminder = createAsyncThunk(
+  'user/setTimerReminder',
+  async (timerReminder: boolean) => {
+    const session = await getSession();
+    const userId = session?.session.user._id;
+    if (!session) {
+      throw new Error('Unauthorized');
+    }
+    const { data } = await axios.put<{
+      message: string;
+      timer_reminder: boolean;
+    }>('/api/users/timer', { timer_reminder: timerReminder, userId });
+    return data;
+  }
+);
+
 const initialState: User = {
   notes: [],
   list: [],
@@ -129,7 +145,7 @@ const initialState: User = {
   medium_solved: [],
   hard_solved: [],
   total_solved: 0,
-  timerReminder: true,
+  timer_reminder: false,
   isLoading: false,
   error: undefined,
   duration: 0,
@@ -145,9 +161,6 @@ const userSlice = createSlice({
     },
     setTimerDuration(state, action) {
       state.timerDuration = action.payload;
-    },
-    setTimerReminder(state, action) {
-      state.timerReminder = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -160,6 +173,7 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.notes = action.payload.notes;
         state.list = action.payload.list;
+        state.timer_reminder = action.payload.timer_reminder;
         state.attempted_problems = action.payload.attempted_problems;
         state.submissions = action.payload.submissions;
         state.easy_solved = action.payload.easy_solved;
@@ -174,7 +188,9 @@ const userSlice = createSlice({
     });
     builder.addCase(addOrUpdateNote.fulfilled, (state, action) => {
       const { note } = action.payload;
-      const noteIndex = state.notes.findIndex(el => el.title === note.title && el.list_name === note.list_name);
+      const noteIndex = state.notes.findIndex(
+        (el) => el.title === note.title && el.list_name === note.list_name
+      );
 
       if (noteIndex !== -1) {
         state.notes.splice(noteIndex, 1, note);
@@ -202,6 +218,20 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.error.message;
     });
+
+    builder.addCase(setTimerReminder.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(setTimerReminder.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = undefined;
+      state.timer_reminder = action.payload.timer_reminder;
+    });
+    builder.addCase(setTimerReminder.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    });
+
     builder.addCase(removeProblemFromList.pending, (state) => {
       state.isLoading = true;
     });
@@ -255,6 +285,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { setDuration, setTimerDuration, setTimerReminder } =
-  userSlice.actions;
+export const { setDuration, setTimerDuration } = userSlice.actions;
 export default userSlice.reducer;

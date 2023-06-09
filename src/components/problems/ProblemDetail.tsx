@@ -168,7 +168,7 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({
                 <CheckIcon width="20" height="20" />
               </span>
             )}
-            {attemped && (
+            {!completed && attemped && (
               <span className="absolute left-[8rem] top-[-0.5rem]">
                 <InProgressIcon width={20} height={20} />
               </span>

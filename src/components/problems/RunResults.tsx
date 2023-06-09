@@ -26,7 +26,7 @@ const RunResults: React.FC<RunResultsProps> = ({
     <div
       key={index}
       className={`${classes['tabs__item']} ${
-        currentTest === index ? 'opacity-75' : 'opacity-100'
+        currentTest === index ? 'opacity-100' : 'opacity-75'
       }`}
       onClick={() => setCurrentTest(index)}
     >

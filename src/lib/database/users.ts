@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb';
+import { ObjectId, PullOperator } from 'mongodb';
 import { connectDB, usersCollection } from './db-util';
 import { getProblemByTitle } from './problems';
 import { hashPassword, comparePassword } from '@/lib/auth';
@@ -24,6 +24,7 @@ export default class User {
     public account_type: 'user' | 'admin' = 'user',
     public list: List[] = [],
     public notes: List[] = [],
+    public timer_reminder: boolean = false,
     public attempted_problems: List[] = [],
     public submissions: List[] = [],
     public easy_solved: List[] = [],
@@ -41,7 +42,7 @@ export default class User {
     this.password = password;
     this.list = list;
     this.notes = notes;
-    this.notes = notes;
+    this.timer_reminder = timer_reminder;
     this.attempted_problems = attempted_problems;
     this.submissions = submissions;
     this.easy_solved = easy_solved;
@@ -110,7 +111,8 @@ export const getUserData = async (_id: ObjectId) => {
         easy_solved: 1,
         medium_solved: 1,
         hard_solved: 1,
-        total_solved: 1
+        total_solved: 1,
+        timer_reminder: 1
       }
     }
   );
@@ -120,7 +122,18 @@ export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
   await connectDB();
   const { list_name, title, content } = note;
 
-  if (list_name && title && content) {
+  if (list_name && title && (content !== null || content !== undefined)) {
+    const foundEmptyList = await usersCollection.findOne(
+      { _id: userId, 'notes.list_name': list_name },
+      { projection: { _id: 0, 'notes.$': 1 } }
+    );
+
+    if (foundEmptyList && foundEmptyList.notes[0].title === 'placeholder') {
+      await usersCollection.updateOne({ _id: userId }, {
+        $pull: { notes: { title: 'placeholder' } }
+      } as unknown as PullOperator<Document>);
+    }
+
     const result = await usersCollection
       .find({ _id: userId, 'notes.title': title })
       .toArray();
@@ -265,5 +278,13 @@ export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
         submissions: userSubmission
       }
     }
+  );
+};
+
+export const setTimerReminder = async (_id: ObjectId, timerSet: boolean) => {
+  await connectDB();
+  return usersCollection.updateOne(
+    { _id },
+    { $set: { timer_reminder: timerSet } }
   );
 };

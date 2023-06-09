@@ -8,7 +8,7 @@ type PlusIconProps = {
 const PlusIcon: React.FC<PlusIconProps> = ({ width, height }) => {
   return (
     <Image
-      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAX0lEQVR4nO3SMQqAQAwAwRQ+1f9/4WzFUlBWmYH0CZsZAOBZa9/WeearlkNiFKlRpEaRGkVqFKnJFVmXhd6ecciFInvste7KLXSXQ2oUqVGkRpEaRWoUqflNEQCYjzgAzg0/v4QezmcAAAAASUVORK5CYII="
+      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAYUlEQVR4nO3SMQrDQAwAQf3/mwFX94ekNVcaHNZmBtRLrGYAgHut4/M9zzzVckiMIjWK1ChSo0iNIjW5Imtb6N8zDtkocsRe66rcQlc5pEaRGkVqFKlRpEaRmtcUAYB5iB89GXjuHsx5pQAAAABJRU5ErkJggg=="
       width={width ? width : 20}
       height={height ? height : 20}
       alt="check-circle-icon"

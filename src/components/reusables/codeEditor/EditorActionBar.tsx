@@ -40,12 +40,11 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
   title
 }) => {
   const dispatch = useAppDispatch();
-  const { list } = useAppSelector(state => state.user);
+  const { list } = useAppSelector((state) => state.user);
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
-
 
   const handleReset = () => {
     if (language === 'python') {
@@ -105,22 +104,18 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
           </li>
           <li>
             <Tooltip
-              text="Add to list"
+              text={list.includes(title!) ? 'Remove' : 'Add to list'}
               direction="bottom"
-              className="w-[10rem] px-6 py-4"
+              className={`${
+                list.includes(title!) ? 'w-fit' : 'w-[10rem]'
+              } px-6 py-4`}
             >
               {list.includes(title!) ? (
-                <span
-                  data-tooltip="Remove"
-                  onClick={() => dispatch(removeProblemFromList(title!))}
-                >
+                <span onClick={() => dispatch(removeProblemFromList(title!))}>
                   <BookmarkFill width={7} height={7} className="text-primary" />
                 </span>
               ) : (
-                <span
-                  data-tooltip="Add to list"
-                  onClick={() => dispatch(addProblemToList(title!))}
-                >
+                <span onClick={() => dispatch(addProblemToList(title!))}>
                   <BookmarkOutline width={7} height={7} />
                 </span>
               )}
