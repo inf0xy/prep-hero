@@ -1,21 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { renameFolder, deleteFolder } from '@/store';
 import useSubmitNote from '@/hooks/useSubmitNote';
 import { NotificationType } from '@/types/dataTypes';
 import { listNameSelections } from '@/helpers/formFields';
 import TitleList from '@/components/reusables/TitleList';
 import TextEditor from '@/components/reusables/TextEditor';
-import EditIcon from '@/components/icons/EditIcon';
 import MenuIcon from '@/components/icons/MenuIcon';
 import TrashIcon from '@/components/icons/TrashIcon';
 import classes from '@/styles/NotebookPage.module.scss';
 import PlusIcon from '@/components/icons/PlusIcon';
 import Modal from '@/components/reusables/Modal';
 import ConfirmPanel from '@/components/reusables/ConfirmPanel';
-import FolderClosedIcon from '@/components/icons/FolderClosed';
 import Alert from '@/components/reusables/Alert';
-import EllipsisVerticalIcon from '@/components/icons/EllipsisVerticalIcon';
-import FolderOpenIcon from '@/components/icons/FolderOpen';
+import FolderItem from '@/components/user/FolderItem';
 
 const NotebookPage = () => {
   const { theme, notes } = useAppSelector((state) => {
@@ -23,14 +21,17 @@ const NotebookPage = () => {
     const { notes } = state.user;
     return { theme, notes };
   });
+  const dispatch = useAppDispatch();
   const [folderNames, setFolderNames] = useState<string[]>([]);
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
+  const [folderAction, setFolderAction] = useState('create');
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
+  const [actionFolderName, setActionFolderName] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState<string | null>(null);
-  const [noteContent, setNoteContent] = useState<string | null>(null);
+  const [noteContent, setNoteContent] = useState('');
   const folderNameRef = useRef<HTMLInputElement | null>(null);
   const noteTitleRef = useRef<HTMLInputElement | null>(null);
   const { handleSubmitNote } = useSubmitNote(setShowAlert, setNotification);
@@ -51,6 +52,15 @@ const NotebookPage = () => {
     setFolderNames(Array.from(folders) as string[]);
   }, [notes]);
 
+  const closeNewNoteModal = () => {
+    const newNoteModal = document.querySelector(
+      'input[type="checkbox"]#modal__create-new-note'
+    ) as HTMLInputElement;
+    if (newNoteModal) {
+      newNoteModal.checked = false;
+    }
+  };
+
   const getNotesWithListName = () => {
     let currentNotes = notes.filter((el) => el.title !== 'placeholder');
     if (selectedFolder) {
@@ -69,7 +79,7 @@ const NotebookPage = () => {
     return currentNotes.map((el) => el.title) as string[];
   };
 
-  const handleCreateFolder = async () => {
+  const handleFolderAction = async () => {
     if (folderNameRef.current) {
       const name = folderNameRef.current.value;
       if (
@@ -84,31 +94,52 @@ const NotebookPage = () => {
         });
         setShowAlert(true);
       } else {
-        const note = {
-          list_name: name,
-          title: 'placeholder',
-          content: ''
-        };
-        try {
-          await handleSubmitNote(undefined, note);
-          folderNameRef.current.value = '';
-        } catch (err: any) {
-          setNotification({
-            status: 'error',
-            message: 'Something went wrong'
-          });
-          setShowAlert(true);
-          console.log(err.message);
+        if (folderAction === 'create') {
+          const note = {
+            list_name: name,
+            title: 'placeholder',
+            content: ''
+          };
+          try {
+            await handleSubmitNote(undefined, note);
+            folderNameRef.current.value = '';
+          } catch (err: any) {
+            setNotification({
+              status: 'error',
+              message: 'Something went wrong'
+            });
+            setShowAlert(true);
+          }
+        } else if (folderAction === 'rename') {
+          console.log('inside rename ');
+          try {
+            await dispatch(
+              renameFolder({
+                oldFolderName: actionFolderName!,
+                newFolderName: name
+              })
+            );
+            folderNameRef.current.value = '';
+          } catch (err: any) {
+            console.error(err);
+            setNotification({
+              status: 'error',
+              message: 'Something went wrong'
+            });
+            setShowAlert(true);
+          }
         }
       }
     }
   };
 
   const handleCreateNote = async () => {
+    closeNewNoteModal();
+
     if (noteTitleRef.current && noteTitleRef.current.value !== '') {
       const title = noteTitleRef.current!.value;
       const existedTitle = notes.find(
-        (el) => el.list_name === selectedFolder && el.title === title
+        (el) => el.list_name === actionFolderName && el.title === title
       );
 
       if (existedTitle) {
@@ -124,7 +155,7 @@ const NotebookPage = () => {
       setEditingTitle(title);
       try {
         handleSubmitNote(undefined, {
-          list_name: selectedFolder!,
+          list_name: actionFolderName!,
           title,
           content: ''
         });
@@ -134,7 +165,6 @@ const NotebookPage = () => {
           message: 'Something went wrong'
         });
         setShowAlert(true);
-        console.log(err.message);
       }
     } else {
       setNotification({
@@ -147,11 +177,21 @@ const NotebookPage = () => {
       noteTitleRef.current.value = '';
     }
   };
-  const handleDeleteFolder = async () => {};
+  const handleDeleteFolder = async () => {
+    try {
+      await dispatch(deleteFolder(actionFolderName!));
+    } catch (err: any) {
+      setNotification({
+        status: 'error',
+        message: err.message
+      });
+      setShowAlert(true);
+    }
+  };
 
   const handleCloseNoteModal = async () => {
     const note = {
-      list_name: selectedFolder!,
+      list_name: actionFolderName!,
       title: editingTitle!,
       content: noteContent!
     };
@@ -198,7 +238,7 @@ const NotebookPage = () => {
               </label>
               <ul
                 tabIndex={0}
-                className={`dropdown-content translate-x-[-4.1rem] translate-y-[-3.5rem] shadow rounded-box min-w-[15rem] ${
+                className={`dropdown-content translate-x-[-4.1rem] translate-y-[-4.5rem] shadow rounded-box min-w-[15rem] ${
                   classes['create-button-actions']
                 } ${classes[`create-button-actions--${theme}`]}`}
               >
@@ -206,6 +246,7 @@ const NotebookPage = () => {
                   className={`${classes['new-folder']} ${
                     classes[`new-folder--${theme}`]
                   }`}
+                  onClick={() => setFolderAction('create')}
                 >
                   <a>
                     <label htmlFor="modal__create-new-folder">New folder</label>
@@ -221,79 +262,18 @@ const NotebookPage = () => {
               </ul>
             </div>
             <ul className={classes['folders']}>
-              {folderNames.map((el) => (
-                <li key={el}>
-                  <div
-                    className="flex items-center space-x-6"
-                    onClick={() => {
-                      if (selectedFolder && selectedFolder === el) {
-                        setSelectedFolder(null);
-                      } else {
-                        setSelectedFolder(el);
-                      }
-                    }}
-                  >
-                    <span>
-                      {selectedFolder === el ? (
-                        <FolderOpenIcon width={18} height={18} />
-                      ) : (
-                        <FolderClosedIcon width={18} height={18} />
-                      )}
-                    </span>
-                    <p>{el}</p>
-                  </div>
-                  <div
-                    className={`dropdown ${classes['vertical-dots']}`}
-                    onClick={() => setSelectedFolder(el)}
-                  >
-                    <label tabIndex={0} className={classes.icon}>
-                      <EllipsisVerticalIcon width="7" height="7" />
-                    </label>
-                    <ul
-                      tabIndex={0}
-                      className={`dropdown-content shadow rounded-box min-w-[15rem] ${
-                        classes['folder-actions']
-                      } ${classes[`folder-actions--${theme}`]}`}
-                    >
-                      <li
-                        className={`${classes['new-note']} ${
-                          classes[`new-note--${theme}`]
-                        }`}
-                      >
-                        <a>
-                          <label
-                            htmlFor="modal__create-new-note"
-                            className="cursor-pointer"
-                          >
-                            New note
-                          </label>
-                        </a>
-                      </li>
-                      <li
-                        className={`${classes['rename']} ${
-                          classes[`rename--${theme}`]
-                        }`}
-                      >
-                        <a>Rename</a>
-                      </li>
-                      <li
-                        className={`${classes['delete']} ${
-                          classes[`delete--${theme}`]
-                        }`}
-                      >
-                        <a>
-                          <label
-                            htmlFor="delete-folder-confirm-modal"
-                            className="cursor-pointer"
-                          >
-                            Delete
-                          </label>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-              ))}
+              {folderNames.map(
+                (el) => (
+                  <FolderItem
+                    key={el}
+                    folderName={el}
+                    selectedFolder={selectedFolder}
+                    setSelectedFolder={setSelectedFolder}
+                    setActionFolderName={setActionFolderName}
+                    setFolderAction={setFolderAction}
+                  />
+                )
+              )}
             </ul>
           </div>
         </div>
@@ -301,10 +281,8 @@ const NotebookPage = () => {
           <TitleList
             listType="notes"
             titles={getNotesWithListName()}
-            firstIconText="Clear"
-            secondIconText="Edit"
+            firstIconText="Action"
             firstIcon={<TrashIcon />}
-            secondIcon={<EditIcon />}
             firstIconAction={undefined}
             secondIconAction={undefined}
             actionBar={undefined}
@@ -321,7 +299,9 @@ const NotebookPage = () => {
               classes[`form__create-folder--${theme}`]
             }`}
           >
-            <label className={classes.title}>New folder</label>
+            <label className={classes.title}>
+              {folderAction === 'create' ? 'New folder' : 'Rename folder'}
+            </label>
             <input ref={folderNameRef} placeholder="Name" />
             <div className={classes['create-folder-actions']}>
               <button
@@ -331,52 +311,53 @@ const NotebookPage = () => {
                       folderNameRef.current!.value = '';
                     }, 500);
                   }
+                  setFolderAction('');
                 }}
               >
                 <label htmlFor="modal__create-new-folder">Cancel</label>
               </button>
-              <button onClick={handleCreateFolder}>
-                <label htmlFor="modal__create-new-folder">Create</label>
+              <button onClick={handleFolderAction}>
+                <label htmlFor="modal__create-new-folder">
+                  {folderAction === 'create' ? 'Create' : 'Save'}
+                </label>
               </button>
             </div>
           </div>
         </Modal>
-        {!editingTitle && (
-          <Modal
-            id="modal__create-new-note"
-            type="close-button"
-            showCloseButton={false}
-            className="min-w-[30rem] min-h-[15rem]"
+        <Modal
+          id="modal__create-new-note"
+          type="close-button"
+          showCloseButton={false}
+          className="min-w-[30rem] min-h-[15rem]"
+        >
+          <div
+            className={`${classes['form__create-note']} ${
+              classes[`form__create-note--${theme}`]
+            }`}
           >
-            <div
-              className={`${classes['form__create-note']} ${
-                classes[`form__create-note--${theme}`]
-              }`}
-            >
-              <label className={classes.title}>New note</label>
-              <input ref={noteTitleRef} placeholder="Title" />
-              <div className={classes['create-note-actions']}>
-                <button
-                  onClick={() => {
-                    if (noteTitleRef.current) {
-                      setTimeout(() => {
-                        noteTitleRef.current!.value = '';
-                      }, 500);
-                    }
-                  }}
-                >
-                  <label htmlFor="modal__create-new-note">Cancel</label>
-                </button>
+            <label className={classes.title}>New note</label>
+            <input ref={noteTitleRef} placeholder="Title" />
+            <div className={classes['create-note-actions']}>
+              <button
+                onClick={() => {
+                  if (noteTitleRef.current) {
+                    setTimeout(() => {
+                      noteTitleRef.current!.value = '';
+                    }, 500);
+                  }
+                }}
+              >
+                <label htmlFor="modal__create-new-note">Cancel</label>
+              </button>
 
-                <button onClick={handleCreateNote}>
-                  <label htmlFor={`modal__editor-note-${editingTitle}`}>
-                    Create
-                  </label>
-                </button>
-              </div>
+              <button onClick={handleCreateNote}>
+                <label htmlFor={`modal__editor-note-${editingTitle}`}>
+                  Create
+                </label>
+              </button>
             </div>
-          </Modal>
-        )}
+          </div>
+        </Modal>
         <Modal
           id={`modal__editor-note-${editingTitle}`}
           type="close-button"

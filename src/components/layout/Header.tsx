@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import { setTheme, getTheme, getProblemCounts, fetchUserData } from '@/store';
-import ConfirmPanel from '../reusables/ConfirmPanel';
 import UserMenu from '../user/UserMenu';
 import classes from './Header.module.scss';
 
@@ -41,10 +40,6 @@ const Header = () => {
     }
     dispatch(getTheme());
   }, [dispatch]);
-
-  const handleLogout = () => {
-    signOut({ redirect: true, callbackUrl: '/auth/login' });
-  };
 
   return (
     <header className={`${classes.header} ${classes[`header--${theme}`]}`}>
@@ -152,14 +147,6 @@ const Header = () => {
           </div>
         )}
       </div>
-      <ConfirmPanel
-        id="logout-confirm-modal"
-        headerText="Are you sure?"
-        message="You are about to log out."
-        cancelText="Cancel"
-        confirmText="Logout"
-        onConfirm={handleLogout}
-      />
     </header>
   );
 };

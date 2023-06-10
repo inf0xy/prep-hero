@@ -1,5 +1,5 @@
 import { useEffect, useRef, RefObject } from 'react';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useAppSelector } from '@/hooks/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -109,10 +109,9 @@ const UserMenu: React.FC<UserMenuProps> = ({
         className={`transition duration-300 ease-in-out hover:bg-primary ${
           theme === 'light' ? 'hover:text-white' : ''
         } w-full px-5 py-3 rounded-md cursor-pointer`}
+        onClick={() => signOut({ redirect: true, callbackUrl: '/auth/login' })}
       >
-        <label htmlFor="logout-confirm-modal" className="cursor-pointer">
-          Logout
-        </label>
+        Logout
       </li>
     </ul>
   );

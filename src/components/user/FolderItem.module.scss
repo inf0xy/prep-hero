@@ -1,0 +1,82 @@
+@import '@/styles/variables.module.scss';
+
+.folder-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+
+  span,
+  p {
+    cursor: pointer;
+  }
+
+  p {
+    transform: translateY(2px);
+  }
+}
+
+.vertical-dots {
+  justify-self: flex-end;
+  margin-left: auto;
+  position: relative;
+
+  .icon {
+    display: block;
+    overflow: hidden;
+    transform: translateY(3px);
+    padding: 0.2rem;
+    border-radius: 50%;
+    transition: background-color 0.3s ease-in;
+
+    &:hover {
+      cursor: pointer;
+      background-color: $color-gray-200;
+    }
+  }
+}
+
+.folder-actions {
+  position: absolute;
+  top: -2.2rem;
+  left: -4rem;
+  font-size: 1.5rem;
+  gap: 0.5rem;
+  width: 15rem;
+  align-items: flex-start;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &--dark {
+    background-color: $dark-background-100;
+    color: $text-off-white;
+  }
+
+  &--light {
+    background-color: $light-background-0;
+    color: $text-gray-700;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .new-note,
+  .rename,
+  .delete {
+    padding: 0.7rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease-in;
+
+    &--dark:hover {
+      background-color: $color-gray-600;
+    }
+
+    &--light:hover {
+      background-color: $color-input-light;
+      color: $text-gray-600;
+    }
+  }
+}

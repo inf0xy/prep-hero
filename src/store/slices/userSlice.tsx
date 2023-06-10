@@ -9,7 +9,12 @@ import {
   HardSolved,
   Submission
 } from '@/types/dataTypes';
-import { addOrUpdateNote, deleteNote } from './notesSlice';
+import {
+  addOrUpdateNote,
+  deleteNote,
+  renameFolder,
+  deleteFolder
+} from './notesSlice';
 
 interface User {
   notes: Note[];
@@ -281,6 +286,15 @@ const userSlice = createSlice({
     builder.addCase(saveSubmittedCode.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message;
+    });
+
+    builder.addCase(renameFolder.fulfilled, (state, action) => {
+      const { notes } = action.payload;
+      state.notes = notes;
+    });
+    builder.addCase(deleteFolder.fulfilled, (state, action) => {
+      const { notes } = action.payload;
+      state.notes = notes;
     });
   }
 });

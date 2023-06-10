@@ -180,7 +180,8 @@
     align-items: center;
     gap: 1.5rem;
 
-    span, p {
+    span,
+    p {
       cursor: pointer;
     }
 
@@ -188,36 +189,35 @@
       transform: translateY(2px);
     }
 
-    .vertical-dots {
-      justify-self: flex-end;
-      margin-left: auto;
-      position: relative;
+    // .vertical-dots {
+    //   justify-self: flex-end;
+    //   margin-left: auto;
+    //   position: relative;
 
-      .icon {
-        display: block;
-        overflow: hidden;
-        transform: translateY(3px);
-        padding: 0.2rem;
-        border-radius: 50%;
-        transition: background-color 0.3s ease-in;
+    //   .icon {
+    //     display: block;
+    //     overflow: hidden;
+    //     transform: translateY(3px);
+    //     padding: 0.2rem;
+    //     border-radius: 50%;
+    //     transition: background-color 0.3s ease-in;
 
-        &:hover {
-          cursor: pointer;
-          background-color: $color-gray-200;
-        }
-      }
-    }
+    //     &:hover {
+    //       cursor: pointer;
+    //       background-color: $color-gray-200;
+    //     }
+    //   }
+    // }
   }
 }
 
 .folder-actions {
   position: absolute;
-  top: -1rem;
-  left: -2rem;
+  top: -2.2rem;
+  left: -4rem;
 }
 
-.create-button-actions,
-.folder-actions {
+.create-button-actions {
   font-size: 1.5rem;
   gap: 0.5rem;
 
@@ -232,10 +232,7 @@
     cursor: pointer;
   }
 
-  .new-folder,
-  .new-note,
-  .rename,
-  .delete {
+  .new-folder {
     padding: 0.7rem 1rem;
     border-radius: 0.5rem;
     transition: background-color 0.2s ease-in;

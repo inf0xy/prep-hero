@@ -42,6 +42,44 @@ export const deleteNote = createAsyncThunk(
   }
 );
 
+export const renameFolder = createAsyncThunk(
+  'notes/renameFolder',
+  async (
+    folderNames: { oldFolderName: string; newFolderName: string },
+    { rejectWithValue }
+  ) => {
+    const session = await getSession();
+    if (!session) {
+      return rejectWithValue(new Error('Required login'));
+    }
+
+    const userId = session?.session.user._id;
+    const { data } = await axios.put('/api/users/notes/rename-folder', {
+      folderNames,
+      userId
+    });
+    return data;
+  }
+);
+
+export const deleteFolder = createAsyncThunk(
+  'notes/deleteFolder', async (
+    folderName: string,
+    { rejectWithValue }
+  ) => {
+    const session = await getSession();
+    if (!session) {
+      return rejectWithValue(new Error('Required login'));
+    }
+
+    const userId = session?.session.user._id;
+    const { data } = await axios.delete('/api/users/notes/delete-folder', {
+      params: { folderName, userId }
+    });
+    return data;
+  }
+);
+
 const initialState: NotesState = {
   selectedNote: {
     listName: undefined,
@@ -82,6 +120,28 @@ const notesSlice = createSlice({
       state.error = undefined;
     });
     builder.addCase(deleteNote.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(renameFolder.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(renameFolder.fulfilled, (state) => {
+      state.isLoading = false;
+      state.error = undefined;
+    });
+    builder.addCase(renameFolder.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(deleteFolder.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deleteFolder.fulfilled, (state) => {
+      state.isLoading = false;
+      state.error = undefined;
+    });
+    builder.addCase(deleteFolder.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message;
     });

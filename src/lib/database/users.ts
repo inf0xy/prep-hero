@@ -3,6 +3,7 @@ import { connectDB, usersCollection } from './db-util';
 import { getProblemByTitle } from './problems';
 import { hashPassword, comparePassword } from '@/lib/auth';
 import { Note, Submission } from '@/types/dataTypes';
+import { listNameSelections } from '@/helpers/formFields';
 
 type List = {
   problem_id: ObjectId;
@@ -181,6 +182,40 @@ export const deleteUserNote = async (userId: ObjectId, title: string) => {
   } else {
     return { message: 'Unable to delete note.' };
   }
+};
+
+export const editListName = async (
+  _id: ObjectId,
+  oldFolderName: string,
+  newFolderName: string
+) => {
+  await connectDB();
+  if (
+    listNameSelections.some((el) => el === oldFolderName) ||
+    listNameSelections.some((el) => el === newFolderName)
+  ) {
+    return 'Not allowed';
+  }
+
+  await usersCollection.updateMany(
+    { _id, 'notes.list_name': oldFolderName },
+    { $set: { 'notes.$.list_name': newFolderName } }
+  );
+
+  return usersCollection
+    .find({ _id }, { projection: { notes: 1, _id: 0 } })
+    .toArray();
+};
+
+export const deleteFolder = async (_id: ObjectId, folderName: string) => {
+  await connectDB();
+  await usersCollection.updateMany({ _id }, {
+    $pull: { notes: { list_name: folderName } }
+  } as unknown as PullOperator<Document>);
+
+  return usersCollection
+    .find({ _id }, { projection: { notes: 1, _id: 0 } })
+    .toArray();
 };
 
 export const addProblemToList = async (_id: ObjectId, title: string) => {

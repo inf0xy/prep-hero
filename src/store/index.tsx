@@ -12,7 +12,9 @@ import userReducer, {
 import notesSlice, {
   setSelectedNote,
   addOrUpdateNote,
-  deleteNote
+  deleteNote,
+  renameFolder,
+  deleteFolder
 } from './slices/notesSlice';
 import problemsReducer, {
   setSelectedProblem,
@@ -45,6 +47,8 @@ export {
   setSelectedNote,
   addOrUpdateNote,
   deleteNote,
+  renameFolder,
+  deleteFolder,
   setSelectedProblem,
   addProblem,
   updateProblem,
