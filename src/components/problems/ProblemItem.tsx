@@ -209,13 +209,19 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           {session && session.session.user.account_type === 'user' && (
             <div className={classes['action-icons']}>
               {list.includes(title!) ? (
-                <span
-                  className={classes['bookmark-icon']}
-                  data-tooltip="Remove"
-                  onClick={() => dispatch(removeProblemFromList(title!))}
+                <Tooltip
+                  text="Remove"
+                  direction="top"
+                  className="w-fit px-4 py-2"
                 >
-                  <BookmarkFill className="text-primary" />
-                </span>
+                  <span
+                    className={classes['bookmark-icon']}
+                    data-tooltip="Remove"
+                    onClick={() => dispatch(removeProblemFromList(title!))}
+                  >
+                    <BookmarkFill className="text-primary" />
+                  </span>
+                </Tooltip>
               ) : (
                 <Tooltip
                   text="Add to list"
@@ -367,7 +373,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       </Modal>
       <Modal
         id={`modal__full-note-${title}`}
-        buttonSize='btn-sm'
+        buttonSize="btn-sm"
         className={`${
           theme === 'dark'
             ? `bg-[${variables.darkBackground50}]`
@@ -384,7 +390,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       <Modal
         id={`modal__problems-note-${title}`}
         type="close-button"
-        buttonSize='btn-sm'
+        buttonSize="btn-sm"
         className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}

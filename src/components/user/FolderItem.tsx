@@ -4,6 +4,9 @@ import EllipsisVerticalIcon from '../icons/EllipsisVerticalIcon';
 import FolderOpenIcon from '../icons/FolderOpen';
 import FolderClosedIcon from '../icons/FolderClosed';
 import classes from './FolderItem.module.scss';
+import EditIcon from '../icons/EditIcon';
+import TrashIcon from '../icons/TrashIcon';
+import DocumentPlus from '../icons/DocumentPlus';
 
 interface FolderItemProps {
   folderName: string;
@@ -66,14 +69,15 @@ const FolderItem: React.FC<FolderItemProps> = ({
                   classes[`new-note--${theme}`]
                 }`}
               >
-                <a>
+
                   <label
                     htmlFor="modal__create-new-note"
                     className="cursor-pointer"
                   >
-                    New note
+                    <DocumentPlus />
+                    <span>New note</span>
                   </label>
-                </a>
+
               </li>
               <li
                 className={`${classes['rename']} ${
@@ -85,20 +89,22 @@ const FolderItem: React.FC<FolderItemProps> = ({
                   htmlFor="modal__create-new-folder"
                   className="cursor-pointer"
                 >
-                  Rename
+                  <EditIcon />
+                  <span>Rename</span>
                 </label>
               </li>
             </>
           )}
           <li className={`${classes['delete']} ${classes[`delete--${theme}`]}`}>
-            <a>
+
               <label
                 htmlFor="delete-folder-confirm-modal"
                 className="cursor-pointer"
               >
-                Delete
+                <TrashIcon />
+                <span>Remove</span>
               </label>
-            </a>
+
           </li>
         </ul>
       </div>

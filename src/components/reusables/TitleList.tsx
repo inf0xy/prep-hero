@@ -11,14 +11,17 @@ import classes from './TitleList.module.scss';
 type TitleListProps = {
   listType: 'problems' | 'notes' | string;
   titles: string[];
-  firstIconText: string;
+  firstIconText?: string;
   secondIconText?: string;
   firstIcon?: ReactNode;
   secondIcon?: ReactNode;
   testTitles?: string[];
   actionBar?: ReactNode;
+  folderName?: string;
   firstIconAction?: (val?: string) => Promise<any> | undefined;
   secondIconAction?: (val?: string) => Promise<any> | undefined;
+  handleRenameNote?: (val: string) => void;
+  handleDeleteNote?: (val: string) => void;
 };
 
 import Modal from './Modal';
@@ -27,6 +30,7 @@ import { NotificationType } from '@/types/dataTypes';
 import useSubmitNote from '@/hooks/useSubmitNote';
 import { Note } from '@/types/dataTypes';
 import Alert from './Alert';
+import NoteAction from '../user/NoteAction';
 
 const TitleList: React.FC<TitleListProps> = ({
   listType,
@@ -38,7 +42,10 @@ const TitleList: React.FC<TitleListProps> = ({
   testTitles,
   actionBar,
   firstIconAction,
-  secondIconAction
+  secondIconAction,
+  folderName,
+  handleRenameNote,
+  handleDeleteNote
 }) => {
   const [currentTitles, setCurrentTitles] = useState(titles);
   const [searchTerm, setSearchTerm] = useState('');
@@ -134,9 +141,22 @@ const TitleList: React.FC<TitleListProps> = ({
             }
             className={`${
               testTitles && testTitles.includes(title) ? 'text-cyan-500' : ''
+            } ${
+              listType !== 'notes'
+                ? 'transition duration-300 ease hover:text-primary'
+                : ''
             }`}
           >
-            {secondIcon}
+            {listType === 'notes' ? (
+              <NoteAction
+                folderName={folderName!}
+                title={title}
+                handleRenameNote={handleRenameNote!}
+                handleDeleteNote={handleDeleteNote!}
+              />
+            ) : (
+              secondIcon
+            )}
           </span>
         </div>
       )}
@@ -158,7 +178,7 @@ const TitleList: React.FC<TitleListProps> = ({
       <Modal
         id={`modal__notebook-note-${title}`}
         type="close-button"
-        buttonSize='btn-sm'
+        buttonSize="btn-sm"
         className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}

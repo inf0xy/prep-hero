@@ -14,6 +14,8 @@ import Modal from '@/components/reusables/Modal';
 import ConfirmPanel from '@/components/reusables/ConfirmPanel';
 import Alert from '@/components/reusables/Alert';
 import FolderItem from '@/components/user/FolderItem';
+import NoteAction from '@/components/user/NoteAction';
+import FolderPlus from '@/components/icons/FolderPlus';
 
 const NotebookPage = () => {
   const { theme, notes } = useAppSelector((state) => {
@@ -200,6 +202,10 @@ const NotebookPage = () => {
     setEditingTitle(null);
   };
 
+  const handleRenameNote = (title: string) => {};
+
+  const handleDeleteNote = (title: string) => {};
+
   return (
     <>
       {showAlert && (
@@ -238,7 +244,7 @@ const NotebookPage = () => {
               </label>
               <ul
                 tabIndex={0}
-                className={`dropdown-content translate-x-[-4.1rem] translate-y-[-4.5rem] shadow rounded-box min-w-[15rem] ${
+                className={`dropdown-content translate-y-[-1.6rem] shadow rounded-box min-w-[15rem] ${
                   classes['create-button-actions']
                 } ${classes[`create-button-actions--${theme}`]}`}
               >
@@ -248,32 +254,30 @@ const NotebookPage = () => {
                   }`}
                   onClick={() => setFolderAction('create')}
                 >
-                  <a>
-                    <label htmlFor="modal__create-new-folder">New folder</label>
-                  </a>
+                  <label htmlFor="modal__create-new-folder">
+                    <FolderPlus /><span>New folder</span>
+                  </label>
                 </li>
                 <li
                   className={`${classes['new-folder']} ${
                     classes[`new-folder--${theme}`]
                   }`}
                 >
-                  <a>Item 2</a>
+                  <span>Item 2</span>
                 </li>
               </ul>
             </div>
             <ul className={classes['folders']}>
-              {folderNames.map(
-                (el) => (
-                  <FolderItem
-                    key={el}
-                    folderName={el}
-                    selectedFolder={selectedFolder}
-                    setSelectedFolder={setSelectedFolder}
-                    setActionFolderName={setActionFolderName}
-                    setFolderAction={setFolderAction}
-                  />
-                )
-              )}
+              {folderNames.map((el) => (
+                <FolderItem
+                  key={el}
+                  folderName={el}
+                  selectedFolder={selectedFolder}
+                  setSelectedFolder={setSelectedFolder}
+                  setActionFolderName={setActionFolderName}
+                  setFolderAction={setFolderAction}
+                />
+              ))}
             </ul>
           </div>
         </div>
@@ -281,11 +285,12 @@ const NotebookPage = () => {
           <TitleList
             listType="notes"
             titles={getNotesWithListName()}
-            firstIconText="Action"
-            firstIcon={<TrashIcon />}
+            secondIconText="Action"
             firstIconAction={undefined}
             secondIconAction={undefined}
             actionBar={undefined}
+            handleRenameNote={handleRenameNote}
+            handleDeleteNote={handleDeleteNote}
           />
         </div>
         <Modal
