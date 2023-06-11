@@ -1,8 +1,10 @@
-import { Dispatch, SetStateAction, RefObject } from 'react';
+import { useState, Dispatch, SetStateAction, RefObject } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { useAppSelector } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
 import Loading from '../Loading';
+
+import { useMonaco } from '@monaco-editor/react';
 
 
 type CodeEditorProps = {
@@ -29,6 +31,16 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       setCodeInput(value!);
     }
   };
+  const monaco = useMonaco();
+  const [breakpoints, setBreakPoints] = useState([]);
+
+  const highlightBreakpointLine = (lineNumber: any) => {
+    if (monaco && monaco.editor && monaco.editor.getModels().length > 0) {
+      const model = monaco.editor.getModels()[0];
+      // const editor = monaco.editor.getEditorWidget(model);
+      // if (editor) {}
+    }
+  };
 
   return (
     <div className="code-editor" ref={editorRef}>
@@ -50,6 +62,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         }}
         onChange={handleEditorChange}
         loading={<Loading width={40} height={40} />}
+        onMount={(editor) => {
+          editor.onMouseDown((event) => {
+            if (event.target.position) {
+              const lineNumber = event.target.position.lineNumber;
+              console.log(lineNumber);
+            }
+          })
+        }}
       />
     </div>
   );

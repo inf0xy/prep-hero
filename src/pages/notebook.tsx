@@ -7,13 +7,13 @@ import { listNameSelections } from '@/helpers/formFields';
 import TitleList from '@/components/reusables/TitleList';
 import TextEditor from '@/components/reusables/TextEditor';
 import MenuIcon from '@/components/icons/MenuIcon';
-import classes from '@/styles/NotebookPage.module.scss';
 import PlusIcon from '@/components/icons/PlusIcon';
 import Modal from '@/components/reusables/Modal';
 import ConfirmPanel from '@/components/reusables/ConfirmPanel';
 import Alert from '@/components/reusables/Alert';
 import FolderItem from '@/components/user/FolderItem';
 import FolderPlus from '@/components/icons/FolderPlus';
+import classes from '@/styles/NotebookPage.module.scss';
 
 const NotebookPage = () => {
   const { theme, notes } = useAppSelector((state) => {

@@ -8,6 +8,7 @@ import TrashIcon from '../icons/TrashIcon';
 import Modal from '../reusables/Modal';
 import EditIcon from '../icons/EditIcon';
 import classes from './ActionMenu.module.scss';
+import Alert from '../reusables/Alert';
 
 interface NoteActionProps {
   title: string;
@@ -78,6 +79,15 @@ const NoteAction: React.FC<NoteActionProps> = ({ title }) => {
 
   return (
     <>
+      {showAlert && (
+        <Alert
+          setNotification={setNotification}
+          status={notification?.status!}
+          onClose={() => setShowAlert(false)}
+        >
+          {notification?.message}
+        </Alert>
+      )}
       <div className={`dropdown ${classes['vertical-dots']}`}>
         <label tabIndex={0} className={classes.icon}>
           <EllipsisVerticalIcon width="7" height="7" />
