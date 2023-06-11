@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 import EllipsisVerticalIcon from '../icons/EllipsisVerticalIcon';
 import FolderOpenIcon from '../icons/FolderOpen';
 import FolderClosedIcon from '../icons/FolderClosed';
-import classes from './FolderItem.module.scss';
+import classes from './ActionMenu.module.scss';
 import EditIcon from '../icons/EditIcon';
 import TrashIcon from '../icons/TrashIcon';
 import DocumentPlus from '../icons/DocumentPlus';

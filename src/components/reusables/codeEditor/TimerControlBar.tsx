@@ -4,6 +4,7 @@ import { setDuration, setTimerDuration } from '@/store';
 import ArrowPathIcon from '@/components/icons/ArrowPathIcon';
 import PlayIcon from '@/components/icons/PlayIcon';
 import PauseIcon from '@/components/icons/PauseIcon';
+import Tooltip from '@/components/reusables/Tooltip';
 
 type TimerControlBarProps = {
   mode: string;
@@ -45,7 +46,7 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
         setId(timeoutId);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration, start]);
 
   const handleStart = () => {
@@ -83,6 +84,7 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
 
   return (
     <div className="flex space-x-6">
+      <Tooltip text='Add time' direction='bottom' className={duration === 0 && mode === 'timer' ? `w-[8rem] p-2 left-[3rem] ${theme === 'dark' ? '#2b2b2b' : '#656565'}` : 'hidden'}>
       <button
         className={`${startButtonColor} px-8 py-2 rounded-md ${
           (duration !== 0 && mode === 'timer') || mode === 'stopwatch'
@@ -102,6 +104,7 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
           </span>
         )}
       </button>
+      </Tooltip>
       <button
         className={`${
           theme === 'dark' ? 'bg-[#656565]' : 'bg-[#a7a3ae]'

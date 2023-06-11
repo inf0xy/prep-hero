@@ -95,7 +95,6 @@ const SpeedChart = () => {
     const problems = submissions.filter((el) =>
       easyProblems.includes(el.title)
     );
-    console.log('easy ', problems);
     setUserData(getSolveTimes(problems, variables.colorSuccess500));
   };
 
@@ -104,7 +103,6 @@ const SpeedChart = () => {
     const problems = submissions.filter((el) =>
       mediumProblems.includes(el.title)
     );
-    console.log('medium ', problems);
     setUserData(getSolveTimes(problems, variables.colorWarning200));
   };
 
@@ -113,7 +111,6 @@ const SpeedChart = () => {
     const problems = submissions.filter((el) =>
       hardProblems.includes(el.title)
     );
-    console.log('hard ', problems);
     setUserData(getSolveTimes(problems, variables.colorError500));
   };
 

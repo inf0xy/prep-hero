@@ -7,14 +7,12 @@ import { listNameSelections } from '@/helpers/formFields';
 import TitleList from '@/components/reusables/TitleList';
 import TextEditor from '@/components/reusables/TextEditor';
 import MenuIcon from '@/components/icons/MenuIcon';
-import TrashIcon from '@/components/icons/TrashIcon';
 import classes from '@/styles/NotebookPage.module.scss';
 import PlusIcon from '@/components/icons/PlusIcon';
 import Modal from '@/components/reusables/Modal';
 import ConfirmPanel from '@/components/reusables/ConfirmPanel';
 import Alert from '@/components/reusables/Alert';
 import FolderItem from '@/components/user/FolderItem';
-import NoteAction from '@/components/user/NoteAction';
 import FolderPlus from '@/components/icons/FolderPlus';
 
 const NotebookPage = () => {
@@ -63,6 +61,15 @@ const NotebookPage = () => {
     }
   };
 
+  const openNewNoteModal = () => {
+    const newNoteModal = document.querySelector(
+      'input[type="checkbox"]#modal__editor-note'
+    ) as HTMLInputElement;
+    if (newNoteModal) {
+      newNoteModal.checked = true;
+    }
+  };
+
   const getNotesWithListName = () => {
     let currentNotes = notes.filter((el) => el.title !== 'placeholder');
     if (selectedFolder) {
@@ -104,7 +111,6 @@ const NotebookPage = () => {
           };
           try {
             await handleSubmitNote(undefined, note);
-            folderNameRef.current.value = '';
           } catch (err: any) {
             setNotification({
               status: 'error',
@@ -113,7 +119,6 @@ const NotebookPage = () => {
             setShowAlert(true);
           }
         } else if (folderAction === 'rename') {
-          console.log('inside rename ');
           try {
             await dispatch(
               renameFolder({
@@ -121,7 +126,6 @@ const NotebookPage = () => {
                 newFolderName: name
               })
             );
-            folderNameRef.current.value = '';
           } catch (err: any) {
             console.error(err);
             setNotification({
@@ -132,6 +136,7 @@ const NotebookPage = () => {
           }
         }
       }
+      folderNameRef.current.value = '';
     }
   };
 
@@ -140,13 +145,11 @@ const NotebookPage = () => {
 
     if (noteTitleRef.current && noteTitleRef.current.value !== '') {
       const title = noteTitleRef.current!.value;
-      const existedTitle = notes.find(
-        (el) => el.list_name === actionFolderName && el.title === title
-      );
+      const existedTitle = notes.find((el) => el.title === title);
 
       if (existedTitle) {
         setNotification({
-          status: 'error',
+          status: 'warning',
           message: 'Title name already exists.'
         });
         setShowAlert(true);
@@ -155,6 +158,7 @@ const NotebookPage = () => {
       }
 
       setEditingTitle(title);
+      openNewNoteModal();
       try {
         handleSubmitNote(undefined, {
           list_name: actionFolderName!,
@@ -201,10 +205,6 @@ const NotebookPage = () => {
     setNoteContent('');
     setEditingTitle(null);
   };
-
-  const handleRenameNote = (title: string) => {};
-
-  const handleDeleteNote = (title: string) => {};
 
   return (
     <>
@@ -255,7 +255,8 @@ const NotebookPage = () => {
                   onClick={() => setFolderAction('create')}
                 >
                   <label htmlFor="modal__create-new-folder">
-                    <FolderPlus /><span>New folder</span>
+                    <FolderPlus />
+                    <span>New folder</span>
                   </label>
                 </li>
                 <li
@@ -289,8 +290,6 @@ const NotebookPage = () => {
             firstIconAction={undefined}
             secondIconAction={undefined}
             actionBar={undefined}
-            handleRenameNote={handleRenameNote}
-            handleDeleteNote={handleDeleteNote}
           />
         </div>
         <Modal
@@ -314,9 +313,9 @@ const NotebookPage = () => {
                   if (folderNameRef.current) {
                     setTimeout(() => {
                       folderNameRef.current!.value = '';
+                      setFolderAction('');
                     }, 500);
                   }
-                  setFolderAction('');
                 }}
               >
                 <label htmlFor="modal__create-new-folder">Cancel</label>
@@ -354,17 +353,12 @@ const NotebookPage = () => {
               >
                 <label htmlFor="modal__create-new-note">Cancel</label>
               </button>
-
-              <button onClick={handleCreateNote}>
-                <label htmlFor={`modal__editor-note-${editingTitle}`}>
-                  Create
-                </label>
-              </button>
+              <button onClick={handleCreateNote}>Create</button>
             </div>
           </div>
         </Modal>
         <Modal
-          id={`modal__editor-note-${editingTitle}`}
+          id="modal__editor-note"
           type="close-button"
           buttonSize="btn-sm"
           className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${

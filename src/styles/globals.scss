@@ -136,13 +136,13 @@ body {
   }
 }
 
+.wmde-markdown pre {
+  position: relative;
+}
+
 .text-editor {
   .w-md-editor-bar {
     display: none;
-  }
-
-  .wmde-markdown pre {
-    position: relative;
   }
 
   .w-md-editor-toolbar {

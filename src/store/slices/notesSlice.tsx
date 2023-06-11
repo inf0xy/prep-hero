@@ -42,6 +42,20 @@ export const deleteNote = createAsyncThunk(
   }
 );
 
+export const renameNote = createAsyncThunk(
+  'notes/renameNote',
+  async (noteNames: { oldTitle: string, newTitle: string}, { rejectWithValue }) => {
+    const session = await getSession();
+    if (!session) {
+      return rejectWithValue(new Error('Required login'));
+    }
+
+    const userId = session?.session.user._id;
+    const { data } = await axios.put('/api/users/notes/rename-note', { noteNames, userId });
+    return data;
+  }
+);
+
 export const renameFolder = createAsyncThunk(
   'notes/renameFolder',
   async (
@@ -142,6 +156,17 @@ const notesSlice = createSlice({
       state.error = undefined;
     });
     builder.addCase(deleteFolder.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(renameNote.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(renameNote.fulfilled, (state) => {
+      state.isLoading = false;
+      state.error = undefined;
+    });
+    builder.addCase(renameNote.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message;
     });

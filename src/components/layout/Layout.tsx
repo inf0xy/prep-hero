@@ -10,7 +10,6 @@ type LayoutProps = {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
-  // const regex = /problem\/.*/;
   const regex = /\/(problem\/.*|notebook)/;
 
   useCustomScrollbar();

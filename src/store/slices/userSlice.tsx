@@ -13,7 +13,8 @@ import {
   addOrUpdateNote,
   deleteNote,
   renameFolder,
-  deleteFolder
+  deleteFolder,
+  renameNote
 } from './notesSlice';
 
 interface User {
@@ -204,11 +205,9 @@ const userSlice = createSlice({
       }
     });
     builder.addCase(deleteNote.fulfilled, (state, action) => {
-      const noteIndex = state.notes.findIndex(
-        (el) => el.title === action.payload.title
-      );
-      if (noteIndex !== -1) {
-        state.notes.splice(noteIndex, 1);
+      const { notes } = action.payload;
+      if (notes) {
+        state.notes = notes;
       }
     });
     builder.addCase(addProblemToList.pending, (state) => {
@@ -290,11 +289,21 @@ const userSlice = createSlice({
 
     builder.addCase(renameFolder.fulfilled, (state, action) => {
       const { notes } = action.payload;
-      state.notes = notes;
+      if (notes) {
+        state.notes = notes;
+      }
     });
     builder.addCase(deleteFolder.fulfilled, (state, action) => {
       const { notes } = action.payload;
-      state.notes = notes;
+      if (notes) {
+        state.notes = notes;
+      }
+    });
+    builder.addCase(renameNote.fulfilled, (state, action) => {
+      const { notes } = action.payload;
+      if (notes) {
+        state.notes = notes;
+      }
     });
   }
 });

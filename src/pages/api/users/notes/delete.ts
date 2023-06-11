@@ -12,7 +12,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         new ObjectId(userId as string),
         title as string
       );
-      res.status(result.title ? 200 : 500).json(result);
+      if (result.hasOwnProperty('notes')) {
+        res.status(200).json({ notes: result.notes });
+      } else {
+        res.status(500).json(result);
+      }
     } catch (err: any) {
       res.status(400).json({ message: 'Invalid request' });
     }

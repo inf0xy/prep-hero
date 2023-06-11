@@ -172,16 +172,53 @@ export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
 
 export const deleteUserNote = async (userId: ObjectId, title: string) => {
   await connectDB();
-  const result = await usersCollection.updateOne(
-    { _id: userId },
-    { $pull: { notes: { title } } }
+  const foundNotes = await usersCollection.findOne(
+    { _id: userId, 'notes.title': title },
+    { projection: { _id: 0, 'notes.$': 1 } }
   );
+  if (foundNotes) {
+    const listName = foundNotes.notes[0].list_name;
+    const result = await usersCollection.updateOne(
+      { _id: userId },
+      { $pull: { notes: { title } } }
+    );
 
-  if (result.modifiedCount === 1) {
-    return { message: 'Deleted', title };
+    if (result.modifiedCount === 1) {
+      if (foundNotes.notes.length === 1) {
+        await usersCollection.updateOne(
+          { _id: userId },
+          {
+            $push: {
+              notes: { list_name: listName, title: 'placeholder', content: '' }
+            }
+          }
+        );
+      }
+      const notes = await usersCollection
+        .find({ _id: userId }, { projection: { notes: 1, _id: 0 } })
+        .toArray();
+      return { notes: notes[0].notes };
+    } else {
+      return { message: 'Unable to delete note.' };
+    }
   } else {
-    return { message: 'Unable to delete note.' };
+    return { message: 'Note not found.' };
   }
+};
+
+export const editNoteName = async (
+  _id: ObjectId,
+  oldTitle: string,
+  newTitle: string
+) => {
+  await connectDB();
+  const result = await usersCollection.updateOne(
+    { _id, 'notes.title': oldTitle },
+    { $set: { 'notes.$.title': newTitle } }
+  );
+  return usersCollection
+    .find({ _id }, { projection: { notes: 1, _id: 0 } })
+    .toArray();
 };
 
 export const editListName = async (
@@ -198,8 +235,9 @@ export const editListName = async (
   }
 
   await usersCollection.updateMany(
-    { _id, 'notes.list_name': oldFolderName },
-    { $set: { 'notes.$.list_name': newFolderName } }
+    { _id },
+    { $set: { 'notes.$[elem].list_name': newFolderName } },
+    { arrayFilters: [{ 'elem.list_name': oldFolderName }] }
   );
 
   return usersCollection

@@ -17,11 +17,8 @@ type TitleListProps = {
   secondIcon?: ReactNode;
   testTitles?: string[];
   actionBar?: ReactNode;
-  folderName?: string;
   firstIconAction?: (val?: string) => Promise<any> | undefined;
   secondIconAction?: (val?: string) => Promise<any> | undefined;
-  handleRenameNote?: (val: string) => void;
-  handleDeleteNote?: (val: string) => void;
 };
 
 import Modal from './Modal';
@@ -42,10 +39,7 @@ const TitleList: React.FC<TitleListProps> = ({
   testTitles,
   actionBar,
   firstIconAction,
-  secondIconAction,
-  folderName,
-  handleRenameNote,
-  handleDeleteNote
+  secondIconAction
 }) => {
   const [currentTitles, setCurrentTitles] = useState(titles);
   const [searchTerm, setSearchTerm] = useState('');
@@ -149,10 +143,7 @@ const TitleList: React.FC<TitleListProps> = ({
           >
             {listType === 'notes' ? (
               <NoteAction
-                folderName={folderName!}
                 title={title}
-                handleRenameNote={handleRenameNote!}
-                handleDeleteNote={handleDeleteNote!}
               />
             ) : (
               secondIcon

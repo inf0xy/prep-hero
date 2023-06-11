@@ -71,7 +71,6 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
         </Button>
 
         <Tooltip
-          // text="Stdout"
           text={!isLoading ? 'Execute' : 'Unavailable during execution'}
           direction="top"
           className={`left-[4.5rem] ${!isLoading ? 'w-fit' : 'w-[20rem]'} p-4`}
