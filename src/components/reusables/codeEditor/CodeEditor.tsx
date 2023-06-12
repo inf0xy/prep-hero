@@ -1,11 +1,8 @@
-import { useState, Dispatch, SetStateAction, RefObject } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction, RefObject } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { useAppSelector } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
 import Loading from '../Loading';
-
-import { useMonaco } from '@monaco-editor/react';
-
 
 type CodeEditorProps = {
   value: string;
@@ -24,23 +21,58 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   setCodeInput,
   editorRef
 }) => {
-  const { theme } = useAppSelector((state) => state.theme);
+  const { theme } = useAppSelector(state => state.theme);
 
   const handleEditorChange = (value: string | undefined) => {
     if (!options.readOnly) {
       setCodeInput(value!);
     }
   };
-  const monaco = useMonaco();
-  const [breakpoints, setBreakPoints] = useState([]);
 
-  const highlightBreakpointLine = (lineNumber: any) => {
-    if (monaco && monaco.editor && monaco.editor.getModels().length > 0) {
-      const model = monaco.editor.getModels()[0];
-      // const editor = monaco.editor.getEditorWidget(model);
-      // if (editor) {}
+  const [breakpoints, setBreakpoints] = useState<number[]>([]);
+  const [currentDecorationId, setCurrentDecorationId] = useState<string | null>(null);
+
+
+  const handleLineClick = (lineNumber: number, editor: any, monaco: any) => {
+    const updatedBreakpoints = breakpoints.includes(lineNumber)
+      ? breakpoints.filter((line) => line !== lineNumber)
+      : [...breakpoints, lineNumber];
+    setBreakpoints(updatedBreakpoints);
+
+    if (currentDecorationId) {
+      editor.deltaDecorations([currentDecorationId], []);
     }
+    const newDecorationId = editor.deltaDecorations([], [
+      {
+        range: new monaco.Range(lineNumber, 1, lineNumber, 1),
+        options: {
+          isWholeLine: true,
+          className: 'view-line.code-error-highlight',
+        },
+      },
+    ]);
+
+    setCurrentDecorationId(newDecorationId[0]);
+
+
+    // Send updated breakpoints to the backend debugger through the WebSocket connection
+    // sendBreakpointsToDebugger(updatedBreakpoints);
   };
+
+//   const highlightBreakpointLine = (lineNumber: number, editor: any, monaco: any) => {
+//   if (editor) {
+//     editor.revealLineInCenter(lineNumber);
+//     editor.deltaDecorations([], [
+//       {
+//         range: new monaco.Range(lineNumber, 1, lineNumber, 1),
+//         options: {
+//           isWholeLine: true,
+//           className: 'breakpoint-hit-line',
+//         },
+//       },
+//     ]);
+//   }
+// };
 
   return (
     <div className="code-editor" ref={editorRef}>
@@ -62,14 +94,15 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         }}
         onChange={handleEditorChange}
         loading={<Loading width={40} height={40} />}
-        onMount={(editor) => {
-          editor.onMouseDown((event) => {
-            if (event.target.position) {
-              const lineNumber = event.target.position.lineNumber;
-              console.log(lineNumber);
-            }
-          })
-        }}
+        // onMount={(editor, monaco) => {
+        //   editor.onMouseDown((event) => {
+        //     if (event.target.position) {
+        //       const lineNumber = event.target.position.lineNumber;
+        //       // highlightBreakpointLine(lineNumber, editor, monaco)
+        //       handleLineClick(lineNumber, editor, monaco)
+        //     }
+        //   })
+        // }}
       />
     </div>
   );

@@ -74,10 +74,13 @@
 }
 
 .tabs {
+  position: relative;
   display: flex;
   font-size: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   height: 4.5rem;
+  z-index: 20;
+
 
 
   & > * {

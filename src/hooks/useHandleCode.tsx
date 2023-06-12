@@ -122,8 +122,7 @@ const useHandleCode = ({
     ]
   );
 
-  const handleSubmission = useCallback(
-    async (
+  const handleSubmission = useCallback(async (
       action: 'test' | 'submit',
       reviewCode: { code: string; language: string } | undefined,
       language: string,

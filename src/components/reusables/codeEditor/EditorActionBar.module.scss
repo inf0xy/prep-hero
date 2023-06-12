@@ -21,4 +21,8 @@
   & > * {
     cursor: pointer;
   }
+
+  li:last-child label div button {
+    color: $color-icon-gray;
+  }
 }

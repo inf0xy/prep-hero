@@ -133,8 +133,9 @@ const useCodeCustomEffect = ({
   }, [submissions]);
 
   useEffect(() => {
-    if (codeError && editorRef.current) {
-      handleHighLightError(codeLines, codeError);
+    if (editorRef.current) {
+      console.log('codeError ', codeError);
+      handleHighLightError(codeLines, codeError || '');
     }
   }, [codeError, codeLines, editorRef, handleHighLightError]);
 };

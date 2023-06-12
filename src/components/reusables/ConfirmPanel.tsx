@@ -34,7 +34,7 @@ const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
               className={` modal-box p-0 ${classes['confirm-panel']} ${classes[`confirm-panel--${theme}`]}`}
             >
               <div
-                className={`card z-[-1] h-56 min-w-[50vw] ${
+                className={`card z-[-1] h-56 min-w-[60rem] ${
                   theme === 'dark' ? 'bg-[#333]' : 'bg-white'
                 } px-[1rem] ${className}`}
               >

@@ -19,8 +19,21 @@ const Debugger = () => {
   );
 
   useEffect(() => {
-    socket.on('sendMessage', (data) => {
+    socket.on('startDebugging', (data) => {
       setMessage(data);
+    });
+
+    socket.on('stepIn', (data) => {
+
+    });
+    socket.on('stepOver', (data) => {
+
+    });
+    socket.on('stepOut', (data) => {
+
+    });
+    socket.on('stopDebugging', (data) => {
+
     });
 
     socket.on('error', (error) => {
@@ -32,10 +45,32 @@ const Debugger = () => {
     };
   }, []);
 
-  const sendMessage = () => {
-    // console.log('sending message ', inputVal);
-    socket.emit('sendMessage', inputVal);
+  // const sendMessage = () => {
+  //   // console.log('sending message ', inputVal);
+  //   socket.emit('sendMessage', inputVal);
+  //   setInputVal('');
+  // };
+
+  const handleStartDebugging = () => {
+    console.log('sending message ', inputVal);
+    socket.emit('startDebugging', inputVal);
     setInputVal('');
+  };
+
+  const handleStepIn = () => {
+    socket.emit('stepIn');
+  }
+
+  const handleStepOver = () => {
+    socket.emit('stepOver');
+  }
+
+  const handleStepOut = () => {
+    socket.emit('stepOut');
+  }
+
+  const handleExit = () => {
+    socket.emit('stopDebugging');
   };
 
   return (
@@ -51,15 +86,19 @@ const Debugger = () => {
       )}
       <label>Message</label>
       <input value={inputVal} onChange={(e) => setInputVal(e.target.value)} />
-      <Button onClick={sendMessage}>Send</Button>
+      <Button onClick={handleStartDebugging}>Start</Button>
+      <Button onClick={handleStepIn}>Step In</Button>
+      <Button onClick={handleStepOver}>Step Over</Button>
+      <Button onClick={handleStepOut}>Step Out</Button>
+      <Button onClick={handleExit}>Exit</Button>
       <h1>{message}</h1>
-      <CodeEditor
+      {/* <CodeEditor
         value=""
         language="python"
         setCodeInput={setCodeInput}
         height="500px"
         options={{ fontSize: 14, tabSize: 4, readOnly: false }}
-      />
+      /> */}
     </div>
   );
 };

@@ -111,11 +111,16 @@ body {
 .code-highlight {
   overflow-x: hidden !important;
   .code-line {
+    word-wrap: break-word;
     overflow-x: hidden;
     white-space: pre-wrap;
     font-size: 1.4rem;
   }
 }
+
+// .breakpoint-hit-line {
+//   background-color: red;
+// }
 
 .w-md-editor {
   box-shadow: none !important;
