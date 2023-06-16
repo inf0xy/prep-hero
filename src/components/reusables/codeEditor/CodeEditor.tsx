@@ -29,35 +29,35 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   };
 
-  const [breakpoints, setBreakpoints] = useState<number[]>([]);
-  const [currentDecorationId, setCurrentDecorationId] = useState<string | null>(null);
+  // const [breakpoints, setBreakpoints] = useState<number[]>([]);
+  // const [currentDecorationId, setCurrentDecorationId] = useState<string | null>(null);
 
 
-  const handleLineClick = (lineNumber: number, editor: any, monaco: any) => {
-    const updatedBreakpoints = breakpoints.includes(lineNumber)
-      ? breakpoints.filter((line) => line !== lineNumber)
-      : [...breakpoints, lineNumber];
-    setBreakpoints(updatedBreakpoints);
+  // const handleLineClick = (lineNumber: number, editor: any, monaco: any) => {
+  //   const updatedBreakpoints = breakpoints.includes(lineNumber)
+  //     ? breakpoints.filter((line) => line !== lineNumber)
+  //     : [...breakpoints, lineNumber];
+  //   setBreakpoints(updatedBreakpoints);
 
-    if (currentDecorationId) {
-      editor.deltaDecorations([currentDecorationId], []);
-    }
-    const newDecorationId = editor.deltaDecorations([], [
-      {
-        range: new monaco.Range(lineNumber, 1, lineNumber, 1),
-        options: {
-          isWholeLine: true,
-          className: 'view-line.code-error-highlight',
-        },
-      },
-    ]);
+  //   if (currentDecorationId) {
+  //     editor.deltaDecorations([currentDecorationId], []);
+  //   }
+  //   const newDecorationId = editor.deltaDecorations([], [
+  //     {
+  //       range: new monaco.Range(lineNumber, 1, lineNumber, 1),
+  //       options: {
+  //         isWholeLine: true,
+  //         className: 'view-line.code-error-highlight',
+  //       },
+  //     },
+  //   ]);
 
-    setCurrentDecorationId(newDecorationId[0]);
+  //   setCurrentDecorationId(newDecorationId[0]);
 
 
     // Send updated breakpoints to the backend debugger through the WebSocket connection
     // sendBreakpointsToDebugger(updatedBreakpoints);
-  };
+  // };
 
 //   const highlightBreakpointLine = (lineNumber: number, editor: any, monaco: any) => {
 //   if (editor) {

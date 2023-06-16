@@ -85,7 +85,7 @@ const NotebookPage = () => {
         );
       }
     }
-    return currentNotes.map((el) => el.title) as string[];
+    return currentNotes.map((el) => el.title).reverse() as string[];
   };
 
   const handleFolderAction = async () => {

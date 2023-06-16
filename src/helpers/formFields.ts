@@ -102,6 +102,7 @@ export const companyListOption = [
   { label: 'Google', value: 'Google' },
   { label: 'Goldman Sachs', value: 'Goldman Sachs' },
   { label: 'Intel', value: 'Intel' },
+  { label: 'JPMorgan', value: 'JPMorgan' },
   { label: 'LinkedIn', value: 'LinkedIn' },
   { label: 'Lyft', value: 'Lyft' },
   { label: 'Intel', value: 'Intel' },
@@ -116,6 +117,7 @@ export const companyListOption = [
   { label: 'Spotify', value: 'Spotify' },
   { label: 'TikTok', value: 'TikTok' },
   { label: 'Uber', value: 'Uber' },
+  { label: 'Visa', value: 'Visa' },
   { label: 'Walmart', value: 'Walmart' },
   { label: 'Yahoo', value: 'Yahoo' }
 ];
@@ -204,6 +206,7 @@ export const companies = [
   'Google',
   'Goldman Sachs',
   'Intel',
+  'JPMorgan',
   'LinkedIn',
   'Lyft',
   'Netflix',
@@ -216,6 +219,7 @@ export const companies = [
   'Spotify',
   'TikTok',
   'Uber',
+  'Visa',
   'Walmart',
   'Yahoo'
 ];
