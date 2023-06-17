@@ -1,4 +1,4 @@
-import { useState, useRef, Dispatch, SetStateAction } from 'react';
+import { useEffect, useState, useRef, Dispatch, SetStateAction } from 'react';
 import CodeEditor from '@/components/reusables/codeEditor/CodeEditor';
 import Resizable from '../reusables/Resizable';
 import { useAppSelector } from '@/hooks/hooks';
@@ -15,7 +15,7 @@ import SubmissionResults from './SubmissionResults';
 import EditorActionBar from '../reusables/codeEditor/EditorActionBar';
 import Alert from '../reusables/Alert';
 import TextEditor from '../reusables/TextEditor';
-
+import DebuggingActionBar from '../reusables/codeEditor/DebuggingActionBar';
 import variables from '@/styles/variables.module.scss';
 import classes from './ProblemEditor.module.scss';
 
@@ -42,6 +42,8 @@ type ProblemEditorProps = {
   setReviewCode: Dispatch<
     SetStateAction<{ code: string; language: string } | undefined>
   >;
+  debugging: boolean;
+  setDebugging: Dispatch<SetStateAction<boolean>>;
 };
 
 const ProblemEditor: React.FC<ProblemEditorProps> = ({
@@ -49,7 +51,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   title,
   listNames,
   reviewCode,
-  setReviewCode
+  setReviewCode,
+  debugging,
+  setDebugging
 }) => {
   const { theme, submissions, notes } = useAppSelector((state) => {
     const { theme } = state.theme;
@@ -60,6 +64,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
       notes
     };
   });
+  const [breakpoints, setBreakPoints] = useState<number[]>([]);
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
@@ -160,6 +165,26 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     setShowNote(false);
   };
 
+  const renderedTopBar = debugging ? (
+    <DebuggingActionBar setShowNote={setShowNote} title={title} />
+  ) : (
+    <>
+      {codeInputPython !== undefined && codeInputJavascript !== undefined && (
+        <EditorActionBar
+          title={title}
+          language={language}
+          setLanguage={setLanguage}
+          setCodeInputPython={setCodeInputPython}
+          setCodeInputJavascript={setCodeInputJavascript}
+          setShowNote={setShowNote}
+          userPythonSubmission={userPythonSubmission}
+          userJavascriptSubmission={userJavascriptSubmission}
+          prompts={prompts}
+        />
+      )}
+    </>
+  );
+
   return (
     <>
       {showAlert && (
@@ -176,7 +201,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
           classes[`problem-editor--${theme}`]
         }`}
       >
-        <div className={classes['problem-editor__main']}>
+        <div className={`problem-editor ${classes['problem-editor__main']}`}>
           {reviewCode ? (
             <div
               className={`${classes['submission-review']} ${
@@ -234,24 +259,8 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
               </ul>
             </div>
           ) : (
-            <>
-              {codeInputPython !== undefined &&
-                codeInputJavascript !== undefined && (
-                  <EditorActionBar
-                    title={title}
-                    language={language}
-                    setLanguage={setLanguage}
-                    setCodeInputPython={setCodeInputPython}
-                    setCodeInputJavascript={setCodeInputJavascript}
-                    setShowNote={setShowNote}
-                    userPythonSubmission={userPythonSubmission}
-                    userJavascriptSubmission={userJavascriptSubmission}
-                    prompts={prompts}
-                  />
-                )}
-            </>
+            <>{renderedTopBar}</>
           )}
-
           {codeInputPython !== undefined &&
             codeInputJavascript !== undefined &&
             editorHeight && (
@@ -375,11 +384,13 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
           handleShowConsole={handleShowConsole}
           handleRunCodeManually={handleRunCodeManually}
           handleSubmission={handleSubmission}
+          debugging={debugging}
+          setDebugging={setDebugging}
         />
         <Modal
           id="modal-settings"
           type="close-button"
-          buttonSize='btn-sm'
+          buttonSize="btn-sm"
           className="overflow-visible"
         >
           <div
@@ -409,7 +420,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
         <Modal
           id={`modal__editor-note-${title}`}
           type="close-button"
-          buttonSize='btn-sm'
+          buttonSize="btn-sm"
           className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
             theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
           }`}

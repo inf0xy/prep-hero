@@ -118,9 +118,19 @@ body {
   }
 }
 
-// .breakpoint-hit-line {
-//   background-color: red;
-// }
+.line-number {
+  position: relative;
+}
+
+.line-numbers.breakpoint::before {
+  content: '\2022';
+  position: absolute;
+  width: 1rem;
+  font-size: 2.2rem;
+  text-align: center;
+  color: $color-error-400;
+  left: 0;
+}
 
 .w-md-editor {
   box-shadow: none !important;
@@ -240,26 +250,56 @@ body {
   background-position: 50%;
 }
 
-.react-resizable-handle:hover {
-  background-color: $color-primary-500;
+
+
+
+.problem-editor {
+  .react-resizable-handle-n {
+    height: 10px;
+    width: 100%;
+    transform: rotate(0);
+    transform: translateX(-48%);
+    cursor: row-resize;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+    background-position: 50% 2px;
+    position: absolute;
+    top: 0;
+  }
+
+  .react-resizable-handle:hover {
+    background-color: $color-primary-500;
+  }
+
 }
 
-.react-resizable-handle-n {
+.debugger .react-resizable {
+  padding: 0;
+  display: block;
+  background-repeat: no-repeat;
+  background-position: 50%;
+
+  .react-resizable-handle:hover {
+    background-color: $color-secondary-100;
+  }
+}
+
+.debugger .react-resizable-handle-s {
   height: 10px;
-  width: 100%;
-  // transform: translateX(-2rem);
+  width: calc(100% + 4rem);
   cursor: row-resize;
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+  transform: rotate(0);
+  transform: translateX(-50%);
   position: absolute;
-  top: 0;
+  bottom: 0;
 }
 
-// .react-resizable-handle-s {
-//   height: 10px;
-//   width: 100%;
-//   cursor: row-resize;
-//   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
-// }
+.debugger.dark .react-resizable-handle-s {
+  background-color: $dark-background-400;
+}
+
+.debugger.light .react-resizable-handle-s {
+  background-color: $light-background-0;
+}
 
 // .react-resizable-handle-e {
 //   width: 10px;

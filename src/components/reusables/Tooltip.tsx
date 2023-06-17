@@ -8,13 +8,15 @@ type TooltipProps = {
   children: ReactNode;
   direction: 'top' | 'bottom';
   className?: string;
+  extraStyle?: object
 };
 
 const Tooltip: React.FC<TooltipProps> = ({
   text,
   children,
   direction,
-  className
+  className,
+  extraStyle
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const transition = useTransition(isHovered, {
@@ -47,6 +49,7 @@ const Tooltip: React.FC<TooltipProps> = ({
               className={`${classes.tooltip} ${
                 classes[`tooltip--${direction}`]
               } ${classes[`tooltip--${theme}`]} ${className}`}
+              style={extraStyle}
             >
               {text}
             </div>

@@ -6,6 +6,7 @@ import { setDuration } from '@/store';
 import { Problem } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import ProblemEditor from '@/components/problems/ProblemEditor';
+import Debugger from '@/components/reusables/codeEditor/Debugger';
 import classes from '@/styles/ProblemDetailPage.module.scss';
 
 type ProblemDetailPageProps = {
@@ -28,6 +29,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   const [reviewCode, setReviewCode] = useState<
     { code: string; language: string } | undefined
   >(undefined);
+  const [debugging, setDebugging] = useState(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -85,50 +87,59 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
               </button>
             </div>
           )}
-
-          <div className={`${classes.detail} ${classes[`detail--${theme}`]}`}>
-            <ul className={`${classes.tabs} ${classes[`tabs--${theme}`]}`}>
-              <li
-                className={`rounded-tl-md ${
-                  activeTab === 'prompt' ? 'bg-accent' : ''
-                } ${
-                  activeTab === 'prompt' && theme == 'light' ? 'text-white' : ''
-                }`}
-                onClick={() => setActiveTab('prompt')}
+          {!debugging ? (
+            <div className={`${classes.detail} ${classes[`detail--${theme}`]}`}>
+              <ul className={`${classes.tabs} ${classes[`tabs--${theme}`]}`}>
+                <li
+                  className={`rounded-tl-md ${
+                    activeTab === 'prompt' ? 'bg-accent' : ''
+                  } ${
+                    activeTab === 'prompt' && theme == 'light'
+                      ? 'text-white'
+                      : ''
+                  }`}
+                  onClick={() => setActiveTab('prompt')}
+                >
+                  Prompt
+                </li>
+                <li
+                  className={`${activeTab === 'solutions' ? 'bg-accent' : ''} ${
+                    activeTab === 'solutions' && theme == 'light'
+                      ? 'text-white'
+                      : ''
+                  }`}
+                  onClick={() => setActiveTab('solutions')}
+                >
+                  Solutions
+                </li>
+                <li
+                  className={`${
+                    activeTab === 'submissions' ? 'bg-accent' : ''
+                  } ${
+                    activeTab === 'submissions' && theme == 'light'
+                      ? 'text-white'
+                      : ''
+                  }`}
+                  onClick={() => setActiveTab('submissions')}
+                >
+                  Submissions
+                </li>
+              </ul>
+              <div
+                className={`problem-description-wrapper--${theme} ${classes.description}`}
               >
-                Prompt
-              </li>
-              <li
-                className={`${activeTab === 'solutions' ? 'bg-accent' : ''} ${
-                  activeTab === 'solutions' && theme == 'light'
-                    ? 'text-white'
-                    : ''
-                }`}
-                onClick={() => setActiveTab('solutions')}
-              >
-                Solutions
-              </li>
-              <li
-                className={`${activeTab === 'submissions' ? 'bg-accent' : ''} ${
-                  activeTab === 'submissions' && theme == 'light'
-                    ? 'text-white'
-                    : ''
-                }`}
-                onClick={() => setActiveTab('submissions')}
-              >
-                Submissions
-              </li>
-            </ul>
-            <div
-              className={`problem-description-wrapper--${theme} ${classes.description}`}
-            >
-              <ProblemDetail
-                tab={activeTab}
-                problem={selectedProblem}
-                setReviewCode={setReviewCode}
-              />
+                <ProblemDetail
+                  tab={activeTab}
+                  problem={selectedProblem}
+                  setReviewCode={setReviewCode}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className={`${classes.debug} ${classes[`debug--${theme}`]}`}>
+              <Debugger />
+            </div>
+          )}
           <div className={`${classes.working} ${classes[`working--${theme}`]}`}>
             <ProblemEditor
               prompts={prompts}
@@ -136,6 +147,8 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
               listNames={selectedProblem.list_names!}
               reviewCode={reviewCode}
               setReviewCode={setReviewCode}
+              debugging={debugging}
+              setDebugging={setDebugging}
             />
           </div>
         </div>

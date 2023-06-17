@@ -5,6 +5,10 @@ import variables from '@/styles/variables.module.scss';
 
 import ChevronDown from '@/components/icons/ChevronDown';
 import Tooltip from '../Tooltip';
+import DebugIcon from '@/components/icons/DebugIcon';
+import { Dispatch, SetStateAction } from 'react';
+import StopIcon from '@/components/icons/StopIcon';
+import ExitIcon from '@/components/icons/ExitIcon';
 
 type ConsoleActionBarProps = {
   showConsole: boolean;
@@ -13,6 +17,8 @@ type ConsoleActionBarProps = {
   language: string;
   codeInputPython: string | undefined;
   codeInputJavascript: string | undefined;
+  debugging: boolean;
+  setDebugging: Dispatch<SetStateAction<boolean>>;
   handleShowConsole: () => void;
   handleRunCodeManually: (
     reviewCode: { code: string; language: string } | undefined,
@@ -40,7 +46,9 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
   codeInputJavascript,
   handleShowConsole,
   handleSubmission,
-  handleRunCodeManually
+  handleRunCodeManually,
+  debugging,
+  setDebugging
 }) => {
   const { theme, duration, timerDuration } = useAppSelector((state) => {
     const { theme } = state.theme;
@@ -97,6 +105,24 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
         </Tooltip>
       </div>
       <div className="flex space-x-5">
+        <Tooltip
+          text={debugging ? 'Exit' : 'Debug'}
+          direction="top"
+          className="w-fit px-6 py-4 left-4"
+        >
+          <button
+            onClick={() => setDebugging(!debugging)}
+            className={`${
+              debugging ? 'translate-y-[3px]' : 'translate-y-[2px]'
+            }`}
+          >
+            {debugging ? (
+              <ExitIcon width={17} height={17} />
+            ) : (
+              <DebugIcon width={21} height={21} />
+            )}
+          </button>
+        </Tooltip>
         <Button
           disabled={isLoading ? true : false}
           extraStyle={{

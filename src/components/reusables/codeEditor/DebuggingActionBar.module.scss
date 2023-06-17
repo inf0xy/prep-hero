@@ -1,0 +1,50 @@
+@import '@/styles/variables.module.scss';
+
+.debugging-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4.5rem;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 0.2rem;
+  padding: 0 2rem;
+  gap: 1rem;
+}
+
+.debugging-actions {
+  margin-left: auto;
+  justify-self: center;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &--dark {
+    background-color: $dark-background-100;
+  }
+
+  &--light {
+    background-color: $light-background-200;
+  }
+}
+
+.debugging-menu__options {
+  display: flex;
+  justify-self: flex-end;
+  margin-left: auto;
+  align-items: center;
+  color: $text-gray-400;
+  gap: 1.5rem;
+
+  & > * {
+    cursor: pointer;
+  }
+
+  li:last-child label div button {
+    color: $color-icon-gray;
+  }
+}
