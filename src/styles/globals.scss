@@ -101,11 +101,23 @@ body {
   width: 0 !important;
 }
 
+.code-editor .view-line.code-debug-highlight
+.code-editor .view-line.code-error-highlight {
+  opacity: 0.7;
+  width: calc(100% - 8px);
+}
+
 .code-editor .view-line.code-error-highlight {
   background-color: $color-error-700 !important;
-  opacity: 0.7;
   border: solid $color-error-500 1px;
-  width: calc(100% - 8px);
+}
+
+.code-editor .view-line.code-debug-highlight.dark {
+  background-color: $color-debug-highlight-dark !important;
+}
+
+.code-editor .view-line.code-debug-highlight.light {
+  background-color: $color-debug-highlight-light !important;
 }
 
 .code-highlight {
@@ -118,19 +130,50 @@ body {
   }
 }
 
-.line-number {
-  position: relative;
+// .line-numbers {
+//   position: relative;
+// }
+
+// .margin-view-overlays div.add-breakpoint::before,
+// .line-numbers.active-breakpoint::before {
+//   content: '\2022' !important;
+//   position: absolute !important;
+//   width: 1rem !important;
+//   font-size: 2.5rem !important;
+//   text-align: center !important;
+//   color: $color-error-400 !important;
+//   left: -2px !important;
+//   cursor: pointer !important;
+// }
+
+.breakpoint-set,
+.breakpoint-hover {
+  background-color: $color-error-400;
+  width: 0.8rem !important;
+  height: 0.8rem !important;
+  cursor: pointer !important;
+  border-radius: 50%;
+  position: absolute !important;
+  left: 1.2rem !important;
+  top: 0.5rem !important;
 }
 
-.line-numbers.breakpoint::before {
-  content: '\2022';
-  position: absolute;
-  width: 1rem;
-  font-size: 2.2rem;
-  text-align: center;
-  color: $color-error-400;
-  left: 0;
+.breakpoint-hover {
+  opacity: 0.6;
 }
+
+.breakpoint-set {
+  opacity: 1;
+}
+
+
+// .line-numbers.add-breakpoint::before {
+//   opacity: 0.5;
+// }
+
+// .line-numbers.active-breakpoint::before {
+//   opacity: 1;
+// }
 
 .w-md-editor {
   box-shadow: none !important;
@@ -250,9 +293,6 @@ body {
   background-position: 50%;
 }
 
-
-
-
 .problem-editor {
   .react-resizable-handle-n {
     height: 10px;
@@ -269,7 +309,6 @@ body {
   .react-resizable-handle:hover {
     background-color: $color-primary-500;
   }
-
 }
 
 .debugger .react-resizable {

@@ -94,3 +94,5 @@ export type ResultMessage = {
   failedTestCases: Result[];
   runtime: string;
 };
+
+export type DebuggingAction = 'stepIn' | 'stepOut' | 'stepOver' | 'restart' | 'exit' | '';

@@ -3,7 +3,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { getAllTitles, getSelectedProblem } from '@/helpers/problem-api-util';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { setDuration } from '@/store';
-import { Problem } from '@/types/dataTypes';
+import { Problem, DebuggingAction } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import ProblemEditor from '@/components/problems/ProblemEditor';
 import Debugger from '@/components/reusables/codeEditor/Debugger';
@@ -30,6 +30,9 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
     { code: string; language: string } | undefined
   >(undefined);
   const [debugging, setDebugging] = useState(false);
+  const [debuggingCode, setDebuggingCode] = useState('');
+  const [debuggingAction, setDebuggingAction] = useState<DebuggingAction>('');
+  const [breakpoints, setBreakpoints] = useState<number[]>([]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -137,7 +140,12 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
             </div>
           ) : (
             <div className={`${classes.debug} ${classes[`debug--${theme}`]}`}>
-              <Debugger />
+              <Debugger
+                breakpoints={breakpoints}
+                debuggingCode={debuggingCode}
+                debuggingAction={debuggingAction}
+                setDebugging={setDebugging}
+              />
             </div>
           )}
           <div className={`${classes.working} ${classes[`working--${theme}`]}`}>
@@ -149,6 +157,10 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
               setReviewCode={setReviewCode}
               debugging={debugging}
               setDebugging={setDebugging}
+              setDebuggingCode={setDebuggingCode}
+              setDebuggingAction={setDebuggingAction}
+              breakpoints={breakpoints}
+              setBreakpoints={setBreakpoints}
             />
           </div>
         </div>

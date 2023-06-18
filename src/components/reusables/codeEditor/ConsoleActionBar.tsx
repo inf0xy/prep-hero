@@ -1,14 +1,16 @@
+import { useState } from 'react';
 import { useAppSelector } from '@/hooks/hooks';
 import Button from '../Button';
-import classes from './ConsoleActionBar.module.scss';
-import variables from '@/styles/variables.module.scss';
-
+import Alert from '../Alert';
+import { NotificationType } from '@/types/dataTypes';
 import ChevronDown from '@/components/icons/ChevronDown';
 import Tooltip from '../Tooltip';
 import DebugIcon from '@/components/icons/DebugIcon';
 import { Dispatch, SetStateAction } from 'react';
 import StopIcon from '@/components/icons/StopIcon';
 import ExitIcon from '@/components/icons/ExitIcon';
+import variables from '@/styles/variables.module.scss';
+import classes from './ConsoleActionBar.module.scss';
 
 type ConsoleActionBarProps = {
   showConsole: boolean;
@@ -19,6 +21,7 @@ type ConsoleActionBarProps = {
   codeInputJavascript: string | undefined;
   debugging: boolean;
   setDebugging: Dispatch<SetStateAction<boolean>>;
+  breakpoints: number[];
   handleShowConsole: () => void;
   handleRunCodeManually: (
     reviewCode: { code: string; language: string } | undefined,
@@ -48,51 +51,118 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
   handleSubmission,
   handleRunCodeManually,
   debugging,
-  setDebugging
+  setDebugging,
+  breakpoints
 }) => {
   const { theme, duration, timerDuration } = useAppSelector((state) => {
     const { theme } = state.theme;
     const { duration, timerDuration } = state.user;
     return { theme, duration, timerDuration };
   });
+  const [showAlert, setShowAlert] = useState(false);
+  const [notification, setNotification] = useState<NotificationType | null>(
+    null
+  );
 
   return (
-    <div
-      className={`${classes['code-actions']} ${
-        classes[`code-actions--${theme}`]
-      }`}
-    >
-      <div className={classes['left-button-group']}>
-        <Button
-          extraStyle={{
-            padding: '0 1rem',
-            backgroundColor: variables.colorGray700
-          }}
-          onClick={handleShowConsole}
+    <>
+      {showAlert && (
+        <Alert
+          status={notification?.status!}
+          onClose={() => setShowAlert(false)}
+          setNotification={setNotification}
         >
-          Console
-          <span className="ml-3">
-            <ChevronDown
-              className={`${showConsole ? classes.down : classes.up}`}
-            />
-          </span>
-        </Button>
+          {notification?.message}
+        </Alert>
+      )}
+      <div
+        className={`${classes['code-actions']} ${
+          classes[`code-actions--${theme}`]
+        }`}
+      >
+        <div className={classes['left-button-group']}>
+          <Button
+            extraStyle={{
+              padding: '0 1rem',
+              backgroundColor: variables.colorGray700
+            }}
+            onClick={handleShowConsole}
+          >
+            Console
+            <span className="ml-3">
+              <ChevronDown
+                className={`${showConsole ? classes.down : classes.up}`}
+              />
+            </span>
+          </Button>
 
-        <Tooltip
-          text={!isLoading ? 'Execute' : 'Unavailable during execution'}
-          direction="top"
-          className={`left-[4.5rem] ${!isLoading ? 'w-fit' : 'w-[20rem]'} p-4`}
-        >
+          <Tooltip
+            text={!isLoading ? 'Execute' : 'Unavailable during execution'}
+            direction="top"
+            className={`left-[4.5rem] ${
+              !isLoading ? 'w-fit' : 'w-[20rem]'
+            } p-4`}
+          >
+            <Button
+              disabled={isLoading ? true : false}
+              extraStyle={{
+                backgroundColor: variables.colorSecondary200,
+                padding: '0 2rem',
+                height: '2.5rem',
+                opacity: isLoading ? '0.5' : '1'
+              }}
+              onClick={() =>
+                handleRunCodeManually(
+                  reviewCode,
+                  language,
+                  codeInputPython,
+                  codeInputJavascript
+                )
+              }
+            >
+              Execute
+            </Button>
+          </Tooltip>
+        </div>
+        <div className="flex space-x-5">
+          <Tooltip
+            text={debugging ? 'Exit' : 'Debug'}
+            direction="top"
+            className="w-fit px-6 py-4 left-4"
+          >
+            <button
+              onClick={() => {
+                if (breakpoints.length > 0) {
+                  setDebugging(!debugging);
+                } else {
+                  setNotification({
+                    status: 'warning',
+                    message: 'Add breakpoints to start debugging.'
+                  });
+                  setShowAlert(true);
+                }
+              }}
+              className={`${
+                debugging ? 'translate-y-[3px]' : 'translate-y-[2px]'
+              }`}
+            >
+              {debugging ? (
+                <ExitIcon width={17} height={17} />
+              ) : (
+                <DebugIcon width={21} height={21} />
+              )}
+            </button>
+          </Tooltip>
           <Button
             disabled={isLoading ? true : false}
             extraStyle={{
-              backgroundColor: variables.colorSecondary200,
+              backgroundColor: variables.colorGray500,
               padding: '0 2rem',
-              height: '2.5rem',
               opacity: isLoading ? '0.5' : '1'
             }}
             onClick={() =>
-              handleRunCodeManually(
+              handleSubmission(
+                'test',
                 reviewCode,
                 language,
                 codeInputPython,
@@ -100,71 +170,32 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
               )
             }
           >
-            Execute
+            Run
           </Button>
-        </Tooltip>
-      </div>
-      <div className="flex space-x-5">
-        <Tooltip
-          text={debugging ? 'Exit' : 'Debug'}
-          direction="top"
-          className="w-fit px-6 py-4 left-4"
-        >
-          <button
-            onClick={() => setDebugging(!debugging)}
-            className={`${
-              debugging ? 'translate-y-[3px]' : 'translate-y-[2px]'
-            }`}
+          <Button
+            disabled={isLoading ? true : false}
+            extraStyle={{
+              backgroundColor: variables.colorPrimary200,
+              padding: '0 2rem',
+              opacity: isLoading ? '0.5' : '1'
+            }}
+            onClick={() =>
+              handleSubmission(
+                'submit',
+                reviewCode,
+                language,
+                codeInputPython,
+                codeInputJavascript,
+                duration,
+                timerDuration
+              )
+            }
           >
-            {debugging ? (
-              <ExitIcon width={17} height={17} />
-            ) : (
-              <DebugIcon width={21} height={21} />
-            )}
-          </button>
-        </Tooltip>
-        <Button
-          disabled={isLoading ? true : false}
-          extraStyle={{
-            backgroundColor: variables.colorGray500,
-            padding: '0 2rem',
-            opacity: isLoading ? '0.5' : '1'
-          }}
-          onClick={() =>
-            handleSubmission(
-              'test',
-              reviewCode,
-              language,
-              codeInputPython,
-              codeInputJavascript
-            )
-          }
-        >
-          Run
-        </Button>
-        <Button
-          disabled={isLoading ? true : false}
-          extraStyle={{
-            backgroundColor: variables.colorPrimary200,
-            padding: '0 2rem',
-            opacity: isLoading ? '0.5' : '1'
-          }}
-          onClick={() =>
-            handleSubmission(
-              'submit',
-              reviewCode,
-              language,
-              codeInputPython,
-              codeInputJavascript,
-              duration,
-              timerDuration
-            )
-          }
-        >
-          Submit
-        </Button>
+            Submit
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

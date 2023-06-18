@@ -1,15 +1,20 @@
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
+import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
 import io, { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
-import Button from '../Button';
 import Alert from '../Alert';
-import { NotificationType } from '@/types/dataTypes';
+import { DebuggingAction, NotificationType } from '@/types/dataTypes';
 import classes from './Debugger.module.scss';
 import DebuggingResizable from './DebuggerInfoResizable';
 import PlusIcon from '@/components/icons/PlusIcon';
 import Tooltip from '../Tooltip';
 import { useAppSelector } from '@/hooks/hooks';
+
+interface DebuggerProps {
+  breakpoints: number[];
+  debuggingCode: string;
+  debuggingAction: DebuggingAction;
+  setDebugging: Dispatch<SetStateAction<boolean>>
+}
 
 type DebuggingData = {
   codeLine: string;
@@ -19,8 +24,7 @@ type DebuggingData = {
   watchVariables: { [key: string]: string };
 };
 
-const Debugger = () => {
-  const [breakpoints, setBreakpoitns] = useState('');
+const Debugger: React.FC<DebuggerProps> = ({ breakpoints, debuggingCode, debuggingAction, setDebugging }) => {
   const [watchVariablesInput, setWatchVariablesInput] = useState('');
   const [watchVars, setWatchVars] = useState<string[]>([]);
   const [codeInput, setCodeInput] = useState('');
@@ -36,23 +40,27 @@ const Debugger = () => {
   );
 
   const { theme } = useAppSelector((state) => state.theme);
-  const router = useRouter();
 
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const [windowHeight, setWindowHeight] = useState<number | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
-
-  const handleResize = () => {
-    setWindowHeight(window.innerWidth);
-  };
+  const [ready, setReady] = useState(true);
 
   useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
+    const handleResize = () => {
+      setWindowHeight(window.innerHeight);
     };
+
+    if (typeof window !== 'undefined') {
+      setWindowHeight(window.innerHeight);
+      window.addEventListener('resize', handleResize);
+
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
   }, []);
 
   useEffect(() => {
@@ -124,7 +132,7 @@ const Debugger = () => {
     });
     socketRef.current.on('stopDebugging', (data) => {
       if (data === 'done') {
-        router.replace('/problems');
+        setDebugging(false);
       }
     });
     socketRef.current.on('addWatchVariables', (data) => {
@@ -159,9 +167,55 @@ const Debugger = () => {
         socketRef.current.disconnect();
       }
     };
-  }, [router]);
+  }, [setDebugging]);
 
-  const handleStartDebugging = (socket: Socket) => {
+  useEffect(() => {
+    if (ready) {
+      handleStartDebugging();
+      setReady(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socketRef.current]);
+
+  useEffect(() => {
+    if (!ready) {
+      setTimeout(() => {
+        setReady(true);
+      }, 500);
+    }
+  }, [ready]);
+
+  useEffect(() => {
+    if (ready) {
+      switch (debuggingAction) {
+        case 'stepIn':
+          if (ready)
+            handleStepIn();
+          break;
+        case 'stepOver':
+          if (ready)
+            handleStepOver();
+          break;
+        case 'stepOut':
+          if (ready)
+            handleStepOut();
+          break;
+        case 'restart':
+          if (ready)
+            handleRestart();
+          break;
+        case 'exit':
+          if (ready)
+            handleExit();
+          break;
+        default:
+          console.log('Invalid');
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, debuggingAction]);
+
+  const handleStartDebugging = () => {
     setDebuggingData({
       codeLine: '',
       callStack: [],
@@ -169,12 +223,14 @@ const Debugger = () => {
       stdOut: [],
       watchVariables: {}
     });
-    const debuggingBreakpoints = breakpoints.split(',').map((el) => +el.trim());
-    socket.emit(
-      'startDebugging',
-      JSON.stringify({ code: codeInput, breakpoints: debuggingBreakpoints })
-    );
-    setBreakpoitns('');
+
+    if (socketRef.current) {
+      const debuggingData = {
+        code: debuggingCode,
+        breakpoints
+      };
+      socketRef.current.emit('startDebugging', JSON.stringify(debuggingData));
+    }
   };
 
   const handleStepIn = () => {
@@ -267,36 +323,40 @@ const Debugger = () => {
         classes[`debugger--${theme}`]
       }`}
     >
-      <DebuggingResizable minHeight={100} maxHeight={windowHeight * 0.3}>
-        <div
-          className={`${classes['local-variables']} ${
-            classes[`local-variables--${theme}`]
-          }`}
-        >
-          <h2>Local Variables</h2>
-        </div>
-      </DebuggingResizable>
-      <DebuggingResizable minHeight={100} maxHeight={windowHeight * 0.4}>
-        <div
-          className={`${classes['watch-variables']} ${
-            classes[`watch-variables--${theme}`]
-          }`}
-        >
-          <div className={classes['watch-variables__actions']}>
-            <h2>Watch</h2>
-            <Tooltip
-              text="Add expression"
-              direction="top"
-              className="w-[12rem] p-4 left-[-2.5rem] bottom-[100%]"
-              extraStyle={{ bottom: '90%' }}
+      {windowHeight && (
+        <>
+          <DebuggingResizable minHeight={100} maxHeight={windowHeight * 0.3}>
+            <div
+              className={`${classes['local-variables']} ${
+                classes[`local-variables--${theme}`]
+              }`}
             >
-              <div className={classes.add}>
-                <PlusIcon />
+              <h2>Local Variables</h2>
+            </div>
+          </DebuggingResizable>
+          <DebuggingResizable minHeight={100} maxHeight={windowHeight * 0.4}>
+            <div
+              className={`${classes['watch-variables']} ${
+                classes[`watch-variables--${theme}`]
+              }`}
+            >
+              <div className={classes['watch-variables__actions']}>
+                <h2>Watch</h2>
+                <Tooltip
+                  text="Add expression"
+                  direction="top"
+                  className="w-[12rem] p-4 left-[-2.5rem] bottom-[100%]"
+                  extraStyle={{ bottom: '90%' }}
+                >
+                  <div className={classes.add}>
+                    <PlusIcon />
+                  </div>
+                </Tooltip>
               </div>
-            </Tooltip>
-          </div>
-        </div>
-      </DebuggingResizable>
+            </div>
+          </DebuggingResizable>
+        </>
+      )}
       <div
         className={`${classes['call-stack']} ${
           classes[`call-stack--${theme}`]

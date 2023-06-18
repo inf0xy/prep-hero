@@ -22,7 +22,7 @@
 
   &--light h2 {
     color: $color-secondary-100;
-    background-color: $light-background-0;
+    background-color: $light-background-100;
   }
 }
 
@@ -64,7 +64,7 @@
   }
 
   &--light .watch-variables__actions {
-    background-color: $light-background-0;
+    background-color: $light-background-100;
   }
 }
 
@@ -74,7 +74,7 @@
   }
 
   &--light {
-    background-color: $light-background-0;
+    background-color: $light-background-100;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 }

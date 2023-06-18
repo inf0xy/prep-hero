@@ -1,10 +1,4 @@
-import {
-  useState,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-  RefObject
-} from 'react';
+import { useRef, Dispatch, SetStateAction, RefObject } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { useAppSelector } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
@@ -17,6 +11,8 @@ type CodeEditorProps = {
   height: string;
   setCodeInput: (val: string) => void | Dispatch<SetStateAction<string>>;
   editorRef?: RefObject<HTMLDivElement>;
+  breakpoints: number[];
+  setBreakpoints: Dispatch<SetStateAction<number[]>>;
 };
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -25,88 +21,184 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   language,
   height,
   setCodeInput,
-  editorRef
+  editorRef,
+  breakpoints,
+  setBreakpoints
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
-  const [editorReady, setEditorReady] = useState(false);
 
-  useEffect(() => {
-    const handler = (event: MouseEvent) => {
-      const line = event.currentTarget as Element;
-      line.classList.add('breakpoint');
-    };
+  const codeEditorModelRef = useRef(null);
+  const monacolRef = useRef(null);
+  const breakpointState = useRef<number[]>([]);
+  const lastHoverState = useRef<{
+    startLineNumber: number;
+    startColumn: number;
+    endLineNumber: number;
+    endColumn: number;
+  } | null>(null);
 
-    if (editorReady) {
-      const lines = document.body.querySelectorAll(
-        '.margin-view-overlays div .line-numbers'
-      );
-      lines.forEach((line) => {
-        console.log('adding events to line... ', line);
-        line.addEventListener(
-          'click',
-          handler as EventListenerOrEventListenerObject
+  const handleMouseDown = (event: any) => {
+    if (event.target?.position && event.target.position.column === 1) {
+      const { lineNumber } = event.target?.position;
+      if (
+        // breakpointState.current &&
+        !breakpointState.current.includes(lineNumber)
+      ) {
+        setBreakpoints((prev) => [...prev, lineNumber]);
+        breakpointState.current = [...breakpointState.current, lineNumber];
+        renderedBreakpointsDecorations('add', lineNumber, event.target.range);
+      } else {
+        setBreakpoints((prev) => prev.filter((line) => line !== lineNumber));
+        breakpointState.current = breakpointState.current.filter(
+          (el) => el !== lineNumber
         );
-      });
-
-      return () => {
-        lines.forEach((line) => {
-          line.removeEventListener(
-            'click',
-            handler as EventListenerOrEventListenerObject
-          );
-        });
-      };
+        renderedBreakpointsDecorations(
+          'remove',
+          lineNumber,
+          event.target.range
+        );
+      }
     }
-  }, [editorReady]);
+  };
+
+  const renderedBreakpointsDecorations = (
+    action: string,
+    lineNumber: number,
+    range: {
+      startLineNumber: number;
+      startColumn: number;
+      endLineNumber: number;
+      endColumn: number;
+    }
+  ) => {
+    const { startLineNumber, startColumn, endLineNumber, endColumn } = range;
+    if (action === 'add') {
+      const newId = (codeEditorModelRef.current as any).deltaDecorations(
+        [],
+        [
+          {
+            range: new (monacolRef.current as any).Range(
+              startLineNumber,
+              startColumn,
+              endLineNumber,
+              endColumn
+            ),
+            options: {
+              isWholeLine: false,
+              glyphMarginClassName: 'breakpoint-set'
+            }
+          }
+        ]
+      );
+    } else {
+      const decorations = (
+        codeEditorModelRef.current as any
+      ).getDecorationsInRange(
+        new (monacolRef.current as any).Range(
+          startLineNumber,
+          startColumn,
+          endLineNumber,
+          endColumn
+        )
+      );
+
+      const breakpointDecorations = decorations.filter(
+        (decoration: any) =>
+          decoration.options.glyphMarginClassName === 'breakpoint-set'
+      );
+
+      (codeEditorModelRef.current as any).deltaDecorations(
+        breakpointDecorations.map((decoration: any) => decoration.id),
+        []
+      );
+    }
+  };
+
+  const handleHoverOnLineNumber = (range: {
+    startLineNumber: number;
+    startColumn: number;
+    endLineNumber: number;
+    endColumn: number;
+  }) => {
+    const { startLineNumber, startColumn, endLineNumber, endColumn } = range;
+    if (codeEditorModelRef.current && monacolRef.current) {
+      (codeEditorModelRef.current as any).deltaDecorations(
+        [],
+        [
+          {
+            range: new (monacolRef.current as any).Range(
+              startLineNumber,
+              startColumn,
+              endLineNumber,
+              endColumn
+            ),
+            options: {
+              isWholeLine: false,
+              glyphMarginClassName: 'breakpoint-hover'
+            }
+          }
+        ]
+      );
+    }
+  };
+
+  const handleHoverOffLineNumber = (range: {
+    startLineNumber: number;
+    startColumn: number;
+    endLineNumber: number;
+    endColumn: number;
+  }) => {
+    const { startLineNumber, startColumn, endLineNumber, endColumn } = range;
+    const decorations = (
+      codeEditorModelRef.current as any
+    ).getDecorationsInRange(
+      new (monacolRef.current as any).Range(
+        startLineNumber,
+        startColumn,
+        endLineNumber,
+        endColumn
+      )
+    );
+
+    const breakpointDecorations = decorations.filter(
+      (decoration: any) =>
+        decoration.options.glyphMarginClassName === 'breakpoint-hover'
+    );
+
+    (codeEditorModelRef.current as any).deltaDecorations(
+      breakpointDecorations.map((decoration: any) => decoration.id),
+      []
+    );
+  };
+
+  const handleMouseMove = (event: any) => {
+    if (event.target?.position) {
+      if (event.target.position.column === 1) {
+        if (!lastHoverState.current) {
+          lastHoverState.current = event.target.range;
+          handleHoverOnLineNumber(event.target.range);
+        } else {
+          handleHoverOffLineNumber(lastHoverState.current);
+          lastHoverState.current = event.target.range;
+          handleHoverOnLineNumber(event.target.range);
+        }
+      } else if (lastHoverState.current) {
+        handleHoverOffLineNumber(lastHoverState.current);
+      }
+    }
+  };
+
+  const handleMouseLeave = (event: any) => {
+    if (lastHoverState.current) {
+      handleHoverOffLineNumber(lastHoverState.current);
+    }
+  };
 
   const handleEditorChange = (value: string | undefined) => {
     if (!options.readOnly) {
       setCodeInput(value!);
     }
   };
-
-  // const [breakpoints, setBreakpoints] = useState<number[]>([]);
-  // const [currentDecorationId, setCurrentDecorationId] = useState<string | null>(null);
-
-  // const handleLineClick = (lineNumber: number, editor: any, monaco: any) => {
-  //   const updatedBreakpoints = breakpoints.includes(lineNumber)
-  //     ? breakpoints.filter((line) => line !== lineNumber)
-  //     : [...breakpoints, lineNumber];
-  //   setBreakpoints(updatedBreakpoints);
-
-  //   if (currentDecorationId) {
-  //     editor.deltaDecorations([currentDecorationId], []);
-  //   }
-  //   const newDecorationId = editor.deltaDecorations([], [
-  //     {
-  //       range: new monaco.Range(lineNumber, 1, lineNumber, 1),
-  //       options: {
-  //         isWholeLine: true,
-  //         className: 'view-line.code-error-highlight',
-  //       },
-  //     },
-  //   ]);
-
-  //   setCurrentDecorationId(newDecorationId[0]);
-
-  // Send updated breakpoints to the backend debugger through the WebSocket connection
-  // sendBreakpointsToDebugger(updatedBreakpoints);
-  // };
-
-  //   const highlightBreakpointLine = (lineNumber: number, editor: any, monaco: any) => {
-  //   if (editor) {
-  //     editor.revealLineInCenter(lineNumber);
-  //     editor.deltaDecorations([], [
-  //       {
-  //         range: new monaco.Range(lineNumber, 1, lineNumber, 1),
-  //         options: {
-  //           isWholeLine: true,
-  //           className: 'breakpoint-hit-line',
-  //         },
-  //       },
-  //     ]);
-  //   }
-  // };
 
   return (
     <div className="code-editor" ref={editorRef}>
@@ -116,6 +208,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         height={height}
         value={value}
         options={{
+          glyphMargin: true,
           wordWrap: 'on',
           minimap: { enabled: false },
           showUnused: false,
@@ -129,14 +222,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         onChange={handleEditorChange}
         loading={<Loading width={40} height={40} />}
         onMount={(editor, monaco) => {
-          setEditorReady(true);
-          // editor.onMouseDown((event) => {
-          //   if (event.target.position) {
-          //     const lineNumber = event.target.position.lineNumber;
-          //     // highlightBreakpointLine(lineNumber, editor, monaco)
-          //     handleLineClick(lineNumber, editor, monaco)
-          //   }
-          // })
+          (codeEditorModelRef as any).current = editor;
+          (monacolRef as any).current = monaco;
+          editor.onMouseDown(handleMouseDown);
+          editor.onMouseMove(handleMouseMove);
+          editor.onMouseLeave(handleMouseLeave);
         }}
       />
     </div>

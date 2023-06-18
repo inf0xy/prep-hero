@@ -25,7 +25,8 @@ import {
   NotificationType,
   Submission,
   Note,
-  CodeLine
+  CodeLine,
+  DebuggingAction
 } from '@/types/dataTypes';
 import ClipboardIcon from '../icons/ClipboardIcon';
 import Tooltip from '../reusables/Tooltip';
@@ -44,6 +45,10 @@ type ProblemEditorProps = {
   >;
   debugging: boolean;
   setDebugging: Dispatch<SetStateAction<boolean>>;
+  setDebuggingCode: Dispatch<SetStateAction<string>>;
+  breakpoints: number[];
+  setBreakpoints: Dispatch<SetStateAction<number[]>>;
+  setDebuggingAction: Dispatch<SetStateAction<DebuggingAction>>;
 };
 
 const ProblemEditor: React.FC<ProblemEditorProps> = ({
@@ -53,7 +58,11 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   reviewCode,
   setReviewCode,
   debugging,
-  setDebugging
+  setDebuggingCode,
+  setDebugging,
+  breakpoints,
+  setBreakpoints,
+  setDebuggingAction
 }) => {
   const { theme, submissions, notes } = useAppSelector((state) => {
     const { theme } = state.theme;
@@ -64,7 +73,6 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
       notes
     };
   });
-  const [breakpoints, setBreakPoints] = useState<number[]>([]);
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
@@ -124,6 +132,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
 
   useCodeCustomEffect({
     title,
+    language,
     prompts,
     notes,
     codeInputPython,
@@ -132,6 +141,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     reviewCode,
     submissions,
     codeError,
+    debugging,
     editorRef,
     getCodeLines,
     handleHighLightError,
@@ -141,6 +151,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     setUserJavascriptSubmission,
     setOptions,
     setCodeLines,
+    setDebuggingCode,
     setEditorHeight,
     setNoteContent
   });
@@ -166,7 +177,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   };
 
   const renderedTopBar = debugging ? (
-    <DebuggingActionBar setShowNote={setShowNote} title={title} />
+    <DebuggingActionBar setShowNote={setShowNote} title={title} setDebuggingAction={setDebuggingAction}/>
   ) : (
     <>
       {codeInputPython !== undefined && codeInputJavascript !== undefined && (
@@ -272,6 +283,8 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                 >
                   <CodeEditor
                     editorRef={editorRef}
+                    breakpoints={breakpoints}
+                    setBreakpoints={setBreakpoints}
                     value={
                       reviewCode
                         ? reviewCode.code
@@ -386,6 +399,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
           handleSubmission={handleSubmission}
           debugging={debugging}
           setDebugging={setDebugging}
+          breakpoints={breakpoints}
         />
         <Modal
           id="modal-settings"
@@ -429,7 +443,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
         >
           <div className={`code-editor__note code-editor__note--${theme}`}>
             {showNote && (
-              <TextEditor value={noteContent!} setValue={setNoteContent} />
+              <TextEditor value={noteContent ? noteContent : ''} setValue={setNoteContent} />
             )}
           </div>
         </Modal>

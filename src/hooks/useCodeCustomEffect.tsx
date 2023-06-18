@@ -3,6 +3,7 @@ import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 
 type UseCodeCustomEffectProps = {
   title: string;
+  language: string;
   prompts: { python: string; javascript: string; [key: string]: string };
   notes: Note[];
   codeInputPython: string | undefined;
@@ -11,6 +12,7 @@ type UseCodeCustomEffectProps = {
   reviewCode: { code: string; language: string } | undefined;
   submissions: Submission[];
   codeError: string | null;
+  debugging: boolean;
   editorRef: RefObject<HTMLDivElement>;
   getCodeLines: () => CodeLine[];
   handleHighLightError: (
@@ -19,6 +21,7 @@ type UseCodeCustomEffectProps = {
   ) => void;
   setCodeInputPython: Dispatch<SetStateAction<string | undefined>>;
   setCodeInputJavascript: Dispatch<SetStateAction<string | undefined>>;
+  setDebuggingCode: Dispatch<SetStateAction<string>>;
   setUserPythonSubmission: Dispatch<
     SetStateAction<Submission | undefined | undefined>
   >;
@@ -33,6 +36,7 @@ type UseCodeCustomEffectProps = {
 
 const useCodeCustomEffect = ({
   title,
+  language,
   prompts,
   notes,
   codeInputPython,
@@ -40,12 +44,14 @@ const useCodeCustomEffect = ({
   codeLines,
   reviewCode,
   submissions,
+  debugging,
   codeError,
   editorRef,
   getCodeLines,
   handleHighLightError,
   setCodeInputPython,
   setCodeInputJavascript,
+  setDebuggingCode,
   setUserPythonSubmission,
   setUserJavascriptSubmission,
   setOptions,
@@ -64,6 +70,13 @@ const useCodeCustomEffect = ({
       setEditorHeight(`${window.innerHeight - 188}px`);
     }
   }, [setEditorHeight]);
+
+  useEffect(() => {
+    if (debugging) {
+      setDebuggingCode(codeInputPython!);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debugging, setDebuggingCode])
 
   useEffect(() => {
     if (problemNoteContent) {
@@ -134,7 +147,6 @@ const useCodeCustomEffect = ({
 
   useEffect(() => {
     if (editorRef.current) {
-      console.log('codeError ', codeError);
       handleHighLightError(codeLines, codeError || '');
     }
   }, [codeError, codeLines, editorRef, handleHighLightError]);

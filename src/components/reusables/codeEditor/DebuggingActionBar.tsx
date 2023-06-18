@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { NotificationType, Submission } from '@/types/dataTypes';
+import { NotificationType, DebuggingAction } from '@/types/dataTypes';
 import Tooltip from '../Tooltip';
 import FullScreenButton from './FullScreenButton';
 import Alert from '../Alert';
@@ -15,17 +15,19 @@ import { useAppSelector } from '@/hooks/hooks';
 type DebuggingActionBarProps = {
   title: string;
   setShowNote: Dispatch<SetStateAction<boolean>>;
+  setDebuggingAction: Dispatch<SetStateAction<DebuggingAction>>;
 };
 
 const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
+  title,
   setShowNote,
-  title
+  setDebuggingAction
 }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
-  const { theme } = useAppSelector(state => state.theme);
+  const { theme } = useAppSelector((state) => state.theme);
 
   return (
     <>
@@ -39,12 +41,26 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
         </Alert>
       )}
       <div className={classes['debugging-menu']}>
-        <ul className={`${classes['debugging-actions']} ${classes[`debugging-actions--${theme}`]}`}>
-          <li><StepOverIcon width={17} height={17}/></li>
-          <li><StepInIcon width={17} height={17}/></li>
-          <li><StepOutIcon width={17} height={17}/></li>
-          <li><DebugResetIcon width={15} height={15} /></li>
-          <li><StopIcon width={21} height={21}/></li>
+        <ul
+          className={`${classes['debugging-actions']} ${
+            classes[`debugging-actions--${theme}`]
+          }`}
+        >
+          <li onClick={() => setDebuggingAction('stepOver')}>
+            <StepOverIcon width={17} height={17} />
+          </li>
+          <li onClick={() => setDebuggingAction('stepIn')}>
+            <StepInIcon width={17} height={17} />
+          </li>
+          <li onClick={() => setDebuggingAction('stepOut')}>
+            <StepOutIcon width={17} height={17} />
+          </li>
+          <li onClick={() => setDebuggingAction('restart')}>
+            <DebugResetIcon width={15} height={15} />
+          </li>
+          <li onClick={() => setDebuggingAction('exit')}>
+            <StopIcon width={21} height={21} />
+          </li>
         </ul>
         <ul className={classes['debugging-menu__options']}>
           <li onClick={() => setShowNote(true)}>
