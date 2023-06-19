@@ -12,6 +12,7 @@ import Modal from '../reusables/Modal';
 import Loading from '../reusables/Loading';
 import RunResults from './RunResults';
 import SubmissionResults from './SubmissionResults';
+import DebugConsole from '../reusables/codeEditor/DebugConsole';
 import EditorActionBar from '../reusables/codeEditor/EditorActionBar';
 import Alert from '../reusables/Alert';
 import TextEditor from '../reusables/TextEditor';
@@ -26,7 +27,8 @@ import {
   Submission,
   Note,
   CodeLine,
-  DebuggingAction
+  DebuggingAction,
+  SocketType
 } from '@/types/dataTypes';
 import ClipboardIcon from '../icons/ClipboardIcon';
 import Tooltip from '../reusables/Tooltip';
@@ -43,21 +45,7 @@ type ProblemEditorProps = {
   setReviewCode: Dispatch<
     SetStateAction<{ code: string; language: string } | undefined>
   >;
-  debugging: boolean;
-  setDebugging: Dispatch<SetStateAction<boolean>>;
-  setDebuggingCode: Dispatch<SetStateAction<string>>;
-  breakpoints: number[];
-  currentDebuggingLineNumber: number;
-  setBreakpoints: Dispatch<SetStateAction<number[]>>;
-  setDebuggingAction: Dispatch<SetStateAction<DebuggingAction>>;
-  exitingDebugging: boolean;
-  handleStartDebugging: () => void,
-  handleStopDebugging: () => void,
-  handleStepIn: () => void,
-  handleStepOver: () => void,
-  handleStepOut: () => void,
-  handleRestart: () => void,
-  handleExit: () => void
+  socketConnection: SocketType;
 };
 
 const ProblemEditor: React.FC<ProblemEditorProps> = ({
@@ -66,30 +54,21 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   listNames,
   reviewCode,
   setReviewCode,
-  debugging,
-  setDebuggingCode,
-  setDebugging,
-  breakpoints,
-  currentDebuggingLineNumber,
-  exitingDebugging,
-  setBreakpoints,
-  handleStartDebugging,
-  handleStopDebugging,
-  handleStepIn,
-  handleStepOver,
-  handleStepOut,
-  handleRestart,
-  handleExit
+  socketConnection
 }) => {
-  const { theme, submissions, notes } = useAppSelector((state) => {
-    const { theme } = state.theme;
-    const { submissions, notes } = state.user;
-    return {
-      theme,
-      submissions,
-      notes
-    };
-  });
+  const { theme, submissions, notes, debugging, debuggingData } =
+    useAppSelector((state) => {
+      const { theme } = state.theme;
+      const { submissions, notes } = state.user;
+      const { debugging, debuggingData } = state.debugger;
+      return {
+        theme,
+        submissions,
+        notes,
+        debugging,
+        debuggingData
+      };
+    });
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
@@ -158,8 +137,8 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     reviewCode,
     submissions,
     codeError,
-    debugging,
     editorRef,
+    debuggingData,
     getCodeLines,
     handleHighLightError,
     setCodeInputPython,
@@ -168,9 +147,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     setUserJavascriptSubmission,
     setOptions,
     setCodeLines,
-    setDebuggingCode,
     setEditorHeight,
-    setNoteContent
+    setNoteContent,
+    setShowConsole
   });
 
   const handleShowConsole = () => {
@@ -197,13 +176,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     <DebuggingActionBar
       setShowNote={setShowNote}
       title={title}
-      handleStartDebugging={handleStartDebugging}
-      handleStopDebugging={handleStopDebugging}
-      handleStepIn={handleStepIn}
-      handleStepOver={handleStepOver}
-      handleStepOut={handleStepOut}
-      handleRestart={handleRestart}
-      handleExit={handleExit}
+      socketConnection={socketConnection}
     />
   ) : (
     <>
@@ -310,9 +283,6 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                 >
                   <CodeEditor
                     editorRef={editorRef}
-                    debugging={debugging}
-                    setBreakpoints={setBreakpoints}
-                    currentDebuggingLineNumber={currentDebuggingLineNumber}
                     value={
                       reviewCode
                         ? reviewCode.code
@@ -334,79 +304,88 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                   <Resizable setEditorHeight={setEditorHeight}>
                     <div className={classes.console}>
                       <div className={classes.output}>
-                        {isLoading && (
-                          <div className="flex items-center justify-center h-full space-x-4">
-                            <span className="w-[35px] h-[35px]">
-                              <Loading width={35} height={35} />
-                            </span>
-                            <p
-                              className="text-[1.8rem]"
-                              style={{
-                                color:
-                                  theme === 'dark'
-                                    ? variables.textOffWhite
-                                    : variables.colorGray700
-                              }}
-                            >
-                              Hang tight...
-                            </p>
-                          </div>
-                        )}
-                        {!isLoading && testCode && (
+                        {debugging ? (
+                          <DebugConsole />
+                        ) : (
                           <>
-                            <h2
-                              className={
-                                theme === 'light' ? `text-[#4f4c52]` : ''
-                              }
-                            >
-                              Stdout:
-                            </h2>
-                            <code
-                              className={`${classes.code} ${
-                                classes[`code--${theme}`]
-                              }`}
-                            >
-                              {output.includes('\n')
-                                ? output.split('\n').map((str, index) => (
-                                    <p key={index} className="mb-2">
-                                      {str}
-                                    </p>
-                                  ))
-                                : output}
-                            </code>
-                          </>
-                        )}
-                        {!isLoading && codeError && (
-                          <code
-                            className={`${classes.code} ${classes['code--error']}`}
-                          >
-                            {!codeError.includes('\n') ? (
-                              <p className="text-red-500 mt-4 mb-4 text-[1.4rem]">
-                                {codeError}
-                              </p>
-                            ) : (
-                              <div className="my-4 space-y-2">
-                                {codeError.split('\n').map((el, index) => (
-                                  <p
-                                    key={index}
-                                    className={`text-red-500 ${
-                                      el.includes('Error')
-                                        ? 'text-[1.4rem]'
-                                        : 'ml-2'
-                                    }`}
-                                  >
-                                    {el}
-                                  </p>
-                                ))}
+                            {isLoading && (
+                              <div className="flex items-center justify-center h-full space-x-4">
+                                <span className="w-[35px] h-[35px]">
+                                  <Loading width={35} height={35} />
+                                </span>
+                                <p
+                                  className="text-[1.8rem]"
+                                  style={{
+                                    color:
+                                      theme === 'dark'
+                                        ? variables.textOffWhite
+                                        : variables.colorGray700
+                                  }}
+                                >
+                                  Hang tight...
+                                </p>
                               </div>
                             )}
-                          </code>
-                        )}
-                        {!isLoading && !codeError && resultMessage && (
-                          <SubmissionResults result={resultMessage} />
-                        )}
-                        {!isLoading && !resultMessage && runResults && (
-                          <RunResults type="test" testResults={runResults} />
+                            {!isLoading && testCode && (
+                              <>
+                                <h2
+                                  className={
+                                    theme === 'light' ? `text-[#4f4c52]` : ''
+                                  }
+                                >
+                                  Stdout:
+                                </h2>
+                                <code
+                                  className={`${classes.code} ${
+                                    classes[`code--${theme}`]
+                                  }`}
+                                >
+                                  {output.includes('\n')
+                                    ? output.split('\n').map((str, index) => (
+                                        <p key={index} className="mb-2">
+                                          {str}
+                                        </p>
+                                      ))
+                                    : output}
+                                </code>
+                              </>
+                            )}
+                            {!isLoading && codeError && (
+                              <code
+                                className={`${classes.code} ${classes['code--error']}`}
+                              >
+                                {!codeError.includes('\n') ? (
+                                  <p className="text-red-500 mt-4 mb-4 text-[1.4rem]">
+                                    {codeError}
+                                  </p>
+                                ) : (
+                                  <div className="my-4 space-y-2">
+                                    {codeError.split('\n').map((el, index) => (
+                                      <p
+                                        key={index}
+                                        className={`text-red-500 ${
+                                          el.includes('Error')
+                                            ? 'text-[1.4rem]'
+                                            : 'ml-2'
+                                        }`}
+                                      >
+                                        {el}
+                                      </p>
+                                    ))}
+                                  </div>
+                                )}
+                              </code>
+                            )}
+                            {!isLoading && !codeError && resultMessage && (
+                              <SubmissionResults result={resultMessage} />
+                            )}
+                            {!isLoading && !resultMessage && runResults && (
+                              <RunResults
+                                type="test"
+                                testResults={runResults}
+                              />
+                            )}
+                          </>
                         )}
                       </div>
                     </div>
@@ -422,14 +401,10 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
           language={language}
           codeInputPython={codeInputPython}
           codeInputJavascript={codeInputJavascript}
+          socketConnection={socketConnection}
           handleShowConsole={handleShowConsole}
           handleRunCodeManually={handleRunCodeManually}
           handleSubmission={handleSubmission}
-          debugging={debugging}
-          setDebugging={setDebugging}
-          handleExit={handleExit}
-          breakpoints={breakpoints}
-          exitingDebugging={exitingDebugging}
         />
         <Modal
           id="modal-settings"

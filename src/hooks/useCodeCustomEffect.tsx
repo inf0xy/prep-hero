@@ -1,5 +1,13 @@
-import { CodeLine, CodeOptions, Note, Submission } from '@/types/dataTypes';
+import {
+  CodeLine,
+  CodeOptions,
+  DebuggingData,
+  Note,
+  Submission
+} from '@/types/dataTypes';
 import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from './hooks';
+import { setDebuggingCode } from '@/store';
 
 type UseCodeCustomEffectProps = {
   title: string;
@@ -12,8 +20,8 @@ type UseCodeCustomEffectProps = {
   reviewCode: { code: string; language: string } | undefined;
   submissions: Submission[];
   codeError: string | null;
-  debugging: boolean;
   editorRef: RefObject<HTMLDivElement>;
+  debuggingData: DebuggingData;
   getCodeLines: () => CodeLine[];
   handleHighLightError: (
     codeLines: CodeLine[],
@@ -21,7 +29,6 @@ type UseCodeCustomEffectProps = {
   ) => void;
   setCodeInputPython: Dispatch<SetStateAction<string | undefined>>;
   setCodeInputJavascript: Dispatch<SetStateAction<string | undefined>>;
-  setDebuggingCode: Dispatch<SetStateAction<string>>;
   setUserPythonSubmission: Dispatch<
     SetStateAction<Submission | undefined | undefined>
   >;
@@ -32,6 +39,7 @@ type UseCodeCustomEffectProps = {
   setCodeLines: Dispatch<SetStateAction<CodeLine[]>>;
   setEditorHeight: Dispatch<SetStateAction<string | null>>;
   setNoteContent: Dispatch<SetStateAction<string | null>>;
+  setShowConsole: Dispatch<SetStateAction<boolean>>;
 };
 
 const useCodeCustomEffect = ({
@@ -44,26 +52,29 @@ const useCodeCustomEffect = ({
   codeLines,
   reviewCode,
   submissions,
-  debugging,
   codeError,
   editorRef,
+  debuggingData,
   getCodeLines,
   handleHighLightError,
   setCodeInputPython,
   setCodeInputJavascript,
-  setDebuggingCode,
   setUserPythonSubmission,
   setUserJavascriptSubmission,
   setOptions,
   setCodeLines,
   setEditorHeight,
-  setNoteContent
+  setNoteContent,
+  setShowConsole
 }: UseCodeCustomEffectProps) => {
   let problemNoteContent: string | undefined = '';
   if (notes) {
     const result = notes.find((el: Note) => el.title === title);
     problemNoteContent = result ? result.content : '';
   }
+
+  const { debugging } = useAppSelector((state) => state.debugger);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -73,11 +84,19 @@ const useCodeCustomEffect = ({
 
   useEffect(() => {
     if (debugging) {
-
-      language === 'python' ? setDebuggingCode(codeInputPython!) : setDebuggingCode(codeInputJavascript!);
+      language === 'python'
+        ? dispatch(setDebuggingCode(codeInputPython!))
+        : dispatch(setDebuggingCode(codeInputJavascript!));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debugging, setDebuggingCode])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debugging, setDebuggingCode]);
+
+  useEffect(() => {
+    if (debugging && debuggingData.stdOut.length > 0) {
+      setShowConsole(true);
+      setEditorHeight(`${window.innerHeight - 400}px`);
+    }
+  }, [debugging, debuggingData, setEditorHeight, setShowConsole]);
 
   useEffect(() => {
     if (problemNoteContent) {

@@ -3,16 +3,11 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { getAllTitles, getSelectedProblem } from '@/helpers/problem-api-util';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { setDuration } from '@/store';
-import { Problem, DebuggingAction, DebuggingData } from '@/types/dataTypes';
+import { Problem, SocketType } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import ProblemEditor from '@/components/problems/ProblemEditor';
 import Debugger from '@/components/reusables/codeEditor/Debugger';
 import classes from '@/styles/ProblemDetailPage.module.scss';
-
-import { Socket } from 'socket.io-client';
-import { DefaultEventsMap } from 'socket.io/dist/typed-events';
-
-
 
 type ProblemDetailPageProps = {
   selectedProblem: Problem;
@@ -21,42 +16,41 @@ type ProblemDetailPageProps = {
 const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   selectedProblem
 }) => {
-  const { theme, timer_reminder, timerDuration, duration } = useAppSelector(
-    (state) => {
+  const { theme, debugging, timer_reminder, timerDuration, duration } =
+    useAppSelector((state) => {
       const { theme } = state.theme;
+      const { debugging } = state.debugger;
       const { timer_reminder, timerDuration, duration } = state.user;
-      return { theme, timer_reminder, timerDuration, duration };
-    }
-  );
+      return { debugging, theme, timer_reminder, timerDuration, duration };
+    });
 
   const [activeTab, setActiveTab] = useState('prompt');
   const [timerAlert, setTimerAlert] = useState(false);
   const [reviewCode, setReviewCode] = useState<
     { code: string; language: string } | undefined
   >(undefined);
+  const [socketConnection, setSocketConnection] = useState<SocketType | null>(null);
 
-  const [debugging, setDebugging] = useState(false);
-  const [socketConnection, setSocketConnection] = useState<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
-  const [debuggingCode, setDebuggingCode] = useState('');
-  const [debuggingAction, setDebuggingAction] = useState<DebuggingAction>('');
-  const [breakpoints, setBreakpoints] = useState<number[]>([]);
-  const [debuggingData, setDebuggingData] = useState<DebuggingData>({
-    codeLine: '',
-    callStack: [],
-    localVariables: {},
-    stdOut: [],
-    watchVariables: {}
-  });
-  const [watchVars, setWatchVars] = useState<string[]>([]);
-  const [watchVariablesInput, setWatchVariablesInput] = useState('');
-  const [currentDebuggingLineNumber, setCurrentDebuggingLineNumber] = useState(0);
-  const [exitingDebugging, setExitingDebugging] = useState(false);
-
+  // const [debugging, setDebugging] = useState(false);
+  // const [socketConnection, setSocketConnection] = useState<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
+  // const [debuggingCode, setDebuggingCode] = useState('');
+  // const [breakpoints, setBreakpoints] = useState<number[]>([]);
+  // const [debuggingData, setDebuggingData] = useState<DebuggingData>({
+  //   codeLine: '',
+  //   callStack: [],
+  //   localVariables: {},
+  //   stdOut: [],
+  //   watchVariables: {}
+  // });
+  // const [watchVars, setWatchVars] = useState<string[]>([]);
+  // const [watchVariablesInput, setWatchVariablesInput] = useState('');
+  // const [currentDebuggingLineNumber, setCurrentDebuggingLineNumber] = useState(0);
+  // const [exitingDebugging, setExitingDebugging] = useState(false);
 
   const dispatch = useAppDispatch();
 
-console.log('current breakpoints ', breakpoints);
-console.log('currentDebugging LineNumber', currentDebuggingLineNumber);
+  // console.log('current breakpoints ', breakpoints);
+  // console.log('currentDebugging LineNumber', currentDebuggingLineNumber);
 
   useEffect(() => {
     dispatch(setDuration(0));
@@ -66,11 +60,11 @@ console.log('currentDebugging LineNumber', currentDebuggingLineNumber);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (breakpoints.length > 0) {
-      setCurrentDebuggingLineNumber(breakpoints[0]);
-    }
-  }, [breakpoints])
+  // useEffect(() => {
+  //   if (breakpoints.length > 0) {
+  //     setCurrentDebuggingLineNumber(breakpoints[0]);
+  //   }
+  // }, [breakpoints])
 
   const prompts = selectedProblem.prompts
     ? selectedProblem.prompts
@@ -83,82 +77,82 @@ console.log('currentDebugging LineNumber', currentDebuggingLineNumber);
     ? 'Start stopwatch to record session.'
     : "Time's up!";
 
-  const handleStartDebugging = () => {
-    setDebuggingData({
-      codeLine: '',
-      callStack: [],
-      localVariables: {},
-      stdOut: [],
-      watchVariables: {}
-    });
+  // const handleStartDebugging = () => {
+  //   setDebuggingData({
+  //     codeLine: '',
+  //     callStack: [],
+  //     localVariables: {},
+  //     stdOut: [],
+  //     watchVariables: {}
+  //   });
 
-    if (socketConnection) {
-      const debuggingData = {
-        code: debuggingCode,
-        breakpoints
-      };
-      socketConnection.emit('startDebugging', JSON.stringify(debuggingData));
-    }
-  };
+  //   if (socketConnection) {
+  //     const debuggingData = {
+  //       code: debuggingCode,
+  //       breakpoints
+  //     };
+  //     socketConnection.emit('startDebugging', JSON.stringify(debuggingData));
+  //   }
+  // };
 
-  const handleStopDebugging = () => {
-    if (socketConnection) {
-      socketConnection.emit('stopDebugging');
-    }
-  }
+  // const handleStopDebugging = () => {
+  //   if (socketConnection) {
+  //     socketConnection.emit('stopDebugging');
+  //   }
+  // }
 
-  const handleStepIn = () => {
-    if (socketConnection) {
-      socketConnection.emit('stepIn', JSON.stringify({ watchVars }));
-    }
-  };
+  // const handleStepIn = () => {
+  //   if (socketConnection) {
+  //     socketConnection.emit('stepIn', JSON.stringify({ watchVars }));
+  //   }
+  // };
 
-  const handleStepOver = () => {
-    if (socketConnection) {
-      socketConnection.emit('stepOver', JSON.stringify({ watchVars }));
-    }
-  };
+  // const handleStepOver = () => {
+  //   if (socketConnection) {
+  //     socketConnection.emit('stepOver', JSON.stringify({ watchVars }));
+  //   }
+  // };
 
-  const handleStepOut = () => {
-    if (socketConnection) {
-      socketConnection.emit('stepOut', JSON.stringify({ watchVars }));
-    }
-  };
+  // const handleStepOut = () => {
+  //   if (socketConnection) {
+  //     socketConnection.emit('stepOut', JSON.stringify({ watchVars }));
+  //   }
+  // };
 
-  const handleRestart = () => {
-    if (socketConnection) {
-      socketConnection.emit('restart', JSON.stringify({ watchVars }));
-    }
-  };
+  // const handleRestart = () => {
+  //   if (socketConnection) {
+  //     socketConnection.emit('restart', JSON.stringify({ watchVars }));
+  //   }
+  // };
 
-  const handleExit = () => {
-    if (socketConnection) {
-      setExitingDebugging(true);
-      socketConnection.emit('exit');
-    }
-  };
+  // const handleExit = () => {
+  //   if (socketConnection) {
+  //     setExitingDebugging(true);
+  //     socketConnection.emit('exit');
+  //   }
+  // };
 
-  const handleAddWatchVariables = () => {
-    if (socketConnection) {
-      socketConnection.emit(
-        'addWatchVariables',
-        JSON.stringify({ watchVars: [...watchVars, watchVariablesInput] })
-      );
-      setWatchVars((prev) => [...prev, watchVariablesInput]);
-    }
-    setWatchVariablesInput('');
-  };
+  // const handleAddWatchVariables = () => {
+  //   if (socketConnection) {
+  //     socketConnection.emit(
+  //       'addWatchVariables',
+  //       JSON.stringify({ watchVars: [...watchVars, watchVariablesInput] })
+  //     );
+  //     setWatchVars((prev) => [...prev, watchVariablesInput]);
+  //   }
+  //   setWatchVariablesInput('');
+  // };
 
-  const handleRemoveWatchVariables = (variable: string) => {
-    const currentWatchVariables = watchVars.filter((el) => el !== variable);
-    if (socketConnection) {
-      socketConnection.emit(
-        'removeWatchVariables',
-        JSON.stringify({ watchVars: currentWatchVariables })
-      );
-      setWatchVars(currentWatchVariables);
-    }
-  };
+  // const handleRemoveWatchVariables = (variable: string) => {
+  //   const currentWatchVariables = watchVars.filter((el) => el !== variable);
+  //   if (socketConnection) {
+  //     socketConnection.emit(
+  //       'removeWatchVariables',
+  //       JSON.stringify({ watchVars: currentWatchVariables })
+  //     );
+  //     setWatchVars(currentWatchVariables);
+  //   }
+  // };
 
   return (
     <>
@@ -246,19 +240,7 @@ console.log('currentDebugging LineNumber', currentDebuggingLineNumber);
             </div>
           ) : (
             <div className={`${classes.debug} ${classes[`debug--${theme}`]}`}>
-              <Debugger
-                socketConnection={socketConnection}
-                setSocketConnection={setSocketConnection}
-                breakpoints={breakpoints}
-                setDebugging={setDebugging}
-                debuggingData={debuggingData}
-                setDebuggingData={setDebuggingData}
-                watchVars={watchVars}
-                setCurrentDebuggingLineNumber={setCurrentDebuggingLineNumber}
-                handleAddWatchVariables={handleAddWatchVariables}
-                handleRemoveWatchVariables={handleRemoveWatchVariables}
-                setExitingDebugging={setExitingDebugging}
-              />
+              <Debugger setSocketConnection={setSocketConnection}/>
             </div>
           )}
           <div className={`${classes.working} ${classes[`working--${theme}`]}`}>
@@ -268,21 +250,7 @@ console.log('currentDebugging LineNumber', currentDebuggingLineNumber);
               listNames={selectedProblem.list_names!}
               reviewCode={reviewCode}
               setReviewCode={setReviewCode}
-              debugging={debugging}
-              setDebugging={setDebugging}
-              setDebuggingCode={setDebuggingCode}
-              setDebuggingAction={setDebuggingAction}
-              breakpoints={breakpoints}
-              setBreakpoints={setBreakpoints}
-              currentDebuggingLineNumber={currentDebuggingLineNumber}
-              handleStartDebugging={handleStartDebugging}
-              handleStopDebugging={handleStopDebugging}
-              handleStepIn={handleStepIn}
-              handleStepOver={handleStepOver}
-              handleStepOut={handleStepOut}
-              handleRestart={handleRestart}
-              handleExit={handleExit}
-              exitingDebugging={exitingDebugging}
+              socketConnection={socketConnection}
             />
           </div>
         </div>

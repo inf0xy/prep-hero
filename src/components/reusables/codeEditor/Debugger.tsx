@@ -2,54 +2,44 @@ import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
 import io, { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import Alert from '../Alert';
-import { NotificationType, DebuggingData } from '@/types/dataTypes';
+import { NotificationType, DebuggingData, SocketType } from '@/types/dataTypes';
 import classes from './Debugger.module.scss';
 import DebuggingResizable from './DebuggerInfoResizable';
 import PlusIcon from '@/components/icons/PlusIcon';
 import Tooltip from '../Tooltip';
-import { useAppSelector } from '@/hooks/hooks';
-
-interface DebuggerProps {
-  socketConnection: Socket<DefaultEventsMap, DefaultEventsMap> | null;
-  setSocketConnection: Dispatch<
-    SetStateAction<Socket<DefaultEventsMap, DefaultEventsMap> | null>
-  >;
-  breakpoints: number[];
-  setDebugging: Dispatch<SetStateAction<boolean>>;
-  debuggingData: DebuggingData;
-  watchVars: string[];
-  setDebuggingData: Dispatch<SetStateAction<DebuggingData>>;
-  setCurrentDebuggingLineNumber: Dispatch<SetStateAction<number>>;
-  setExitingDebugging: Dispatch<SetStateAction<boolean>>;
-  handleAddWatchVariables: () => void;
-  handleRemoveWatchVariables: (val: string) => void;
-}
-
-const Debugger: React.FC<DebuggerProps> = ({
-  socketConnection,
-  setSocketConnection,
-  breakpoints,
-  setDebugging,
-  debuggingData,
-  watchVars,
+import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
+import {
   setDebuggingData,
   setCurrentDebuggingLineNumber,
+  setDebugging,
   setExitingDebugging,
-  handleAddWatchVariables,
-  handleRemoveWatchVariables
-}) => {
+  setDebuggingStarted
+} from '@/store';
+import useDebugger from '@/hooks/useDebugger';
+
+type DebuggerProps = {
+  setSocketConnection: Dispatch<SetStateAction<SocketType>>;
+};
+
+const Debugger: React.FC<DebuggerProps> = ({ setSocketConnection }) => {
   const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(
     null
   );
-
-  const { theme } = useAppSelector((state) => state.theme);
-
   const [windowHeight, setWindowHeight] = useState<number | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
-  const [ready, setReady] = useState(true);
+  const { theme, breakpoints, debuggingData, watchVars } = useAppSelector(
+    (state) => {
+      const { theme } = state.theme;
+      const { breakpoints, debuggingData, watchVars } = state.debugger;
+      return { theme, breakpoints, debuggingData, watchVars };
+    }
+  );
+
+  const dispatch = useAppDispatch();
+  const { handleRemoveWatchVariables } = useDebugger();
 
   useEffect(() => {
     const handleResize = () => {
@@ -80,25 +70,31 @@ const Debugger: React.FC<DebuggerProps> = ({
           stdOut,
           watchVariables
         } = JSON.parse(data);
-        setDebuggingData({
-          codeLine,
-          callStack: callStack.reverse(),
-          localVariables,
-          stdOut,
-          watchVariables
-        });
-        if (currentLineNumber > 0) {
-          setCurrentDebuggingLineNumber(currentLineNumber);
+        dispatch(
+          setDebuggingData({
+            codeLine,
+            callStack: callStack.reverse(),
+            localVariables,
+            stdOut,
+            watchVariables
+          })
+        );
+        if (currentLineNumber >= 0) {
+          if (currentLineNumber === 0) {
+            dispatch(setDebuggingStarted(false));
+          }
+          dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
         }
       } else {
-        setDebuggingData({
+        const newDebuggingData = {
           codeLine: '',
           callStack: [],
           localVariables: {},
           stdOut: [],
           watchVariables: {}
-        });
-        setCurrentDebuggingLineNumber(breakpoints[0]);
+        };
+        dispatch(setDebuggingData(newDebuggingData));
+        dispatch(setCurrentDebuggingLineNumber(breakpoints[0]));
       }
     });
 
@@ -111,15 +107,19 @@ const Debugger: React.FC<DebuggerProps> = ({
         stdOut,
         watchVariables
       } = JSON.parse(data);
-      setDebuggingData({
+      const newDebuggingData = {
         codeLine,
         callStack: callStack.reverse(),
         localVariables,
         stdOut,
         watchVariables
-      });
-      if (currentLineNumber > 0) {
-        setCurrentDebuggingLineNumber(currentLineNumber);
+      };
+      dispatch(setDebuggingData(newDebuggingData));
+      if (currentLineNumber >= 0) {
+        if (currentLineNumber === 0) {
+          dispatch(setDebuggingStarted(false));
+        }
+        dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
       }
     });
 
@@ -132,15 +132,19 @@ const Debugger: React.FC<DebuggerProps> = ({
         stdOut,
         watchVariables
       } = JSON.parse(data);
-      setDebuggingData({
+      const newDebuggingData = {
         codeLine,
         callStack: callStack.reverse(),
         localVariables,
         stdOut,
         watchVariables
-      });
-      if (currentLineNumber > 0) {
-        setCurrentDebuggingLineNumber(currentLineNumber);
+      };
+      dispatch(setDebuggingData(newDebuggingData));
+      if (currentLineNumber >= 0) {
+        if (currentLineNumber === 0) {
+          dispatch(setDebuggingStarted(false));
+        }
+        dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
       }
     });
 
@@ -153,15 +157,19 @@ const Debugger: React.FC<DebuggerProps> = ({
         stdOut,
         watchVariables
       } = JSON.parse(data);
-      setDebuggingData({
+      const newDebuggingData = {
         codeLine,
         callStack: callStack.reverse(),
         localVariables,
         stdOut,
         watchVariables
-      });
-      if (currentLineNumber > 0) {
-        setCurrentDebuggingLineNumber(currentLineNumber);
+      };
+      dispatch(setDebuggingData(newDebuggingData));
+      if (currentLineNumber >= 0) {
+        if (currentLineNumber === 0) {
+          dispatch(setDebuggingStarted(false));
+        }
+        dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
       }
     });
 
@@ -170,37 +178,41 @@ const Debugger: React.FC<DebuggerProps> = ({
     socket.on('stopDebugging', (data) => {
       const resetCallStack = debuggingData.callStack.slice(1);
       if (data === 'stop') {
-        setDebuggingData({
+        const newDebuggingData = {
           codeLine: '',
           callStack: resetCallStack,
           localVariables: {},
           stdOut: [],
           watchVariables: {}
-        });
-        setCurrentDebuggingLineNumber(0);
+        };
+        dispatch(setDebuggingData(newDebuggingData));
+        dispatch(setCurrentDebuggingLineNumber(0));
+        dispatch(setDebuggingStarted(false));
       }
     });
     socket.on('addWatchVariables', (data) => {
       const { watchVariables } = JSON.parse(data);
-
-      setDebuggingData((prev) => ({
-        codeLine: prev.codeLine,
-        callStack: prev.callStack,
-        localVariables: prev.localVariables,
-        stdOut: prev.stdOut,
+      const newDebuggingData = {
+        codeLine: debuggingData.codeLine,
+        callStack: debuggingData.callStack,
+        localVariables: debuggingData.localVariables,
+        stdOut: debuggingData.stdOut,
         watchVariables
-      }));
+      };
+
+      dispatch(setDebuggingData(newDebuggingData));
     });
 
     socket.on('removeWatchVariables', (data) => {
       const { watchVariables } = JSON.parse(data);
-      setDebuggingData((prev) => ({
-        codeLine: prev.codeLine,
-        callStack: prev.callStack,
-        localVariables: prev.localVariables,
-        stdOut: prev.stdOut,
+      const newDebuggingData = {
+        codeLine: debuggingData.codeLine,
+        callStack: debuggingData.callStack,
+        localVariables: debuggingData.localVariables,
+        stdOut: debuggingData.stdOut,
         watchVariables
-      }));
+      };
+      dispatch(setDebuggingData(newDebuggingData));
     });
 
     socket.on('error', (error) => {
@@ -209,8 +221,8 @@ const Debugger: React.FC<DebuggerProps> = ({
 
     socket.on('exit', (data) => {
       if (data === 'disconnecting') {
-        setDebugging(false);
-        setExitingDebugging(false);
+        dispatch(setDebugging(false));
+        dispatch(setExitingDebugging(false));
         setSocketConnection(null);
       }
     });
@@ -220,7 +232,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         socket.disconnect();
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     breakpoints,
     setCurrentDebuggingLineNumber,
@@ -242,7 +254,7 @@ const Debugger: React.FC<DebuggerProps> = ({
 
     renderedLocalVariables.push(
       <p key={key}>
-        {key}: {formatValue}
+        {key}: <span className={classes[`local-variables__value--${theme}`]}>{formatValue}</span>
       </p>
     );
   }
@@ -269,16 +281,19 @@ const Debugger: React.FC<DebuggerProps> = ({
     >
       {windowHeight && (
         <>
-          <DebuggingResizable minHeight={100} maxHeight={windowHeight * 0.3}>
+          <DebuggingResizable minHeight={200} maxHeight={windowHeight * 0.3}>
             <div
               className={`${classes['local-variables']} ${
                 classes[`local-variables--${theme}`]
               }`}
             >
               <h2>Local Variables</h2>
+              <div className={classes['local-variables__content']}>
+                {renderedLocalVariables}
+              </div>
             </div>
           </DebuggingResizable>
-          <DebuggingResizable minHeight={100} maxHeight={windowHeight * 0.4}>
+          <DebuggingResizable minHeight={200} maxHeight={windowHeight * 0.4}>
             <div
               className={`${classes['watch-variables']} ${
                 classes[`watch-variables--${theme}`]
@@ -286,6 +301,7 @@ const Debugger: React.FC<DebuggerProps> = ({
             >
               <div className={classes['watch-variables__actions']}>
                 <h2>Watch</h2>
+                <div>{renderedWatchVariables}</div>
                 <Tooltip
                   text="Add expression"
                   direction="top"
@@ -307,6 +323,11 @@ const Debugger: React.FC<DebuggerProps> = ({
         }`}
       >
         <h2>Call Stack</h2>
+        <div className={classes['callstack__content']}>
+          {debuggingData.callStack.map((el) => (
+            <p key={el}>{el}</p>
+          ))}
+        </div>
       </div>
     </div>
   );

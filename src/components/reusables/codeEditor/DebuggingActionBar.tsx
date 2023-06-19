@@ -1,47 +1,72 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { NotificationType, DebuggingAction } from '@/types/dataTypes';
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { setDebuggingStarted } from '@/store';
+import { NotificationType, SocketType } from '@/types/dataTypes';
+import useDebugger from '@/hooks/useDebugger';
 import Tooltip from '../Tooltip';
 import FullScreenButton from './FullScreenButton';
 import Alert from '../Alert';
 import DocumentIcon from '@/components/icons/DocumentIcon';
-import classes from './DebuggingActionBar.module.scss';
 import StepOverIcon from '@/components/icons/StepOverIcon';
 import StepInIcon from '@/components/icons/StepInIcon';
 import StepOutIcon from '@/components/icons/StepOutIcon';
 import DebugResetIcon from '@/components/icons/DebugResetIcon';
 import StopIcon from '@/components/icons/StopIcon';
-import { useAppSelector } from '@/hooks/hooks';
 import DebugPlayIcon from '@/components/icons/DebugPlayIcon';
+import classes from './DebuggingActionBar.module.scss';
+
 
 type DebuggingActionBarProps = {
   title: string;
   setShowNote: Dispatch<SetStateAction<boolean>>;
-  handleStartDebugging: () => void;
-  handleStopDebugging: () => void;
-  handleStepIn: () => void;
-  handleStepOver: () => void;
-  handleStepOut: () => void;
-  handleRestart: () => void;
-  handleExit: () => void;
+  socketConnection: SocketType;
 };
 
 const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
   title,
   setShowNote,
-  handleStartDebugging,
-  handleStopDebugging,
-  handleStepIn,
-  handleStepOver,
-  handleStepOut,
-  handleRestart,
-  handleExit
+  socketConnection
 }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
-  const [started, setStarted] = useState(false);
-  const { theme } = useAppSelector((state) => state.theme);
+  const {
+    theme,
+    debuggingCode,
+    breakpoints,
+    watchVars,
+    currentDebuggingLineNumber,
+    debuggingStarted
+  } = useAppSelector((state) => {
+    const { theme } = state.theme;
+    const {
+      debuggingCode,
+      breakpoints,
+      watchVars,
+      currentDebuggingLineNumber,
+      debuggingStarted
+    } = state.debugger;
+    return {
+      theme,
+      debuggingCode,
+      breakpoints,
+      watchVars,
+      currentDebuggingLineNumber,
+      debuggingStarted
+    };
+  });
+
+  const dispatch = useAppDispatch();
+
+  const {
+    handleStartDebugging,
+    handleStopDebugging,
+    handleStepOver,
+    handleStepIn,
+    handleStepOut,
+    handleRestart
+  } = useDebugger();
 
   return (
     <>
@@ -60,11 +85,11 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
             classes[`debugging-actions--${theme}`]
           }`}
         >
-          {started ? (
+          {debuggingStarted && currentDebuggingLineNumber !== 0 ? (
             <li
               onClick={() => {
-                handleStopDebugging();
-                setStarted(false);
+                handleStopDebugging(socketConnection);
+                dispatch(setDebuggingStarted(false));
               }}
             >
               <StopIcon width={21} height={21} />
@@ -72,23 +97,27 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
           ) : (
             <li
               onClick={() => {
-                handleStartDebugging();
-                setStarted(true);
+                handleStartDebugging(
+                  socketConnection,
+                  debuggingCode,
+                  breakpoints
+                );
+                dispatch(setDebuggingStarted(true));
               }}
             >
               <DebugPlayIcon width={21} height={21} />
             </li>
           )}
-          <li onClick={() => handleStepOver()}>
+          <li onClick={() => handleStepOver(socketConnection, watchVars)}>
             <StepOverIcon width={17} height={17} />
           </li>
-          <li onClick={() => handleStepIn()}>
+          <li onClick={() => handleStepIn(socketConnection, watchVars)}>
             <StepInIcon width={17} height={17} />
           </li>
-          <li onClick={() => handleStepOut()}>
+          <li onClick={() => handleStepOut(socketConnection, watchVars)}>
             <StepOutIcon width={17} height={17} />
           </li>
-          <li onClick={() => handleRestart()}>
+          <li onClick={() => handleRestart(socketConnection, watchVars)}>
             <DebugResetIcon width={15} height={15} />
           </li>
         </ul>

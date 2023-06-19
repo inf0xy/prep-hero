@@ -7,9 +7,10 @@ import {
   useEffect
 } from 'react';
 import MonacoEditor from '@monaco-editor/react';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
 import Loading from '../Loading';
+import { setBreakpoints } from '@/store';
 
 type CodeEditorProps = {
   value: string;
@@ -18,9 +19,6 @@ type CodeEditorProps = {
   height: string;
   setCodeInput: (val: string) => void | Dispatch<SetStateAction<string>>;
   editorRef?: RefObject<HTMLDivElement>;
-  debugging?: boolean;
-  setBreakpoints?: Dispatch<SetStateAction<number[]>>;
-  currentDebuggingLineNumber?: number;
 };
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -29,12 +27,17 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   language,
   height,
   setCodeInput,
-  editorRef,
-  debugging,
-  setBreakpoints,
-  currentDebuggingLineNumber
+  editorRef
 }) => {
-  const { theme } = useAppSelector((state) => state.theme);
+  const { theme, debugging, breakpoints, currentDebuggingLineNumber } =
+    useAppSelector((state) => {
+      const { theme } = state.theme;
+      const { breakpoints, debugging, currentDebuggingLineNumber } =
+        state.debugger;
+      return { theme, breakpoints, debugging, currentDebuggingLineNumber };
+    });
+
+  const dispatch = useAppDispatch();
 
   const [lastDebugLineNumber, setLastDebugLineNumber] = useState(0);
 
@@ -50,20 +53,22 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const handleMouseDown = (event: any) => {
     if (
-      setBreakpoints &&
       event.target?.position &&
       event.target.position.column === 1
     ) {
       const { lineNumber } = event.target?.position;
       if (
-        // breakpointState.current &&
         !breakpointState.current.includes(lineNumber)
       ) {
-        setBreakpoints((prev) => [...prev, lineNumber]);
+        const newBreakpoints = [...breakpoints, lineNumber];
+        dispatch(setBreakpoints(newBreakpoints));
         breakpointState.current = [...breakpointState.current, lineNumber];
         renderedBreakpointsDecorations('add', lineNumber, event.target.range);
       } else {
-        setBreakpoints((prev) => prev.filter((line) => line !== lineNumber));
+        const newBreakpoints = breakpoints.filter(
+          (line) => line !== lineNumber
+        );
+        dispatch(setBreakpoints(newBreakpoints));
         breakpointState.current = breakpointState.current.filter(
           (el) => el !== lineNumber
         );
@@ -122,7 +127,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   useEffect(() => {
-    console.log(currentDebuggingLineNumber);
     if (debugging && debugging === true && currentDebuggingLineNumber) {
       if (lastDebugLineNumber) {
         handleHighLightDebuggingLine('remove', lastDebugLineNumber);

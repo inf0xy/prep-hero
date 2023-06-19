@@ -1,3 +1,6 @@
+import { Socket } from 'socket.io-client';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
+
 export type GeneralFormData = {
   listNames: string[];
   title: string;
@@ -95,6 +98,7 @@ export type ResultMessage = {
   runtime: string;
 };
 
+export type SocketType = Socket<DefaultEventsMap, DefaultEventsMap> | null;
 export type DebuggingAction = 'stepIn' | 'stepOut' | 'stepOver' | 'restart' | 'exit' | '';
 
 export type DebuggingData = {

@@ -9,7 +9,7 @@ interface ResizableProps {
 }
 
 const DebuggingResizable: React.FC<ResizableProps> = ({ children, maxHeight, minHeight }) => {
-  const [height, setHeight] = useState(100);
+  const [height, setHeight] = useState(200);
 
   const handleResize = (
     event: React.SyntheticEvent,
@@ -23,7 +23,7 @@ const DebuggingResizable: React.FC<ResizableProps> = ({ children, maxHeight, min
       axis="y"
       width={Infinity}
       height={height}
-      minConstraints={[Infinity, minHeight ? minHeight : 100]}
+      minConstraints={[Infinity, minHeight ? minHeight : 200]}
       maxConstraints={[Infinity, maxHeight ? maxHeight : 500]}
       onResize={handleResize}
       resizeHandles={['s']}

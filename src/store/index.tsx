@@ -23,6 +23,17 @@ import problemsReducer, {
   updateProblem,
   getProblemCounts
 } from './slices/problemsSlice';
+import debuggerReducer, {
+  setDebugging,
+  setDebuggingCode,
+  setBreakpoints,
+  setDebuggingData,
+  setCurrentDebuggingLineNumber,
+  setWatchVars,
+  setWatchVariablesInput,
+  setExitingDebugging,
+  setDebuggingStarted
+} from './slices/debuggerSlice';
 import themeReducer, { setTheme, getTheme } from './slices/themeSlice';
 
 export const store = configureStore({
@@ -30,6 +41,7 @@ export const store = configureStore({
     user: userReducer,
     notes: notesSlice,
     problems: problemsReducer,
+    debugger: debuggerReducer,
     theme: themeReducer
   }
 });
@@ -55,6 +67,15 @@ export {
   addProblem,
   updateProblem,
   getProblemCounts,
+  setDebugging,
+  setDebuggingCode,
+  setBreakpoints,
+  setDebuggingData,
+  setCurrentDebuggingLineNumber,
+  setWatchVars,
+  setWatchVariablesInput,
+  setExitingDebugging,
+  setDebuggingStarted,
   setTheme,
   getTheme
 };
