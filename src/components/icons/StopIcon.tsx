@@ -8,10 +8,10 @@ type StopIconProps = {
 const StopIcon: React.FC<StopIconProps> = ({ width, height }) => {
   return (
     <Image
-      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAmklEQVR4nO3aWw3DQAwEQINZLscfg4FsIbQ/aaJ2RgqAWPdYWzcDAADwgc3pk7+52j7gJxUgVkAfswXmZgoQK6C2QJwBdQjGLVDXYOSA/l7weEMOiBxQOSByQOWAyAGVAyIHdK62gtCRBFcUPnqB1Qwd3eBqh495wNzMPCDmATUPiHlAzQPiiUy9EYpHUv168Nh/KwAAADC/4AUheS2MYREErgAAAABJRU5ErkJggg=="
+      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAYklEQVR4nO3YsQnAMAxEUQ2SIbz/AjdW0qe5JoQEvwduDUK/0gwA8AM51vnmGwPc2MDxsYTmZ/+PAYrYQCGhIhIqJFREQoWEikiokFARCRUSKiKh3RKKu9By2NorIQBgnncBai0bLm540xoAAAAASUVORK5CYII="
       width={width ? width : 20}
       height={height ? height : 20}
-      alt="check-circle-icon"
+      alt="stop-icon"
     />
   );
 };

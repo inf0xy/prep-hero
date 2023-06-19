@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, Dispatch, SetStateAction } from 'react';
+import { useState, useRef, Dispatch, SetStateAction } from 'react';
 import CodeEditor from '@/components/reusables/codeEditor/CodeEditor';
 import Resizable from '../reusables/Resizable';
 import { useAppSelector } from '@/hooks/hooks';
@@ -47,8 +47,17 @@ type ProblemEditorProps = {
   setDebugging: Dispatch<SetStateAction<boolean>>;
   setDebuggingCode: Dispatch<SetStateAction<string>>;
   breakpoints: number[];
+  currentDebuggingLineNumber: number;
   setBreakpoints: Dispatch<SetStateAction<number[]>>;
   setDebuggingAction: Dispatch<SetStateAction<DebuggingAction>>;
+  exitingDebugging: boolean;
+  handleStartDebugging: () => void,
+  handleStopDebugging: () => void,
+  handleStepIn: () => void,
+  handleStepOver: () => void,
+  handleStepOut: () => void,
+  handleRestart: () => void,
+  handleExit: () => void
 };
 
 const ProblemEditor: React.FC<ProblemEditorProps> = ({
@@ -61,8 +70,16 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   setDebuggingCode,
   setDebugging,
   breakpoints,
+  currentDebuggingLineNumber,
+  exitingDebugging,
   setBreakpoints,
-  setDebuggingAction
+  handleStartDebugging,
+  handleStopDebugging,
+  handleStepIn,
+  handleStepOver,
+  handleStepOut,
+  handleRestart,
+  handleExit
 }) => {
   const { theme, submissions, notes } = useAppSelector((state) => {
     const { theme } = state.theme;
@@ -177,7 +194,17 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   };
 
   const renderedTopBar = debugging ? (
-    <DebuggingActionBar setShowNote={setShowNote} title={title} setDebuggingAction={setDebuggingAction}/>
+    <DebuggingActionBar
+      setShowNote={setShowNote}
+      title={title}
+      handleStartDebugging={handleStartDebugging}
+      handleStopDebugging={handleStopDebugging}
+      handleStepIn={handleStepIn}
+      handleStepOver={handleStepOver}
+      handleStepOut={handleStepOut}
+      handleRestart={handleRestart}
+      handleExit={handleExit}
+    />
   ) : (
     <>
       {codeInputPython !== undefined && codeInputJavascript !== undefined && (
@@ -283,8 +310,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                 >
                   <CodeEditor
                     editorRef={editorRef}
-                    breakpoints={breakpoints}
+                    debugging={debugging}
                     setBreakpoints={setBreakpoints}
+                    currentDebuggingLineNumber={currentDebuggingLineNumber}
                     value={
                       reviewCode
                         ? reviewCode.code
@@ -399,7 +427,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
           handleSubmission={handleSubmission}
           debugging={debugging}
           setDebugging={setDebugging}
+          handleExit={handleExit}
           breakpoints={breakpoints}
+          exitingDebugging={exitingDebugging}
         />
         <Modal
           id="modal-settings"
@@ -443,7 +473,10 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
         >
           <div className={`code-editor__note code-editor__note--${theme}`}>
             {showNote && (
-              <TextEditor value={noteContent ? noteContent : ''} setValue={setNoteContent} />
+              <TextEditor
+                value={noteContent ? noteContent : ''}
+                setValue={setNoteContent}
+              />
             )}
           </div>
         </Modal>

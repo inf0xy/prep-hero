@@ -7,10 +7,10 @@ import ChevronDown from '@/components/icons/ChevronDown';
 import Tooltip from '../Tooltip';
 import DebugIcon from '@/components/icons/DebugIcon';
 import { Dispatch, SetStateAction } from 'react';
-import StopIcon from '@/components/icons/StopIcon';
 import ExitIcon from '@/components/icons/ExitIcon';
 import variables from '@/styles/variables.module.scss';
 import classes from './ConsoleActionBar.module.scss';
+import LoadingInfinityIcon from '@/components/icons/LoadingInfinityIcon';
 
 type ConsoleActionBarProps = {
   showConsole: boolean;
@@ -22,6 +22,8 @@ type ConsoleActionBarProps = {
   debugging: boolean;
   setDebugging: Dispatch<SetStateAction<boolean>>;
   breakpoints: number[];
+  exitingDebugging: boolean;
+  handleExit: () => void;
   handleShowConsole: () => void;
   handleRunCodeManually: (
     reviewCode: { code: string; language: string } | undefined,
@@ -52,7 +54,9 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
   handleRunCodeManually,
   debugging,
   setDebugging,
-  breakpoints
+  breakpoints,
+  exitingDebugging,
+  handleExit
 }) => {
   const { theme, duration, timerDuration } = useAppSelector((state) => {
     const { theme } = state.theme;
@@ -63,6 +67,22 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
+
+  const handleDebugButton = () => {
+    if (!debugging) {
+      if (breakpoints.length > 0) {
+        setDebugging(true);
+      } else {
+        setNotification({
+          status: 'warning',
+          message: 'Add breakpoints to start debugging.'
+        });
+        setShowAlert(true);
+      }
+    } else {
+      handleExit();
+    }
+  };
 
   return (
     <>
@@ -125,34 +145,34 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
           </Tooltip>
         </div>
         <div className="flex space-x-5">
-          <Tooltip
-            text={debugging ? 'Exit' : 'Debug'}
-            direction="top"
-            className="w-fit px-6 py-4 left-4"
-          >
-            <button
-              onClick={() => {
-                if (breakpoints.length > 0) {
-                  setDebugging(!debugging);
-                } else {
-                  setNotification({
-                    status: 'warning',
-                    message: 'Add breakpoints to start debugging.'
-                  });
-                  setShowAlert(true);
-                }
-              }}
-              className={`${
-                debugging ? 'translate-y-[3px]' : 'translate-y-[2px]'
-              }`}
+          {!exitingDebugging ? (
+            <Tooltip
+              text={debugging ? 'Exit' : 'Debug'}
+              direction="top"
+              className="w-fit px-6 py-4 left-4"
             >
-              {debugging ? (
-                <ExitIcon width={17} height={17} />
-              ) : (
-                <DebugIcon width={21} height={21} />
-              )}
-            </button>
-          </Tooltip>
+              <button
+                onClick={handleDebugButton}
+                className={`${
+                  debugging ? 'translate-y-[3px]' : 'translate-y-[2px]'
+                }`}
+              >
+                {debugging ? (
+                  <ExitIcon width={17} height={17} />
+                ) : (
+                  <DebugIcon width={21} height={21} />
+                )}
+              </button>
+            </Tooltip>
+          ) : (
+            <Tooltip
+              text="Exiting debugging"
+              direction="top"
+              className="w-[14rem] py-4 left-4"
+            >
+              <LoadingInfinityIcon width={21} height={21} />
+            </Tooltip>
+          )}
           <Button
             disabled={isLoading ? true : false}
             extraStyle={{

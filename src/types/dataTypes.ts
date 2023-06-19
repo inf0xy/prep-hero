@@ -96,3 +96,11 @@ export type ResultMessage = {
 };
 
 export type DebuggingAction = 'stepIn' | 'stepOut' | 'stepOver' | 'restart' | 'exit' | '';
+
+export type DebuggingData = {
+  codeLine: string;
+  callStack: string[];
+  localVariables: { [key: string]: any };
+  stdOut: string[];
+  watchVariables: { [key: string]: string };
+};

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
 import io, { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import Alert from '../Alert';
-import { DebuggingAction, NotificationType } from '@/types/dataTypes';
+import { NotificationType, DebuggingData } from '@/types/dataTypes';
 import classes from './Debugger.module.scss';
 import DebuggingResizable from './DebuggerInfoResizable';
 import PlusIcon from '@/components/icons/PlusIcon';
@@ -10,31 +10,34 @@ import Tooltip from '../Tooltip';
 import { useAppSelector } from '@/hooks/hooks';
 
 interface DebuggerProps {
+  socketConnection: Socket<DefaultEventsMap, DefaultEventsMap> | null;
+  setSocketConnection: Dispatch<
+    SetStateAction<Socket<DefaultEventsMap, DefaultEventsMap> | null>
+  >;
   breakpoints: number[];
-  debuggingCode: string;
-  debuggingAction: DebuggingAction;
-  setDebugging: Dispatch<SetStateAction<boolean>>
+  setDebugging: Dispatch<SetStateAction<boolean>>;
+  debuggingData: DebuggingData;
+  watchVars: string[];
+  setDebuggingData: Dispatch<SetStateAction<DebuggingData>>;
+  setCurrentDebuggingLineNumber: Dispatch<SetStateAction<number>>;
+  setExitingDebugging: Dispatch<SetStateAction<boolean>>;
+  handleAddWatchVariables: () => void;
+  handleRemoveWatchVariables: (val: string) => void;
 }
 
-type DebuggingData = {
-  codeLine: string;
-  callStack: string[];
-  localVariables: { [key: string]: any };
-  stdOut: string[];
-  watchVariables: { [key: string]: string };
-};
-
-const Debugger: React.FC<DebuggerProps> = ({ breakpoints, debuggingCode, debuggingAction, setDebugging }) => {
-  const [watchVariablesInput, setWatchVariablesInput] = useState('');
-  const [watchVars, setWatchVars] = useState<string[]>([]);
-  const [codeInput, setCodeInput] = useState('');
-  const [debuggingData, setDebuggingData] = useState<DebuggingData>({
-    codeLine: '',
-    callStack: [],
-    localVariables: {},
-    stdOut: [],
-    watchVariables: {}
-  });
+const Debugger: React.FC<DebuggerProps> = ({
+  socketConnection,
+  setSocketConnection,
+  breakpoints,
+  setDebugging,
+  debuggingData,
+  watchVars,
+  setDebuggingData,
+  setCurrentDebuggingLineNumber,
+  setExitingDebugging,
+  handleAddWatchVariables,
+  handleRemoveWatchVariables
+}) => {
   const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(
     null
   );
@@ -64,12 +67,19 @@ const Debugger: React.FC<DebuggerProps> = ({ breakpoints, debuggingCode, debuggi
   }, []);
 
   useEffect(() => {
-    socketRef.current = io('http://localhost:5000');
+    const socket = io('http://localhost:5000');
+    setSocketConnection(socket);
 
-    socketRef.current.on('startDebugging', (data) => {
+    socket.on('startDebugging', (data) => {
       if (data) {
-        const { codeLine, callStack, localVariables, stdOut, watchVariables } =
-          JSON.parse(data);
+        const {
+          currentLineNumber,
+          codeLine,
+          callStack,
+          localVariables,
+          stdOut,
+          watchVariables
+        } = JSON.parse(data);
         setDebuggingData({
           codeLine,
           callStack: callStack.reverse(),
@@ -77,6 +87,9 @@ const Debugger: React.FC<DebuggerProps> = ({ breakpoints, debuggingCode, debuggi
           stdOut,
           watchVariables
         });
+        if (currentLineNumber > 0) {
+          setCurrentDebuggingLineNumber(currentLineNumber);
+        }
       } else {
         setDebuggingData({
           codeLine: '',
@@ -85,12 +98,19 @@ const Debugger: React.FC<DebuggerProps> = ({ breakpoints, debuggingCode, debuggi
           stdOut: [],
           watchVariables: {}
         });
+        setCurrentDebuggingLineNumber(breakpoints[0]);
       }
     });
 
-    socketRef.current.on('stepIn', (data) => {
-      const { codeLine, callStack, localVariables, stdOut, watchVariables } =
-        JSON.parse(data);
+    socket.on('stepIn', (data) => {
+      const {
+        currentLineNumber,
+        codeLine,
+        callStack,
+        localVariables,
+        stdOut,
+        watchVariables
+      } = JSON.parse(data);
       setDebuggingData({
         codeLine,
         callStack: callStack.reverse(),
@@ -98,44 +118,69 @@ const Debugger: React.FC<DebuggerProps> = ({ breakpoints, debuggingCode, debuggi
         stdOut,
         watchVariables
       });
-    });
-    socketRef.current.on('stepOver', (data) => {
-      const { codeLine, callStack, localVariables, stdOut, watchVariables } =
-        JSON.parse(data);
-      setDebuggingData({
-        codeLine,
-        callStack: callStack.reverse(),
-        localVariables,
-        stdOut,
-        watchVariables
-      });
-    });
-    socketRef.current.on('stepOut', (data) => {
-      const { codeLine, callStack, localVariables, stdOut, watchVariables } =
-        JSON.parse(data);
-      setDebuggingData({
-        codeLine,
-        callStack: callStack.reverse(),
-        localVariables,
-        stdOut,
-        watchVariables
-      });
-    });
-    socketRef.current.on('restart', (data) => {
-      setDebuggingData((prev) => ({
-        codeLine: '',
-        callStack: [],
-        localVariables: {},
-        stdOut: [],
-        watchVariables: prev.watchVariables
-      }));
-    });
-    socketRef.current.on('stopDebugging', (data) => {
-      if (data === 'done') {
-        setDebugging(false);
+      if (currentLineNumber > 0) {
+        setCurrentDebuggingLineNumber(currentLineNumber);
       }
     });
-    socketRef.current.on('addWatchVariables', (data) => {
+
+    socket.on('stepOver', (data) => {
+      const {
+        currentLineNumber,
+        codeLine,
+        callStack,
+        localVariables,
+        stdOut,
+        watchVariables
+      } = JSON.parse(data);
+      setDebuggingData({
+        codeLine,
+        callStack: callStack.reverse(),
+        localVariables,
+        stdOut,
+        watchVariables
+      });
+      if (currentLineNumber > 0) {
+        setCurrentDebuggingLineNumber(currentLineNumber);
+      }
+    });
+
+    socket.on('stepOut', (data) => {
+      const {
+        currentLineNumber,
+        codeLine,
+        callStack,
+        localVariables,
+        stdOut,
+        watchVariables
+      } = JSON.parse(data);
+      setDebuggingData({
+        codeLine,
+        callStack: callStack.reverse(),
+        localVariables,
+        stdOut,
+        watchVariables
+      });
+      if (currentLineNumber > 0) {
+        setCurrentDebuggingLineNumber(currentLineNumber);
+      }
+    });
+
+    socket.on('restart', (data) => {});
+
+    socket.on('stopDebugging', (data) => {
+      const resetCallStack = debuggingData.callStack.slice(1);
+      if (data === 'stop') {
+        setDebuggingData({
+          codeLine: '',
+          callStack: resetCallStack,
+          localVariables: {},
+          stdOut: [],
+          watchVariables: {}
+        });
+        setCurrentDebuggingLineNumber(0);
+      }
+    });
+    socket.on('addWatchVariables', (data) => {
       const { watchVariables } = JSON.parse(data);
 
       setDebuggingData((prev) => ({
@@ -147,7 +192,7 @@ const Debugger: React.FC<DebuggerProps> = ({ breakpoints, debuggingCode, debuggi
       }));
     });
 
-    socketRef.current.on('removeWatchVariables', (data) => {
+    socket.on('removeWatchVariables', (data) => {
       const { watchVariables } = JSON.parse(data);
       setDebuggingData((prev) => ({
         codeLine: prev.codeLine,
@@ -158,132 +203,31 @@ const Debugger: React.FC<DebuggerProps> = ({ breakpoints, debuggingCode, debuggi
       }));
     });
 
-    socketRef.current.on('error', (error) => {
+    socket.on('error', (error) => {
       console.error('Socket error:', error);
     });
 
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
+    socket.on('exit', (data) => {
+      if (data === 'disconnecting') {
+        setDebugging(false);
+        setExitingDebugging(false);
+        setSocketConnection(null);
       }
-    };
-  }, [setDebugging]);
-
-  useEffect(() => {
-    if (ready) {
-      handleStartDebugging();
-      setReady(false);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socketRef.current]);
-
-  useEffect(() => {
-    if (!ready) {
-      setTimeout(() => {
-        setReady(true);
-      }, 500);
-    }
-  }, [ready]);
-
-  useEffect(() => {
-    if (ready) {
-      switch (debuggingAction) {
-        case 'stepIn':
-          if (ready)
-            handleStepIn();
-          break;
-        case 'stepOver':
-          if (ready)
-            handleStepOver();
-          break;
-        case 'stepOut':
-          if (ready)
-            handleStepOut();
-          break;
-        case 'restart':
-          if (ready)
-            handleRestart();
-          break;
-        case 'exit':
-          if (ready)
-            handleExit();
-          break;
-        default:
-          console.log('Invalid');
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, debuggingAction]);
-
-  const handleStartDebugging = () => {
-    setDebuggingData({
-      codeLine: '',
-      callStack: [],
-      localVariables: {},
-      stdOut: [],
-      watchVariables: {}
     });
 
-    if (socketRef.current) {
-      const debuggingData = {
-        code: debuggingCode,
-        breakpoints
-      };
-      socketRef.current.emit('startDebugging', JSON.stringify(debuggingData));
-    }
-  };
-
-  const handleStepIn = () => {
-    if (socketRef.current) {
-      socketRef.current.emit('stepIn', JSON.stringify({ watchVars }));
-    }
-  };
-
-  const handleStepOver = () => {
-    if (socketRef.current) {
-      socketRef.current.emit('stepOver', JSON.stringify({ watchVars }));
-    }
-  };
-
-  const handleStepOut = () => {
-    if (socketRef.current) {
-      socketRef.current.emit('stepOut', JSON.stringify({ watchVars }));
-    }
-  };
-
-  const handleRestart = () => {
-    if (socketRef.current) {
-      socketRef.current.emit('restart', JSON.stringify({ watchVars }));
-    }
-  };
-
-  const handleExit = () => {
-    if (socketRef.current) {
-      socketRef.current.emit('stopDebugging');
-    }
-  };
-
-  const handleAddWatchVariables = () => {
-    if (socketRef.current) {
-      socketRef.current.emit(
-        'addWatchVariables',
-        JSON.stringify({ watchVars: [...watchVars, watchVariablesInput] })
-      );
-      setWatchVars((prev) => [...prev, watchVariablesInput]);
-    }
-    setWatchVariablesInput('');
-  };
-
-  const handleRemoveWatchVariables = (variable: string) => {
-    const currentWatchVariables = watchVars.filter((el) => el !== variable);
-    if (socketRef.current) {
-      socketRef.current.emit(
-        'removeWatchVariables',
-        JSON.stringify({ watchVars: currentWatchVariables })
-      );
-      setWatchVars(currentWatchVariables);
-    }
-  };
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    breakpoints,
+    setCurrentDebuggingLineNumber,
+    setDebugging,
+    setDebuggingData,
+    setSocketConnection
+  ]);
 
   const renderedLocalVariables = [];
   for (const [key, value] of Object.entries(debuggingData.localVariables)) {

@@ -11,22 +11,36 @@ import StepOutIcon from '@/components/icons/StepOutIcon';
 import DebugResetIcon from '@/components/icons/DebugResetIcon';
 import StopIcon from '@/components/icons/StopIcon';
 import { useAppSelector } from '@/hooks/hooks';
+import DebugPlayIcon from '@/components/icons/DebugPlayIcon';
 
 type DebuggingActionBarProps = {
   title: string;
   setShowNote: Dispatch<SetStateAction<boolean>>;
-  setDebuggingAction: Dispatch<SetStateAction<DebuggingAction>>;
+  handleStartDebugging: () => void;
+  handleStopDebugging: () => void;
+  handleStepIn: () => void;
+  handleStepOver: () => void;
+  handleStepOut: () => void;
+  handleRestart: () => void;
+  handleExit: () => void;
 };
 
 const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
   title,
   setShowNote,
-  setDebuggingAction
+  handleStartDebugging,
+  handleStopDebugging,
+  handleStepIn,
+  handleStepOver,
+  handleStepOut,
+  handleRestart,
+  handleExit
 }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
+  const [started, setStarted] = useState(false);
   const { theme } = useAppSelector((state) => state.theme);
 
   return (
@@ -46,20 +60,36 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
             classes[`debugging-actions--${theme}`]
           }`}
         >
-          <li onClick={() => setDebuggingAction('stepOver')}>
+          {started ? (
+            <li
+              onClick={() => {
+                handleStopDebugging();
+                setStarted(false);
+              }}
+            >
+              <StopIcon width={21} height={21} />
+            </li>
+          ) : (
+            <li
+              onClick={() => {
+                handleStartDebugging();
+                setStarted(true);
+              }}
+            >
+              <DebugPlayIcon width={21} height={21} />
+            </li>
+          )}
+          <li onClick={() => handleStepOver()}>
             <StepOverIcon width={17} height={17} />
           </li>
-          <li onClick={() => setDebuggingAction('stepIn')}>
+          <li onClick={() => handleStepIn()}>
             <StepInIcon width={17} height={17} />
           </li>
-          <li onClick={() => setDebuggingAction('stepOut')}>
+          <li onClick={() => handleStepOut()}>
             <StepOutIcon width={17} height={17} />
           </li>
-          <li onClick={() => setDebuggingAction('restart')}>
+          <li onClick={() => handleRestart()}>
             <DebugResetIcon width={15} height={15} />
-          </li>
-          <li onClick={() => setDebuggingAction('exit')}>
-            <StopIcon width={21} height={21} />
           </li>
         </ul>
         <ul className={classes['debugging-menu__options']}>

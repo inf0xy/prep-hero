@@ -1,4 +1,11 @@
-import { useRef, Dispatch, SetStateAction, RefObject } from 'react';
+import {
+  useState,
+  useRef,
+  Dispatch,
+  SetStateAction,
+  RefObject,
+  useEffect
+} from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { useAppSelector } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
@@ -11,8 +18,9 @@ type CodeEditorProps = {
   height: string;
   setCodeInput: (val: string) => void | Dispatch<SetStateAction<string>>;
   editorRef?: RefObject<HTMLDivElement>;
-  breakpoints: number[];
-  setBreakpoints: Dispatch<SetStateAction<number[]>>;
+  debugging?: boolean;
+  setBreakpoints?: Dispatch<SetStateAction<number[]>>;
+  currentDebuggingLineNumber?: number;
 };
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -22,10 +30,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   height,
   setCodeInput,
   editorRef,
-  breakpoints,
-  setBreakpoints
+  debugging,
+  setBreakpoints,
+  currentDebuggingLineNumber
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
+
+  const [lastDebugLineNumber, setLastDebugLineNumber] = useState(0);
 
   const codeEditorModelRef = useRef(null);
   const monacolRef = useRef(null);
@@ -38,7 +49,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   } | null>(null);
 
   const handleMouseDown = (event: any) => {
-    if (event.target?.position && event.target.position.column === 1) {
+    if (
+      setBreakpoints &&
+      event.target?.position &&
+      event.target.position.column === 1
+    ) {
       const { lineNumber } = event.target?.position;
       if (
         // breakpointState.current &&
@@ -60,6 +75,66 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       }
     }
   };
+
+  const handleHighLightDebuggingLine = (
+    action: 'add' | 'remove',
+    lineNumber: number
+  ) => {
+    if (action === 'add') {
+      (codeEditorModelRef.current as any).deltaDecorations(
+        [],
+        [
+          {
+            range: new (monacolRef.current as any).Range(
+              lineNumber,
+              1,
+              lineNumber,
+              1
+            ),
+            options: {
+              isWholeLine: true,
+              className:
+                theme === 'dark'
+                  ? 'code-debug-highlight--dark'
+                  : 'code-debug-highlight--light'
+            }
+          }
+        ]
+      );
+    } else {
+      const decorations = (
+        codeEditorModelRef.current as any
+      ).getDecorationsInRange(
+        new (monacolRef.current as any).Range(lineNumber, 1, lineNumber, 1)
+      );
+
+      const breakpointDecorations = decorations.filter(
+        (decoration: any) =>
+          decoration.options.className === 'code-debug-highlight--dark' ||
+          decoration.options.className === 'code-debug-highlight--light'
+      );
+
+      (codeEditorModelRef.current as any).deltaDecorations(
+        breakpointDecorations.map((decoration: any) => decoration.id),
+        []
+      );
+    }
+  };
+
+  useEffect(() => {
+    console.log(currentDebuggingLineNumber);
+    if (debugging && debugging === true && currentDebuggingLineNumber) {
+      if (lastDebugLineNumber) {
+        handleHighLightDebuggingLine('remove', lastDebugLineNumber);
+      }
+
+      handleHighLightDebuggingLine('add', currentDebuggingLineNumber);
+      setLastDebugLineNumber(currentDebuggingLineNumber);
+    } else if (lastDebugLineNumber) {
+      handleHighLightDebuggingLine('remove', lastDebugLineNumber);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentDebuggingLineNumber, debugging]);
 
   const renderedBreakpointsDecorations = (
     action: string,

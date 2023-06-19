@@ -73,7 +73,8 @@ const useCodeCustomEffect = ({
 
   useEffect(() => {
     if (debugging) {
-      setDebuggingCode(codeInputPython!);
+
+      language === 'python' ? setDebuggingCode(codeInputPython!) : setDebuggingCode(codeInputJavascript!);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debugging, setDebuggingCode])
