@@ -1,5 +1,7 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
+import useDebugger from '@/hooks/useDebugger';
 import { setDebugging } from '@/store';
 import Button from '../Button';
 import Alert from '../Alert';
@@ -8,10 +10,9 @@ import ChevronDown from '@/components/icons/ChevronDown';
 import Tooltip from '../Tooltip';
 import DebugIcon from '@/components/icons/DebugIcon';
 import ExitIcon from '@/components/icons/ExitIcon';
+import LoadingInfinityIcon from '@/components/icons/LoadingInfinityIcon';
 import variables from '@/styles/variables.module.scss';
 import classes from './ConsoleActionBar.module.scss';
-import LoadingInfinityIcon from '@/components/icons/LoadingInfinityIcon';
-import useDebugger from '@/hooks/useDebugger';
 
 type ConsoleActionBarProps = {
   showConsole: boolean;
@@ -52,6 +53,7 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
   handleSubmission,
   handleRunCodeManually
 }) => {
+  const { data: session } = useSession();
   const { theme, duration, timerDuration, debugging, exitingDebugging } =
     useAppSelector((state) => {
       const { theme } = state.theme;
@@ -75,6 +77,10 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
   const { handleExit } = useDebugger();
 
   const handleDebugButton = async () => {
+    if (!session) {
+      return;
+    }
+
     if (!debugging) {
       // check error before entering debugging session
       const { error } = await handleRunCodeManually(

@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useState } from 'react';
+import { Session } from 'next-auth';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { removeProblemFromList, addProblemToList, setBreakpoints } from '@/store';
 import { NotificationType, Submission } from '@/types/dataTypes';
@@ -15,6 +16,8 @@ import BookmarkOutline from '@/components/icons/BookmarkOutline';
 import SourceCode from '@/components/icons/SourceCodeIcon';
 import ArrowPathIcon from '@/components/icons/ArrowPathIcon';
 import DocumentIcon from '@/components/icons/DocumentIcon';
+import { useSession } from 'next-auth/react';
+
 
 type EditorActionBarProps = {
   language: string;
@@ -39,6 +42,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
   userJavascriptSubmission,
   title
 }) => {
+  const session = useSession();
   const dispatch = useAppDispatch();
   const { list } = useAppSelector((state) => state.user);
   const [showAlert, setShowAlert] = useState(false);
@@ -94,6 +98,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
       <div className={classes['editor-menu']}>
         <LanguageSelection setLanguage={setLanguage} multiOptions={false} />
         <ul className={classes.options}>
+          {session && session.data && <>
           <li onClick={() => setShowNote(true)}>
             <Tooltip text="Note" direction="bottom" className="w-fit px-6 py-4">
               <label
@@ -151,6 +156,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
               </label>
             </Tooltip>
           </li>
+          </>}
           <li>
             <Tooltip
               text="Settings"

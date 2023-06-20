@@ -1,4 +1,5 @@
 import { useState, useRef, Dispatch, SetStateAction } from 'react';
+import { useSession } from 'next-auth/react';
 import CodeEditor from '@/components/reusables/codeEditor/CodeEditor';
 import Resizable from '../reusables/Resizable';
 import { useAppSelector } from '@/hooks/hooks';
@@ -19,7 +20,6 @@ import TextEditor from '../reusables/TextEditor';
 import DebuggingActionBar from '../reusables/codeEditor/DebuggingActionBar';
 import variables from '@/styles/variables.module.scss';
 import classes from './ProblemEditor.module.scss';
-
 import {
   RunResult,
   ResultMessage,
@@ -34,6 +34,8 @@ import ClipboardCopiedIcon from '../icons/ClipboardCopiedIcon';
 import DocumentIcon from '../icons/DocumentIcon';
 import useCodeLines from '@/hooks/useCodeLines';
 import useCodeCustomEffect from '@/hooks/useCodeCustomEffect';
+import Link from 'next/link';
+import LockIcon from '../icons/LockIcon';
 
 type ProblemEditorProps = {
   prompts: { python: string; javascript: string; [key: string]: string };
@@ -54,6 +56,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   setReviewCode,
   socketConnection
 }) => {
+  const session = useSession();
   const { theme, submissions, notes, debugging, debuggingData } =
     useAppSelector((state) => {
       const { theme } = state.theme;
@@ -209,7 +212,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
           classes[`problem-editor--${theme}`]
         }`}
       >
-        <div className={`problem-editor ${theme} ${classes['problem-editor__main']}`}>
+        <div
+          className={`problem-editor ${theme} ${classes['problem-editor__main']}`}
+        >
           {reviewCode ? (
             <div
               className={`${classes['submission-review']} ${
@@ -392,18 +397,53 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
               </>
             )}
         </div>
-        <ConsoleActionBar
-          showConsole={showConsole}
-          isLoading={isLoading}
-          reviewCode={reviewCode}
-          language={language}
-          codeInputPython={codeInputPython}
-          codeInputJavascript={codeInputJavascript}
-          socketConnection={socketConnection}
-          handleShowConsole={handleShowConsole}
-          handleRunCodeManually={handleRunCodeManually}
-          handleSubmission={handleSubmission}
-        />
+        <div className={classes['console-action-bar__container']}>
+          {!session.data && (
+            <div
+              className={`${classes['code-actions-backdrop']} ${
+                classes[`code-actions-backdrop--${theme}`]
+              }`}
+            >
+              <p
+                className={`${classes['lock-message']} ${
+                  classes[`lock-message--${theme}`]
+                }`}
+              >
+                <span className={classes['lock-icon']}>
+                  <LockIcon width={8} height={8} />
+                </span>{' '}
+                You need to &nbsp;{' '}
+                <Link
+                  className={classes['lock-message__login']}
+                  href="/auth/login"
+                >
+                  Login
+                </Link>
+                <span className={classes.slash}>/</span>
+                <Link
+                  className={classes['lock-message__signup']}
+                  href="/auth/signup"
+                >
+                  Sign Up
+                </Link>{' '}
+                &nbsp; to run code
+              </p>
+            </div>
+          )}
+          <ConsoleActionBar
+            showConsole={showConsole}
+            isLoading={isLoading}
+            reviewCode={reviewCode}
+            language={language}
+            codeInputPython={codeInputPython}
+            codeInputJavascript={codeInputJavascript}
+            socketConnection={socketConnection}
+            handleShowConsole={handleShowConsole}
+            handleRunCodeManually={handleRunCodeManually}
+            handleSubmission={handleSubmission}
+          />
+        </div>
+
         <Modal
           id="modal-settings"
           type="close-button"

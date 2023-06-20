@@ -222,28 +222,53 @@ const Debugger: React.FC<DebuggerProps> = ({
       }
     });
     socket.on('addWatchVariables', (data) => {
-      const { watchVariables } = JSON.parse(data);
+      const {
+        currentLineNumber,
+        codeLine,
+        callStack,
+        localVariables,
+        stdOut,
+        watchVariables
+      } = JSON.parse(data);
       const newDebuggingData = {
-        codeLine: debuggingData.codeLine,
-        callStack: debuggingData.callStack,
-        localVariables: debuggingData.localVariables,
-        stdOut: debuggingData.stdOut,
+        codeLine,
+        callStack: callStack.reverse(),
+        localVariables,
+        stdOut,
         watchVariables
       };
-
       dispatch(setDebuggingData(newDebuggingData));
+      if (currentLineNumber >= 0) {
+        if (currentLineNumber === 0) {
+          dispatch(setDebuggingStarted(false));
+        }
+        dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
+      }
     });
 
     socket.on('removeWatchVariables', (data) => {
-      const { watchVariables } = JSON.parse(data);
+      const {
+        currentLineNumber,
+        codeLine,
+        callStack,
+        localVariables,
+        stdOut,
+        watchVariables
+      } = JSON.parse(data);
       const newDebuggingData = {
-        codeLine: debuggingData.codeLine,
-        callStack: debuggingData.callStack,
-        localVariables: debuggingData.localVariables,
-        stdOut: debuggingData.stdOut,
+        codeLine,
+        callStack: callStack.reverse(),
+        localVariables,
+        stdOut,
         watchVariables
       };
       dispatch(setDebuggingData(newDebuggingData));
+      if (currentLineNumber >= 0) {
+        if (currentLineNumber === 0) {
+          dispatch(setDebuggingStarted(false));
+        }
+        dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
+      }
     });
 
     socket.on('error', (error) => {

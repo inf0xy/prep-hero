@@ -56,7 +56,7 @@ const Header = () => {
         </ul>
       </nav>
       <div className="flex space-x-10">
-        {router.pathname.match(/^(.*?)\/problem\/(.*?)$/) && (
+        {session && router.pathname.match(/^(.*?)\/problem\/(.*?)$/) && (
           <div className="flex space-x-4">
             <span className="self-center  pt-[2px]">
               <Time />
