@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { getAllTitles, getSelectedProblem } from '@/helpers/problem-api-util';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { setDuration } from '@/store';
+import { setBreakpoints, setDuration, setWatchVars } from '@/store';
 import { Problem, SocketType } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import ProblemEditor from '@/components/problems/ProblemEditor';
@@ -29,28 +29,11 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   const [reviewCode, setReviewCode] = useState<
     { code: string; language: string } | undefined
   >(undefined);
-  const [socketConnection, setSocketConnection] = useState<SocketType | null>(null);
-
-  // const [debugging, setDebugging] = useState(false);
-  // const [socketConnection, setSocketConnection] = useState<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
-  // const [debuggingCode, setDebuggingCode] = useState('');
-  // const [breakpoints, setBreakpoints] = useState<number[]>([]);
-  // const [debuggingData, setDebuggingData] = useState<DebuggingData>({
-  //   codeLine: '',
-  //   callStack: [],
-  //   localVariables: {},
-  //   stdOut: [],
-  //   watchVariables: {}
-  // });
-  // const [watchVars, setWatchVars] = useState<string[]>([]);
-  // const [watchVariablesInput, setWatchVariablesInput] = useState('');
-  // const [currentDebuggingLineNumber, setCurrentDebuggingLineNumber] = useState(0);
-  // const [exitingDebugging, setExitingDebugging] = useState(false);
+  const [socketConnection, setSocketConnection] = useState<SocketType | null>(
+    null
+  );
 
   const dispatch = useAppDispatch();
-
-  // console.log('current breakpoints ', breakpoints);
-  // console.log('currentDebugging LineNumber', currentDebuggingLineNumber);
 
   useEffect(() => {
     dispatch(setDuration(0));
@@ -58,13 +41,12 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
       setTimerAlert(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      dispatch(setBreakpoints([]));
+      dispatch(setWatchVars([]));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // useEffect(() => {
-  //   if (breakpoints.length > 0) {
-  //     setCurrentDebuggingLineNumber(breakpoints[0]);
-  //   }
-  // }, [breakpoints])
 
   const prompts = selectedProblem.prompts
     ? selectedProblem.prompts
@@ -76,83 +58,6 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   const timerAlertMessage = timerAlert
     ? 'Start stopwatch to record session.'
     : "Time's up!";
-
-  // const handleStartDebugging = () => {
-  //   setDebuggingData({
-  //     codeLine: '',
-  //     callStack: [],
-  //     localVariables: {},
-  //     stdOut: [],
-  //     watchVariables: {}
-  //   });
-
-  //   if (socketConnection) {
-  //     const debuggingData = {
-  //       code: debuggingCode,
-  //       breakpoints
-  //     };
-  //     socketConnection.emit('startDebugging', JSON.stringify(debuggingData));
-  //   }
-  // };
-
-  // const handleStopDebugging = () => {
-  //   if (socketConnection) {
-  //     socketConnection.emit('stopDebugging');
-  //   }
-  // }
-
-  // const handleStepIn = () => {
-  //   if (socketConnection) {
-  //     socketConnection.emit('stepIn', JSON.stringify({ watchVars }));
-  //   }
-  // };
-
-  // const handleStepOver = () => {
-  //   if (socketConnection) {
-  //     socketConnection.emit('stepOver', JSON.stringify({ watchVars }));
-  //   }
-  // };
-
-  // const handleStepOut = () => {
-  //   if (socketConnection) {
-  //     socketConnection.emit('stepOut', JSON.stringify({ watchVars }));
-  //   }
-  // };
-
-  // const handleRestart = () => {
-  //   if (socketConnection) {
-  //     socketConnection.emit('restart', JSON.stringify({ watchVars }));
-  //   }
-  // };
-
-  // const handleExit = () => {
-  //   if (socketConnection) {
-  //     setExitingDebugging(true);
-  //     socketConnection.emit('exit');
-  //   }
-  // };
-
-  // const handleAddWatchVariables = () => {
-  //   if (socketConnection) {
-  //     socketConnection.emit(
-  //       'addWatchVariables',
-  //       JSON.stringify({ watchVars: [...watchVars, watchVariablesInput] })
-  //     );
-  //     setWatchVars((prev) => [...prev, watchVariablesInput]);
-  //   }
-  //   setWatchVariablesInput('');
-  // };
-
-  // const handleRemoveWatchVariables = (variable: string) => {
-  //   const currentWatchVariables = watchVars.filter((el) => el !== variable);
-  //   if (socketConnection) {
-  //     socketConnection.emit(
-  //       'removeWatchVariables',
-  //       JSON.stringify({ watchVars: currentWatchVariables })
-  //     );
-  //     setWatchVars(currentWatchVariables);
-  //   }
-  // };
 
   return (
     <>
@@ -240,7 +145,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
             </div>
           ) : (
             <div className={`${classes.debug} ${classes[`debug--${theme}`]}`}>
-              <Debugger setSocketConnection={setSocketConnection}/>
+              <Debugger socketConnection={socketConnection} setSocketConnection={setSocketConnection} />
             </div>
           )}
           <div className={`${classes.working} ${classes[`working--${theme}`]}`}>

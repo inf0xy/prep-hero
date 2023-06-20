@@ -92,11 +92,11 @@ const useCodeCustomEffect = ({
   }, [debugging, setDebuggingCode]);
 
   useEffect(() => {
-    if (debugging && debuggingData.stdOut.length > 0) {
+    if (debugging) {
       setShowConsole(true);
       setEditorHeight(`${window.innerHeight - 400}px`);
     }
-  }, [debugging, debuggingData, setEditorHeight, setShowConsole]);
+  }, [debugging, setEditorHeight, setShowConsole]);
 
   useEffect(() => {
     if (problemNoteContent) {

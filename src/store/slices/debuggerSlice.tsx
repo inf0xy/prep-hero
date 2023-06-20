@@ -8,7 +8,6 @@ interface DebuggerState {
   debuggingData: DebuggingData;
   currentDebuggingLineNumber: number;
   watchVars: string[];
-  watchVariablesInput: string[];
   exitingDebugging: boolean;
   debuggingStarted: boolean;
   isLoading: boolean;
@@ -28,7 +27,6 @@ const initialState: DebuggerState = {
   },
   currentDebuggingLineNumber: 0,
   watchVars: [],
-  watchVariablesInput: [],
   exitingDebugging: false,
   debuggingStarted: false,
   isLoading: false,
@@ -58,9 +56,6 @@ const debuggerSlice = createSlice({
     setWatchVars(state, action) {
       state.watchVars = action.payload;
     },
-    setWatchVariablesInput(state, action) {
-      state.watchVariablesInput = action.payload;
-    },
     setExitingDebugging(state, action) {
       state.exitingDebugging = action.payload;
     },
@@ -77,7 +72,6 @@ export const {
   setDebuggingData,
   setCurrentDebuggingLineNumber,
   setWatchVars,
-  setWatchVariablesInput,
   setExitingDebugging,
   setDebuggingStarted
 } = debuggerSlice.actions;

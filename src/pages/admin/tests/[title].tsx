@@ -126,7 +126,8 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
           <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
             <CodeEditor
               value={pythonTestFile}
-              options={{ fontSize: 14, tabSize: 4, readOnly: false }}
+              options={{ fontSize: 14, tabSize: 4 }}
+              readOnly={false}
               language="python"
               setCodeInput={setPythonTestFile}
               height="600px"
@@ -138,7 +139,8 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
               <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
                 <CodeEditor
                   value={pythonTests.base}
-                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  readOnly={false}
                   language="python"
                   setCodeInput={(val: string) =>
                     setPythonTests((prev) => ({
@@ -155,7 +157,8 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
               <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
                 <CodeEditor
                   value={pythonTests.all}
-                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  readOnly={false}
                   language="python"
                   setCodeInput={(val: string) =>
                     setPythonTests((prev) => ({
@@ -177,7 +180,8 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
           <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
             <CodeEditor
               value={javascriptTestFile}
-              options={{ fontSize: 14, tabSize: 4, readOnly: false }}
+              options={{ fontSize: 14, tabSize: 4 }}
+              readOnly={false}
               language="javascript"
               setCodeInput={setJavascriptTestFile}
               height="600px"
@@ -189,7 +193,8 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
               <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
                 <CodeEditor
                   value={javascriptTests.base}
-                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  readOnly={false}
                   language="javascript"
                   setCodeInput={(val: string) =>
                     setJavascriptTests((prev) => ({
@@ -206,7 +211,8 @@ const ProblemTestsPage: React.FC<ProblemTestsPageProps> = ({ test, title }) => {
               <div className={`${classes['editor-wrapper']} ${classes[`editor-wrapper--${theme}`]}`}>
                 <CodeEditor
                   value={javascriptTests.all}
-                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  readOnly={false}
                   language="javascript"
                   setCodeInput={(val: string) =>
                     setJavascriptTests((prev) => ({

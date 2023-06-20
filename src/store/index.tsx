@@ -30,7 +30,6 @@ import debuggerReducer, {
   setDebuggingData,
   setCurrentDebuggingLineNumber,
   setWatchVars,
-  setWatchVariablesInput,
   setExitingDebugging,
   setDebuggingStarted
 } from './slices/debuggerSlice';
@@ -73,7 +72,6 @@ export {
   setDebuggingData,
   setCurrentDebuggingLineNumber,
   setWatchVars,
-  setWatchVariablesInput,
   setExitingDebugging,
   setDebuggingStarted,
   setTheme,

@@ -7,10 +7,10 @@ import { listNameSelections } from '@/helpers/formFields';
 import TitleList from '@/components/reusables/TitleList';
 import TextEditor from '@/components/reusables/TextEditor';
 import MenuIcon from '@/components/icons/MenuIcon';
-import PlusIcon from '@/components/icons/PlusIcon';
 import Modal from '@/components/reusables/Modal';
 import ConfirmPanel from '@/components/reusables/ConfirmPanel';
 import Alert from '@/components/reusables/Alert';
+import FolderAddIcon from '@/components/icons/FolderAddIcon';
 import FolderItem from '@/components/user/FolderItem';
 import FolderPlus from '@/components/icons/FolderPlus';
 import classes from '@/styles/NotebookPage.module.scss';
@@ -239,7 +239,7 @@ const NotebookPage = () => {
               }`}
             >
               <label tabIndex={0} className={classes['create-button__title']}>
-                <PlusIcon width={25} height={25} />
+                <FolderAddIcon width={25} height={25} />
                 <span>New</span>
               </label>
               <ul
@@ -286,7 +286,7 @@ const NotebookPage = () => {
           <TitleList
             listType="notes"
             titles={getNotesWithListName()}
-            secondIconText="Action"
+            secondIconText=""
             firstIconAction={undefined}
             secondIconAction={undefined}
             actionBar={undefined}

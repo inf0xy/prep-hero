@@ -118,8 +118,10 @@ const TitleList: React.FC<TitleListProps> = ({
 
   const renderedTitles = currentTitles.map((title) => (
     <div key={title} className={classes['title__cell']}>
-      {firstIconText && (
-        <div className={classes['first-col-icon']}>
+      {firstIconText !== undefined && (
+        <div className={classes['first-col-icon']} style={
+          firstIconText.length === 0 ? { gridColumn: 'span 1' } : undefined
+        }>
           <span
             onClick={firstIconAction ? () => firstIconAction(title) : undefined}
           >
@@ -127,8 +129,13 @@ const TitleList: React.FC<TitleListProps> = ({
           </span>
         </div>
       )}
-      {secondIconText && (
-        <div className={classes['second-col-icon']}>
+      {secondIconText !== undefined && (
+        <div
+          className={classes['second-col-icon']}
+          style={
+            secondIconText.length === 0 ? { gridColumn: 'span 1' } : undefined
+          }
+        >
           <span
             onClick={
               secondIconAction ? () => secondIconAction(title) : undefined
@@ -141,13 +148,7 @@ const TitleList: React.FC<TitleListProps> = ({
                 : ''
             }`}
           >
-            {listType === 'notes' ? (
-              <NoteAction
-                title={title}
-              />
-            ) : (
-              secondIcon
-            )}
+            {listType === 'notes' ? <NoteAction title={title} /> : secondIcon}
           </span>
         </div>
       )}
@@ -229,17 +230,29 @@ const TitleList: React.FC<TitleListProps> = ({
           }`}
         >
           <div className={classes['titles-table__header']}>
-            {firstIconText && (
+            {firstIconText !== undefined && (
               <div
                 role="row"
                 className={classes['first-col-header']}
-                style={{}}
+                style={
+                  firstIconText.length === 0
+                    ? { gridColumn: 'span 1' }
+                    : undefined
+                }
               >
                 {firstIconText}
               </div>
             )}
-            {secondIconText && (
-              <div role="row" className={classes['second-col-header']}>
+            {secondIconText !== undefined && (
+              <div
+                role="row"
+                className={classes['second-col-header']}
+                style={
+                  secondIconText.length === 0
+                    ? { gridColumn: 'span 1' }
+                    : undefined
+                }
+              >
                 {secondIconText}
               </div>
             )}

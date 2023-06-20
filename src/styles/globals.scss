@@ -270,6 +270,22 @@ body {
   background-position: 50%;
 }
 
+.problem-editor.dark .react-resizable-handle {
+  background-color: $dark-background-200;
+
+  &:hover {
+    background-color: $color-primary-500;
+  }
+}
+
+.problem-editor.light .react-resizable-handle {
+  background-color: $color-gray-300;
+
+  &:hover {
+    background-color: $color-primary-50;
+  }
+}
+
 .problem-editor {
   .react-resizable-handle-n {
     height: 10px;
@@ -281,10 +297,6 @@ body {
     background-position: 50% 2px;
     position: absolute;
     top: 0;
-  }
-
-  .react-resizable-handle:hover {
-    background-color: $color-primary-500;
   }
 }
 

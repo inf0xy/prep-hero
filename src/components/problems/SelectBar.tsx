@@ -62,7 +62,7 @@ const SelectBar: React.FC<SelectBarProps> = ({
         <Tooltip
           text="Random question"
           direction="bottom"
-          className="w-[15rem] px-6 py-4"
+          className="w-[14rem] py-4"
         >
           <Button
             extraStyle={{
@@ -81,7 +81,7 @@ const SelectBar: React.FC<SelectBarProps> = ({
         <Tooltip
           text="Reset search"
           direction="bottom"
-          className="w-[12rem] px-6 py-4"
+          className="w-[11rem] py-4"
         >
           <Button
             extraStyle={{
@@ -98,9 +98,9 @@ const SelectBar: React.FC<SelectBarProps> = ({
       </div>
       {session && (
         <Tooltip
-          text="Show / Hide all notes"
+          text="Toggle all notes"
           direction="bottom"
-          className="w-[15rem] px-6 py-4"
+          className="w-[13rem] py-4"
         >
           <input
             type="checkbox"

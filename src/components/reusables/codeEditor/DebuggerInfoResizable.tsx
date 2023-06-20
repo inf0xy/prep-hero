@@ -1,16 +1,22 @@
-import { ReactNode, useState, useRef } from 'react';
+import { ReactNode, useState, useRef, Dispatch, SetStateAction, useEffect } from 'react';
 import { ResizableBox, ResizeCallbackData } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 
-interface ResizableProps {
+interface DebuggingResizable {
   children: ReactNode;
-  maxHeight?: number;
-  minHeight?: number
+  height: number;
+  setHeight: Dispatch<SetStateAction<number>>;
+  maxHeight: number;
+  minHeight: number;
 }
 
-const DebuggingResizable: React.FC<ResizableProps> = ({ children, maxHeight, minHeight }) => {
-  const [height, setHeight] = useState(200);
-
+const DebuggingResizable: React.FC<DebuggingResizable> = ({
+  children,
+  height,
+  setHeight,
+  maxHeight,
+  minHeight
+}) => {
   const handleResize = (
     event: React.SyntheticEvent,
     { size }: ResizeCallbackData
@@ -23,8 +29,8 @@ const DebuggingResizable: React.FC<ResizableProps> = ({ children, maxHeight, min
       axis="y"
       width={Infinity}
       height={height}
-      minConstraints={[Infinity, minHeight ? minHeight : 200]}
-      maxConstraints={[Infinity, maxHeight ? maxHeight : 500]}
+      minConstraints={[Infinity, minHeight]}
+      maxConstraints={[Infinity, maxHeight]}
       onResize={handleResize}
       resizeHandles={['s']}
     >

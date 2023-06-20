@@ -1,12 +1,5 @@
 import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
-import io, { Socket } from 'socket.io-client';
-import { DefaultEventsMap } from 'socket.io/dist/typed-events';
-import Alert from '../Alert';
-import { NotificationType, DebuggingData, SocketType } from '@/types/dataTypes';
-import classes from './Debugger.module.scss';
-import DebuggingResizable from './DebuggerInfoResizable';
-import PlusIcon from '@/components/icons/PlusIcon';
-import Tooltip from '../Tooltip';
+import { io } from 'socket.io-client';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import {
   setDebuggingData,
@@ -16,16 +9,29 @@ import {
   setDebuggingStarted
 } from '@/store';
 import useDebugger from '@/hooks/useDebugger';
+import { NotificationType, SocketType } from '@/types/dataTypes';
+import Alert from '../Alert';
+import DebuggingResizable from './DebuggerInfoResizable';
+import PlusIcon from '@/components/icons/PlusIcon';
+import Tooltip from '../Tooltip';
+import classes from './Debugger.module.scss';
+import XIcon from '@/components/icons/XIcon';
 
 type DebuggerProps = {
+  socketConnection: SocketType;
   setSocketConnection: Dispatch<SetStateAction<SocketType>>;
 };
 
-const Debugger: React.FC<DebuggerProps> = ({ setSocketConnection }) => {
-  const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(
-    null
-  );
+const Debugger: React.FC<DebuggerProps> = ({
+  socketConnection,
+  setSocketConnection
+}) => {
   const [windowHeight, setWindowHeight] = useState<number | null>(null);
+  const [localVarsHeight, setLocalVarsHeight] = useState(200);
+  const [watchVarsHeight, setWatchVarsHeight] = useState(200);
+  const [addingWatchVar, setAddingWatchVar] = useState(false);
+  const [watchVariableInput, setWatchVariableInput] = useState('');
+  const [hoveredWatchVar, setHoveredWatchVar] = useState(-1);
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
@@ -38,13 +44,27 @@ const Debugger: React.FC<DebuggerProps> = ({ setSocketConnection }) => {
     }
   );
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const addWatchVarButtonRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
-  const { handleRemoveWatchVariables } = useDebugger();
+  const { handleAddWatchVariables, handleRemoveWatchVariables } = useDebugger();
 
   useEffect(() => {
     const handleResize = () => {
       setWindowHeight(window.innerHeight);
     };
+
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node) &&
+        !addWatchVarButtonRef.current?.contains(event.target as Node)
+      ) {
+        setAddingWatchVar(false);
+      }
+    };
+
+    document.addEventListener('click', handleOutsideClick);
 
     if (typeof window !== 'undefined') {
       setWindowHeight(window.innerHeight);
@@ -52,9 +72,21 @@ const Debugger: React.FC<DebuggerProps> = ({ setSocketConnection }) => {
 
       return () => {
         window.removeEventListener('resize', handleResize);
+        document.removeEventListener('click', handleOutsideClick);
+      };
+    } else {
+      return () => {
+        document.removeEventListener('click', handleOutsideClick);
       };
     }
   }, []);
+
+  useEffect(() => {
+    if (windowHeight) {
+      setLocalVarsHeight(Math.min(windowHeight * 0.2, 200));
+      setWatchVarsHeight(Math.min(windowHeight * 0.2, 200));
+    }
+  }, [windowHeight]);
 
   useEffect(() => {
     const socket = io('http://localhost:5000');
@@ -176,13 +208,12 @@ const Debugger: React.FC<DebuggerProps> = ({ setSocketConnection }) => {
     socket.on('restart', (data) => {});
 
     socket.on('stopDebugging', (data) => {
-      const resetCallStack = debuggingData.callStack.slice(1);
       if (data === 'stop') {
         const newDebuggingData = {
           codeLine: '',
-          callStack: resetCallStack,
+          callStack: [],
           localVariables: {},
-          stdOut: [],
+          stdOut: debuggingData.stdOut,
           watchVariables: {}
         };
         dispatch(setDebuggingData(newDebuggingData));
@@ -216,6 +247,8 @@ const Debugger: React.FC<DebuggerProps> = ({ setSocketConnection }) => {
     });
 
     socket.on('error', (error) => {
+      setNotification({ status: 'error', message: 'Something went wrong.' });
+      setShowAlert(true);
       console.error('Socket error:', error);
     });
 
@@ -224,12 +257,34 @@ const Debugger: React.FC<DebuggerProps> = ({ setSocketConnection }) => {
         dispatch(setDebugging(false));
         dispatch(setExitingDebugging(false));
         setSocketConnection(null);
+        dispatch(
+          setDebuggingData({
+            codeLine: '',
+            callStack: [],
+            localVariables: {},
+            stdOut: [],
+            watchVariables: {}
+          })
+        );
+        dispatch(setCurrentDebuggingLineNumber(0));
+        dispatch(setDebuggingStarted(false));
       }
     });
 
     return () => {
       if (socket) {
         socket.disconnect();
+        dispatch(
+          setDebuggingData({
+            codeLine: '',
+            callStack: [],
+            localVariables: {},
+            stdOut: [],
+            watchVariables: {}
+          })
+        );
+        dispatch(setCurrentDebuggingLineNumber(0));
+        dispatch(setDebuggingStarted(false));
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -244,92 +299,199 @@ const Debugger: React.FC<DebuggerProps> = ({ setSocketConnection }) => {
   const renderedLocalVariables = [];
   for (const [key, value] of Object.entries(debuggingData.localVariables)) {
     let formatValue;
+    let isError = false;
+
     if (typeof value === 'object') {
       formatValue = JSON.stringify(value);
     } else if (typeof value === 'string' && value !== 'function') {
       formatValue = `'${value}'`;
+    } else if (/^\*\*.*Error:.*\*\*$/.exec(value)) {
+      formatValue = value.replace(/raised/g, '');
+      isError = true;
     } else {
       formatValue = value;
     }
 
     renderedLocalVariables.push(
-      <p key={key}>
-        {key}: <span className={classes[`local-variables__value--${theme}`]}>{formatValue}</span>
+      <p key={`${key}-${formatValue}`}>
+        {key}:{' '}
+        <span
+          className={`${classes[`local-variables__value--${theme}`]} ${
+            isError ? 'italic text-red-500' : ''
+          }`}
+        >
+          {formatValue}
+        </span>
       </p>
     );
   }
 
+  const re = /^\*\*.*Error:.*\*\*$/;
   const renderedWatchVariables = watchVars.map((el, index) => (
-    <div key={index} className="flex space-x-8">
-      <p>{el}:</p>
+    <div
+      key={`${el}-${index}`}
+      className={`${classes['watch-variable']} ${
+        hoveredWatchVar === index ? classes[`watch-variable--${theme}`] : ''
+      }`}
+      onMouseEnter={() => setHoveredWatchVar(index)}
+      onMouseLeave={() => setHoveredWatchVar(-1)}
+    >
+      {/* <p className={classes[`watch-variable__key`]}>{el}:</p> */}
       <p>
-        {debuggingData.watchVariables.hasOwnProperty(el)
-          ? debuggingData.watchVariables[el]
-          : ''}
+        {el}:
+        <span
+          className={`${classes[`watch-variable__value--${theme}`]} ${
+            re.exec(debuggingData.watchVariables[el])
+              ? classes['watch-var__error']
+              : ''
+          }`}
+        >
+          {debuggingData.watchVariables.hasOwnProperty(el) ? (
+            re.exec(debuggingData.watchVariables[el]) ? (
+              debuggingData.watchVariables[el].replace('raised', '')
+            ) : (
+              debuggingData.watchVariables[el]
+            )
+          ) : (
+            <span className="italic opacity-75">not available</span>
+          )}
+        </span>
       </p>
-      <span className="text-xl" onClick={() => handleRemoveWatchVariables(el)}>
-        X
-      </span>
+      {hoveredWatchVar === index && (
+        <span
+          className={classes['watch-var-remove__button']}
+          onClick={() =>
+            handleRemoveWatchVariables(socketConnection, el, watchVars)
+          }
+        >
+          <XIcon width={13} height={13} />
+        </span>
+      )}
     </div>
   ));
 
+  const handleWatchVarFormSubmit = () => {
+    if (!watchVariableInput.length) {
+      setNotification({
+        status: 'warning',
+        message: 'Expression must be at least 1 character'
+      });
+      setShowAlert(true);
+    } else {
+      handleAddWatchVariables(socketConnection, watchVariableInput, watchVars);
+    }
+    setAddingWatchVar(false);
+    setWatchVariableInput('');
+  };
+
   return (
-    <div
-      className={`debugger ${theme} ${classes.debugger} ${
-        classes[`debugger--${theme}`]
-      }`}
-    >
-      {windowHeight && (
-        <>
-          <DebuggingResizable minHeight={200} maxHeight={windowHeight * 0.3}>
-            <div
-              className={`${classes['local-variables']} ${
-                classes[`local-variables--${theme}`]
-              }`}
-            >
-              <h2>Local Variables</h2>
-              <div className={classes['local-variables__content']}>
-                {renderedLocalVariables}
-              </div>
-            </div>
-          </DebuggingResizable>
-          <DebuggingResizable minHeight={200} maxHeight={windowHeight * 0.4}>
-            <div
-              className={`${classes['watch-variables']} ${
-                classes[`watch-variables--${theme}`]
-              }`}
-            >
-              <div className={classes['watch-variables__actions']}>
-                <h2>Watch</h2>
-                <div>{renderedWatchVariables}</div>
-                <Tooltip
-                  text="Add expression"
-                  direction="top"
-                  className="w-[12rem] p-4 left-[-2.5rem] bottom-[100%]"
-                  extraStyle={{ bottom: '90%' }}
-                >
-                  <div className={classes.add}>
-                    <PlusIcon />
-                  </div>
-                </Tooltip>
-              </div>
-            </div>
-          </DebuggingResizable>
-        </>
+    <>
+      {showAlert && (
+        <Alert
+          status={notification?.status!}
+          onClose={() => setShowAlert(false)}
+          setNotification={setNotification}
+        >
+          {notification?.message!}
+        </Alert>
       )}
       <div
-        className={`${classes['call-stack']} ${
-          classes[`call-stack--${theme}`]
+        className={`debugger ${theme} ${classes.debugger} ${
+          classes[`debugger--${theme}`]
         }`}
       >
-        <h2>Call Stack</h2>
-        <div className={classes['callstack__content']}>
-          {debuggingData.callStack.map((el) => (
-            <p key={el}>{el}</p>
-          ))}
+        {windowHeight && (
+          <>
+            <DebuggingResizable
+              height={localVarsHeight}
+              setHeight={setLocalVarsHeight}
+              minHeight={Math.min(windowHeight * 0.2, 200)}
+              maxHeight={Math.max(windowHeight * 0.4, 200)}
+            >
+              <div
+                className={`${classes['local-variables']} ${
+                  classes[`local-variables--${theme}`]
+                }`}
+              >
+                <h2>Local Variables</h2>
+                <div
+                  className={classes['local-variables__content']}
+                  style={{ maxHeight: `${localVarsHeight - 45}px` }}
+                >
+                  {renderedLocalVariables}
+                </div>
+              </div>
+            </DebuggingResizable>
+            <DebuggingResizable
+              height={watchVarsHeight}
+              setHeight={setWatchVarsHeight}
+              minHeight={Math.min(windowHeight * 0.2, 200)}
+              maxHeight={Math.max(windowHeight * 0.4, 200)}
+            >
+              <div
+                className={`${classes['watch-variables']} ${
+                  classes[`watch-variables--${theme}`]
+                }`}
+              >
+                <div className={classes['watch-variables__actions']}>
+                  <h2>Watch</h2>
+                  <Tooltip
+                    text="Add expression"
+                    direction="top"
+                    className="w-[12rem] p-4 left-[-2.5rem] bottom-[100%]"
+                    extraStyle={{ bottom: '90%' }}
+                  >
+                    <div
+                      ref={addWatchVarButtonRef}
+                      className={`${classes.add} ${classes[`add--${theme}`]}`}
+                      onClick={() => setAddingWatchVar(true)}
+                    >
+                      <PlusIcon />
+                    </div>
+                  </Tooltip>
+                </div>
+                <div
+                  className={classes['watch-variables__content']}
+                  style={{ maxHeight: `${watchVarsHeight - 45}px` }}
+                >
+                  {renderedWatchVariables}
+                  {addingWatchVar && (
+                    <form
+                      className={classes['watch-variable__add']}
+                      onSubmit={handleWatchVarFormSubmit}
+                    >
+                      <input
+                        ref={inputRef}
+                        placeholder="Expression to watch"
+                        spellCheck={false}
+                        className={`${classes['variable-input']} ${
+                          classes[`variable-input--${theme}`]
+                        }`}
+                        autoFocus={true}
+                        value={watchVariableInput}
+                        onChange={(e) => setWatchVariableInput(e.target.value)}
+                      />
+                    </form>
+                  )}
+                </div>
+              </div>
+            </DebuggingResizable>
+          </>
+        )}
+        <div
+          className={`${classes['call-stack']} ${
+            classes[`call-stack--${theme}`]
+          }`}
+        >
+          <h2>Call Stack</h2>
+          <div className={classes['callstack__content']}>
+            {debuggingData.callStack.map((el, index) => (
+              <p key={`${el}-${index}`}>{el}</p>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

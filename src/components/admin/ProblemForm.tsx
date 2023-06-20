@@ -327,7 +327,8 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
               >
                 <CodeEditor
                   value={prompts['python']}
-                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  readOnly={false}
                   language="python"
                   setCodeInput={(val) =>
                     setPrompts((prev) => ({
@@ -350,7 +351,8 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
               >
                 <CodeEditor
                   value={prompts['javascript']}
-                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  readOnly={false}
                   language="javascript"
                   setCodeInput={(val) =>
                     setPrompts((prev) => ({
@@ -378,7 +380,8 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
               >
                 <CodeEditor
                   value={solutionCodes['python']}
-                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  readOnly={false}
                   language="python"
                   setCodeInput={(val) =>
                     setSolutionCodes((prev) => ({
@@ -401,7 +404,8 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
               >
                 <CodeEditor
                   value={solutionCodes['javascript']}
-                  options={{ fontSize: 14, tabSize: 4, readOnly: false }}
+                  options={{ fontSize: 14, tabSize: 4 }}
+                  readOnly={false}
                   language="javascript"
                   setCodeInput={(val) =>
                     setSolutionCodes((prev) => ({

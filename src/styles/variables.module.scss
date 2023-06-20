@@ -24,6 +24,11 @@ $color-gray-700: #4f4c52;
 $color-gray-800: #343036;
 $color-gray-900: #221f23;
 
+// Pink colors:
+$color-pink-50: #eac0d2;
+$color-pink-100: #f1acc9;
+$color-pink-200: #c55584;
+
 // Dark background colors:
 $dark-background-50: #333;
 $dark-background-100: #3a3a3a;
@@ -53,14 +58,7 @@ $text-gray-700: $color-gray-700;
 $text-gray-800: $color-gray-800;
 $text-gray-900: $color-gray-900;
 
-// Miscelaneous colors:
-$facebook-background-100: #2b70c0;
-$facebook-background-200: #2c517c;
-$google-background-100: #35b46d;
-$google-background-200: #2d7a4e;
-$github-background-100: #3b3b3b;
-$github-background-200: #1a1a1a;
-
+// Status colors
 $color-success-100: #a2f0bc;
 $color-success-200: #6fc88d;
 $color-success-300: #19dd5a;
@@ -68,14 +66,14 @@ $color-success-500: #12bd4b;
 $color-success-600: #1a5d30;
 $color-success-700: #104d24;
 
-$color-error-50: #eac0d2;
-$color-error-100: #f1acc9;
-$color-error-200: #c55584;
+
+// $color-error-50: ;
+// $color-error-100: ;
+$color-error-200: #ff7474;
 $color-error-300: #ef4444;
 $color-error-400: #e32447;
 $color-error-500: #a10c4a;
 $color-error-600: #57112e;
-// $color-error-700: #4a1a1a;
 $color-error-700: #5d2525;
 
 $color-warning-100: #eea60c;
@@ -83,6 +81,14 @@ $color-warning-200: #c59a01;
 $color-warning-300: #705926;
 
 $color-info-100: #008aa9;
+
+// Miscelaneous colors:
+$facebook-background-100: #2b70c0;
+$facebook-background-200: #2c517c;
+$google-background-100: #35b46d;
+$google-background-200: #2d7a4e;
+$github-background-100: #3b3b3b;
+$github-background-200: #1a1a1a;
 
 $color-python: #2767b9;
 $color-javascript: #95950c;

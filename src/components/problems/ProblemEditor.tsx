@@ -25,9 +25,7 @@ import {
   ResultMessage,
   NotificationType,
   Submission,
-  Note,
   CodeLine,
-  DebuggingAction,
   SocketType
 } from '@/types/dataTypes';
 import ClipboardIcon from '../icons/ClipboardIcon';
@@ -76,8 +74,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState({
     fontSize: 14,
-    tabSize: 4,
-    readOnly: false
+    tabSize: 4
   });
   const [language, setLanguage] = useState('python');
   const [userPythonSubmission, setUserPythonSubmission] = useState<
@@ -212,7 +209,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
           classes[`problem-editor--${theme}`]
         }`}
       >
-        <div className={`problem-editor ${classes['problem-editor__main']}`}>
+        <div className={`problem-editor ${theme} ${classes['problem-editor__main']}`}>
           {reviewCode ? (
             <div
               className={`${classes['submission-review']} ${
@@ -291,6 +288,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                         : codeInputJavascript
                     }
                     options={options}
+                    readOnly={debugging ? true : false}
                     language={reviewCode ? reviewCode.language : language}
                     setCodeInput={
                       language === 'python'

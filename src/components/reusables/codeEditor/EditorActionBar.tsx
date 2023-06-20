@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { removeProblemFromList, addProblemToList } from '@/store';
+import { removeProblemFromList, addProblemToList, setBreakpoints } from '@/store';
 import { NotificationType, Submission } from '@/types/dataTypes';
 import LanguageSelection from './LanguageSelection';
 import ConfirmPanel from '../ConfirmPanel';
@@ -52,6 +52,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
     } else {
       setCodeInputJavascript(JSON.parse(prompts['javascript']));
     }
+    dispatch(setBreakpoints([]))
   };
 
   const handleRetrieveLastSubmission = () => {
@@ -76,6 +77,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
         setShowAlert(true);
       }
     }
+    dispatch(setBreakpoints([]));
   };
 
   return (

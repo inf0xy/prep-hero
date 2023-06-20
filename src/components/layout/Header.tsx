@@ -9,8 +9,7 @@ import classes from './Header.module.scss';
 
 import LogoDark from './LogoDark';
 import LogoLight from './LogoLight';
-import ClockIconDark from '../icons/ClockIconDark';
-import ClockIconLight from '../icons/ClockIconLight';
+import ClockIcon from '../icons/ClockIcon';
 import Time from '../reusables/codeEditor/Time';
 
 import variables from '@/styles/variables.module.scss';
@@ -64,11 +63,7 @@ const Header = () => {
             </span>
             <div className="dropdown dropdown-bottom dropdown-end self-center pt-[1px]">
               <label tabIndex={0} className="cursor-pointer">
-                {theme === 'dark' ? (
-                  <ClockIconDark height={23} width={23} />
-                ) : (
-                  <ClockIconLight height={23} width={23} />
-                )}
+                <ClockIcon height={23} width={23} />
               </label>
               <div
                 tabIndex={0}

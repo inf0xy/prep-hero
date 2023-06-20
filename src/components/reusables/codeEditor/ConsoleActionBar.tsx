@@ -26,8 +26,9 @@ type ConsoleActionBarProps = {
     reviewCode: { code: string; language: string } | undefined,
     language: string,
     codeInputPython: string | undefined,
-    codeInputJavascript: string | undefined
-  ) => Promise<void>;
+    codeInputJavascript: string | undefined,
+    checkDebuggingError: boolean
+  ) => Promise<{ error: any }>;
   handleSubmission: (
     action: 'test' | 'submit',
     reviewCode: { code: string; language: string } | undefined,
@@ -73,9 +74,19 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
   const dispatch = useAppDispatch();
   const { handleExit } = useDebugger();
 
-  const handleDebugButton = () => {
+  const handleDebugButton = async () => {
     if (!debugging) {
-      dispatch(setDebugging(true));
+      // check error before entering debugging session
+      const { error } = await handleRunCodeManually(
+        reviewCode,
+        language,
+        codeInputPython,
+        codeInputJavascript,
+        true
+      );
+      if (error === undefined) {
+        dispatch(setDebugging(true));
+      }
     } else {
       handleExit(socketConnection);
     }
@@ -115,31 +126,33 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
 
           <Tooltip
             text={
-              !isLoading
-                ? 'Execute'
+              !isLoading && !debugging
+                ? 'Stdout'
                 : debugging
                 ? 'Unavailable during debugging'
                 : 'Unavailable during execution'
             }
             direction="top"
             className={`left-[4.5rem] ${
-              !isLoading ? 'w-fit' : 'w-[20rem]'
+              !isLoading && !debugging ? 'w-fit' : 'w-[21rem]'
             } p-4`}
           >
             <Button
-              disabled={isLoading && !debugging ? true : false}
+              disabled={isLoading || debugging ? true : false}
               extraStyle={{
                 backgroundColor: variables.colorSecondary200,
                 padding: '0 2rem',
                 height: '2.5rem',
-                opacity: isLoading && !debugging ? '0.5' : '1'
+                opacity: isLoading || debugging ? '0.5' : '1',
+                cursor: !isLoading && !debugging ? 'pointer' : 'unset'
               }}
               onClick={() =>
                 handleRunCodeManually(
                   reviewCode,
                   language,
                   codeInputPython,
-                  codeInputJavascript
+                  codeInputJavascript,
+                  false
                 )
               }
             >
@@ -177,11 +190,12 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             </Tooltip>
           )}
           <Button
-            disabled={isLoading && !debugging ? true : false}
+            disabled={isLoading || debugging ? true : false}
             extraStyle={{
               backgroundColor: variables.colorGray500,
               padding: '0 2rem',
-              opacity: isLoading && !debugging ? '0.5' : '1'
+              opacity: isLoading || debugging ? '0.5' : '1',
+              cursor: !isLoading && !debugging ? 'pointer' : 'unset'
             }}
             onClick={() =>
               handleSubmission(
@@ -196,11 +210,12 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             Run
           </Button>
           <Button
-            disabled={isLoading && !debugging ? true : false}
+            disabled={isLoading || debugging ? true : false}
             extraStyle={{
               backgroundColor: variables.colorPrimary200,
               padding: '0 2rem',
-              opacity: isLoading && !debugging ? '0.5' : '1'
+              opacity: isLoading || debugging ? '0.5' : '1',
+              cursor: !isLoading && !debugging ? 'pointer' : 'unset'
             }}
             onClick={() =>
               handleSubmission(

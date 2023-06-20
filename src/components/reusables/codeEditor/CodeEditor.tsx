@@ -15,6 +15,7 @@ import { setBreakpoints } from '@/store';
 type CodeEditorProps = {
   value: string;
   options: CodeOptions;
+  readOnly: boolean;
   language: string;
   height: string;
   setCodeInput: (val: string) => void | Dispatch<SetStateAction<string>>;
@@ -24,6 +25,7 @@ type CodeEditorProps = {
 const CodeEditor: React.FC<CodeEditorProps> = ({
   value,
   options,
+  readOnly,
   language,
   height,
   setCodeInput,
@@ -36,11 +38,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         state.debugger;
       return { theme, breakpoints, debugging, currentDebuggingLineNumber };
     });
+  const [lastDebugLineNumber, setLastDebugLineNumber] = useState(0);
 
   const dispatch = useAppDispatch();
 
-  const [lastDebugLineNumber, setLastDebugLineNumber] = useState(0);
-
+  const breakpointsRef = useRef<number[] | null>(null);
   const codeEditorModelRef = useRef(null);
   const monacolRef = useRef(null);
   const breakpointState = useRef<number[]>([]);
@@ -54,12 +56,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const handleMouseDown = (event: any) => {
     if (
       event.target?.position &&
-      event.target.position.column === 1
+      event.target.position.column === 1 &&
+      event.target.range.endColumn > 1
     ) {
       const { lineNumber } = event.target?.position;
-      if (
-        !breakpointState.current.includes(lineNumber)
-      ) {
+      if (!breakpointState.current.includes(lineNumber)) {
         const newBreakpoints = [...breakpoints, lineNumber];
         dispatch(setBreakpoints(newBreakpoints));
         breakpointState.current = [...breakpointState.current, lineNumber];
@@ -127,6 +128,21 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   useEffect(() => {
+    if (breakpoints.length > 0) {
+      breakpointsRef.current = breakpoints;
+    } else if (breakpoints.length === 0 && breakpointsRef.current) {
+      breakpointsRef.current.forEach((line) => {
+        renderedBreakpointsDecorations('remove', line, {
+          startLineNumber: line,
+          startColumn: 1,
+          endLineNumber: line,
+          endColumn: 1
+        });
+      });
+    }
+  }, [breakpoints]);
+
+  useEffect(() => {
     if (debugging && debugging === true && currentDebuggingLineNumber) {
       if (lastDebugLineNumber) {
         handleHighLightDebuggingLine('remove', lastDebugLineNumber);
@@ -152,7 +168,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   ) => {
     const { startLineNumber, startColumn, endLineNumber, endColumn } = range;
     if (action === 'add') {
-      const newId = (codeEditorModelRef.current as any).deltaDecorations(
+      (codeEditorModelRef.current as any).deltaDecorations(
         [],
         [
           {
@@ -252,7 +268,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const handleMouseMove = (event: any) => {
     if (event.target?.position) {
-      if (event.target.position.column === 1) {
+      if (
+        event.target.position.column === 1 &&
+        event.target.range.endColumn > 1
+      ) {
         if (!lastHoverState.current) {
           lastHoverState.current = event.target.range;
           handleHoverOnLineNumber(event.target.range);
@@ -274,7 +293,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   const handleEditorChange = (value: string | undefined) => {
-    if (!options.readOnly) {
+    if (!readOnly) {
       setCodeInput(value!);
     }
   };
@@ -296,7 +315,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           renderWhitespace: 'none',
           folding: false,
           lineNumbersMinChars: 3,
-          ...options
+          ...options,
+          readOnly
         }}
         onChange={handleEditorChange}
         loading={<Loading width={40} height={40} />}

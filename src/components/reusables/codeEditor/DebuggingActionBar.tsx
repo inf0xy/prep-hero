@@ -15,7 +15,6 @@ import StopIcon from '@/components/icons/StopIcon';
 import DebugPlayIcon from '@/components/icons/DebugPlayIcon';
 import classes from './DebuggingActionBar.module.scss';
 
-
 type DebuggingActionBarProps = {
   title: string;
   setShowNote: Dispatch<SetStateAction<boolean>>;

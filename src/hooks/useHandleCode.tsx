@@ -37,8 +37,9 @@ type UseHandleCodeReturnType = {
     reviewCode: { code: string; language: string } | undefined,
     language: string,
     codeInputPython: string | undefined,
-    codeInputJavascript: string | undefined
-  ) => Promise<void>;
+    codeInputJavascript: string | undefined,
+    checkDebuggingError: boolean
+  ) => Promise<{ error: any }>;
   handleSubmission: (
     action: 'test' | 'submit',
     reviewCode: { code: string; language: string } | undefined,
@@ -67,12 +68,12 @@ const useHandleCode = ({
 }: UseHandleCodeProps): UseHandleCodeReturnType => {
   const dispatch = useAppDispatch();
 
-  const handleRunCodeManually = useCallback(
-    async (
+  const handleRunCodeManually = useCallback(async (
       reviewCode: { code: string; language: string } | undefined,
       language: string,
       codeInputPython: string | undefined,
-      codeInputJavascript: string | undefined
+      codeInputJavascript: string | undefined,
+      checkDebuggingError: boolean
     ) => {
       setIsLoading(true);
       setCodeError(null);
@@ -101,12 +102,17 @@ const useHandleCode = ({
       if (result.hasOwnProperty('error')) {
         setTestCode(false);
         setCodeError(result.error);
+        return { error: result.error };
       } else {
+        if (checkDebuggingError) {
+          return { error: undefined };
+        }
         const formattedStr = result.output
           .replace(/"None"/g, JSON.stringify(null))
           .replace(/"True"/g, JSON.stringify(true))
           .replace(/"False"/g, JSON.stringify(false));
         setOutput(formattedStr);
+        return { error: undefined };
       }
     },
 

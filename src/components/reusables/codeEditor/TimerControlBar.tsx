@@ -84,26 +84,37 @@ const TimerControlBar: React.FC<TimerControlBarProps> = ({
 
   return (
     <div className="flex space-x-6">
-      <Tooltip text='Add time' direction='bottom' className={duration === 0 && mode === 'timer' ? `w-[8rem] p-2 left-[3rem] ${theme === 'dark' ? '#2b2b2b' : '#656565'}` : 'hidden'}>
-      <button
-        className={`${startButtonColor} px-8 py-2 rounded-md ${
-          (duration !== 0 && mode === 'timer') || mode === 'stopwatch'
-            ? 'hover:bg-primary'
-            : ''
-        }`}
-        onClick={handleOnClick}
-        disabled={duration === 0 && mode === 'timer' ? true : false}
+      <Tooltip
+        text="Add time"
+        direction="top"
+        className={
+          duration === 0 && mode === 'timer'
+            ? `w-[8rem] p-4 left-[2.8rem] ${
+                theme === 'dark' ? '#2b2b2b' : '#656565'
+              }`
+            : 'hidden'
+        }
+        extraStyle={{ bottom: '3.5rem'}}
       >
-        {!start ? (
-          <span className="text-white">
-            <PlayIcon width="8" height="8" />
-          </span>
-        ) : (
-          <span className="text-white">
-            <PauseIcon width="8" height="8" />
-          </span>
-        )}
-      </button>
+        <button
+          className={`${startButtonColor} px-8 py-2 rounded-md ${
+            (duration !== 0 && mode === 'timer') || mode === 'stopwatch'
+              ? 'hover:bg-primary'
+              : ''
+          }`}
+          onClick={handleOnClick}
+          disabled={duration === 0 && mode === 'timer' ? true : false}
+        >
+          {!start ? (
+            <span className="text-white">
+              <PlayIcon width="8" height="8" />
+            </span>
+          ) : (
+            <span className="text-white">
+              <PauseIcon width="8" height="8" />
+            </span>
+          )}
+        </button>
       </Tooltip>
       <button
         className={`${

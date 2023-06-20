@@ -68,7 +68,6 @@ export type NotificationType = {
 export type CodeOptions = {
   fontSize: number;
   tabSize: number;
-  readOnly: boolean;
 };
 
 export type CodeLine = {

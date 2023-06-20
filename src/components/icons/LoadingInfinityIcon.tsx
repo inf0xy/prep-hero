@@ -12,6 +12,7 @@ const LoadingInfinityIcon: React.FC<LoadingInfinityIconProps> = ({ width, height
       width={width ? width : 20}
       height={height ? height : 20}
       alt="check-circle-icon"
+      style={{ transform: 'translateY(2px)' }}
     />
   );
 };

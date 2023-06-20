@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from './hooks';
+import { useAppDispatch } from './hooks';
 import {
   setDebugging,
   setDebuggingData,
   setExitingDebugging,
   setWatchVars,
-  setWatchVariablesInput
+  setCurrentDebuggingLineNumber,
+  setDebuggingStarted
 } from '@/store';
 import { SocketType } from '@/types/dataTypes';
 
@@ -84,43 +85,47 @@ const useDebugger = () => {
     []
   );
 
-  const handleExit = useCallback((socketConnection: SocketType) => {
-    if (socketConnection) {
-      dispatch(setExitingDebugging(true));
-      socketConnection.emit('exit');
-      dispatch(
-        setDebuggingData({
-          codeLine: '',
-          callStack: [],
-          localVariables: {},
-          stdOut: [],
-          watchVariables: {}
-        })
-      );
-    }
-  }, []);
+  const handleExit = useCallback(
+    (socketConnection: SocketType) => {
+      if (socketConnection) {
+        dispatch(setExitingDebugging(true));
+        socketConnection.emit('exit');
+      }
+    },
+    [dispatch]
+  );
 
-  const handleAddWatchVariables = useCallback(() => {
-    // if (socketConnection) {
-    //   socketConnection.emit(
-    //     'addWatchVariables',
-    //     JSON.stringify({ watchVars: [...watchVars, watchVariablesInput] })
-    //   );
-    //   setWatchVars((prev) => [...prev, watchVariablesInput]);
-    // }
-    // setWatchVariablesInput('');
-  }, []);
+  const handleAddWatchVariables = useCallback(
+    (
+      socketConnection: SocketType,
+      watchVariableInput: string,
+      watchVars: string[]
+    ) => {
+      const newWatchVars = [...watchVars, watchVariableInput];
+      if (socketConnection) {
+        socketConnection.emit(
+          'addWatchVariables',
+          JSON.stringify({ watchVars: newWatchVars })
+        );
+      }
+      dispatch(setWatchVars(newWatchVars));
+    },
+    [dispatch]
+  );
 
-  const handleRemoveWatchVariables = useCallback((variable: string) => {
-    // const currentWatchVariables = watchVars.filter((el) => el !== variable);
-    // if (socketConnection) {
-    //   socketConnection.emit(
-    //     'removeWatchVariables',
-    //     JSON.stringify({ watchVars: currentWatchVariables })
-    //   );
-    //   setWatchVars(currentWatchVariables);
-    // }
-  }, []);
+  const handleRemoveWatchVariables = useCallback(
+    (socketConnection: SocketType, variable: string, watchVars: string[]) => {
+      const currentWatchVariables = watchVars.filter((el) => el !== variable);
+      if (socketConnection) {
+        socketConnection.emit(
+          'removeWatchVariables',
+          JSON.stringify({ watchVars: currentWatchVariables })
+        );
+      }
+      dispatch(setWatchVars(currentWatchVariables));
+    },
+    [dispatch]
+  );
 
   return {
     handleStartDebugging,
