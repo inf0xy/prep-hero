@@ -51,12 +51,14 @@ const Resizable: React.FC<ResizableProps> = ({
     }
   };
 
-  const minConstraints: [width: number, height: number] = minHeight
-    ? [Infinity, minHeight]
-    : [minWidth!, Infinity];
-  const maxConstraints: [width: number, height: number] = maxHeight
-    ? [Infinity, maxHeight]
-    : [maxWidth!, Infinity];
+  const minConstraints: [number, number] = [
+    minWidth !== undefined ? minWidth : Infinity,
+    minHeight !== undefined ? minHeight : Infinity
+  ];
+  const maxConstraints: [number, number] = [
+    maxWidth !== undefined ? maxWidth : Infinity,
+    maxHeight !== undefined ? maxHeight : Infinity
+  ];
 
   return (
     <ResizableBox

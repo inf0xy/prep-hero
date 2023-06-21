@@ -23,12 +23,12 @@ const DebugConsole = () => {
         classes[`debug-console--${theme}`]
       }`}
     >
+      <h3>Stdout:</h3>
       <div
         className={`${classes['debugging__output']} ${
           classes[`debugging__output--${theme}`]
         }`}
       >
-        <h3>Stdout:</h3>
         <code>
           {output.map((el, index) => (
             <p
