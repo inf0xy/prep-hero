@@ -1,20 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import { setTheme, getTheme, getProblemCounts, fetchUserData } from '@/store';
 import UserMenu from '../user/UserMenu';
-import classes from './Header.module.scss';
 
 import LogoDark from './LogoDark';
 import LogoLight from './LogoLight';
 import ClockIcon from '../icons/ClockIcon';
+import TimeSetter from '../reusables/codeEditor/TimeSetter';
 import Time from '../reusables/codeEditor/Time';
 
 import variables from '@/styles/variables.module.scss';
-import TimeSetter from '../reusables/codeEditor/TimeSetter';
-import { useRouter } from 'next/router';
+import classes from './Header.module.scss';
 
 const Header = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);

@@ -233,41 +233,15 @@ const NotebookPage = () => {
             <MenuIcon width={8} height={8} />
           </button>
           <div className={classes['side-nav__content']}>
-            <div
-              className={`dropdown ${classes['create-button']} ${
+            <label
+            htmlFor="modal__create-new-folder"
+              className={`${classes['create-button']} ${
                 classes[`create-button--${theme}`]
               }`}
+              onClick={() => setFolderAction('create')}
             >
-              <label tabIndex={0} className={classes['create-button__title']}>
-                <FolderAddIcon width={25} height={25} />
-                <span>New</span>
-              </label>
-              <ul
-                tabIndex={0}
-                className={`dropdown-content translate-y-[-1.6rem] shadow rounded-box min-w-[15rem] ${
-                  classes['create-button-actions']
-                } ${classes[`create-button-actions--${theme}`]}`}
-              >
-                <li
-                  className={`${classes['new-folder']} ${
-                    classes[`new-folder--${theme}`]
-                  }`}
-                  onClick={() => setFolderAction('create')}
-                >
-                  <label htmlFor="modal__create-new-folder">
-                    <FolderPlus />
-                    <span>New folder</span>
-                  </label>
-                </li>
-                <li
-                  className={`${classes['new-folder']} ${
-                    classes[`new-folder--${theme}`]
-                  }`}
-                >
-                  <span>Item 2</span>
-                </li>
-              </ul>
-            </div>
+              <FolderAddIcon width={25} height={25} />New folder
+            </label>
             <ul className={classes['folders']}>
               {folderNames.map((el) => (
                 <FolderItem

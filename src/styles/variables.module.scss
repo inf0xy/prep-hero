@@ -85,6 +85,12 @@ $color-warning-300: #705926;
 $color-info-100: #008aa9;
 
 // Miscelaneous colors:
+$homepage-background: linear-gradient(
+  143deg,
+  rgba(33, 33, 33, 1) 0%,
+  rgba(71, 43, 31, 1) 100%
+);
+
 $facebook-background-100: #2b70c0;
 $facebook-background-200: #2c517c;
 $google-background-100: #35b46d;

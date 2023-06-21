@@ -58,7 +58,7 @@ const FolderItem: React.FC<FolderItemProps> = ({
         </label>
         <ul
           tabIndex={0}
-          className={`dropdown-content shadow rounded-box min-w-[15rem] ${
+          className={`dropdown-content shadow ${
             classes['folder-actions']
           } ${classes[`folder-actions--${theme}`]}`}
         >

@@ -1,12 +1,19 @@
 import { useEffect, useRef, RefObject } from 'react';
+import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
 import classes from './UserMenu.module.scss';
-import variables from '@/styles/variables.module.scss';
+import { setNavigateDestination, setTimerReminder } from '@/store';
 
 import { Dispatch, SetStateAction } from 'react';
+import UserIcon from '../icons/UserIcon';
+import DashboardIcon from '../icons/DashboardIcon';
+import JournalIcon from '../icons/JournalIcon';
+import LogoutIcon from '../icons/LogoutIcon';
+import SmallClockIcon from '../icons/SmallClockIcon';
+import BookmarkIcon from '../icons/BookmarkIcon';
 
 type UserMenuProps = {
   showUserMenu: boolean;
@@ -20,7 +27,13 @@ const UserMenu: React.FC<UserMenuProps> = ({
   parentRef
 }) => {
   const { data: session } = useSession();
-  const { theme } = useAppSelector((state) => state.theme);
+  const { theme, timer_reminder } = useAppSelector((state) => {
+    const { timer_reminder } = state.user;
+    const { theme } = state.theme;
+    return { theme, timer_reminder };
+  });
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const ulEl = useRef<HTMLUListElement | null>(null);
 
@@ -51,19 +64,33 @@ const UserMenu: React.FC<UserMenuProps> = ({
     }
   }, [showUserMenu]);
 
+  const handleSetTimerReminder = async () => {
+    try {
+      await dispatch(setTimerReminder(!timer_reminder));
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
+
+  const handleNavigateToSavedList = () => {
+    dispatch(setNavigateDestination('saved-list'));
+    setShowUserMenu(false);
+    router.push('/dashboard');
+  };
+
   return (
     <ul
       ref={ulEl}
       tabIndex={0}
-      className={`dropdown-content shadow rounded-box w-[18rem] px-12 py-8 mt-3 flex flex-col space-y-3 ${
-        classes['user-menu']
-      } ${
-        theme === 'dark'
-          ? `bg-[${variables.darkBackground100}]`
-          : 'bg-white text-gray-500'
+      className={`dropdown-content shadow  ${classes['user-menu']} ${
+        classes[`user-menu--${theme}`]
       }`}
     >
-      <li className={`${classes['user-menu__avatar']} mb-3`}>
+      <li
+        className={`${classes['user-menu__item']} ${
+          classes[`user-menu__item--${theme}`]
+        } ${classes['user-menu__avatar']} mb-3`}
+      >
         <Image
           src="/user.png"
           alt="avatar"
@@ -74,19 +101,21 @@ const UserMenu: React.FC<UserMenuProps> = ({
         <h3>{session && session.session.user.name}</h3>
       </li>
       <li
-        className={`transition duration-300 ease-in-out hover:bg-primary ${
-          theme === 'light' ? 'hover:text-white' : ''
-        } w-full px-5 py-3 rounded-md cursor-pointer`}
+        className={`${classes['user-menu__item']} ${
+          classes[`user-menu__item--${theme}`]
+        } `}
         onClick={() => setShowUserMenu(false)}
       >
+        <UserIcon />
         My Profile
       </li>
       <li
-        className={`transition duration-300 ease-in-out hover:bg-primary ${
-          theme === 'light' ? 'hover:text-white' : ''
-        } w-full px-5 py-3 rounded-md cursor-pointer`}
+        className={`${classes['user-menu__item']} ${
+          classes[`user-menu__item--${theme}`]
+        }`}
         onClick={() => setShowUserMenu(false)}
       >
+        <DashboardIcon width={19} height={19} />
         <Link
           href={
             session && session.session.user.account_type === 'admin'
@@ -98,20 +127,43 @@ const UserMenu: React.FC<UserMenuProps> = ({
         </Link>
       </li>
       <li
-        className={`transition duration-300 ease-in-out hover:bg-primary ${
-          theme === 'light' ? 'hover:text-white' : ''
-        } w-full px-5 py-3 rounded-md cursor-pointer`}
+        className={`${classes['user-menu__item']} ${
+          classes[`user-menu__item--${theme}`]
+        }`}
+        onClick={handleNavigateToSavedList}
+      >
+        <BookmarkIcon />Saved List
+      </li>
+
+      <li
+        className={`${classes['user-menu__item']} ${
+          classes[`user-menu__item--${theme}`]
+        }`}
         onClick={() => setShowUserMenu(false)}
       >
-        <Link href="/notebook">Notebook</Link>
+        <JournalIcon /><Link href="/notebook">Notebook</Link>
       </li>
       <li
-        className={`transition duration-300 ease-in-out hover:bg-primary ${
-          theme === 'light' ? 'hover:text-white' : ''
-        } w-full px-5 py-3 rounded-md cursor-pointer`}
+        className={`${classes['user-menu__item']} ${
+          classes[`user-menu__item--${theme}`]
+        }`}
+        onClick={handleSetTimerReminder}
+      >
+        <SmallClockIcon /> Timer Reminder
+        <input
+          type="checkbox"
+          className="toggle toggle-info"
+          checked={timer_reminder}
+          onChange={handleSetTimerReminder}
+        />
+      </li>
+      <li
+        className={`${classes['user-menu__item']} ${
+          classes[`user-menu__item--${theme}`]
+        }`}
         onClick={() => signOut({ redirect: true, callbackUrl: '/auth/login' })}
       >
-        Logout
+        <LogoutIcon /> Logout
       </li>
     </ul>
   );

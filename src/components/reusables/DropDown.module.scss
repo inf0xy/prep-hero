@@ -62,20 +62,19 @@
 }
 
 .tags__badge--dark:hover {
-background-color: $color-primary-400;
+background-color: $dark-background-200;
 }
 
 .tags__badge--light:hover {
-  background-color: $color-primary-200;
-  color: $text-off-white;
+  background-color: $light-background-300;
 }
 
 .tags__badge--dark--selected {
-  background-color: $color-primary-400;
-  color: $color-gray-100;
+  background-color: $dark-background-200;
+  color: $text-off-white;
 }
 
 .tags__badge--light--selected {
-  background-color: $color-primary-200;
-  color: $text-off-white;
+  background-color: $light-background-300;
+  color: $text-gray-500;
 }

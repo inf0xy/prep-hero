@@ -61,7 +61,9 @@ const DropDown: React.FC<DropDownProps> = ({
   const renderOptions = options.map((option, index) => (
     <div
       key={option.value + index}
-      className={`${classes['option-item']} ${theme === 'dark' ? 'text-gray-200' : 'text-gray-500'} hover:bg-[#e64900b5] ${theme === 'dark' ? 'hover:text-gray-200' : 'hover:text-white'} rounded-md cursor-pointer p-3`}
+      className={`${classes['option-item']} ${
+        theme === 'dark' ? 'text-white hover:bg-[#656565]' : 'text-gray-500 hover:bg-[#e7e7e7]'
+      }  rounded-md cursor-pointer p-3`}
       onClick={() => handleOptionClick(option)}
     >
       {option.label}
@@ -84,27 +86,25 @@ const DropDown: React.FC<DropDownProps> = ({
         `}
         onClick={handleToggle}
       >
-        <span className={`px-5 font-medium text-gray-200 ${
-          theme === 'dark'
-            ? 'text-gray-200'
-            : 'text-gray-500'
-        }`}>{defaultText}</span>
+        <span
+          className={`px-5 font-medium text-gray-200 ${
+            theme === 'dark' ? 'text-gray-200' : 'text-gray-500'
+          }`}
+        >
+          {defaultText}
+        </span>
         <div className={`flex items-center justify-center w-fit h-[3rem] px-1`}>
           <div className="relative w-7 h-full mr-3">
             <ChevronDown
               className={`absolute top-[25%] left-[5%] text-lg ${
-                theme === 'dark'
-                  ? 'text-gray-200'
-                  : 'text-gray-500'
+                theme === 'dark' ? 'text-gray-200' : 'text-gray-500'
               } ${
                 isOpen ? classes['arrow-down_hide'] : classes['arrow-down_show']
               }`}
             />
             <ChevronUp
               className={`absolute top-[25%] left-[5%] text-lg ${
-                theme === 'dark'
-                  ? 'text-gray-200'
-                  : 'text-gray-500'
+                theme === 'dark' ? 'text-gray-200' : 'text-gray-500'
               } ${
                 isOpen ? classes['arrow-up_show'] : classes['arrow-up_hide']
               }`}
@@ -117,9 +117,7 @@ const DropDown: React.FC<DropDownProps> = ({
           <animated.div style={style}>
             <Panel
               className={`absolute top-full p-3 mt-[4px] z-50 rounded-md ${
-                theme === 'dark'
-                  ? 'bg-[#3a3a3a]'
-                  : `bg-white shadow-lg`
+                theme === 'dark' ? 'bg-[#3a3a3a]' : `bg-white shadow-lg`
               }`}
               onClick={() => {}}
             >

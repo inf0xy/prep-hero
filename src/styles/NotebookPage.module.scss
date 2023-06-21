@@ -25,7 +25,7 @@
   flex-direction: column;
 
   &--dark {
-    background-color: $dark-background-200;
+    background-color: $dark-background-300;
     color: $text-off-white;
     border-bottom: solid $color-gray-700 1px;
     border-right: solid $color-gray-700 1px;
@@ -56,16 +56,18 @@
 
   .create-button {
     display: flex;
-    background-color: $color-primary-50;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: $color-secondary-100;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 14rem;
+    width: 100%;
     height: 3.5rem;
     margin-left: auto;
     margin-right: auto;
-    border-radius: 0.8rem;
+    border-radius: 0.5rem;
     color: $text-off-white;
     font-size: 1.7rem;
-    justify-content: center;
 
     &,
     label {
@@ -91,7 +93,7 @@
     }
 
     &--dark ul {
-      background: $dark-background-100;
+      background: $dark-background-200;
     }
 
     &--light ul {
@@ -189,6 +191,10 @@
   padding: 2rem;
   display: flex;
   flex-direction: column;
+
+  transform: translateY(-1.6rem) !important;
+  border-radius: 0.7rem;
+  min-width: 15rem;
 
   &:hover {
     cursor: pointer;

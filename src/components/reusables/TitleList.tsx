@@ -119,9 +119,12 @@ const TitleList: React.FC<TitleListProps> = ({
   const renderedTitles = currentTitles.map((title) => (
     <div key={title} className={classes['title__cell']}>
       {firstIconText !== undefined && (
-        <div className={classes['first-col-icon']} style={
-          firstIconText.length === 0 ? { gridColumn: 'span 1' } : undefined
-        }>
+        <div
+          className={classes['first-col-icon']}
+          style={
+            firstIconText.length === 0 ? { gridColumn: 'span 1' } : undefined
+          }
+        >
           <span
             onClick={firstIconAction ? () => firstIconAction(title) : undefined}
           >
@@ -229,7 +232,11 @@ const TitleList: React.FC<TitleListProps> = ({
             classes[`titles-table--${theme}`]
           }`}
         >
-          <div className={classes['titles-table__header']}>
+          <div
+            className={`${classes['titles-table__header']} ${
+              classes[`titles-table__header--${theme}`]
+            }`}
+          >
             {firstIconText !== undefined && (
               <div
                 role="row"

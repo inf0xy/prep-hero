@@ -1,0 +1,26 @@
+import Image from 'next/image';
+import { useAppSelector } from '@/hooks/hooks';
+
+type UserIconProps = {
+  width?: number;
+  height?: number;
+};
+
+const UserIcon: React.FC<UserIconProps> = ({ width, height }) => {
+  const { theme } = useAppSelector((state) => state.theme);
+
+  return (
+    <Image
+      src={
+        theme === 'dark'
+          ? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAADNklEQVR4nO2ay0tVQRzHf5UVptgmi1xpL4M2YmVJD3BTUbseYLbIQGpVWi0iWvSgguiPqIWhV/sXeix67IQ2JlELS4kekGZZgfGJ4Y5wHOfI9d45xzkxHzhwOefO9/s7Z+bM/GbmiAQCgUAgEAgEAokDNALXgSfAa+CHPtTvx/pao/xPAIuAo8AQhaMeyBFVVrIMUAe8oHieA7WSRYBdwCdK5yvQIlkC2Av8sdzMb6AHaAXqgQp91OtzvTHl1Lk9kqFm/8VyE7lCmrMu32cp/9n714F8h2e+81NAZxFaXbpslGfiM8AxS811lqB3waJ3WDyu/SGz2TvQ7Tc0B8VHgK2WjmudA91a3XlGaRDfIJ/FRelxqK060ChXxTfIp7dRWh1qtxnaj8Q3gDdGkBscaqs8IcqQ+AYwYQRZ6VC70tCeEN8AfiX4AKoM7UnxDeCjEeSmBF+BUfEN4KkR5HGH2iey0AneNYLsTXAYvCO+Aey2JELrHejWWRKhneIbwGJLKtznQPehoTno7UoR0M5sukrQu2jROym+Qr4VvDQCVlPa80XOBKcsS2SLxWfID1ljlprrL2RypP5jafaKb8BGyQLAfkvHNd0x5nRuv1lneJX6d5u+ZlsSU0nWPskS5B/COKUznrmbnwZojqnRQlFlmyVrACuBaw5bgNKqkiwAtAAfcI+aaxwQz4fA28DfmBtQI0M30AFsB6qBpfqo1ufUtQdztBylfcu7RAhYAtyfY59PJUjl89ArB07NsZ94T3mKRzWfswQ5qdf2y0rQLtMJkdIy6fEiKQJuWIIbBZocejQAwxafhV0cBQ5Z3vkBoCYBrxqtbfYJB117FYTO4FRNRxlJ4uYjntWWxdcRl8tvBaN7fDNdbUrBdwvw0/C+mbTvDIC1lkXQoqe98wW4Ynn4ayTFAC5bhrqyFP0rLK/fpTSHvXeGeXsq5jPjOGPE8DaVBInZm6Bj80lyHMaxAvhuxJL8F2bAOcO0O3HT+FjUJzVRzqZhmjNMOxI3jY/ldFI70rEArwzTbbJAADuMWAbSMH1vmK5K3DQ+ltVGLMNpmE4apssSN42PZbn3m6aBQCAQCAQCAfGTf4CrHYUhB2yNAAAAAElFTkSuQmCC'
+          : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAADxElEQVR4nO2ay49URRTGzwyIQY1uUCMr8AUZN8aWcXq89X1VkxmZ6E6dBGHhmBBdCaMujGEBGCUx/BGwwAwN/AuKCx87EzdCDCxQJ8ZHIogOkGAwR+8kk5Nq0t1zu7uuqV9SSef2ra8e99Spc+pekUwmk8lkMplMpu84554ieRjAWQDnAPxZlnMkP9X/9B75nzFC8mUA50ne6qTohHjvX9K6Umecc1tJftnpwCPlC5JbpI54758l+fMaBr9iDb8BCFInnHMgeSMymOsAFknuCiFsm5mZuVuL/tZrJE/G6uk1AE7qYvYAfo0MotWJOZfL5lSk/i91WA4jds0DuAlgf7dCJBe0rtH6XFKG5FzE7Lse/AoA3o7ovSiJMhLZ6lprFQVw2mh+KykSQmhYx1UUxcNr1dV1r87TaD8pqUHysDHVxQq1W0b7oKQGgLPmKe2qUHu30f5EUoPkd6aTj1alXcYJqy3gvKQGgKtmAu6pSlu1zARcldQAcK1fEzA+Pn6v0V6W1ADw0+pOFkXxeL+WAMklSQ0An5lOvlKVtnNuT/JOEMBR08mT/doGSX4kqUGysIFQCOGRipIrGwhNSIKMRkLhU2sVBXAmEgqneVJEcj6Sxi70qgfgHavnnHtVEmYUwFc2HSb5Vi+ZoE2H9YhM25CUCSFsA3A5ksae7iQ50nsiZq/1fwfwmNQB7/3OiOP61zGqRy9j++1lhKdle3mt1eYo7Zpz7jmpE977nSSvRCah23KldoNfAUCzzSFnp0UPQ5tSN6anp+8jeagqC1AtzQekDgAIAH6oYODWD2iuMSuJb4FHSP7dZgC6M5wguRfAjqIo7m80Gndo0d96Tf8j+fFtLEe1P0wuEJqbm1tH8nibgeuLz/mJiYmNnerpvSRfa/c+EcAxbVMSYTSSrGhZ1iiQ5PpehbVueTS+HJmExSSCIgDvRwa/5Jwbr6oNPQUmeSkyCcM9HPXevxBZ819PTk5urrot1VRt6xMAPC/DgP9FcEvmifzYj8GvoM7SHr5qm1Uev3VM6fFtuFqZ2bcjhPAEyb+MJXwgg8Q591DkELTntLdbABywkz81NfXgIM3/vchW17O37xb9piCy/N4d5LZ30Tz9eRkwzrk3zARcGEiAFMxLUI3wuglyqqLRaNxF8o/VfRnIF2YA9pmnf0KGRPlJzeq+vDmIRlum0b0yJAC8HokO+wvJb8wEPC1Dwnv/jA3C+t4oye9No5tkSDSbzQdMXy71vVGaxGRsbGyDDInZ2dk7bQI2rL5kMplMJpPJZKRm/AOFcJ4W5JERdgAAAABJRU5ErkJggg=='
+      }
+      width={width ? width : 20}
+      height={height ? height : 20}
+      alt="check-circle-icon"
+    />
+  );
+};
+
+export default UserIcon;

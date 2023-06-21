@@ -10,7 +10,7 @@
   gap: 1rem;
 
   &--dark {
-    background-color: $dark-background-200;
+    background-color: $dark-background-300;
     color: $text-off-white;
   }
 
@@ -55,10 +55,18 @@
   grid-template-columns: repeat(20, 1fr);
   gap: 0.5rem;
   height: 4rem;
-  border-bottom: solid $color-gray-600 0.4px;
+
   padding: 0 1.5rem;
   color: $color-gray-300;
   gap: 1rem;
+
+  &--dark {
+    border-bottom: solid $dark-background-100 0.4px;
+  }
+
+  &--light {
+    border-bottom: solid $light-background-300 0.4px;
+  }
 
   & > * {
     display: flex;

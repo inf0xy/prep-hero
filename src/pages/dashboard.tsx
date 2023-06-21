@@ -3,7 +3,11 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { removeProblemFromList, setTimerReminder } from '@/store';
+import {
+  removeProblemFromList,
+  setNavigateDestination,
+  setTimerReminder
+} from '@/store';
 import { NotificationType, Submission } from '@/types/dataTypes';
 import ProgressBar from '@/components/dashboard/ProgressBar';
 import ProgressCircle from '@/components/dashboard/ProgressCircle';
@@ -24,18 +28,19 @@ const DashBoard = () => {
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
-  const { theme, submissions, list, timer_reminder } = useAppSelector(
-    (state) => {
+  const { theme, submissions, list, timer_reminder, destination } =
+    useAppSelector((state) => {
       const { theme } = state.theme;
       const { submissions, list, timer_reminder } = state.user;
+      const { destination } = state.navigate;
       return {
         theme,
         submissions,
         list,
-        timer_reminder
+        timer_reminder,
+        destination
       };
-    }
-  );
+    });
 
   const [savedList, setSavedList] = useState<string[]>([]);
   const [completedList, setCompletedList] = useState<string[]>([]);
@@ -43,6 +48,18 @@ const DashBoard = () => {
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
   const parentDiv = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedListSection = document.getElementById('saved-list');
+      if (savedListSection && destination === 'saved-list') {
+        savedListSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    return () => {
+      dispatch(setNavigateDestination(undefined));
+    };
+  }, []);
 
   useEffect(() => {
     setSavedList(list);
@@ -168,7 +185,7 @@ const DashBoard = () => {
           >
             <SpeedChart />
           </div>
-          <span className={classes['saved-list']}>
+          <span className={classes['saved-list']} id="saved-list">
             <TitleList
               listType="problems"
               titles={listType === 'saved' ? savedList : completedList}

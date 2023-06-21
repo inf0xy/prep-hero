@@ -21,14 +21,13 @@
   display: flex;
   flex-direction: column;
   width: 30rem;
-  background-color: $dark-background-200;
   border-radius: 1rem;
   padding: 3rem 2rem;
   gap: 4rem;
 
   &--dark {
     color: $text-off-white;
-    background-color: $dark-background-200;
+    background-color: $dark-background-300;
   }
 
   &--light {
@@ -59,7 +58,8 @@
   font-size: 1.5rem;
 
   &--dark {
-    background-color: $color-gray-600;
+    // background-color: $color-gray-600;
+    background-color: $dark-background-100;
   }
 
   &--light {
@@ -102,7 +102,7 @@
 
   &--dark {
     color: $text-off-white;
-    background-color: $dark-background-200;
+    background-color: $dark-background-300;
   }
 
   &--light {
@@ -165,7 +165,7 @@
 
   &--dark {
     color: $text-off-white;
-    background-color: $dark-background-200;
+    background-color: $dark-background-300;
   }
 
   &--light {

@@ -34,6 +34,9 @@ import debuggerReducer, {
   setDebuggingStarted
 } from './slices/debuggerSlice';
 import themeReducer, { setTheme, getTheme } from './slices/themeSlice';
+import navigateReducer, {
+  setNavigateDestination
+} from './slices/navigateSlice';
 
 export const store = configureStore({
   reducer: {
@@ -41,7 +44,8 @@ export const store = configureStore({
     notes: notesSlice,
     problems: problemsReducer,
     debugger: debuggerReducer,
-    theme: themeReducer
+    theme: themeReducer,
+    navigate: navigateReducer
   }
 });
 export type RootState = ReturnType<typeof store.getState>;
@@ -75,5 +79,6 @@ export {
   setExitingDebugging,
   setDebuggingStarted,
   setTheme,
-  getTheme
+  getTheme,
+  setNavigateDestination
 };
