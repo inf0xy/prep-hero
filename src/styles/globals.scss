@@ -34,6 +34,7 @@
   background: $color-scrollbar-thumb-hover-light;
 }
 
+.console-output.light::-webkit-scrollbar-track,
 .text-editor.light .w-md-editor-area::-webkit-scrollbar-track,
 .text-editor.light .w-md-editor-preview::-webkit-scrollbar-track,
 .heatmap-wrapper--light::-webkit-scrollbar-track,
@@ -43,6 +44,7 @@
   background: $color-scrollbar-track-light;
 }
 
+.console-output.light::-webkit-scrollbar-thumb,
 .text-editor.light .w-md-editor-area::-webkit-scrollbar-thumb,
 .text-editor.light .w-md-editor-preview::-webkit-scrollbar-thumb,
 .heatmap-wrapper--light::-webkit-scrollbar-thumb,
@@ -51,7 +53,7 @@
 .title-list-wrapper--light::-webkit-scrollbar-thumb {
   background: $color-scrollbar-thumb-light;
 }
-
+.console-output.light::-webkit-scrollbar-thumb:hover
 .text-editor.light .w-md-editor-area::-webkit-scrollbar-thumb:hover,
 .text-editor.light .w-md-editor-preview::-webkit-scrollbar-thumb:hover,
 .heatmap-wrapper--light::-webkit-scrollbar-thumb:hover,
@@ -107,7 +109,6 @@ body {
   background-color: $color-error-700 !important;
   border: solid $color-error-500 1px;
 }
-
 
 .code-debug-highlight--dark {
   opacity: 0.7;
@@ -286,18 +287,23 @@ body {
   }
 }
 
-.problem-editor {
-  .react-resizable-handle-n {
-    height: 10px;
-    width: 100%;
-    transform: rotate(0);
-    transform: translateX(-48%);
-    cursor: row-resize;
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
-    background-position: 50% 2px;
-    position: absolute;
-    top: 0;
-  }
+.problem-editor .react-resizable-handle.react-resizable-handle-s {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.problem-editor.show-console .react-resizable-handle-s {
+  visibility: visible;
+  pointer-events: all;
+  height: 10px;
+  width: 100%;
+  transform: rotate(0);
+  transform: translateX(-48%);
+  cursor: row-resize;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+  background-position: 50% 2px;
+  position: absolute;
+  bottom: -5px;
 }
 
 .debugger .react-resizable {

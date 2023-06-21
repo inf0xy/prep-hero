@@ -93,7 +93,12 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     string | undefined
   >(undefined);
   const [showConsole, setShowConsole] = useState(false);
-  const [editorHeight, setEditorHeight] = useState<string | null>(null);
+  // const [editorHeight, setEditorHeight] = useState<string | null>(null);
+  const [editorHeight, setEditorHeight] = useState(100);
+  const [editorMinHeight, setEditorMinHeight] = useState(50);
+  const [editorMaxHeight, setEditorMaxHeight] = useState(100);
+  const [availableHeight, setAvailableHeight] = useState<number | null>(null);
+
   const [codeError, setCodeError] = useState<string | null>(null);
   const [output, setOutput] = useState('');
   const [testCode, setTestCode] = useState(false);
@@ -138,7 +143,6 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     submissions,
     codeError,
     editorRef,
-    debuggingData,
     getCodeLines,
     handleHighLightError,
     setCodeInputPython,
@@ -148,17 +152,23 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     setOptions,
     setCodeLines,
     setEditorHeight,
+    setEditorMaxHeight,
+    availableHeight,
+    setAvailableHeight,
     setNoteContent,
+    showConsole,
     setShowConsole
   });
 
   const handleShowConsole = () => {
-    if (showConsole) {
-      setEditorHeight(`${window.innerHeight - 188}px`);
-      setShowConsole(false);
-    } else {
-      setEditorHeight(`${window.innerHeight - 400}px`);
-      setShowConsole(true);
+    if (availableHeight) {
+      if (showConsole) {
+        setEditorHeight(availableHeight * 0.6);
+        setShowConsole(false);
+      } else {
+        setEditorHeight(availableHeight - 105);
+        setShowConsole(true);
+      }
     }
   };
 
@@ -213,7 +223,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
         }`}
       >
         <div
-          className={`problem-editor ${theme} ${classes['problem-editor__main']}`}
+          className={`problem-editor ${
+            showConsole ? 'show-console' : ''
+          } ${theme} ${classes['problem-editor__main']}`}
         >
           {reviewCode ? (
             <div
@@ -274,225 +286,256 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
           ) : (
             <>{renderedTopBar}</>
           )}
-          {codeInputPython !== undefined &&
-            codeInputJavascript !== undefined &&
-            editorHeight && (
-              <>
+          {availableHeight && (
+            <Resizable
+              axis="y"
+              resizeHandles="s"
+              height={editorHeight}
+              setHeight={setEditorHeight}
+              minHeight={editorMinHeight}
+              maxHeight={editorMaxHeight}
+            >
+              {codeInputPython !== undefined &&
+                codeInputJavascript !== undefined &&
+                editorHeight && (
+                  <div
+                    className={`${classes['md-editor']} ${
+                      classes[`md-editor--${theme}`]
+                    }`}
+                  >
+                    <CodeEditor
+                      editorRef={editorRef}
+                      value={
+                        reviewCode
+                          ? reviewCode.code
+                          : language === 'python'
+                          ? codeInputPython
+                          : codeInputJavascript
+                      }
+                      options={options}
+                      readOnly={debugging ? true : false}
+                      language={reviewCode ? reviewCode.language : language}
+                      setCodeInput={
+                        language === 'python'
+                          ? setCodeInputPython
+                          : setCodeInputJavascript
+                      }
+                      height={`${editorHeight}px`}
+                    />
+                  </div>
+                )}
+            </Resizable>
+          )}
+          {showConsole && availableHeight && (
+            <div
+              className={classes.console}
+              style={{
+                height: `${availableHeight - editorHeight + 35}px`,
+                maxHeight: `${availableHeight - editorHeight + 35}px`
+              }}
+            >
+              <div
+                className={classes['output-wrapper']}
+                style={{
+                  height: `${availableHeight - editorHeight - 5}px`,
+                  maxHeight: `${availableHeight - editorHeight - 5}px`
+                }}
+              >
                 <div
-                  className={`${classes['md-editor']} ${
-                    classes[`md-editor--${theme}`]
-                  }`}
+                  className={`console-output ${theme} ${classes.output}`}
+                  style={{
+                    height: `${availableHeight - editorHeight - 45}px`,
+                    maxHeight: `${availableHeight - editorHeight - 45}px`
+                  }}
                 >
-                  <CodeEditor
-                    editorRef={editorRef}
-                    value={
-                      reviewCode
-                        ? reviewCode.code
-                        : language === 'python'
-                        ? codeInputPython
-                        : codeInputJavascript
-                    }
-                    options={options}
-                    readOnly={debugging ? true : false}
-                    language={reviewCode ? reviewCode.language : language}
-                    setCodeInput={
-                      language === 'python'
-                        ? setCodeInputPython
-                        : setCodeInputJavascript
-                    }
-                    height={editorHeight}
-                  />
-                </div>
-                {showConsole && (
-                  <Resizable setEditorHeight={setEditorHeight}>
-                    <div className={classes.console}>
-                      <div className={classes.output}>
-                        {debugging ? (
-                          <DebugConsole />
-                        ) : (
-                          <>
-                            {isLoading && (
-                              <div className="flex items-center justify-center h-full space-x-4">
-                                <span className="w-[35px] h-[35px]">
-                                  <Loading width={35} height={35} />
-                                </span>
+                  {debugging ? (
+                    <DebugConsole />
+                  ) : (
+                    <>
+                      {isLoading && (
+                        <div className="flex items-center justify-center h-full space-x-4">
+                          <span className="w-[35px] h-[35px]">
+                            <Loading width={35} height={35} />
+                          </span>
+                          <p
+                            className="text-[1.8rem]"
+                            style={{
+                              color:
+                                theme === 'dark'
+                                  ? variables.textOffWhite
+                                  : variables.colorGray700
+                            }}
+                          >
+                            Hang tight...
+                          </p>
+                        </div>
+                      )}
+                      {!isLoading && testCode && (
+                        <>
+                          <h2
+                            className={
+                              theme === 'light' ? `text-[#4f4c52]` : ''
+                            }
+                          >
+                            Stdout:
+                          </h2>
+                          <code
+                            className={`${classes.code} ${
+                              classes[`code--${theme}`]
+                            }`}
+                          >
+                            {output.includes('\n')
+                              ? output.split('\n').map((str, index) => (
+                                  <p key={index} className="mb-2">
+                                    {str}
+                                  </p>
+                                ))
+                              : output}
+                          </code>
+                        </>
+                      )}
+                      {!isLoading && codeError && (
+                        <code
+                          className={`${classes.code} ${classes['code--error']}`}
+                        >
+                          {!codeError.includes('\n') ? (
+                            <p className="text-red-500 mt-4 mb-4 text-[1.4rem]">
+                              {codeError}
+                            </p>
+                          ) : (
+                            <div className="my-4 space-y-2">
+                              {codeError.split('\n').map((el, index) => (
                                 <p
-                                  className="text-[1.8rem]"
-                                  style={{
-                                    color:
-                                      theme === 'dark'
-                                        ? variables.textOffWhite
-                                        : variables.colorGray700
-                                  }}
-                                >
-                                  Hang tight...
-                                </p>
-                              </div>
-                            )}
-                            {!isLoading && testCode && (
-                              <>
-                                <h2
-                                  className={
-                                    theme === 'light' ? `text-[#4f4c52]` : ''
-                                  }
-                                >
-                                  Stdout:
-                                </h2>
-                                <code
-                                  className={`${classes.code} ${
-                                    classes[`code--${theme}`]
+                                  key={index}
+                                  className={`text-red-500 ${
+                                    el.includes('Error')
+                                      ? 'text-[1.4rem]'
+                                      : 'ml-2'
                                   }`}
                                 >
-                                  {output.includes('\n')
-                                    ? output.split('\n').map((str, index) => (
-                                        <p key={index} className="mb-2">
-                                          {str}
-                                        </p>
-                                      ))
-                                    : output}
-                                </code>
-                              </>
-                            )}
-                            {!isLoading && codeError && (
-                              <code
-                                className={`${classes.code} ${classes['code--error']}`}
-                              >
-                                {!codeError.includes('\n') ? (
-                                  <p className="text-red-500 mt-4 mb-4 text-[1.4rem]">
-                                    {codeError}
-                                  </p>
-                                ) : (
-                                  <div className="my-4 space-y-2">
-                                    {codeError.split('\n').map((el, index) => (
-                                      <p
-                                        key={index}
-                                        className={`text-red-500 ${
-                                          el.includes('Error')
-                                            ? 'text-[1.4rem]'
-                                            : 'ml-2'
-                                        }`}
-                                      >
-                                        {el}
-                                      </p>
-                                    ))}
-                                  </div>
-                                )}
-                              </code>
-                            )}
-                            {!isLoading && !codeError && resultMessage && (
-                              <SubmissionResults result={resultMessage} />
-                            )}
-                            {!isLoading && !resultMessage && runResults && (
-                              <RunResults
-                                type="test"
-                                testResults={runResults}
-                              />
-                            )}
-                          </>
+                                  {el}
+                                </p>
+                              ))}
+                            </div>
+                          )}
+                        </code>
+                      )}
+                      {!isLoading && !codeError && resultMessage && (
+                        <SubmissionResults result={resultMessage} />
+                      )}
+                      {!isLoading &&
+                        availableHeight &&
+                        !resultMessage &&
+                        runResults && (
+                          <RunResults type="test" testResults={runResults} />
                         )}
-                      </div>
-                    </div>
-                  </Resizable>
-                )}
-              </>
-            )}
-        </div>
-        <div className={classes['console-action-bar__container']}>
-          {!session.data && (
-            <div
-              className={`${classes['code-actions-backdrop']} ${
-                classes[`code-actions-backdrop--${theme}`]
-              }`}
-            >
-              <p
-                className={`${classes['lock-message']} ${
-                  classes[`lock-message--${theme}`]
-                }`}
-              >
-                <span className={classes['lock-icon']}>
-                  <LockIcon width={8} height={8} />
-                </span>{' '}
-                You need to &nbsp;{' '}
-                <Link
-                  className={classes['lock-message__login']}
-                  href="/auth/login"
-                >
-                  Login
-                </Link>
-                <span className={classes.slash}>/</span>
-                <Link
-                  className={classes['lock-message__signup']}
-                  href="/auth/signup"
-                >
-                  Sign Up
-                </Link>{' '}
-                &nbsp; to run code
-              </p>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
           )}
-          <ConsoleActionBar
-            showConsole={showConsole}
-            isLoading={isLoading}
-            reviewCode={reviewCode}
-            language={language}
-            codeInputPython={codeInputPython}
-            codeInputJavascript={codeInputJavascript}
-            socketConnection={socketConnection}
-            handleShowConsole={handleShowConsole}
-            handleRunCodeManually={handleRunCodeManually}
-            handleSubmission={handleSubmission}
-          />
-        </div>
-
-        <Modal
-          id="modal-settings"
-          type="close-button"
-          buttonSize="btn-sm"
-          className="overflow-visible"
-        >
-          <div
-            className={`${classes.settings} ${classes[`settings--${theme}`]}`}
-          >
-            <h1>Settings</h1>
-            <div className={classes.font}>
-              <div className={classes['font-description']}>
-                <p className={`${classes.title} ${classes[`title--${theme}`]}`}>
-                  Font Size
+          <div className={classes['console-action-bar__container']}>
+            {!session.data && (
+              <div
+                className={`${classes['code-actions-backdrop']} ${
+                  classes[`code-actions-backdrop--${theme}`]
+                }`}
+              >
+                <p
+                  className={`${classes['lock-message']} ${
+                    classes[`lock-message--${theme}`]
+                  }`}
+                >
+                  <span className={classes['lock-icon']}>
+                    <LockIcon width={8} height={8} />
+                  </span>{' '}
+                  You need to &nbsp;{' '}
+                  <Link
+                    className={classes['lock-message__login']}
+                    href="/auth/login"
+                  >
+                    Login
+                  </Link>
+                  <span className={classes.slash}>/</span>
+                  <Link
+                    className={classes['lock-message__signup']}
+                    href="/auth/signup"
+                  >
+                    Sign Up
+                  </Link>{' '}
+                  &nbsp; to run code
                 </p>
-                <p>Select font size for code editor.</p>
               </div>
-              <FontSelection options={options} setFont={setOptions} />
-            </div>
-            <div className={classes.tab}>
-              <div className={classes['tab-description']}>
-                <p className={`${classes.title} ${classes[`title--${theme}`]}`}>
-                  Tab Size
-                </p>
-                <p>Select tab size for code editor.</p>
-              </div>
-              <TabSizeSelection options={options} setTabSize={setOptions} />
-            </div>
-          </div>
-        </Modal>
-        <Modal
-          id={`modal__editor-note-${title}`}
-          type="close-button"
-          buttonSize="btn-sm"
-          className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
-            theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
-          }`}
-          onClose={handleCloseNoteModal}
-          fullScreenToggle={true}
-        >
-          <div className={`code-editor__note code-editor__note--${theme}`}>
-            {showNote && (
-              <TextEditor
-                value={noteContent ? noteContent : ''}
-                setValue={setNoteContent}
-              />
             )}
+            <ConsoleActionBar
+              showConsole={showConsole}
+              isLoading={isLoading}
+              reviewCode={reviewCode}
+              language={language}
+              codeInputPython={codeInputPython}
+              codeInputJavascript={codeInputJavascript}
+              socketConnection={socketConnection}
+              handleShowConsole={handleShowConsole}
+              handleRunCodeManually={handleRunCodeManually}
+              handleSubmission={handleSubmission}
+            />
           </div>
-        </Modal>
+
+          <Modal
+            id="modal-settings"
+            type="close-button"
+            buttonSize="btn-sm"
+            className="overflow-visible"
+          >
+            <div
+              className={`${classes.settings} ${classes[`settings--${theme}`]}`}
+            >
+              <h1>Settings</h1>
+              <div className={classes.font}>
+                <div className={classes['font-description']}>
+                  <p
+                    className={`${classes.title} ${classes[`title--${theme}`]}`}
+                  >
+                    Font Size
+                  </p>
+                  <p>Select font size for code editor.</p>
+                </div>
+                <FontSelection options={options} setFont={setOptions} />
+              </div>
+              <div className={classes.tab}>
+                <div className={classes['tab-description']}>
+                  <p
+                    className={`${classes.title} ${classes[`title--${theme}`]}`}
+                  >
+                    Tab Size
+                  </p>
+                  <p>Select tab size for code editor.</p>
+                </div>
+                <TabSizeSelection options={options} setTabSize={setOptions} />
+              </div>
+            </div>
+          </Modal>
+          <Modal
+            id={`modal__editor-note-${title}`}
+            type="close-button"
+            buttonSize="btn-sm"
+            className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
+              theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
+            }`}
+            onClose={handleCloseNoteModal}
+            fullScreenToggle={true}
+          >
+            <div className={`code-editor__note code-editor__note--${theme}`}>
+              {showNote && (
+                <TextEditor
+                  value={noteContent ? noteContent : ''}
+                  setValue={setNoteContent}
+                />
+              )}
+            </div>
+          </Modal>
+        </div>
       </div>
     </>
   );

@@ -1,7 +1,6 @@
 import {
   CodeLine,
   CodeOptions,
-  DebuggingData,
   Note,
   Submission
 } from '@/types/dataTypes';
@@ -21,7 +20,6 @@ type UseCodeCustomEffectProps = {
   submissions: Submission[];
   codeError: string | null;
   editorRef: RefObject<HTMLDivElement>;
-  debuggingData: DebuggingData;
   getCodeLines: () => CodeLine[];
   handleHighLightError: (
     codeLines: CodeLine[],
@@ -37,9 +35,14 @@ type UseCodeCustomEffectProps = {
   >;
   setOptions: Dispatch<SetStateAction<CodeOptions>>;
   setCodeLines: Dispatch<SetStateAction<CodeLine[]>>;
-  setEditorHeight: Dispatch<SetStateAction<string | null>>;
+  setEditorHeight: Dispatch<SetStateAction<number>>;
   setNoteContent: Dispatch<SetStateAction<string | null>>;
+  showConsole: boolean;
   setShowConsole: Dispatch<SetStateAction<boolean>>;
+
+  setEditorMaxHeight: Dispatch<SetStateAction<number>>;
+  availableHeight: number | null;
+  setAvailableHeight: Dispatch<SetStateAction<number | null>>;
 };
 
 const useCodeCustomEffect = ({
@@ -54,7 +57,6 @@ const useCodeCustomEffect = ({
   submissions,
   codeError,
   editorRef,
-  debuggingData,
   getCodeLines,
   handleHighLightError,
   setCodeInputPython,
@@ -64,7 +66,11 @@ const useCodeCustomEffect = ({
   setOptions,
   setCodeLines,
   setEditorHeight,
+  setEditorMaxHeight,
+  availableHeight,
+  setAvailableHeight,
   setNoteContent,
+  showConsole,
   setShowConsole
 }: UseCodeCustomEffectProps) => {
   let problemNoteContent: string | undefined = '';
@@ -77,10 +83,31 @@ const useCodeCustomEffect = ({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    const handleResetAvailableHeight = () => {
+      setAvailableHeight(window.innerHeight - 175);
+    };
+
     if (typeof window !== 'undefined') {
-      setEditorHeight(`${window.innerHeight - 188}px`);
+      setAvailableHeight(window.innerHeight - 175);
+      window.addEventListener('resize', handleResetAvailableHeight);
+
+      return () => {
+        window.removeEventListener('resize', handleResetAvailableHeight);
+      };
     }
-  }, [setEditorHeight]);
+  }, [setAvailableHeight]);
+
+  useEffect(() => {
+    if (availableHeight) {
+      if (showConsole) {
+        setEditorMaxHeight(availableHeight * 0.7 - 8);
+        setEditorHeight(availableHeight * 0.7 - 8);
+      } else {
+        setEditorMaxHeight(availableHeight - 8);
+        setEditorHeight(availableHeight - 8);
+      }
+    }
+  }, [availableHeight, setEditorHeight, setEditorMaxHeight, showConsole]);
 
   useEffect(() => {
     if (debugging) {
@@ -94,9 +121,8 @@ const useCodeCustomEffect = ({
   useEffect(() => {
     if (debugging) {
       setShowConsole(true);
-      setEditorHeight(`${window.innerHeight - 400}px`);
     }
-  }, [debugging, setEditorHeight, setShowConsole]);
+  }, [debugging, setShowConsole]);
 
   useEffect(() => {
     if (problemNoteContent) {

@@ -1,11 +1,5 @@
-import {
-  Dispatch,
-  RefObject,
-  SetStateAction,
-  useCallback,
-  useState
-} from 'react';
-import { useAppDispatch, useAppSelector } from './hooks';
+import { Dispatch, SetStateAction, useCallback } from 'react';
+import { useAppDispatch } from './hooks';
 import { runCode, submitCode } from '@/helpers/submission-api-util';
 import { saveSubmittedCode } from '@/store/slices/userSlice';
 
@@ -21,7 +15,7 @@ type UseHandleCodeProps = {
   prompts: { python: string; javascript: string; [key: string]: string };
   showConsole: boolean;
   setShowConsole: Dispatch<SetStateAction<boolean>>;
-  setEditorHeight: Dispatch<SetStateAction<string | null>>;
+  setEditorHeight: Dispatch<SetStateAction<number>>;
   setShowAlert: Dispatch<SetStateAction<boolean>>;
   setNotification: Dispatch<SetStateAction<NotificationType | null>>;
   setCodeError: Dispatch<SetStateAction<string | null>>;
@@ -68,7 +62,8 @@ const useHandleCode = ({
 }: UseHandleCodeProps): UseHandleCodeReturnType => {
   const dispatch = useAppDispatch();
 
-  const handleRunCodeManually = useCallback(async (
+  const handleRunCodeManually = useCallback(
+    async (
       reviewCode: { code: string; language: string } | undefined,
       language: string,
       codeInputPython: string | undefined,
@@ -81,7 +76,7 @@ const useHandleCode = ({
       setResultMessage(null);
       setTestCode(true);
       setShowConsole(true);
-      setEditorHeight(`${window.innerHeight - 400}px`);
+      // setEditorHeight(`${window.innerHeight - 400}px`);
 
       let codeInput: string | undefined;
       // let submitLanguage: string;
@@ -118,7 +113,6 @@ const useHandleCode = ({
 
     [
       setCodeError,
-      setEditorHeight,
       setIsLoading,
       setOutput,
       setResultMessage,
@@ -128,7 +122,8 @@ const useHandleCode = ({
     ]
   );
 
-  const handleSubmission = useCallback(async (
+  const handleSubmission = useCallback(
+    async (
       action: 'test' | 'submit',
       reviewCode: { code: string; language: string } | undefined,
       language: string,
@@ -139,7 +134,7 @@ const useHandleCode = ({
     ) => {
       if (!showConsole) {
         setShowConsole(true);
-        setEditorHeight(`${window.innerHeight - 400}px`);
+        // setEditorHeight(`${window.innerHeight - 400}px`);
       }
 
       if (
@@ -242,7 +237,6 @@ const useHandleCode = ({
       dispatch,
       prompts,
       setCodeError,
-      setEditorHeight,
       setIsLoading,
       setNotification,
       setResultMessage,
