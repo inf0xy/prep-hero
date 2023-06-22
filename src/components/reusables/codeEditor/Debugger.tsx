@@ -326,9 +326,14 @@ const Debugger: React.FC<DebuggerProps> = ({
     let formatValue;
     let isError = false;
 
+    const excludedPatterns = ['function', 'None', 'True', 'False', '__main__'];
+
     if (typeof value === 'object') {
       formatValue = JSON.stringify(value);
-    } else if (typeof value === 'string' && value !== 'function') {
+    } else if (
+      typeof value === 'string' &&
+      excludedPatterns.every((el) => !value.includes(el))
+    ) {
       formatValue = `'${value}'`;
     } else if (/^\*\*.*Error:.*\*\*$/.exec(value)) {
       formatValue = value.replace(/raised/g, '');

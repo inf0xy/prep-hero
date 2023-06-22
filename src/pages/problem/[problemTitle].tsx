@@ -2,7 +2,13 @@ import { useEffect, useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { getAllTitles, getSelectedProblem } from '@/helpers/problem-api-util';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { setBreakpoints, setDuration, setWatchVars } from '@/store';
+import {
+  setBreakpoints,
+  setDebugging,
+  setDuration,
+  setWatchVars,
+  setExitingDebugging
+} from '@/store';
 import { Problem, SocketType } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import ProblemEditor from '@/components/problems/ProblemEditor';
@@ -44,6 +50,8 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
     return () => {
       dispatch(setBreakpoints([]));
       dispatch(setWatchVars([]));
+      dispatch(setDebugging(false));
+      dispatch(setExitingDebugging(false));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -145,7 +153,10 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
             </div>
           ) : (
             <div className={`${classes.debug} ${classes[`debug--${theme}`]}`}>
-              <Debugger socketConnection={socketConnection} setSocketConnection={setSocketConnection} />
+              <Debugger
+                socketConnection={socketConnection}
+                setSocketConnection={setSocketConnection}
+              />
             </div>
           )}
           <div className={`${classes.working} ${classes[`working--${theme}`]}`}>
