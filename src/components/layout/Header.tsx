@@ -41,7 +41,11 @@ const Header = () => {
   }, [dispatch]);
 
   return (
-    <header className={`${classes.header} ${classes[`header--${theme}`]}`}>
+    <header
+      className={`${classes.header} ${classes[`header--${theme}`]} ${
+        router.pathname === '/' ? classes['in-home-page'] : ''
+      }`}
+    >
       <Link href="/" className={classes.logo}>
         {theme === 'dark' ? <LogoDark /> : <LogoLight />}
       </Link>
@@ -55,7 +59,7 @@ const Header = () => {
           </li>
         </ul>
       </nav>
-      <div className="flex space-x-10">
+      <div className={classes['header-right-group']}>
         {session && router.pathname.match(/^(.*?)\/problem\/(.*?)$/) && (
           <div className="flex space-x-4">
             <span className="self-center  pt-[2px]">

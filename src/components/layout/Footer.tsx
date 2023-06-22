@@ -13,6 +13,7 @@ const Footer = () => {
   const { theme } = useAppSelector((state) => state.theme);
 
   const staticStylePaths = [
+    '/',
     '/admin',
     '/admin/add',
     '/admin/edit',
@@ -20,7 +21,7 @@ const Footer = () => {
     '/notes/add',
     '/admin/tests',
     '/dashboard',
-    '/resources'
+    '/resources',
   ];
 
   useEffect(() => {

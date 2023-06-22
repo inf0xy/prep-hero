@@ -68,7 +68,6 @@ $color-success-500: #12bd4b;
 $color-success-600: #1a5d30;
 $color-success-700: #104d24;
 
-
 // $color-error-50: ;
 // $color-error-100: ;
 $color-error-200: #ff7474;
@@ -85,10 +84,16 @@ $color-warning-300: #705926;
 $color-info-100: #008aa9;
 
 // Miscelaneous colors:
-$homepage-background: linear-gradient(
+$homepage-background-primary: linear-gradient(
   143deg,
   rgba(33, 33, 33, 1) 0%,
   rgba(71, 43, 31, 1) 100%
+);
+
+$homepage-background-secondary: linear-gradient(
+  143deg,
+  rgba(12, 68, 62, 1) 50%,
+  rgba(33, 33, 33, 1) 100%
 );
 
 $facebook-background-100: #2b70c0;
@@ -131,7 +136,8 @@ $odd-cell-color-dark: #4545456b;
 $odd-cell-color-light: #cecece6b;
 $strip-color-dark: #dedede;
 $strip-color-light: #ffecde;
-$header-divider: #6c6b6b;
+// $header-divider: #6c6b6b;
+$header-divider: #565656;
 
 $dark-heatmap-color-0: $color-gray-600;
 $light-heatmap-color-0: $color-gray-50;
@@ -140,7 +146,8 @@ $heatmap-color-2: #27ab6b;
 $heatmap-color-3: #1dcf79;
 $heatmap-color-4: #0cf283;
 
-$code-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+$code-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+  Liberation Mono, monospace;
 
 :export {
   colorPrimary50: $color-primary-50;
