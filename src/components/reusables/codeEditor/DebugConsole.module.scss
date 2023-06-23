@@ -21,11 +21,9 @@
     border-radius: 7px;
     word-wrap: break-word;
     height: 100%;
-    line-height: 1.6rem;
 
     & > p {
-      max-height: 13rem;
-      overflow-y: auto;
+      min-height: 1.5rem;
       overflow-x: hidden;
       line-height: 1.3;
     }

@@ -10,7 +10,7 @@ import MonacoEditor from '@monaco-editor/react';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
 import Loading from '../Loading';
-import { setBreakpoints } from '@/store';
+import { setBreakpoints, setDebugging, setDebuggingCode } from '@/store';
 
 type CodeEditorProps = {
   value: string;
@@ -31,13 +31,31 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   setCodeInput,
   editorRef
 }) => {
-  const { theme, debugging, breakpoints, currentDebuggingLineNumber } =
-    useAppSelector((state) => {
-      const { theme } = state.theme;
-      const { breakpoints, debugging, currentDebuggingLineNumber } =
-        state.debugger;
-      return { theme, breakpoints, debugging, currentDebuggingLineNumber };
-    });
+  const {
+    theme,
+    debugging,
+    breakpoints,
+    currentDebuggingLineNumber,
+    debuggingStarted,
+    debuggingCode
+  } = useAppSelector((state) => {
+    const { theme } = state.theme;
+    const {
+      breakpoints,
+      debugging,
+      currentDebuggingLineNumber,
+      debuggingStarted,
+      debuggingCode
+    } = state.debugger;
+    return {
+      theme,
+      breakpoints,
+      debugging,
+      currentDebuggingLineNumber,
+      debuggingStarted,
+      debuggingCode
+    };
+  });
   const [lastDebugLineNumber, setLastDebugLineNumber] = useState(0);
 
   const dispatch = useAppDispatch();
@@ -64,7 +82,12 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         const newBreakpoints = [...breakpoints, lineNumber];
         dispatch(setBreakpoints(newBreakpoints));
         breakpointState.current = [...breakpointState.current, lineNumber];
-        renderedBreakpointsDecorations('add', lineNumber, event.target.range);
+        renderedBreakpointsDecorations('add', {
+          startLineNumber: lineNumber,
+          startColumn: 1,
+          endLineNumber: lineNumber,
+          endColumn: 1
+        });
       } else {
         const newBreakpoints = breakpoints.filter(
           (line) => line !== lineNumber
@@ -73,11 +96,12 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         breakpointState.current = breakpointState.current.filter(
           (el) => el !== lineNumber
         );
-        renderedBreakpointsDecorations(
-          'remove',
-          lineNumber,
-          event.target.range
-        );
+        renderedBreakpointsDecorations('remove', {
+          startLineNumber: lineNumber,
+          startColumn: 1,
+          endLineNumber: lineNumber,
+          endColumn: 1
+        });
       }
     }
   };
@@ -132,7 +156,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       breakpointsRef.current = breakpoints;
     } else if (breakpoints.length === 0 && breakpointsRef.current) {
       breakpointsRef.current.forEach((line) => {
-        renderedBreakpointsDecorations('remove', line, {
+        renderedBreakpointsDecorations('remove', {
           startLineNumber: line,
           startColumn: 1,
           endLineNumber: line,
@@ -158,7 +182,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const renderedBreakpointsDecorations = (
     action: string,
-    lineNumber: number,
     range: {
       startLineNumber: number;
       startColumn: number;
@@ -272,13 +295,20 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         event.target.position.column === 1 &&
         event.target.range.endColumn > 1
       ) {
+        const { lineNumber } = event.target?.position;
+        const currentRange = {
+          startLineNumber: lineNumber,
+          startColumn: 1,
+          endLineNumber: lineNumber,
+          endColumn: 1
+        };
         if (!lastHoverState.current) {
-          lastHoverState.current = event.target.range;
-          handleHoverOnLineNumber(event.target.range);
+          lastHoverState.current = currentRange;
+          handleHoverOnLineNumber(currentRange);
         } else {
           handleHoverOffLineNumber(lastHoverState.current);
           lastHoverState.current = event.target.range;
-          handleHoverOnLineNumber(event.target.range);
+          handleHoverOnLineNumber(currentRange);
         }
       } else if (lastHoverState.current) {
         handleHoverOffLineNumber(lastHoverState.current);
@@ -293,8 +323,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   const handleEditorChange = (value: string | undefined) => {
-    if (!readOnly) {
-      setCodeInput(value!);
+    if (!readOnly && value !== undefined) {
+      setCodeInput(value);
+      dispatch(setDebuggingCode(value));
+
+      // console.log((codeEditorModelRef.current as any).getPostition())
     }
   };
 
@@ -316,7 +349,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           folding: false,
           lineNumbersMinChars: 3,
           ...options,
-          readOnly
+          readOnly: debuggingStarted ? true : false
         }}
         onChange={handleEditorChange}
         loading={<Loading width={40} height={40} />}

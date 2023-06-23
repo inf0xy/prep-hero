@@ -96,6 +96,14 @@ $homepage-background-secondary: linear-gradient(
   rgba(33, 33, 33, 1) 100%
 );
 
+$user-menu-background-dark: linear-gradient(
+  143deg,
+  rgba(33, 33, 33, 1) 32%,
+  rgba(48, 52, 52, 1) 100%
+);
+
+$user-menu-background-light: linear-gradient(143deg, rgba(237,237,237,1) 17%, rgba(255,255,255,1) 100%);
+
 $facebook-background-100: #2b70c0;
 $facebook-background-200: #2c517c;
 $google-background-100: #35b46d;
@@ -137,7 +145,8 @@ $odd-cell-color-light: #cecece6b;
 $strip-color-dark: #dedede;
 $strip-color-light: #ffecde;
 // $header-divider: #6c6b6b;
-$header-divider: #565656;
+$header-divider: $color-gray-500;
+// $header-divider: #565656;
 
 $dark-heatmap-color-0: $color-gray-600;
 $light-heatmap-color-0: $color-gray-50;

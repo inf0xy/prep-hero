@@ -4,9 +4,7 @@ import {
   setDebugging,
   setDebuggingData,
   setExitingDebugging,
-  setWatchVars,
-  setCurrentDebuggingLineNumber,
-  setDebuggingStarted
+  setWatchVars
 } from '@/store';
 import { SocketType } from '@/types/dataTypes';
 

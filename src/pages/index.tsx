@@ -62,14 +62,13 @@ const HomePage = () => {
         <div className={classes.message}>
           <h2>Interview Preparation Toolkit</h2>
           <p>
-          Comprehensive toolkit to help you prepare for technical interviews.
-          Access a curated collection of commonly asked interview behavioral questions, and learn effective strategies to tackle coding problems.
-
-
+            Comprehensive resources to help you prepare for technical
+            interviews. Access a curated collection of commonly asked interview
+            behavioral questions, and learn effective strategies to tackle
+            coding problems.
           </p>
         </div>
         <div className={classes['resouce-image-wrapper']}>
-
           <div className={classes['interview-book-image']}>
             <Image
               src="/technterviewhandbookimage.webp"

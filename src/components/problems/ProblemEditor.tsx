@@ -313,7 +313,8 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                           : codeInputJavascript
                       }
                       options={options}
-                      readOnly={debugging ? true : false}
+                      // readOnly={debugging ? true : false}
+                      readOnly={false}
                       language={reviewCode ? reviewCode.language : language}
                       setCodeInput={
                         language === 'python'

@@ -14,12 +14,14 @@
   z-index: 50 !important;
   gap: 1rem;
 
+  transform: translateY(0) !important;
+
   &--dark {
-    background: $homepage-background-primary;
+    background: $user-menu-background-dark;
   }
 
   &--light {
-    background-color: $light-background-0;
+    background: $user-menu-background-light;
   }
 
   .user-menu__item {
@@ -39,12 +41,10 @@
 
     &--dark:hover {
       background-color: $dark-background-100;
-      color: $text-off-white;
     }
 
     &--light:hover {
-      background-color: $light-background-200;
-      color: $text-gray-700;
+      background-color: $light-background-300;
     }
   }
 
