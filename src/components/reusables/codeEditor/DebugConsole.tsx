@@ -8,14 +8,23 @@ const DebugConsole = () => {
     return { theme, debuggingData };
   });
 
-  const output = debuggingData.stdOut.slice().map((el: string) =>
-    el
-      .replace(/"None"/g, JSON.stringify(null))
-      .replace(/"True"/g, JSON.stringify(true))
-      .replace(/"False"/g, JSON.stringify(false))
-  );
+  let output: string[] = [];
+  let hasError = false;
+  const errorRegex = /^{"debuggingError":.*}$/g;
 
-  const hasError = output.some((el: string) => el.match(/.*Error.*/));
+  if (errorRegex.exec(debuggingData.stdOut[0])) {
+    const debuggingCodeError = JSON.parse(debuggingData.stdOut[0]);
+    hasError = true;
+    output = [debuggingCodeError.debuggingError]
+  } else {
+    output = debuggingData.stdOut.slice().map((el: string) =>
+      el
+        .replace(/"None"/g, JSON.stringify(null))
+        .replace(/"True"/g, JSON.stringify(true))
+        .replace(/"False"/g, JSON.stringify(false))
+    );
+    hasError = output.some((el: string) => el.match(/.*Error.*/));
+  }
 
   return (
     <div
@@ -29,11 +38,10 @@ const DebugConsole = () => {
           classes[`debugging__output--${theme}`]
         }`}
       >
-        <code>
+        <code className={`${hasError ? classes['debug-error'] : ''}`}>
           {output.map((el, index) => (
             <p
               key={`${el}${index}`}
-              className={`${hasError ? 'text-red-500' : ''}`}
             >
               {el}
             </p>

@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { useAppDispatch } from './hooks';
 import {
-  setDebugging,
   setDebuggingData,
   setExitingDebugging,
   setWatchVars

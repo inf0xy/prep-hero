@@ -18,8 +18,6 @@ import EditorActionBar from '../reusables/codeEditor/EditorActionBar';
 import Alert from '../reusables/Alert';
 import TextEditor from '../reusables/TextEditor';
 import DebuggingActionBar from '../reusables/codeEditor/DebuggingActionBar';
-import variables from '@/styles/variables.module.scss';
-import classes from './ProblemEditor.module.scss';
 import {
   RunResult,
   ResultMessage,
@@ -36,6 +34,8 @@ import useCodeLines from '@/hooks/useCodeLines';
 import useCodeCustomEffect from '@/hooks/useCodeCustomEffect';
 import Link from 'next/link';
 import LockIcon from '../icons/LockIcon';
+import variables from '@/styles/variables.module.scss';
+import classes from './ProblemEditor.module.scss';
 
 type ProblemEditorProps = {
   prompts: { python: string; javascript: string; [key: string]: string };

@@ -84,7 +84,7 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
             classes[`debugging-actions--${theme}`]
           }`}
         >
-          {debuggingStarted && currentDebuggingLineNumber !== 0 ? (
+          {debuggingStarted ? (
             <li
               onClick={() => {
                 handleStopDebugging(socketConnection);
@@ -96,12 +96,12 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
           ) : (
             <li
               onClick={() => {
+                dispatch(setDebuggingStarted(true));
                 handleStartDebugging(
                   socketConnection,
                   debuggingCode,
                   breakpoints
                 );
-                dispatch(setDebuggingStarted(true));
               }}
             >
               <DebugPlayIcon width={21} height={21} />

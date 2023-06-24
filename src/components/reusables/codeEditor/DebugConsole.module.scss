@@ -23,10 +23,16 @@
     height: 100%;
 
     & > p {
+      background-color: inherit;
       min-height: 1.5rem;
       overflow-x: hidden;
       line-height: 1.3;
     }
+  }
+
+  .debug-error {
+    color: $color-error-300;
+    background-color: $color-error-700;
   }
 
   &--dark {
@@ -50,4 +56,6 @@
       color: $text-gray-700;
     }
   }
+
+
 }

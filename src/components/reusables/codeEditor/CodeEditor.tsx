@@ -10,7 +10,7 @@ import MonacoEditor from '@monaco-editor/react';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
 import Loading from '../Loading';
-import { setBreakpoints, setDebugging, setDebuggingCode } from '@/store';
+import { setBreakpoints, setDebuggingCode } from '@/store';
 
 type CodeEditorProps = {
   value: string;
@@ -322,12 +322,33 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   };
 
+  const updateBreakpoints = () => {
+    const lineCount =
+      (codeEditorModelRef.current as any).getModel().getLineCount() ?? 0;
+
+    const decorations = (
+      codeEditorModelRef.current as any
+    ).getDecorationsInRange(
+      new (monacolRef.current as any).Range(1, 1, lineCount, 1)
+    );
+    const breakpointDecorations = decorations.filter(
+      (decoration: any) =>
+        decoration.options.glyphMarginClassName === 'breakpoint-set'
+    );
+
+    const newBreakpoints = breakpointDecorations.map(
+      (decoration: any) => decoration.range.startLineNumber
+    );
+    breakpointState.current = newBreakpoints;
+    dispatch(setBreakpoints(newBreakpoints));
+    setLastDebugLineNumber(0);
+  };
+
   const handleEditorChange = (value: string | undefined) => {
     if (!readOnly && value !== undefined) {
       setCodeInput(value);
       dispatch(setDebuggingCode(value));
-
-      // console.log((codeEditorModelRef.current as any).getPostition())
+      updateBreakpoints();
     }
   };
 

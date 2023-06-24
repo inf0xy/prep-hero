@@ -314,7 +314,6 @@ const Debugger: React.FC<DebuggerProps> = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    breakpoints,
     setCurrentDebuggingLineNumber,
     setDebugging,
     setDebuggingData,
