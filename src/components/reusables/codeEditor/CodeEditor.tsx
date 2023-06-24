@@ -310,8 +310,15 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           lastHoverState.current = event.target.range;
           handleHoverOnLineNumber(currentRange);
         }
-      } else if (lastHoverState.current) {
-        handleHoverOffLineNumber(lastHoverState.current);
+      } else {
+        const lineCount =
+          (codeEditorModelRef.current as any).getModel().getLineCount() ?? 0;
+        handleHoverOffLineNumber({
+          startLineNumber: 1,
+          startColumn: 1,
+          endLineNumber: lineCount,
+          endColumn: 1
+        });
       }
     }
   };

@@ -325,17 +325,21 @@ const Debugger: React.FC<DebuggerProps> = ({
     let formatValue;
     let isError = false;
 
-    const excludedPatterns = ['function', 'None', 'True', 'False', 'deque', 'Counter'];
+    const excludedPatterns = ['function', 'None', 'True', 'False', 'deque', 'Counter', 'set()'];
 
-    if (typeof value === 'object') {
-      formatValue = JSON.stringify(value);
-    } else if (
-      typeof value === 'string' &&
-      /<.*?>/g.exec(value) === null &&
-      excludedPatterns.every((el) => !value.includes(el))
-    ) {
-      formatValue = `'${value}'`;
-    } else if (/^\*\*.*Error:.*\*\*$/.exec(value)) {
+    // if (
+    //   typeof value === 'string' &&
+    //   /<.*?>/g.exec(value) === null &&
+    //   excludedPatterns.every((el) => !value.includes(el))
+    // ) {
+    //   formatValue = `'${value}'`;
+    // } else if (/^\*\*.*Error:.*\*\*$/.exec(value)) {
+    //   formatValue = value.replace(/raised/g, '');
+    //   isError = true;
+    // } else {
+    //   formatValue = value;
+    // }
+    if (/^\*\*.*Error:.*\*\*$/.exec(value)) {
       formatValue = value.replace(/raised/g, '');
       isError = true;
     } else {
@@ -439,9 +443,7 @@ const Debugger: React.FC<DebuggerProps> = ({
               maxHeight={Math.max(windowHeight * 0.4, 200)}
             >
               <div
-                className={`${classes['local-variables']} ${
-                  classes[`local-variables--${theme}`]
-                }`}
+                className={`${classes['local-variables']} ${classes[`local-variables--${theme}`]}`}
               >
                 <h2>Local Variables</h2>
                 <div

@@ -240,7 +240,7 @@ const NotebookPage = () => {
               }`}
               onClick={() => setFolderAction('create')}
             >
-              <FolderAddIcon width={25} height={25} />New folder
+              <span className={classes['create-button__title']}><FolderAddIcon /></span>New folder
             </label>
             <ul className={classes['folders']}>
               {folderNames.map((el) => (

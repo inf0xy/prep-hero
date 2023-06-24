@@ -350,7 +350,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                   }}
                 >
                   {debugging ? (
-                    <DebugConsole />
+                    <DebugConsole consoleHeight={availableHeight - editorHeight - 45}/>
                   ) : (
                     <>
                       {isLoading && (
@@ -377,9 +377,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                             className={
                               theme === 'light' ? `text-[#4f4c52]` : ''
                             }
-                          >
-                            Stdout:
-                          </h2>
+                          ></h2>
                           <code
                             className={`${classes.code} ${
                               classes[`code--${theme}`]

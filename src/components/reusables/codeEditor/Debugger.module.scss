@@ -25,6 +25,7 @@
   &--dark h2 {
     color: $color-secondary-50;
     background-color: $dark-background-300;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   &--light h2 {
@@ -35,6 +36,10 @@
 
 .local-variables {
   background-color: inherit;
+
+  &--light h2 {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
 
   .local-variables__content {
     display: flex;

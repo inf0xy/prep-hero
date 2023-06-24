@@ -34,6 +34,7 @@
   background: $color-scrollbar-thumb-hover-light;
 }
 
+.debugger.light div div div::-webkit-scrollbar-track,
 .console-output.light::-webkit-scrollbar-track,
 .text-editor.light .w-md-editor-area::-webkit-scrollbar-track,
 .text-editor.light .w-md-editor-preview::-webkit-scrollbar-track,
@@ -44,6 +45,7 @@
   background: $color-scrollbar-track-light;
 }
 
+.debugger.light div div div::-webkit-scrollbar-thumb,
 .console-output.light::-webkit-scrollbar-thumb,
 .text-editor.light .w-md-editor-area::-webkit-scrollbar-thumb,
 .text-editor.light .w-md-editor-preview::-webkit-scrollbar-thumb,
@@ -53,6 +55,8 @@
 .title-list-wrapper--light::-webkit-scrollbar-thumb {
   background: $color-scrollbar-thumb-light;
 }
+
+.debugger.light div div div::-webkit-scrollbar-thumb:hover,
 .console-output.light::-webkit-scrollbar-thumb:hover
 .text-editor.light .w-md-editor-area::-webkit-scrollbar-thumb:hover,
 .text-editor.light .w-md-editor-preview::-webkit-scrollbar-thumb:hover,
@@ -142,16 +146,12 @@ body {
   position: absolute !important;
   left: 0.5rem !important;
   top: 0.5rem !important;
-  opacity: 0.6;
+  opacity: 0.5 !important;
 }
 
 .breakpoint-set {
-  opacity: 1;
+  opacity: 1 !important;
 }
-
-// .breakpoint-hover {
-//   opacity: 0.6;
-// }
 
 .w-md-editor {
   box-shadow: none !important;

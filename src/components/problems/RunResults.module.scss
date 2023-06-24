@@ -43,10 +43,11 @@
     gap: 1rem;
     padding: 1rem 2rem;
     border-radius: 7px;
-    word-wrap: break-word;
+    word-wrap: break-all;
     line-height: 1.6rem;
 
-    & > p {
+    p {
+      word-wrap: break-word;
       overflow-y: auto;
       overflow-x: hidden;
       line-height: 1.3;
