@@ -79,7 +79,7 @@ const useCodeCustomEffect = ({
     problemNoteContent = result ? result.content : '';
   }
 
-  const { debugging } = useAppSelector((state) => state.debugger);
+  const { debugging, hasDebuggingError } = useAppSelector((state) => state.debugger);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

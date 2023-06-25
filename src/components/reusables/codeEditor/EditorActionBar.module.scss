@@ -10,6 +10,16 @@
   margin-bottom: 0.2rem;
   padding: 0 2rem;
   gap: 1rem;
+  z-index: 50;
+  position: sticky;
+
+  &--dark {
+    background-color: $dark-background-300;
+  }
+
+  &--light {
+    background-color: $light-background-0;
+  }
 }
 
 .options {

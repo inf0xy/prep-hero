@@ -22,14 +22,11 @@
   }
 }
 
-// .in-home-page {
-//   border-bottom: none;
-// }
-
 .logo {
   height: 100%;
   overflow: hidden;
   transform: translateY(-0.8rem);
+  cursor: pointer;
 }
 
 .header-right-group {
@@ -76,6 +73,7 @@
   padding: 8px 20px;
   text-align: center;
   transition: all 0.3s ease-in;
+  cursor: pointer;
 }
 
 .login--dark {

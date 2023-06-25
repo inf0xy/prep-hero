@@ -13,6 +13,7 @@ import StepOutIcon from '@/components/icons/StepOutIcon';
 import DebugResetIcon from '@/components/icons/DebugResetIcon';
 import StopIcon from '@/components/icons/StopIcon';
 import DebugPlayIcon from '@/components/icons/DebugPlayIcon';
+import SettingsIcon from '@/components/icons/SettingsIcon';
 import classes from './DebuggingActionBar.module.scss';
 
 type DebuggingActionBarProps = {
@@ -78,7 +79,11 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
           {notification?.message}
         </Alert>
       )}
-      <div className={classes['debugging-menu']}>
+      <div
+        className={`${classes['debugging-menu']} ${
+          classes[`debugging-menu--${theme}`]
+        }`}
+      >
         <ul
           className={`${classes['debugging-actions']} ${
             classes[`debugging-actions--${theme}`]
@@ -128,6 +133,17 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
                 className="w-fit cursor-pointer"
               >
                 <DocumentIcon width={7} height={7} />
+              </label>
+            </Tooltip>
+          </li>
+          <li>
+            <Tooltip
+              text="Settings"
+              direction="bottom"
+              className="left-[-0.5rem] w-[8rem] px-6 py-4"
+            >
+              <label htmlFor="modal-settings" className="cursor-pointer">
+                <SettingsIcon width="8" height="8" />
               </label>
             </Tooltip>
           </li>

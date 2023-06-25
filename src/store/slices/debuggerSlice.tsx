@@ -10,6 +10,7 @@ interface DebuggerState {
   watchVars: string[];
   exitingDebugging: boolean;
   debuggingStarted: boolean;
+  hasDebuggingError: boolean;
   isLoading: boolean;
   error: undefined | string;
 }
@@ -29,6 +30,7 @@ const initialState: DebuggerState = {
   watchVars: [],
   exitingDebugging: false,
   debuggingStarted: false,
+  hasDebuggingError: false,
   isLoading: false,
   error: undefined
 };
@@ -61,6 +63,9 @@ const debuggerSlice = createSlice({
     },
     setDebuggingStarted(state, action) {
       state.debuggingStarted = action.payload;
+    },
+    setHasDebuggingError(state, action) {
+      state.hasDebuggingError = action.payload;
     }
   }
 });
@@ -73,7 +78,8 @@ export const {
   setCurrentDebuggingLineNumber,
   setWatchVars,
   setExitingDebugging,
-  setDebuggingStarted
+  setDebuggingStarted,
+  setHasDebuggingError
 } = debuggerSlice.actions;
 
 export default debuggerSlice.reducer;

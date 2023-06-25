@@ -313,7 +313,6 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                           : codeInputJavascript
                       }
                       options={options}
-                      // readOnly={debugging ? true : false}
                       readOnly={false}
                       language={reviewCode ? reviewCode.language : language}
                       setCodeInput={
@@ -350,7 +349,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                   }}
                 >
                   {debugging ? (
-                    <DebugConsole consoleHeight={availableHeight - editorHeight - 45}/>
+                    <DebugConsole consoleHeight={availableHeight - editorHeight - 45} />
                   ) : (
                     <>
                       {isLoading && (

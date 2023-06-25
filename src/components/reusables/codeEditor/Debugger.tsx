@@ -6,7 +6,8 @@ import {
   setCurrentDebuggingLineNumber,
   setDebugging,
   setExitingDebugging,
-  setDebuggingStarted
+  setDebuggingStarted,
+  setHasDebuggingError
 } from '@/store';
 import useDebugger from '@/hooks/useDebugger';
 import { NotificationType, SocketType } from '@/types/dataTypes';
@@ -311,6 +312,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         dispatch(setCurrentDebuggingLineNumber(0));
         dispatch(setDebuggingStarted(false));
       }
+      dispatch(setHasDebuggingError(false));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -447,7 +449,7 @@ const Debugger: React.FC<DebuggerProps> = ({
               >
                 <h2>Local Variables</h2>
                 <div
-                  className={classes['local-variables__content']}
+                  className={`${theme} ${classes['local-variables__content']}`}
                   style={{ maxHeight: `${localVarsHeight - 45}px` }}
                 >
                   {renderedLocalVariables}

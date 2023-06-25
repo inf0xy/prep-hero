@@ -11,8 +11,12 @@
   padding: 0 3rem;
 
   &--dark {
-    background-color: $dark-background-600;
+    background-color: $dark-background-400;
     color: $color-gray-200;
+  }
+
+  &--dark.in-home-page {
+    background-color: $dark-background-600;
   }
 
   &--light {

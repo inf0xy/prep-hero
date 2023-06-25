@@ -1,7 +1,11 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Session } from 'next-auth';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { removeProblemFromList, addProblemToList, setBreakpoints } from '@/store';
+import {
+  removeProblemFromList,
+  addProblemToList,
+  setBreakpoints
+} from '@/store';
 import { NotificationType, Submission } from '@/types/dataTypes';
 import LanguageSelection from './LanguageSelection';
 import ConfirmPanel from '../ConfirmPanel';
@@ -17,7 +21,6 @@ import SourceCode from '@/components/icons/SourceCodeIcon';
 import ArrowPathIcon from '@/components/icons/ArrowPathIcon';
 import DocumentIcon from '@/components/icons/DocumentIcon';
 import { useSession } from 'next-auth/react';
-
 
 type EditorActionBarProps = {
   language: string;
@@ -44,7 +47,12 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
 }) => {
   const session = useSession();
   const dispatch = useAppDispatch();
-  const { list } = useAppSelector((state) => state.user);
+  const { list, theme } = useAppSelector((state) => {
+    const { list } = state.user;
+    const { theme } = state.theme;
+    return { list, theme };
+  });
+
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
@@ -56,7 +64,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
     } else {
       setCodeInputJavascript(JSON.parse(prompts['javascript']));
     }
-    dispatch(setBreakpoints([]))
+    dispatch(setBreakpoints([]));
   };
 
   const handleRetrieveLastSubmission = () => {
@@ -95,68 +103,84 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
           {notification?.message}
         </Alert>
       )}
-      <div className={classes['editor-menu']}>
+      <div
+        className={`${classes['editor-menu']} ${
+          classes[`editor-menu--${theme}`]
+        }`}
+      >
         <LanguageSelection setLanguage={setLanguage} multiOptions={false} />
         <ul className={classes.options}>
-          {session && session.data && <>
-          <li onClick={() => setShowNote(true)}>
-            <Tooltip text="Note" direction="bottom" className="w-fit px-6 py-4">
-              <label
-                htmlFor={`modal__editor-note-${title}`}
-                className="w-fit cursor-pointer"
-              >
-                <DocumentIcon width={7} height={7} />
-              </label>
-            </Tooltip>
-          </li>
-          <li>
-            <Tooltip
-              text={list.includes(title!) ? 'Remove' : 'Add to list'}
-              direction="bottom"
-              className={`${
-                list.includes(title!) ? 'w-fit' : 'w-[10rem]'
-              } px-6 py-4`}
-            >
-              {list.includes(title!) ? (
-                <span onClick={() => dispatch(removeProblemFromList(title!))}>
-                  <BookmarkFill width={7} height={7} className="text-primary" />
-                </span>
-              ) : (
-                <span onClick={() => dispatch(addProblemToList(title!))}>
-                  <BookmarkOutline width={7} height={7} />
-                </span>
-              )}
-            </Tooltip>
-          </li>
-          <li>
-            <Tooltip
-              text="Retrieve last submission"
-              direction="bottom"
-              className="w-[19rem] px-6 py-4"
-            >
-              <label
-                htmlFor="restore-last-submission-confirm-modal"
-                className="cursor-pointer"
-              >
-                <SourceCode width="7" height="7" />
-              </label>
-            </Tooltip>
-          </li>
-          <li>
-            <Tooltip
-              text="Reset prompt"
-              direction="bottom"
-              className="w-[12rem] px-6 py-4"
-            >
-              <label
-                htmlFor="editor-reset-confirm-modal"
-                className="cursor-pointer"
-              >
-                <ArrowPathIcon width="7" height="7" />
-              </label>
-            </Tooltip>
-          </li>
-          </>}
+          {session && session.data && (
+            <>
+              <li onClick={() => setShowNote(true)}>
+                <Tooltip
+                  text="Note"
+                  direction="bottom"
+                  className="w-fit px-6 py-4"
+                >
+                  <label
+                    htmlFor={`modal__editor-note-${title}`}
+                    className="w-fit cursor-pointer"
+                  >
+                    <DocumentIcon width={7} height={7} />
+                  </label>
+                </Tooltip>
+              </li>
+              <li>
+                <Tooltip
+                  text={list.includes(title!) ? 'Remove' : 'Add to list'}
+                  direction="bottom"
+                  className={`${
+                    list.includes(title!) ? 'w-fit' : 'w-[10rem]'
+                  } px-6 py-4`}
+                >
+                  {list.includes(title!) ? (
+                    <span
+                      onClick={() => dispatch(removeProblemFromList(title!))}
+                    >
+                      <BookmarkFill
+                        width={7}
+                        height={7}
+                        className="text-primary"
+                      />
+                    </span>
+                  ) : (
+                    <span onClick={() => dispatch(addProblemToList(title!))}>
+                      <BookmarkOutline width={7} height={7} />
+                    </span>
+                  )}
+                </Tooltip>
+              </li>
+              <li>
+                <Tooltip
+                  text="Retrieve last submission"
+                  direction="bottom"
+                  className="w-[19rem] px-6 py-4"
+                >
+                  <label
+                    htmlFor="restore-last-submission-confirm-modal"
+                    className="cursor-pointer"
+                  >
+                    <SourceCode width="7" height="7" />
+                  </label>
+                </Tooltip>
+              </li>
+              <li>
+                <Tooltip
+                  text="Reset prompt"
+                  direction="bottom"
+                  className="w-[12rem] px-6 py-4"
+                >
+                  <label
+                    htmlFor="editor-reset-confirm-modal"
+                    className="cursor-pointer"
+                  >
+                    <ArrowPathIcon width="7" height="7" />
+                  </label>
+                </Tooltip>
+              </li>
+            </>
+          )}
           <li>
             <Tooltip
               text="Settings"

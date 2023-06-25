@@ -21,7 +21,7 @@ const Footer = () => {
     '/notes/add',
     '/admin/tests',
     '/dashboard',
-    '/resources',
+    '/resources'
   ];
 
   useEffect(() => {
@@ -40,7 +40,9 @@ const Footer = () => {
     <footer
       className={`${classes.footer} ${
         classes[`footer--${theme}`]
-      } ${footerStyle}`}
+      } ${footerStyle} ${
+        router.pathname === '/' ? classes['in-home-page'] : ''
+      }`}
     >
       <div className={classes.disclaimer}>Copyright &copy; 2023 Prep Hero</div>
       <div className={classes.socials}>

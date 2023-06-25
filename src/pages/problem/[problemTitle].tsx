@@ -105,6 +105,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
           )}
           {!debugging ? (
             <div className={`${classes.detail} ${classes[`detail--${theme}`]}`}>
+              {/* <ul className={`${classes.tabs} ${classes[`tabs--${theme}`]}`}> */}
               <ul className={`${classes.tabs} ${classes[`tabs--${theme}`]}`}>
                 <li
                   className={`rounded-tl-md ${

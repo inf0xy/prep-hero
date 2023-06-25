@@ -31,7 +31,8 @@ import debuggerReducer, {
   setCurrentDebuggingLineNumber,
   setWatchVars,
   setExitingDebugging,
-  setDebuggingStarted
+  setDebuggingStarted,
+  setHasDebuggingError
 } from './slices/debuggerSlice';
 import themeReducer, { setTheme, getTheme } from './slices/themeSlice';
 import navigateReducer, {
@@ -78,6 +79,7 @@ export {
   setWatchVars,
   setExitingDebugging,
   setDebuggingStarted,
+  setHasDebuggingError,
   setTheme,
   getTheme,
   setNavigateDestination

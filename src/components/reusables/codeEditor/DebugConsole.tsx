@@ -7,22 +7,24 @@ type DebugConsoleProps = {
 };
 
 const DebugConsole: React.FC<DebugConsoleProps> = ({ consoleHeight }) => {
-
   const { theme, debuggingData } = useAppSelector((state) => {
     const { theme } = state.theme;
     const { debuggingData } = state.debugger;
     return { theme, debuggingData };
   });
   const [contentHeight, setContentHeight] = useState(0);
-
   const codeRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (codeRef.current) {
-      const contentNodes = Array.from(codeRef.current?.childNodes) as HTMLParagraphElement[];
+      const contentNodes = Array.from(
+        codeRef.current?.childNodes
+      ) as HTMLParagraphElement[];
       if (contentNodes.length > 0) {
-        let currentContentHeight = contentNodes.reduce((acc, el) => acc += el.offsetHeight, 0);
-
+        let currentContentHeight = contentNodes.reduce(
+          (acc, el) => (acc += el.offsetHeight),
+          0
+        );
         // calculate the total height including all vertical padding - paddingY is 1rem
         currentContentHeight += (contentNodes.length - 1) * 10;
         setContentHeight(currentContentHeight);

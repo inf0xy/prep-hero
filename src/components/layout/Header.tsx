@@ -40,15 +40,23 @@ const Header = () => {
     dispatch(getTheme());
   }, [dispatch]);
 
+  const handleLogoClick = () => {
+    if (session) {
+      router.push('/problems');
+    } else {
+      router.push('/');
+    }
+  };
+
   return (
     <header
       className={`${classes.header} ${classes[`header--${theme}`]} ${
         router.pathname === '/' ? classes['in-home-page'] : ''
       }`}
     >
-      <Link href="/" className={classes.logo}>
+      <span className={classes.logo} onClick={handleLogoClick}>
         {theme === 'dark' ? <LogoDark /> : <LogoLight />}
-      </Link>
+      </span>
       <nav className="h-full">
         <ul className={classes['main-nav']}>
           <li>
@@ -107,22 +115,24 @@ const Header = () => {
         </label>
 
         {!session ? (
-          <>
+          !router.pathname.includes('/auth') ? (
             <nav>
               <ul className={classes.auth}>
                 <li
                   className={`${classes.login} ${classes[`login--${theme}`]}`}
+                  onClick={() => router.push('/auth/login')}
                 >
-                  <Link href="/auth/login">Login</Link>
+                  Login
                 </li>
                 <li
                   className={`${classes.signup} ${classes[`signup--${theme}`]}`}
+                  onClick={() => router.push('/auth/signup')}
                 >
-                  <Link href="/auth/signup">JOIN</Link>
+                  JOIN
                 </li>
               </ul>
             </nav>
-          </>
+          ) : null
         ) : (
           <div className="dropdown dropdown-end">
             <label

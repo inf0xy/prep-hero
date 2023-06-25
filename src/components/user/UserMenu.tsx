@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import Image from 'next/image';
-import Link from 'next/link';
 import classes from './UserMenu.module.scss';
 import { setNavigateDestination, setTimerReminder } from '@/store';
 
@@ -78,6 +77,20 @@ const UserMenu: React.FC<UserMenuProps> = ({
     router.push('/dashboard');
   };
 
+  const handleDashboardClick = () => {
+    setShowUserMenu(false);
+    if (session && session.session.user.account_type === 'admin') {
+      router.push('/admin');
+    } else {
+      router.push('/dashboard');
+    };
+  }
+
+  const handleNotebookClick = () => {
+    setShowUserMenu(false);
+    router.push('/notebook');
+  }
+
   return (
     <ul
       ref={ulEl}
@@ -113,18 +126,10 @@ const UserMenu: React.FC<UserMenuProps> = ({
         className={`${classes['user-menu__item']} ${
           classes[`user-menu__item--${theme}`]
         }`}
-        onClick={() => setShowUserMenu(false)}
+        onClick={handleDashboardClick}
       >
         <DashboardIcon width={19} height={19} />
-        <Link
-          href={
-            session && session.session.user.account_type === 'admin'
-              ? '/admin'
-              : '/dashboard'
-          }
-        >
           Dashboard
-        </Link>
       </li>
       <li
         className={`${classes['user-menu__item']} ${
@@ -139,9 +144,9 @@ const UserMenu: React.FC<UserMenuProps> = ({
         className={`${classes['user-menu__item']} ${
           classes[`user-menu__item--${theme}`]
         }`}
-        onClick={() => setShowUserMenu(false)}
+        onClick={handleNotebookClick}
       >
-        <JournalIcon /><Link href="/notebook">Notebook</Link>
+        <JournalIcon />Notebook
       </li>
       <li
         className={`${classes['user-menu__item']} ${

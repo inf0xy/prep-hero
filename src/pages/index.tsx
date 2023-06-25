@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { useAppSelector } from '@/hooks/hooks';
 import classes from '@/styles/HomePage.module.scss';
 
@@ -7,23 +8,42 @@ const HomePage = () => {
 
   return (
     <div className={`${classes.homepage} ${classes[`homepage--${theme}`]}`}>
-      <div className={classes['first-section']}>
+      <div className={classes.heading}>
+        <h1 className={classes.slogan}>Practice makes perfect</h1>
+        <div className={classes.headline}>
+          <p>Prep Hero is your go-to platform for honing your coding skills</p>
+          <p>and acing technical interviews.</p>
+        </div>
+        <button className={`${classes.join} ${classes[`join--${theme}`]}`}>
+          <Link href="/auth/signup">Create Account</Link>
+        </button>
+      </div>
+      <div
+        className={`${classes['first-section']} ${
+          classes[`first-section--${theme}`]
+        }`}
+      >
         <div className={classes.message}>
-          <h2>Practice makes perfect</h2>
+          <h2>Extensive Coding Challenges</h2>
           <p>
-            Prep Hero is your go-to platform for honing your coding skills and
-            acing technical interviews. Whether you are a coding enthusiast or a
-            job seeker preparing for interviews, we have the perfect resources
-            to help you succeed.
+            Explore a vast library of coding challenges that cover a wide range
+            of topics and difficulty levels. Improve your problem solving
+            skills, and gain confidence in your coding abilities.
           </p>
         </div>
         <div className={classes['code-editor-image']}>
-          <Image
-            src="/code-editor-image.png"
-            alt="Code Editor Image"
-            width={300}
-            height={300}
-          />
+          <div
+            className={`${classes['image-wrapper']} ${
+              classes[`image-wrapper--${theme}`]
+            }`}
+          >
+            <Image
+              src="/code-editor-image.png"
+              alt="Code Editor Image"
+              width={300}
+              height={300}
+            />
+          </div>
         </div>
       </div>
       <div className={classes['second-section']}>
@@ -62,10 +82,9 @@ const HomePage = () => {
         <div className={classes.message}>
           <h2>Interview Preparation Toolkit</h2>
           <p>
-            Comprehensive resources to help you prepare for technical
-            interviews. Access a curated collection of commonly asked interview
-            behavioral questions, and learn effective strategies to tackle
-            coding problems.
+            Access a curated collection of commonly asked interview behavioral
+            questions, and variety of resources to learn effective strategies to
+            tackle coding problems.
           </p>
         </div>
         <div className={classes['resouce-image-wrapper']}>
