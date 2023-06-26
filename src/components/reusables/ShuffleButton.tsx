@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { getAllTitles } from '@/helpers/problem-api-util';
 import { useAppSelector } from '@/hooks/hooks';
-import { useEffect } from 'react';
 import { NotificationType } from '@/types/dataTypes';
 import ShuffleIcon from '../icons/ShuffleIcon';
-import { useRouter } from 'next/router';
 import Alert from './Alert';
 import Button from './Button';
 import variables from '@/styles/variables.module.scss';
@@ -39,6 +38,9 @@ const ShuffleButton = () => {
     if (randomNumber <= titleList.length && titleList[randomNumber]) {
       const randomProblemTitle = titleList[randomNumber];
       router.push(`/problem/${randomProblemTitle}`);
+      if (router.pathname.match(/\/problem\/.*/)) {
+        router.reload();
+      }
     }
   };
 

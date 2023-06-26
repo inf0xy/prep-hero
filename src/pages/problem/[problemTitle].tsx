@@ -11,13 +11,12 @@ import {
   toggleSavedList
 } from '@/store';
 import { Problem, SocketType } from '@/types/dataTypes';
+import SavedList from '@/components/problems/SavedList';
+import Drawer from '@/components/reusables/Drawer';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import ProblemEditor from '@/components/problems/ProblemEditor';
 import Debugger from '@/components/reusables/codeEditor/Debugger';
 import classes from '@/styles/ProblemDetailPage.module.scss';
-
-import SavedList from '@/components/problems/SavedList';
-import Drawer from '@/components/reusables/Drawer';
 
 type ProblemDetailPageProps = {
   selectedProblem: Problem;
