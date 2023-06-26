@@ -8,7 +8,8 @@ type TooltipProps = {
   children: ReactNode;
   direction: 'top' | 'bottom';
   className?: string;
-  extraStyle?: object
+  extraStyle?: object;
+  zIndex?: number;
 };
 
 const Tooltip: React.FC<TooltipProps> = ({
@@ -16,7 +17,8 @@ const Tooltip: React.FC<TooltipProps> = ({
   children,
   direction,
   className,
-  extraStyle
+  extraStyle,
+  zIndex
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const transition = useTransition(isHovered, {
@@ -25,7 +27,7 @@ const Tooltip: React.FC<TooltipProps> = ({
     leave: { opacity: 0 }
   });
 
-  const { theme } = useAppSelector(state => state.theme);
+  const { theme } = useAppSelector((state) => state.theme);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -40,6 +42,7 @@ const Tooltip: React.FC<TooltipProps> = ({
       className={classes['tooltip-container']}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      style={{ zIndex: zIndex ?? 1 }}
     >
       {children}
       {transition((style, item) =>

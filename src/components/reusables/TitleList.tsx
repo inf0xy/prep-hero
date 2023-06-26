@@ -210,7 +210,7 @@ const TitleList: React.FC<TitleListProps> = ({
           classes[`titles-selection--${theme}`]
         }`}
       >
-        <div className={classes['top-bar']}>
+        <div className={`top-bar ${classes['top-bar']}`}>
           <div className={classes['title__searchbar']}>
             <SearchBar
               setSingleSearchTerm={setSearchTerm}

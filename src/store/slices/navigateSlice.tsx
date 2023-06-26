@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface NavigateState {
   destination: string | undefined;
+  savedListOpen: boolean;
 }
 
 const initialState: NavigateState = {
-  destination: undefined
+  destination: undefined,
+  savedListOpen: false
 };
 
 const navigateSlice = createSlice({
@@ -14,9 +16,13 @@ const navigateSlice = createSlice({
   reducers: {
     setNavigateDestination(state, action) {
       state.destination = action.payload;
+    },
+    toggleSavedList(state) {
+      state.savedListOpen = !state.savedListOpen;
     }
   }
 });
 
-export const { setNavigateDestination } = navigateSlice.actions;
+export const { setNavigateDestination, toggleSavedList } =
+  navigateSlice.actions;
 export default navigateSlice.reducer;

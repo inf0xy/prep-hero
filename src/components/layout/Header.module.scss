@@ -36,6 +36,32 @@
   margin-left: auto;
 }
 
+.problem__action-buttons {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  gap: 1.3rem;
+  align-items: center;
+
+  .saved-list-button {
+    height: 3.3rem;
+    width: fit-content;
+    font-size: 1.7rem;
+    font-weight: 300;
+    padding: 0 1.2rem;
+    border-radius: 5px;
+    letter-spacing: 2px;
+    padding-top: 1px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: $color-warning-100;
+      opacity: 0.8;
+      color: $text-off-white;
+    }
+  }
+}
+
 .main-nav,
 .auth {
   display: flex;
@@ -57,6 +83,7 @@
   display: flex;
   align-items: center;
   transition: all 0.5s ease;
+  transform: translateY(2px);
 }
 
 .main-nav li:hover {

@@ -4,7 +4,13 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
-import { setTheme, getTheme, getProblemCounts, fetchUserData } from '@/store';
+import {
+  setTheme,
+  getTheme,
+  getProblemCounts,
+  fetchUserData,
+  toggleSavedList
+} from '@/store';
 import UserMenu from '../user/UserMenu';
 
 import LogoDark from './LogoDark';
@@ -12,7 +18,8 @@ import LogoLight from './LogoLight';
 import ClockIcon from '../icons/ClockIcon';
 import TimeSetter from '../reusables/codeEditor/TimeSetter';
 import Time from '../reusables/codeEditor/Time';
-
+import ShuffleButton from '../reusables/ShuffleButton';
+import Tooltip from '../reusables/Tooltip';
 import variables from '@/styles/variables.module.scss';
 import classes from './Header.module.scss';
 
@@ -67,7 +74,35 @@ const Header = () => {
           </li>
         </ul>
       </nav>
-      <div className={classes['header-right-group']}>
+      {router.pathname.match(/\/problem\/.*/) && (
+        <div className={classes['problem__action-buttons']}>
+          <button
+            className={classes['saved-list-button']}
+            onClick={() => dispatch(toggleSavedList())}
+          >
+            Saved List
+          </button>
+
+          <Tooltip
+            direction="bottom"
+            text="Pick random question"
+            zIndex={30}
+            className="w-[17rem] py-4"
+            extraStyle={{
+              left: '3rem',
+              backgroundColor: variables.darkBackground200
+            }}
+          >
+            <ShuffleButton />
+          </Tooltip>
+        </div>
+      )}
+      <div
+        className={classes['header-right-group']}
+        style={{
+          marginLeft: router.pathname.match(/\/problem\/.*/) ? 'unset' : 'auto'
+        }}
+      >
         {session && router.pathname.match(/^(.*?)\/problem\/(.*?)$/) && (
           <div className="flex space-x-4">
             <span className="self-center  pt-[2px]">

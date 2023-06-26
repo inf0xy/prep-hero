@@ -1,0 +1,62 @@
+@import '@/styles/variables.module.scss';
+
+.saved-list-drawer {
+  width: 60vw;
+  max-width: 70vw;
+  padding: 3rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: transparent;
+
+  &--dark {
+    background: $user-menu-background-dark;
+    color: $text-off-white;
+
+    & > *:nth-child(2) {
+      border: solid $dark-background-100 1px;
+    }
+  }
+
+  &--light {
+    background: $user-menu-background-light;
+    color: $text-gray-700;
+
+    & > *:nth-child(2) {
+      border: solid $color-gray-100 1px;
+    }
+  }
+
+  .title {
+    height: fit-content;
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+  }
+
+  & > *:nth-child(2) {
+    background-color: transparent;
+    height: calc(100vh - 10rem);
+    width: 100%;
+    box-shadow: none;
+    padding: 0;
+
+    // Hide top-bar
+    & > *:first-child {
+      display: none;
+    }
+
+    // Table
+    & > *:nth-child(2) {
+      // Hide table header row
+      & > *:first-child {
+        display: none;
+      }
+
+      // Table body
+      & > *:nth-child(2) {
+        height: 100%;
+        overflow: auto;
+        font-size: 1.6rem;
+      }
+    }
+  }
+}

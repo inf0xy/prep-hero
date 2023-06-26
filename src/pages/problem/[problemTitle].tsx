@@ -7,13 +7,17 @@ import {
   setDebugging,
   setDuration,
   setWatchVars,
-  setExitingDebugging
+  setExitingDebugging,
+  toggleSavedList
 } from '@/store';
 import { Problem, SocketType } from '@/types/dataTypes';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import ProblemEditor from '@/components/problems/ProblemEditor';
 import Debugger from '@/components/reusables/codeEditor/Debugger';
 import classes from '@/styles/ProblemDetailPage.module.scss';
+
+import SavedList from '@/components/problems/SavedList';
+import Drawer from '@/components/reusables/Drawer';
 
 type ProblemDetailPageProps = {
   selectedProblem: Problem;
@@ -22,13 +26,27 @@ type ProblemDetailPageProps = {
 const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   selectedProblem
 }) => {
-  const { theme, debugging, timer_reminder, timerDuration, duration } =
-    useAppSelector((state) => {
-      const { theme } = state.theme;
-      const { debugging } = state.debugger;
-      const { timer_reminder, timerDuration, duration } = state.user;
-      return { debugging, theme, timer_reminder, timerDuration, duration };
-    });
+  const {
+    theme,
+    debugging,
+    timer_reminder,
+    timerDuration,
+    duration,
+    savedListOpen
+  } = useAppSelector((state) => {
+    const { theme } = state.theme;
+    const { debugging } = state.debugger;
+    const { timer_reminder, timerDuration, duration } = state.user;
+    const { savedListOpen } = state.navigate;
+    return {
+      debugging,
+      theme,
+      timer_reminder,
+      timerDuration,
+      duration,
+      savedListOpen
+    };
+  });
 
   const [activeTab, setActiveTab] = useState('prompt');
   const [timerAlert, setTimerAlert] = useState(false);
@@ -69,6 +87,13 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
 
   return (
     <>
+      <Drawer
+        direction="left"
+        isOpen={savedListOpen}
+        closeDrawer={() => dispatch(toggleSavedList())}
+      >
+        <SavedList />
+      </Drawer>
       {selectedProblem && (
         <div
           className={`${classes['problem-detail-page']} ${

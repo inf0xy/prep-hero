@@ -36,7 +36,8 @@ import debuggerReducer, {
 } from './slices/debuggerSlice';
 import themeReducer, { setTheme, getTheme } from './slices/themeSlice';
 import navigateReducer, {
-  setNavigateDestination
+  setNavigateDestination,
+  toggleSavedList
 } from './slices/navigateSlice';
 
 export const store = configureStore({
@@ -82,5 +83,6 @@ export {
   setHasDebuggingError,
   setTheme,
   getTheme,
-  setNavigateDestination
+  setNavigateDestination,
+  toggleSavedList
 };
