@@ -118,12 +118,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
                   direction="bottom"
                   className="w-fit px-6 py-4"
                 >
-                  <label
-                    htmlFor={`modal__editor-note-${title}`}
-                    className="w-fit cursor-pointer"
-                  >
-                    <DocumentIcon width={7} height={7} />
-                  </label>
+                  <DocumentIcon width={7} height={7} />
                 </Tooltip>
               </li>
               <li>

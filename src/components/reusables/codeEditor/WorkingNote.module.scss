@@ -1,0 +1,32 @@
+@import '@/styles/variables.module.scss';
+
+.working-note {
+  display: flex;
+  align-items: center;
+  height: calc(100vh - 5rem);
+  width: 60vw;
+
+  .text-editor-wrapper {
+    position: relative;
+    width: inherit;
+    padding: 3.5rem 0 3.5rem 2rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    .close-note {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      padding: 0.2rem;
+      border-radius: 3px;
+    }
+
+    &--dark {
+      background-color: $dark-background-200;
+    }
+
+    &--light {
+      background-color: $light-background-0;
+    }
+  }
+}

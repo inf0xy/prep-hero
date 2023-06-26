@@ -36,6 +36,7 @@ import Link from 'next/link';
 import LockIcon from '../icons/LockIcon';
 import variables from '@/styles/variables.module.scss';
 import classes from './ProblemEditor.module.scss';
+import WorkingNote from '../reusables/codeEditor/WorkingNote';
 
 type ProblemEditorProps = {
   prompts: { python: string; javascript: string; [key: string]: string };
@@ -172,7 +173,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     }
   };
 
-  const handleCloseNoteModal = async () => {
+  const handleCloseNote = async () => {
     const note = {
       list_name: listNames.join(', '),
       title,
@@ -249,14 +250,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                     direction="bottom"
                     className="w-fit px-6 py-4"
                   >
-                    <label
-                      htmlFor={`modal__editor-note-${title}`}
-                      className="w-fit cursor-pointer"
-                    >
-                      <span className="opacity-[0.7]">
-                        <DocumentIcon width={7} height={7} />
-                      </span>
-                    </label>
+                    <span className="opacity-[0.7]">
+                      <DocumentIcon width={7} height={7} />
+                    </span>
                   </Tooltip>
                 </li>
                 <li>
@@ -349,7 +345,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                   }}
                 >
                   {debugging ? (
-                    <DebugConsole consoleHeight={availableHeight - editorHeight - 45} />
+                    <DebugConsole
+                      consoleHeight={availableHeight - editorHeight - 45}
+                    />
                   ) : (
                     <>
                       {isLoading && (
@@ -514,25 +512,12 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
               </div>
             </div>
           </Modal>
-          <Modal
-            id={`modal__editor-note-${title}`}
-            type="close-button"
-            buttonSize="btn-sm"
-            className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
-              theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
-            }`}
-            onClose={handleCloseNoteModal}
-            fullScreenToggle={true}
-          >
-            <div className={`code-editor__note code-editor__note--${theme}`}>
-              {showNote && (
-                <TextEditor
-                  value={noteContent ? noteContent : ''}
-                  setValue={setNoteContent}
-                />
-              )}
-            </div>
-          </Modal>
+          <WorkingNote
+            showNote={showNote}
+            closeNote={handleCloseNote}
+            noteContent={noteContent}
+            setNoteContent={setNoteContent}
+          />
         </div>
       </div>
     </>

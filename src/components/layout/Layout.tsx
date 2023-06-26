@@ -18,11 +18,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <main className="relative">
       <div
         id="drawer-left"
-        className="absolute top-0 left-0 w-[70vw] min-h-full h-full w-fit max-w-screen z-50"
+        className="absolute top-0 left-0 w-[70vw] min-h-full h-full w-fit max-w-screen z-50 overflow-hidden"
       />
       <div
         id="drawer-right"
-        className="absolute top-0 right-0 w-[70vw] min-h-full h-full w-fit max-w-screen z-50"
+        className="absolute top-0 right-0 w-[70vw] min-h-full h-full w-fit max-w-screen z-50 overflow-hidden"
       />
       <Header />
       {children}

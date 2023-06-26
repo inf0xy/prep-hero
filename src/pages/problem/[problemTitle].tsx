@@ -89,6 +89,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
     <>
       <Drawer
         direction="left"
+        showCloseButton={true}
         isOpen={savedListOpen}
         closeDrawer={() => dispatch(toggleSavedList())}
       >

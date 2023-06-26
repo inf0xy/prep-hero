@@ -1,22 +1,36 @@
 import { ReactNode, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useAppSelector } from '@/hooks/hooks';
 import { useTransition, animated } from 'react-spring';
 import XIcon from '../icons/XIcon';
 import variables from '@/styles/variables.module.scss';
-import { useAppSelector } from '@/hooks/hooks';
 
 type DrawerProps = {
   children: ReactNode;
   direction: 'left' | 'right';
   isOpen: boolean;
-  closeDrawer: () => void;
+  closeDrawer?: () => void;
+  showCloseButton: boolean;
+  top?: string;
+  bottom?: string;
+  left?: string;
+  right?: string;
+  closeButtonWidth?: number;
+  closeButtonHeight?: number;
 };
 
 const Drawer: React.FC<DrawerProps> = ({
   children,
   direction,
   isOpen,
-  closeDrawer
+  closeDrawer,
+  showCloseButton,
+  top,
+  bottom,
+  left,
+  right,
+  closeButtonWidth,
+  closeButtonHeight
 }) => {
   const [shouldRender, setShouldRender] = useState(false);
   const { theme } = useAppSelector((state) => state.theme);
@@ -35,6 +49,16 @@ const Drawer: React.FC<DrawerProps> = ({
     }
   });
 
+  let buttonPositionX = 'right-[2rem]';
+  let buttonPositionY = 'top-[2rem]';
+  if (left || right) {
+    buttonPositionX = left ? `${left}` : `${right}`;
+  }
+
+  if (top || bottom) {
+    buttonPositionY = top ? `${top}` : `${bottom}`;
+  }
+
   return (
     <>
       {shouldRender &&
@@ -43,16 +67,21 @@ const Drawer: React.FC<DrawerProps> = ({
             {transition((style, item) =>
               item ? (
                 <animated.div style={{ ...style, position: 'relative' }}>
-                  <button
-                    className={`absolute top-[2rem] right-[2rem] rounded-lg p-2 duration-300 ease ${
-                      theme === 'dark'
-                        ? 'hover:bg-[#4f4c52]'
-                        : 'hover:bg-[#dfdbe6]'
-                    }`}
-                    onClick={closeDrawer}
-                  >
-                    <XIcon />
-                  </button>
+                  {showCloseButton && (
+                    <button
+                      className={`absolute ${buttonPositionX} ${buttonPositionY} rounded-lg p-2 duration-300 ease ${
+                        theme === 'dark'
+                          ? 'hover:bg-[#4f4c52]'
+                          : 'hover:bg-[#dfdbe6]'
+                      }`}
+                      onClick={closeDrawer}
+                    >
+                      <XIcon
+                        width={closeButtonWidth ?? 20}
+                        height={closeButtonHeight ?? 20}
+                      />
+                    </button>
+                  )}
                   {children}
                 </animated.div>
               ) : null
