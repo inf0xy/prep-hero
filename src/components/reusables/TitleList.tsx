@@ -1,5 +1,4 @@
-import { ReactNode, useState, useCallback, useEffect, useRef } from 'react';
-import Link from 'next/link';
+import { ReactNode, useState, useCallback, useEffect } from 'react';
 import { useAppSelector } from '@/hooks/hooks';
 import SearchBar from '@/components/reusables/SearchBar';
 import Button from '@/components/reusables/Button';
@@ -157,10 +156,14 @@ const TitleList: React.FC<TitleListProps> = ({
       )}
       <p
         className={classes['title-content']}
-        onClick={listType === 'notes' ? () => handleOpenNote(title) : undefined}
+        onClick={
+          listType === 'notes'
+            ? () => handleOpenNote(title)
+            : undefined
+        }
       >
         {listType !== 'notes' ? (
-          <Link href={`/problem/${title}`}>{title}</Link>
+          <a href={`/problem/${title}`}>{title}</a>
         ) : (
           <label
             htmlFor={`modal__notebook-note-${title}`}

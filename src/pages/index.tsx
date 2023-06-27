@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAppSelector } from '@/hooks/hooks';
@@ -5,6 +8,14 @@ import classes from '@/styles/HomePage.module.scss';
 
 const HomePage = () => {
   const { theme } = useAppSelector((state) => state.theme);
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      router.push('/problems');
+    }
+  }, [router, session]);
 
   return (
     <div className={`${classes.homepage} ${classes[`homepage--${theme}`]}`}>

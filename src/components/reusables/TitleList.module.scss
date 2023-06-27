@@ -131,6 +131,7 @@
 
     .title-content {
       grid-column: span 16;
+
       & > * {
         transition: color 0.3s ease;
       }

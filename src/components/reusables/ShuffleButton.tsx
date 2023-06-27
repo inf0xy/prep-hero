@@ -37,9 +37,10 @@ const ShuffleButton = () => {
       Math.floor(Math.random() * (allProblemsCount - 1 + 1)) + 1;
     if (randomNumber <= titleList.length && titleList[randomNumber]) {
       const randomProblemTitle = titleList[randomNumber];
-      router.push(`/problem/${randomProblemTitle}`);
       if (router.pathname.match(/\/problem\/.*/)) {
-        router.reload();
+        window.location.assign(`/problem/${randomProblemTitle}`);
+      } else {
+        router.push(`/problem/${randomProblemTitle}`);
       }
     }
   };
