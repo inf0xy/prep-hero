@@ -16,7 +16,6 @@ import SubmissionResults from './SubmissionResults';
 import DebugConsole from '../reusables/codeEditor/DebugConsole';
 import EditorActionBar from '../reusables/codeEditor/EditorActionBar';
 import Alert from '../reusables/Alert';
-import TextEditor from '../reusables/TextEditor';
 import DebuggingActionBar from '../reusables/codeEditor/DebuggingActionBar';
 import {
   RunResult,
@@ -47,6 +46,7 @@ type ProblemEditorProps = {
     SetStateAction<{ code: string; language: string } | undefined>
   >;
   socketConnection: SocketType;
+  availableWidth: number;
 };
 
 const ProblemEditor: React.FC<ProblemEditorProps> = ({
@@ -55,7 +55,8 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   listNames,
   reviewCode,
   setReviewCode,
-  socketConnection
+  socketConnection,
+  availableWidth
 }) => {
   const session = useSession();
   const { theme, submissions, notes, debugging, debuggingData } =
@@ -94,7 +95,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
     string | undefined
   >(undefined);
   const [showConsole, setShowConsole] = useState(false);
-  // const [editorHeight, setEditorHeight] = useState<string | null>(null);
+
   const [editorHeight, setEditorHeight] = useState(100);
   const [editorMinHeight, setEditorMinHeight] = useState(50);
   const [editorMaxHeight, setEditorMaxHeight] = useState(100);
@@ -431,7 +432,10 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
               </div>
             </div>
           )}
-          <div className={classes['console-action-bar__container']}>
+          <div
+            className={classes['console-action-bar__container']}
+            style={{ width: `${availableWidth}px` }}
+          >
             {!session.data && (
               <div
                 className={`${classes['code-actions-backdrop']} ${

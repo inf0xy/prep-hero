@@ -16,6 +16,7 @@ import Drawer from '@/components/reusables/Drawer';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import ProblemEditor from '@/components/problems/ProblemEditor';
 import Debugger from '@/components/reusables/codeEditor/Debugger';
+import Resizable from '@/components/reusables/Resizable';
 import classes from '@/styles/ProblemDetailPage.module.scss';
 
 type ProblemDetailPageProps = {
@@ -56,22 +57,53 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
     null
   );
 
+  const [problemDetailWidth, setProblemDetailWidth] = useState(250);
+  const [windowWidth, setWindowWidth] = useState<number | null>(null);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setProblemDetailWidth((window.innerWidth - 30) / 2);
+      setWindowWidth(window.innerWidth);
+    }
+
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
     dispatch(setDuration(0));
     if (timer_reminder) {
       setTimerAlert(true);
     }
+
+    window.addEventListener('resize', handleResize);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     return () => {
       dispatch(setBreakpoints([]));
       dispatch(setWatchVars([]));
       dispatch(setDebugging(false));
       dispatch(setExitingDebugging(false));
+      window.removeEventListener('resize', handleResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // useEffect(() => {
+  // const handleResetAvailableHeight = () => {
+  //   setAvailableWidth(window.innerWidth - 175);
+  // };
+
+  // if (typeof window !== 'undefined') {
+  //   // setAvailableHeight(window.innerWidth - 175);
+  //   setProblemDetailWidth((window.innerWidth - 30) / 2);
+  //   window.addEventListener('resize', handleResetAvailableHeight);
+
+  //   return () => {
+  //     window.removeEventListener('resize', handleResetAvailableHeight);
+  //   };
+  // }
+  // }, []);
 
   const prompts = selectedProblem.prompts
     ? selectedProblem.prompts
@@ -96,9 +128,9 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
       </Drawer>
       {selectedProblem && (
         <div
-          className={`${classes['problem-detail-page']} ${
-            classes[`problem-detail-page--${theme}`]
-          }`}
+          className={`problem-detail-page ${theme} ${
+            classes['problem-detail-page']
+          } ${classes[`problem-detail-page--${theme}`]}`}
         >
           {(timerAlert || (timerDuration! > 0 && duration! === 0)) && (
             <div
@@ -128,73 +160,112 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
               </button>
             </div>
           )}
-          {!debugging ? (
-            <div className={`${classes.detail} ${classes[`detail--${theme}`]}`}>
-              {/* <ul className={`${classes.tabs} ${classes[`tabs--${theme}`]}`}> */}
-              <ul className={`${classes.tabs} ${classes[`tabs--${theme}`]}`}>
-                <li
-                  className={`rounded-tl-md ${
-                    activeTab === 'prompt' ? 'bg-accent' : ''
-                  } ${
-                    activeTab === 'prompt' && theme == 'light'
-                      ? 'text-white'
-                      : ''
-                  }`}
-                  onClick={() => setActiveTab('prompt')}
+          {windowWidth && (
+            <>
+              {!debugging ? (
+                <Resizable
+                  axis="x"
+                  resizeHandles="e"
+                  width={problemDetailWidth}
+                  setWidth={setProblemDetailWidth}
+                  minWidth={windowWidth * 0.4}
+                  maxWidth={windowWidth * 0.6}
                 >
-                  Prompt
-                </li>
-                <li
-                  className={`${activeTab === 'solutions' ? 'bg-accent' : ''} ${
-                    activeTab === 'solutions' && theme == 'light'
-                      ? 'text-white'
-                      : ''
-                  }`}
-                  onClick={() => setActiveTab('solutions')}
+                  <div
+                    className={`${classes.detail} ${
+                      classes[`detail--${theme}`]
+                    }`}
+                  >
+                    <ul
+                      className={`${classes.tabs} ${classes[`tabs--${theme}`]}`}
+                    >
+                      <li
+                        className={`rounded-tl-md ${
+                          activeTab === 'prompt' ? 'bg-accent' : ''
+                        } ${
+                          activeTab === 'prompt' && theme == 'light'
+                            ? 'text-white'
+                            : ''
+                        }`}
+                        onClick={() => setActiveTab('prompt')}
+                      >
+                        Prompt
+                      </li>
+                      <li
+                        className={`${
+                          activeTab === 'solutions' ? 'bg-accent' : ''
+                        } ${
+                          activeTab === 'solutions' && theme == 'light'
+                            ? 'text-white'
+                            : ''
+                        }`}
+                        onClick={() => setActiveTab('solutions')}
+                      >
+                        Solutions
+                      </li>
+                      <li
+                        className={`${
+                          activeTab === 'submissions' ? 'bg-accent' : ''
+                        } ${
+                          activeTab === 'submissions' && theme == 'light'
+                            ? 'text-white'
+                            : ''
+                        }`}
+                        onClick={() => setActiveTab('submissions')}
+                      >
+                        Submissions
+                      </li>
+                    </ul>
+                    <div
+                      className={`problem-description-wrapper--${theme} ${classes.description}`}
+                    >
+                      <ProblemDetail
+                        tab={activeTab}
+                        problem={selectedProblem}
+                        setReviewCode={setReviewCode}
+                      />
+                    </div>
+                  </div>
+                </Resizable>
+              ) : (
+                <Resizable
+                  axis="x"
+                  resizeHandles="e"
+                  width={problemDetailWidth}
+                  setWidth={setProblemDetailWidth}
+                  minWidth={windowWidth * 0.4}
+                  maxWidth={windowWidth * 0.6}
                 >
-                  Solutions
-                </li>
-                <li
-                  className={`${
-                    activeTab === 'submissions' ? 'bg-accent' : ''
-                  } ${
-                    activeTab === 'submissions' && theme == 'light'
-                      ? 'text-white'
-                      : ''
-                  }`}
-                  onClick={() => setActiveTab('submissions')}
-                >
-                  Submissions
-                </li>
-              </ul>
-              <div
-                className={`problem-description-wrapper--${theme} ${classes.description}`}
-              >
-                <ProblemDetail
-                  tab={activeTab}
-                  problem={selectedProblem}
-                  setReviewCode={setReviewCode}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className={`${classes.debug} ${classes[`debug--${theme}`]}`}>
-              <Debugger
+                  <div
+                    className={`${classes.debug} ${classes[`debug--${theme}`]}`}
+                  >
+                    <Debugger
+                      socketConnection={socketConnection}
+                      setSocketConnection={setSocketConnection}
+                    />
+                  </div>
+                </Resizable>
+              )}
+            </>
+          )}
+          {windowWidth && (
+            <div
+              className={`${classes.working} ${classes[`working--${theme}`]}`}
+              style={{
+                minWidth: `${windowWidth - problemDetailWidth - 20}px`
+              }}
+            >
+              <ProblemEditor
+                prompts={prompts}
+                title={selectedProblem.title!}
+                listNames={selectedProblem.list_names!}
+                reviewCode={reviewCode}
+                setReviewCode={setReviewCode}
                 socketConnection={socketConnection}
-                setSocketConnection={setSocketConnection}
+                availableWidth={windowWidth - problemDetailWidth - 20}
               />
             </div>
           )}
-          <div className={`${classes.working} ${classes[`working--${theme}`]}`}>
-            <ProblemEditor
-              prompts={prompts}
-              title={selectedProblem.title!}
-              listNames={selectedProblem.list_names!}
-              reviewCode={reviewCode}
-              setReviewCode={setReviewCode}
-              socketConnection={socketConnection}
-            />
-          </div>
         </div>
       )}
     </>

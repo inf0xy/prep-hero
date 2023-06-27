@@ -58,7 +58,8 @@
 
 .debugger.light div div div::-webkit-scrollbar-thumb:hover,
 .console-output.light::-webkit-scrollbar-thumb:hover
-.text-editor.light .w-md-editor-area::-webkit-scrollbar-thumb:hover,
+  .text-editor.light
+  .w-md-editor-area::-webkit-scrollbar-thumb:hover,
 .text-editor.light .w-md-editor-preview::-webkit-scrollbar-thumb:hover,
 .heatmap-wrapper--light::-webkit-scrollbar-thumb:hover,
 .solution-modal-wrapper--light::-webkit-scrollbar-thumb:hover,
@@ -335,13 +336,42 @@ body {
   background-color: $light-background-0;
 }
 
-// .react-resizable-handle-e {
-//   width: 10px;
-//   min-width: 10px;
-//   height: 100%;
-//   cursor: col-resize;
-//   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
-// }
+.problem-detail-page .react-resizable {
+  padding: 0;
+  padding-right: 8px;
+  height: 100%;
+  overflow: hidden;
+
+  .react-resizable-handle-e {
+    position: absolute;
+    bottom: 0;
+    height: calc(100% + 2rem);
+    width: 8px;
+    cursor: row-resize;
+    transform: rotate(0);
+    transform: translateY(-50%);
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+    background-position: 2px 50%;
+    opacity: 0;
+    transition: opacity 0.3 ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.problem-detail-page.dark .react-resizable .react-resizable-handle-e {
+  background-color: $color-primary-500;
+}
+
+.problem-detail-page.light .react-resizable .react-resizable-handle-e {
+  background-color: $color-primary-50;
+}
+
+.problem-editor .react-resizable {
+  padding: 0;
+}
 
 // .code-snippet {
 //   &:has(> div.lines-content.monaco-editor-background) {

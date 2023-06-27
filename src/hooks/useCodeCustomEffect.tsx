@@ -79,7 +79,7 @@ const useCodeCustomEffect = ({
     problemNoteContent = result ? result.content : '';
   }
 
-  const { debugging, hasDebuggingError } = useAppSelector((state) => state.debugger);
+  const { debugging } = useAppSelector((state) => state.debugger);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -100,11 +100,15 @@ const useCodeCustomEffect = ({
   useEffect(() => {
     if (availableHeight) {
       if (showConsole) {
-        setEditorMaxHeight(availableHeight * 0.7 - 8);
-        setEditorHeight(availableHeight * 0.7 - 8);
+        // setEditorMaxHeight(availableHeight * 0.7 - 8);
+        // setEditorHeight(availableHeight * 0.7 - 8);
+        setEditorMaxHeight(availableHeight * 0.7);
+        setEditorHeight(availableHeight * 0.7);
       } else {
-        setEditorMaxHeight(availableHeight - 8);
-        setEditorHeight(availableHeight - 8);
+        // setEditorMaxHeight(availableHeight - 8);
+        // setEditorHeight(availableHeight - 8);
+        setEditorMaxHeight(availableHeight - 3);
+        setEditorHeight(availableHeight - 3);
       }
     }
   }, [availableHeight, setEditorHeight, setEditorMaxHeight, showConsole]);

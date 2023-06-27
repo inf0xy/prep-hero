@@ -166,7 +166,7 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             </Button>
           </Tooltip>
         </div>
-        <div className="flex space-x-5">
+        <div className={classes['right-button-group']}>
           {!exitingDebugging ? (
             <Tooltip
               text={debugging ? 'Exit' : 'Debug'}
@@ -175,9 +175,6 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             >
               <button
                 onClick={handleDebugButton}
-                className={`${
-                  debugging ? 'translate-y-[3px]' : 'translate-y-[2px]'
-                }`}
               >
                 {debugging ? (
                   <ExitIcon width={17} height={17} />
