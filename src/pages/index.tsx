@@ -25,7 +25,7 @@ const HomePage = () => {
       dispatch(setHomePageLoading(false));
     }
   }, [dispatch, router, session]);
-
+console.log(pageLoading);
   return (
     <>
       {pageLoading || pageLoading === undefined ? (

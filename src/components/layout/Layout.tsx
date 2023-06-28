@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Header from './Header';
 import Footer from './Footer';
@@ -14,6 +14,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const regex = /\/(problem\/.*|notebook)/;
 
+  const [headerIsRendered, setHeaderIsRendered] = useState(false);
   const { pageLoading } = useAppSelector(state => state.navigate);
   const dispatch = useAppDispatch();
 
@@ -22,6 +23,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       dispatch(setHomePageLoading(false));
     }
   }, [dispatch, pageLoading, router]);
+
+  useEffect(() => {
+    if (pageLoading) {
+      setHeaderIsRendered(true);
+    }
+  }, [pageLoading])
 
   useCustomScrollbar();
 
@@ -36,7 +43,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         className="absolute top-0 right-0 w-[70vw] min-h-full h-full w-fit max-w-screen z-50 overflow-hidden"
       />
       {!pageLoading && <Header />}
-      {!pageLoading && children}
+      {headerIsRendered && children}
+      {/* {children} */}
       {!regex.test(router.pathname) && !pageLoading && <Footer />}
     </main>
   );
