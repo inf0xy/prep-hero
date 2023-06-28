@@ -1,10 +1,13 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
-import Header from './Header';
-import Footer from './Footer';
-import useCustomScrollbar from '@/hooks/useCustomScrollbar';
+import { useSession } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { setHomePageLoading } from '@/store';
+import useCustomScrollbar from '@/hooks/useCustomScrollbar';
+import Header from './Header';
+import Footer from './Footer';
+import Loading from '../reusables/Loading';
+import variables from '@/styles/variables.module.scss';
 
 type LayoutProps = {
   children: ReactNode;
@@ -14,23 +17,34 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const regex = /\/(problem\/.*|notebook)/;
 
-  const [headerIsRendered, setHeaderIsRendered] = useState(false);
-  const { pageLoading } = useAppSelector(state => state.navigate);
+  const { pageLoading, theme } = useAppSelector((state) => {
+    const { pageLoading } = state.navigate;
+    const { theme } = state.theme;
+    return { pageLoading, theme };
+  });
+
   const dispatch = useAppDispatch();
+  const { data: session } = useSession();
 
   useEffect(() => {
-    if (pageLoading && router.pathname !== '/') {
+    if (session && router.pathname === '/') {
+      router.push('/problems');
+    } else if (pageLoading && (session === null || router.pathname !== '/')) {
       dispatch(setHomePageLoading(false));
     }
-  }, [dispatch, pageLoading, router]);
+  }, [dispatch, pageLoading, router, session]);
 
-  useEffect(() => {
-    if (pageLoading) {
-      setHeaderIsRendered(true);
-    }
-  }, [pageLoading])
+  const headerRef = useRef<HTMLElement>(null);
 
   useCustomScrollbar();
+
+  const backgroundColor =
+    theme === 'dark'
+      ? router.pathname === '/' || router.pathname === '/resources'
+        ? variables.darkBackground600
+        : variables.darkBackground400
+      : variables.lightBackground0;
+  const placeHolder = <div className={`min-h-screen ${backgroundColor}`} />;
 
   return (
     <main className="relative">
@@ -42,10 +56,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         id="drawer-right"
         className="absolute top-0 right-0 w-[70vw] min-h-full h-full w-fit max-w-screen z-50 overflow-hidden"
       />
-      {!pageLoading && <Header />}
-      {headerIsRendered && children}
-      {/* {children} */}
-      {!regex.test(router.pathname) && !pageLoading && <Footer />}
+      {pageLoading || pageLoading === undefined ? (
+        <Loading />
+      ) : (
+        <>
+          <Header headerRef={headerRef} />
+          {!headerRef.current ? placeHolder : children}
+          {!regex.test(router.pathname) && headerRef.current && <Footer />}
+        </>
+      )}
     </main>
   );
 };

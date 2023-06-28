@@ -10,7 +10,6 @@ import ConsoleActionBar from '../reusables/codeEditor/ConsoleActionBar';
 import FontSelection from '../reusables/codeEditor/FontSelection';
 import TabSizeSelection from '../reusables/codeEditor/TabSizeSelection';
 import Modal from '../reusables/Modal';
-import Loading from '../reusables/Loading';
 import RunResults from './RunResults';
 import SubmissionResults from './SubmissionResults';
 import WorkingNote from '../reusables/codeEditor/WorkingNote';
@@ -36,6 +35,7 @@ import Link from 'next/link';
 import LockIcon from '../icons/LockIcon';
 import variables from '@/styles/variables.module.scss';
 import classes from './ProblemEditor.module.scss';
+import SmallLoading from '../reusables/SmallLoading';
 
 type ProblemEditorProps = {
   prompts: { python: string; javascript: string; [key: string]: string };
@@ -354,7 +354,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                       {isLoading && (
                         <div className="flex items-center justify-center h-full space-x-4">
                           <span className="w-[35px] h-[35px]">
-                            <Loading width={35} height={35} />
+                            <SmallLoading width={35} height={35} />
                           </span>
                           <p
                             className="text-[1.8rem]"

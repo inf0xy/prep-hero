@@ -25,6 +25,9 @@ module.exports = {
     themes: [
       {
         mytheme: {
+          dark: {
+            DEFAULT: '#181818'
+          },
           primary: '#e65715',
           secondary: '#15e6d0',
           accent: '#009989',

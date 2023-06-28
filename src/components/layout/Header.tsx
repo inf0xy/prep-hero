@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -23,7 +23,11 @@ import Tooltip from '../reusables/Tooltip';
 import variables from '@/styles/variables.module.scss';
 import classes from './Header.module.scss';
 
-const Header = () => {
+type HeaderProps = {
+  headerRef: RefObject<HTMLElement>;
+};
+
+const Header: React.FC<HeaderProps> = ({ headerRef }) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const avatarRef = useRef<HTMLLabelElement>(null);
 
@@ -57,6 +61,7 @@ const Header = () => {
 
   return (
     <header
+      ref={headerRef}
       className={`${classes.header} ${classes[`header--${theme}`]} ${
         router.pathname === '/' ? classes['in-home-page'] : ''
       }`}

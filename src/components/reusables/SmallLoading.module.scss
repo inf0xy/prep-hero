@@ -1,0 +1,16 @@
+@import '@/styles/variables.module.scss';
+
+.small-loading {
+  animation: rotate 3.5s infinite linear;
+  height: fit-content;
+  min-height: fit-content;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

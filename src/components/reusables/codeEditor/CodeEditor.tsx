@@ -9,6 +9,7 @@ import {
 import MonacoEditor from '@monaco-editor/react';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
+import SmallLoading from '../Loading';
 import Loading from '../Loading';
 import { setBreakpoints, setDebuggingCode } from '@/store';
 
@@ -405,6 +406,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           readOnly: debuggingStarted ? true : false
         }}
         onChange={handleEditorChange}
+        // loading={<SmallLoading width={40} height={40} />}
         loading={<Loading width={40} height={40} />}
         onMount={(editor, monaco) => {
           (codeEditorModelRef as any).current = editor;
