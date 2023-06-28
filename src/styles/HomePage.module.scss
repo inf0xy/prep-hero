@@ -3,7 +3,7 @@
 .homepage {
   min-height: calc(100vh - 150px);
   font-size: 1.8rem;
-  width: 100vw;
+  width: calc(100vw - 1rem);
   padding: 5rem;
   font-weight: 300;
   display: flex;

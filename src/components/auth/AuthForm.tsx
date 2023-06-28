@@ -27,7 +27,7 @@ const AuthForm = () => {
   });
 
   const [showAlert, setShowAlert] = useState(false);
-  const [notification, setNotification] = useState<NotificationType>({
+  const [notification, setNotification] = useState<NotificationType | null>({
     status: undefined,
     message: undefined
   });
@@ -218,9 +218,9 @@ const AuthForm = () => {
           <Alert
             onClose={setShowAlert}
             setNotification={setNotification}
-            status={notification.status!}
+            status={notification?.status!}
           >
-            {notification.message}
+            {notification?.message}
           </Alert>
         )}
         <div className={classes['form-control']}>
@@ -314,7 +314,7 @@ const AuthForm = () => {
               signIn('github', { callbackUrl: '/problems', redirect: true })
             }
           >
-            <GithubIcon width="18px" height="18px" />
+            <GithubIcon width="21px" height="21px" />
           </Button>
           <Button
             extraStyle={{ width: '100%', padding: '0.8rem' }}
@@ -332,7 +332,7 @@ const AuthForm = () => {
               signIn('facebook', { callbackUrl: '/problems', redirect: true })
             }
           >
-            <FacebookIcon width="18px" height="18px" />
+            <FacebookIcon width="22px" height="22px" />
           </Button>
         </div>
       </div>

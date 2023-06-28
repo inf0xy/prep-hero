@@ -1,6 +1,28 @@
+@import '@/styles/variables.module.scss';
+
 .loading {
-  animation: rotate 3.5s infinite linear;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  height: 100%;
+  width: 100%;
+
+  &--dark {
+    background-color: $dark-background-400;
+  }
+
+  &--light {
+    background-color: $light-background-0;
+  }
+
+  .loading-image {
+    animation: rotate 3.5s infinite linear;
+    height: fit-content;
+    min-height: fit-content;
+  }
 }
+
 
 @keyframes rotate {
   0% {

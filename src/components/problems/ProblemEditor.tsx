@@ -13,6 +13,7 @@ import Modal from '../reusables/Modal';
 import Loading from '../reusables/Loading';
 import RunResults from './RunResults';
 import SubmissionResults from './SubmissionResults';
+import WorkingNote from '../reusables/codeEditor/WorkingNote';
 import DebugConsole from '../reusables/codeEditor/DebugConsole';
 import EditorActionBar from '../reusables/codeEditor/EditorActionBar';
 import Alert from '../reusables/Alert';
@@ -35,7 +36,6 @@ import Link from 'next/link';
 import LockIcon from '../icons/LockIcon';
 import variables from '@/styles/variables.module.scss';
 import classes from './ProblemEditor.module.scss';
-import WorkingNote from '../reusables/codeEditor/WorkingNote';
 
 type ProblemEditorProps = {
   prompts: { python: string; javascript: string; [key: string]: string };
@@ -436,7 +436,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
             className={classes['console-action-bar__container']}
             style={{ width: `${availableWidth}px` }}
           >
-            {!session.data && (
+            {!session.data && editorRef.current && (
               <div
                 className={`${classes['code-actions-backdrop']} ${
                   classes[`code-actions-backdrop--${theme}`]

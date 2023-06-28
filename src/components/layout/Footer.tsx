@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import classes from './Footer.module.scss';
+import { useAppSelector } from '@/hooks/hooks';
 import InstagramIcon from '../icons/InstagramIcon';
 import LinkedinIconOutline from '../icons/LinkedinIconOutline';
 import FacebookIcon from '../icons/FacebookIconOutline';
 import TwitterIcon from '../icons/TwitterIcon';
-import { useAppSelector } from '@/hooks/hooks';
+import classes from './Footer.module.scss';
 
 const Footer = () => {
   const router = useRouter();
@@ -41,7 +41,7 @@ const Footer = () => {
       className={`${classes.footer} ${
         classes[`footer--${theme}`]
       } ${footerStyle} ${
-        router.pathname === '/' ? classes['in-home-page'] : ''
+        router.pathname === '/' || router.pathname === '/resources' ? classes['in-home-page'] : ''
       }`}
     >
       <div className={classes.disclaimer}>Copyright &copy; 2023 Prep Hero</div>

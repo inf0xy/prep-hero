@@ -37,7 +37,8 @@ import debuggerReducer, {
 import themeReducer, { setTheme, getTheme } from './slices/themeSlice';
 import navigateReducer, {
   setNavigateDestination,
-  toggleSavedList
+  toggleSavedList,
+  setHomePageLoading
 } from './slices/navigateSlice';
 
 export const store = configureStore({
@@ -84,5 +85,6 @@ export {
   setTheme,
   getTheme,
   setNavigateDestination,
-  toggleSavedList
+  toggleSavedList,
+  setHomePageLoading
 };

@@ -76,13 +76,14 @@ const Header = () => {
       </nav>
       {router.pathname.match(/\/problem\/.*/) && (
         <div className={classes['problem__action-buttons']}>
-          <button
-            className={classes['saved-list-button']}
-            onClick={() => dispatch(toggleSavedList())}
-          >
-            Saved List
-          </button>
-
+          {session && (
+            <button
+              className={classes['saved-list-button']}
+              onClick={() => dispatch(toggleSavedList())}
+            >
+              Saved List
+            </button>
+          )}
           <Tooltip
             direction="bottom"
             text="Pick random question"

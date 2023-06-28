@@ -1,8 +1,10 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Header from './Header';
 import Footer from './Footer';
 import useCustomScrollbar from '@/hooks/useCustomScrollbar';
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { setHomePageLoading } from '@/store';
 
 type LayoutProps = {
   children: ReactNode;
@@ -11,6 +13,15 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const regex = /\/(problem\/.*|notebook)/;
+
+  const { pageLoading } = useAppSelector(state => state.navigate);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (pageLoading && router.pathname !== '/') {
+      dispatch(setHomePageLoading(false));
+    }
+  }, [dispatch, pageLoading, router]);
 
   useCustomScrollbar();
 
@@ -24,9 +35,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         id="drawer-right"
         className="absolute top-0 right-0 w-[70vw] min-h-full h-full w-fit max-w-screen z-50 overflow-hidden"
       />
-      <Header />
-      {children}
-      {!regex.test(router.pathname) && <Footer />}
+      {!pageLoading && <Header />}
+      {!pageLoading && children}
+      {!regex.test(router.pathname) && !pageLoading && <Footer />}
     </main>
   );
 };

@@ -110,7 +110,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
       >
         <LanguageSelection setLanguage={setLanguage} multiOptions={false} />
         <ul className={classes.options}>
-          {session && session.data && (
+          {session && session.data ? (
             <>
               <li onClick={() => setShowNote(true)}>
                 <Tooltip
@@ -175,6 +175,21 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
                 </Tooltip>
               </li>
             </>
+          ) : (
+            <li>
+              <Tooltip
+                text="Reset prompt"
+                direction="bottom"
+                className="w-[12rem] px-6 py-4"
+              >
+                <label
+                  htmlFor="editor-reset-confirm-modal"
+                  className="cursor-pointer"
+                >
+                  <ArrowPathIcon width="7" height="7" />
+                </label>
+              </Tooltip>
+            </li>
           )}
           <li>
             <Tooltip
