@@ -58,7 +58,6 @@
   font-size: 1.5rem;
 
   &--dark {
-    // background-color: $color-gray-600;
     background-color: $dark-background-100;
   }
 
@@ -73,9 +72,6 @@
     align-items: center;
     justify-content: space-between;
     background-color: transparent;
-  }
-
-  .timer-reminder-switch {
   }
 
   .notebook span,
@@ -132,23 +128,8 @@
 .progress {
   display: flex;
   flex-direction: column;
-  // gap: 1.5rem;
   border-radius: 1rem;
   align-items: center;
-
-  // &--dark {
-  //   color: $text-off-white;
-  //   background-color: $dark-background-200;
-  // }
-
-  // &--light {
-  //   color: $text-gray-700;
-  //   background-color: $light-background-0;
-  //   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  // }
-
-  .progress-cirlce-container {
-  }
 
   .progress-bar-container {
     width: 100%;

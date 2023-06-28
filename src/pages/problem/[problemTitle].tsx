@@ -89,22 +89,6 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  // const handleResetAvailableHeight = () => {
-  //   setAvailableWidth(window.innerWidth - 175);
-  // };
-
-  // if (typeof window !== 'undefined') {
-  //   // setAvailableHeight(window.innerWidth - 175);
-  //   setProblemDetailWidth((window.innerWidth - 30) / 2);
-  //   window.addEventListener('resize', handleResetAvailableHeight);
-
-  //   return () => {
-  //     window.removeEventListener('resize', handleResetAvailableHeight);
-  //   };
-  // }
-  // }, []);
-
   const prompts = selectedProblem.prompts
     ? selectedProblem.prompts
     : {

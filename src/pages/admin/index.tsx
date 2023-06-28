@@ -10,7 +10,6 @@ import Button from '@/components/reusables/Button';
 import TitleList from '@/components/reusables/TitleList';
 import BreakerIcon from '@/components/icons/BreakerIcon';
 import EditIcon from '@/components/icons/EditIcon';
-// import useSort from '@/hooks/useSort';
 import Alert from '@/components/reusables/Alert';
 import classes from '../../styles/AdminDashBoard.module.scss';
 

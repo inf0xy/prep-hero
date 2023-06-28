@@ -297,9 +297,9 @@ body {
   visibility: visible;
   pointer-events: all;
   height: 10px;
-  width: 100%;
+  width: calc(100% + 2rem);
   transform: rotate(0);
-  transform: translateX(-48%);
+  transform: translateX(-49%);
   cursor: row-resize;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
   background-position: 50% 2px;
@@ -373,19 +373,9 @@ body {
   padding: 0;
 }
 
-// .code-snippet {
-//   &:has(> div.lines-content.monaco-editor-background) {
-//     background-color: $dark-background-50 !important;
-//   }
-
-//   &:has(> div.margin){
-//     background-color: $dark-background-50 !important;
-//   }
-// }
-
-// .code-snippet .lines-content.monaco-editor-background {
-//   background-color: $dark-background-50 !important;
-// }
+.problem-editor .react-resizable .react-resizable-handle-s {
+  height: 15px;
+}
 
 .code-snippet.dark .lines-content.monaco-editor-background,
 .code-snippet.dark .margin {

@@ -180,6 +180,31 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDebuggingLineNumber, debugging]);
 
+  useEffect(() => {
+    if (debugging) {
+      let currentStyle =
+        theme === 'dark'
+          ? 'code-debug-highlight--light'
+          : 'code-debug-highlight--dark';
+      let replacingStyle = `code-debug-highlight--${theme}`;
+
+      const lineCount =
+        (codeEditorModelRef.current as any).getModel().getLineCount() ?? 0;
+
+      const decorations = (
+        codeEditorModelRef.current as any
+      ).getDecorationsInRange(
+        new (monacolRef.current as any).Range(1, 1, lineCount, 1)
+      );
+      decorations.forEach((decoration: any) => {
+        if (
+          decoration.options.className === currentStyle) {
+          decoration.options.className = replacingStyle;
+        }
+      });
+    }
+  }, [debugging, theme]);
+
   const renderedBreakpointsDecorations = (
     action: string,
     range: {

@@ -76,17 +76,13 @@ const useHandleCode = ({
       setResultMessage(null);
       setTestCode(true);
       setShowConsole(true);
-      // setEditorHeight(`${window.innerHeight - 400}px`);
 
       let codeInput: string | undefined;
-      // let submitLanguage: string;
       if (reviewCode) {
         codeInput = reviewCode.code;
-        // submitLanguage = reviewCode.language;
       } else {
         codeInput =
           language === 'python' ? codeInputPython : codeInputJavascript;
-        // submitLanguage = language;
       }
 
       const result = await runCode(codeInput!);
@@ -134,7 +130,6 @@ const useHandleCode = ({
     ) => {
       if (!showConsole) {
         setShowConsole(true);
-        // setEditorHeight(`${window.innerHeight - 400}px`);
       }
 
       if (

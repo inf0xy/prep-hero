@@ -60,32 +60,6 @@ const SpeedChart = () => {
     setUserData(getSolveTimes(submissions, variables.colorSecondary50));
   }, [submissions]);
 
-  // const handleResize = () => {
-  //   if (userData) {
-  //     // Retrieve solve times again based on the current filter
-  //     const { datasets } = userData;
-  //     const color = datasets[0].borderColor;
-
-  //     if (color === '#15e6d0') {
-  //       setUserData(getSolveTimes(submissions, color));
-  //     } else if (color === '#12bd4b') {
-  //       handleShowEasySolveTimes();
-  //     } else if (color === '#eea60c') {
-  //       handleShowMediumSolveTimes();
-  //     } else if (color === '#a10c4a') {
-  //       handleShowHardSolveTimes();
-  //     }
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener('resize', handleResize);
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize);
-  //   };
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   const handleShowAllSolveTimes = () => {
     setUserData(getSolveTimes(submissions, variables.colorSecondary50));
   };

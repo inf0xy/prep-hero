@@ -14,9 +14,9 @@ import { NotificationType, SocketType } from '@/types/dataTypes';
 import Alert from '../Alert';
 import DebuggingResizable from './DebuggerInfoResizable';
 import PlusIcon from '@/components/icons/PlusIcon';
+import XIcon from '@/components/icons/XIcon';
 import Tooltip from '../Tooltip';
 import classes from './Debugger.module.scss';
-import XIcon from '@/components/icons/XIcon';
 
 type DebuggerProps = {
   socketConnection: SocketType;
@@ -327,20 +327,16 @@ const Debugger: React.FC<DebuggerProps> = ({
     let formatValue;
     let isError = false;
 
-    const excludedPatterns = ['function', 'None', 'True', 'False', 'deque', 'Counter', 'set()'];
+    const excludedPatterns = [
+      'function',
+      'None',
+      'True',
+      'False',
+      'deque',
+      'Counter',
+      'set()'
+    ];
 
-    // if (
-    //   typeof value === 'string' &&
-    //   /<.*?>/g.exec(value) === null &&
-    //   excludedPatterns.every((el) => !value.includes(el))
-    // ) {
-    //   formatValue = `'${value}'`;
-    // } else if (/^\*\*.*Error:.*\*\*$/.exec(value)) {
-    //   formatValue = value.replace(/raised/g, '');
-    //   isError = true;
-    // } else {
-    //   formatValue = value;
-    // }
     if (/^\*\*.*Error:.*\*\*$/.exec(value)) {
       formatValue = value.replace(/raised/g, '');
       isError = true;
@@ -372,7 +368,6 @@ const Debugger: React.FC<DebuggerProps> = ({
       onMouseEnter={() => setHoveredWatchVar(index)}
       onMouseLeave={() => setHoveredWatchVar(-1)}
     >
-      {/* <p className={classes[`watch-variable__key`]}>{el}:</p> */}
       <p>
         {el}:
         <span
@@ -445,7 +440,9 @@ const Debugger: React.FC<DebuggerProps> = ({
               maxHeight={Math.max(windowHeight * 0.4, 200)}
             >
               <div
-                className={`${classes['local-variables']} ${classes[`local-variables--${theme}`]}`}
+                className={`${classes['local-variables']} ${
+                  classes[`local-variables--${theme}`]
+                }`}
               >
                 <h2>Local Variables</h2>
                 <div

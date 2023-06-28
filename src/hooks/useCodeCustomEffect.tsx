@@ -100,13 +100,9 @@ const useCodeCustomEffect = ({
   useEffect(() => {
     if (availableHeight) {
       if (showConsole) {
-        // setEditorMaxHeight(availableHeight * 0.7 - 8);
-        // setEditorHeight(availableHeight * 0.7 - 8);
         setEditorMaxHeight(availableHeight * 0.7);
         setEditorHeight(availableHeight * 0.7);
       } else {
-        // setEditorMaxHeight(availableHeight - 8);
-        // setEditorHeight(availableHeight - 8);
         setEditorMaxHeight(availableHeight - 3);
         setEditorHeight(availableHeight - 3);
       }
