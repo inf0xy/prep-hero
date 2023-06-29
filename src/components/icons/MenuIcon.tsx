@@ -1,27 +1,25 @@
+import Image from 'next/image';
+import { useAppSelector } from '@/hooks/hooks';
+
 type MenuIconProps = {
-  className?: string;
   width?: number;
   height?: number;
 };
 
-const MenuIcon: React.FC<MenuIconProps> = ({ className, width, height }) => {
+const MenuIcon: React.FC<MenuIconProps> = ({ width, height }) => {
+  const { theme } = useAppSelector((state) => state.theme);
+
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className={`w-${width ? width : '6'} h-${
-        height ? height : '6'
-      } ${className}`}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M3.75 9h16.5m-16.5 6.75h16.5"
-      />
-    </svg>
+    <Image
+      src={
+        theme === 'dark'
+          ? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAXklEQVR4nO3WwQnAMAzF0IzXZP+zAyV7qCPUF4Mheht8jEFjSJKkRoAFbPrZwMwMeOnrXDFgAkE/ATzpX5Ak3QlbqNTJXMAWKhK2kCTply1U62QuYAsVCVtIkqTRzAfAJW2MY/uB5wAAAABJRU5ErkJggg=='
+          : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAbklEQVR4nO3WMQ6AIAxAUY4nFCn0/oHEeA+dHYxOQuS/pHs7NPnOAQCAgahYSGJNox0jTRJrOWb/eEAS23ovq7dT9v8fkGP2KqX2X9auI6WuoSyvfwEAMCelhYwWUloIADAtpYWMFlJaCAAAuE+cRnyPDvU3aHcAAAAASUVORK5CYII='
+      }
+      width={width ? width : 20}
+      height={height ? height : 20}
+      alt="journal icon"
+    />
   );
 };
 

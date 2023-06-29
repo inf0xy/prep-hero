@@ -39,7 +39,8 @@ import themeReducer, { setTheme, getTheme } from './slices/themeSlice';
 import navigateReducer, {
   setNavigateDestination,
   toggleSavedList,
-  setHomePageLoading
+  setHomePageLoading,
+  setShowUserMenu
 } from './slices/navigateSlice';
 
 export const store = configureStore({
@@ -88,5 +89,6 @@ export {
   getTheme,
   setNavigateDestination,
   toggleSavedList,
-  setHomePageLoading
+  setHomePageLoading,
+  setShowUserMenu
 };

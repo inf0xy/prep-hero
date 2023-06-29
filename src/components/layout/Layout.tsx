@@ -17,10 +17,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const regex = /\/(problem\/.*|notebook)/;
 
-  const { pageLoading, theme } = useAppSelector((state) => {
+  const { pageLoading, theme, showUserMenu } = useAppSelector((state) => {
     const { pageLoading } = state.navigate;
     const { theme } = state.theme;
-    return { pageLoading, theme };
+    const { showUserMenu } = state.navigate;
+    return { pageLoading, theme, showUserMenu };
   });
 
   const dispatch = useAppDispatch();
@@ -47,7 +48,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const placeHolder = <div className={`min-h-screen ${backgroundColor}`} />;
 
   return (
-    <main className="relative min-w-screen overflow-x-hidden max-w-full">
+    <main
+      className={`relative min-w-screen overflow-x-hidden max-w-full ${
+        showUserMenu
+          ? `${
+              !router.pathname.includes('auth') ? 'pr-[8px]' : ''
+            } h-screen overflow-y-hidden`
+          : ''
+      }`}
+    >
       <div
         id="drawer-left"
         className="absolute top-0 left-0 w-[70vw] min-h-full h-full w-fit max-w-screen z-50 overflow-hidden"

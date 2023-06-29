@@ -66,7 +66,26 @@ const Drawer: React.FC<DrawerProps> = ({
           <div>
             {transition((style, item) =>
               item ? (
-                <animated.div style={{ ...style, position: 'relative' }}>
+                <animated.div
+                  style={{
+                    ...style,
+                    position: 'relative',
+                    borderRadius:
+                      direction === 'left' ? '0 6px 6px 0' : '6px 0 0 6px',
+                    borderLeft:
+                      direction === 'right'
+                        ? theme === 'dark'
+                          ? `solid ${variables.darkBackground100} 1px`
+                          : `solid ${variables.colorGray100} 1px`
+                        : undefined,
+                    borderRight:
+                      direction === 'left'
+                        ? theme === 'dark'
+                          ? `solid ${variables.darkBackground100} 1px`
+                          : `solid ${variables.colorGray100} 1px`
+                        : undefined
+                  }}
+                >
                   {showCloseButton && (
                     <button
                       className={`absolute ${buttonPositionX} ${buttonPositionY} rounded-lg p-2 duration-300 ease ${

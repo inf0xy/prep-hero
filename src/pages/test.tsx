@@ -3,6 +3,7 @@ import SavedList from '@/components/problems/SavedList';
 import Drawer from '@/components/reusables/Drawer';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { toggleSavedList } from '@/store';
+import MobileUserMenu from '@/components/user/MobileUserMenu';
 
 const TestPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,29 +17,13 @@ const TestPage = () => {
         minHeight: '100vh'
       }}
     >
-      <Drawer
-        direction="left"
-        isOpen={savedListOpen}
-        closeDrawer={() => dispatch(toggleSavedList())}
-      >
-        <SavedList />
-      </Drawer>
-      {/* <button
-        className="btn btn-secondary absolute right-0 top-40"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        Open Drawer
-      </button> */}
-
-      {/* <Drawer direction="right" isOpen={isOpen} setIsOpen={setIsOpen}>
-        <SavedList />
-      </Drawer>
+      {/* <MobileUserMenu /> */}
       <button
         className="btn btn-secondary absolute left-0 top-40"
         onClick={() => setIsOpen(!isOpen)}
       >
         Open Drawer
-      </button> */}
+      </button>
     </div>
   );
 };

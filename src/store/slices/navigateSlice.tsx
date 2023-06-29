@@ -4,12 +4,14 @@ interface NavigateState {
   destination: string | undefined;
   savedListOpen: boolean;
   pageLoading: boolean;
+  showUserMenu: boolean;
 }
 
 const initialState: NavigateState = {
   destination: undefined,
   savedListOpen: false,
-  pageLoading: true
+  pageLoading: true,
+  showUserMenu: false
 };
 
 const navigateSlice = createSlice({
@@ -24,10 +26,17 @@ const navigateSlice = createSlice({
     },
     setHomePageLoading(state, action) {
       state.pageLoading = action.payload;
+    },
+    setShowUserMenu(state, action) {
+      state.showUserMenu = action.payload;
     }
   }
 });
 
-export const { setNavigateDestination, toggleSavedList, setHomePageLoading } =
-  navigateSlice.actions;
+export const {
+  setNavigateDestination,
+  toggleSavedList,
+  setHomePageLoading,
+  setShowUserMenu
+} = navigateSlice.actions;
 export default navigateSlice.reducer;
