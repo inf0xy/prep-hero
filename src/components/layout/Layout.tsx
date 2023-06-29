@@ -47,7 +47,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const placeHolder = <div className={`min-h-screen ${backgroundColor}`} />;
 
   return (
-    <main className="relative">
+    <main className="relative min-w-screen overflow-x-hidden max-w-full">
       <div
         id="drawer-left"
         className="absolute top-0 left-0 w-[70vw] min-h-full h-full w-fit max-w-screen z-50 overflow-hidden"

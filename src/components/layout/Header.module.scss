@@ -75,7 +75,7 @@
 }
 
 .main-nav li {
-  height: 100%;
+  height: calc(100% - 1px);
   border-bottom: solid transparent 3px;
   font-size: 1.7rem;
   letter-spacing: 2px;

@@ -11,8 +11,7 @@ const HomePage = () => {
       <div className={classes.heading}>
         <h1 className={classes.slogan}>Practice makes perfect</h1>
         <div className={classes.headline}>
-          <p>Prep Hero is your go-to platform for honing your coding skills</p>
-          <p>and acing technical interviews.</p>
+          <p>Prep Hero is your go-to platform for honing your coding skills and acing technical interviews.</p>
         </div>
         <button className={`${classes.join} ${classes[`join--${theme}`]}`}>
           <Link href="/auth/signup">Create Account</Link>
