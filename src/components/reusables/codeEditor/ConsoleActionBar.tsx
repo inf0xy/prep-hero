@@ -173,9 +173,7 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
               direction="top"
               className="w-fit px-6 py-4 left-4"
             >
-              <button
-                onClick={handleDebugButton}
-              >
+              <button onClick={handleDebugButton}>
                 {debugging ? (
                   <ExitIcon width={17} height={17} />
                 ) : (
@@ -189,7 +187,9 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
               direction="top"
               className="w-[14rem] py-4 left-4"
             >
-              <LoadingInfinityIcon width={21} height={21} />
+              <span className="cursor-not-allowed">
+                <LoadingInfinityIcon width={21} height={21} />
+              </span>
             </Tooltip>
           )}
           <Button

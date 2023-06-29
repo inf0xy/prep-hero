@@ -36,24 +36,24 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
     debuggingCode,
     breakpoints,
     watchVars,
-    currentDebuggingLineNumber,
-    debuggingStarted
+    debuggingStarted,
+    actionAvailable
   } = useAppSelector((state) => {
     const { theme } = state.theme;
     const {
       debuggingCode,
       breakpoints,
       watchVars,
-      currentDebuggingLineNumber,
-      debuggingStarted
+      debuggingStarted,
+      actionAvailable
     } = state.debugger;
     return {
       theme,
       debuggingCode,
       breakpoints,
       watchVars,
-      currentDebuggingLineNumber,
-      debuggingStarted
+      debuggingStarted,
+      actionAvailable
     };
   });
 
@@ -67,7 +67,7 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
     handleStepOut,
     handleRestart
   } = useDebugger();
-
+  console.log(actionAvailable);
   return (
     <>
       {showAlert && (
@@ -87,8 +87,9 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
         <ul
           className={`${classes['debugging-actions']} ${
             classes[`debugging-actions--${theme}`]
-          }`}
+          } ${!actionAvailable ? classes['action-unavailable'] : ''}`}
         >
+          {!actionAvailable && <li className={classes['action-panel-cover']} />}
           {debuggingStarted ? (
             <li
               onClick={() => {

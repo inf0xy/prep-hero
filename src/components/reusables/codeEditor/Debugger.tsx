@@ -7,7 +7,8 @@ import {
   setDebugging,
   setExitingDebugging,
   setDebuggingStarted,
-  setHasDebuggingError
+  setHasDebuggingError,
+  setActionAvailable
 } from '@/store';
 import useDebugger from '@/hooks/useDebugger';
 import { NotificationType, SocketType } from '@/types/dataTypes';
@@ -129,6 +130,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         dispatch(setDebuggingData(newDebuggingData));
         dispatch(setCurrentDebuggingLineNumber(breakpoints[0]));
       }
+      dispatch(setActionAvailable(true));
     });
 
     socket.on('stepIn', (data) => {
@@ -154,6 +156,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         }
         dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
       }
+      dispatch(setActionAvailable(true));
     });
 
     socket.on('stepOver', (data) => {
@@ -179,6 +182,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         }
         dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
       }
+      dispatch(setActionAvailable(true));
     });
 
     socket.on('stepOut', (data) => {
@@ -204,9 +208,14 @@ const Debugger: React.FC<DebuggerProps> = ({
         }
         dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
       }
+      dispatch(setActionAvailable(true));
     });
 
-    socket.on('restart', (data) => {});
+    socket.on('restart', (data) => {
+      if (data === 'restarted') {
+        dispatch(setActionAvailable(true));
+      }
+    });
 
     socket.on('stopDebugging', (data) => {
       if (data === 'stop') {
@@ -220,6 +229,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         dispatch(setDebuggingData(newDebuggingData));
         dispatch(setCurrentDebuggingLineNumber(0));
         dispatch(setDebuggingStarted(false));
+        dispatch(setActionAvailable(true));
       }
     });
     socket.on('addWatchVariables', (data) => {
@@ -245,6 +255,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         }
         dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
       }
+      dispatch(setActionAvailable(true));
     });
 
     socket.on('removeWatchVariables', (data) => {
@@ -270,6 +281,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         }
         dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
       }
+      dispatch(setActionAvailable(true));
     });
 
     socket.on('error', (error) => {
@@ -313,6 +325,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         dispatch(setDebuggingStarted(false));
       }
       dispatch(setHasDebuggingError(false));
+      dispatch(setActionAvailable(true));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

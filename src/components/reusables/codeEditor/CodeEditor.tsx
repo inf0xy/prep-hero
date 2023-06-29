@@ -7,10 +7,9 @@ import {
   useEffect
 } from 'react';
 import MonacoEditor from '@monaco-editor/react';
+import Loading from '../Loading';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
-import SmallLoading from '../Loading';
-import Loading from '../Loading';
 import { setBreakpoints, setDebuggingCode } from '@/store';
 
 type CodeEditorProps = {

@@ -11,6 +11,7 @@ interface DebuggerState {
   exitingDebugging: boolean;
   debuggingStarted: boolean;
   hasDebuggingError: boolean;
+  actionAvailable: boolean;
   isLoading: boolean;
   error: undefined | string;
 }
@@ -31,6 +32,7 @@ const initialState: DebuggerState = {
   exitingDebugging: false,
   debuggingStarted: false,
   hasDebuggingError: false,
+  actionAvailable: false,
   isLoading: false,
   error: undefined
 };
@@ -66,6 +68,9 @@ const debuggerSlice = createSlice({
     },
     setHasDebuggingError(state, action) {
       state.hasDebuggingError = action.payload;
+    },
+    setActionAvailable(state, action) {
+      state.actionAvailable = action.payload;
     }
   }
 });
@@ -79,7 +84,8 @@ export const {
   setWatchVars,
   setExitingDebugging,
   setDebuggingStarted,
-  setHasDebuggingError
+  setHasDebuggingError,
+  setActionAvailable
 } = debuggerSlice.actions;
 
 export default debuggerSlice.reducer;

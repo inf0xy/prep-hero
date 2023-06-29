@@ -23,6 +23,7 @@
 }
 
 .debugging-actions {
+  position: relative;
   justify-content: center;
   display: flex;
   gap: 1rem;
@@ -39,6 +40,19 @@
   &--light {
     background-color: $light-background-200;
   }
+
+  .action-panel-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+}
+
+.action-unavailable {
+  cursor: not-allowed;
 }
 
 .debugging-menu__options {

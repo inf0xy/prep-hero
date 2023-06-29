@@ -3,7 +3,8 @@ import { useAppDispatch } from './hooks';
 import {
   setDebuggingData,
   setExitingDebugging,
-  setWatchVars
+  setWatchVars,
+  setActionAvailable
 } from '@/store';
 import { SocketType } from '@/types/dataTypes';
 
@@ -16,8 +17,6 @@ const useDebugger = () => {
       debuggingCode: string,
       breakpoints: number[]
     ) => {
-      if (breakpoints.length === 0) {
-      }
 
       const data = {
         codeLine: '',
@@ -30,6 +29,7 @@ const useDebugger = () => {
       dispatch(setDebuggingData(data));
 
       if (socketConnection) {
+        dispatch(setActionAvailable(false));
         const debuggingData = {
           code: debuggingCode,
           breakpoints
@@ -42,6 +42,7 @@ const useDebugger = () => {
 
   const handleStopDebugging = useCallback((socketConnection: SocketType) => {
     if (socketConnection) {
+      dispatch(setActionAvailable(false));
       socketConnection.emit('stopDebugging');
     }
   }, []);
@@ -49,6 +50,7 @@ const useDebugger = () => {
   const handleStepIn = useCallback(
     (socketConnection: SocketType, watchVars: string[]) => {
       if (socketConnection) {
+        dispatch(setActionAvailable(false));
         socketConnection.emit('stepIn', JSON.stringify({ watchVars }));
       }
     },
@@ -58,6 +60,7 @@ const useDebugger = () => {
   const handleStepOver = useCallback(
     (socketConnection: SocketType, watchVars: string[]) => {
       if (socketConnection) {
+        dispatch(setActionAvailable(false));
         socketConnection.emit('stepOver', JSON.stringify({ watchVars }));
       }
     },
@@ -67,6 +70,7 @@ const useDebugger = () => {
   const handleStepOut = useCallback(
     (socketConnection: SocketType, watchVars: string[]) => {
       if (socketConnection) {
+        dispatch(setActionAvailable(false));
         socketConnection.emit('stepOut', JSON.stringify({ watchVars }));
       }
     },
@@ -76,6 +80,7 @@ const useDebugger = () => {
   const handleRestart = useCallback(
     (socketConnection: SocketType, watchVars: string[]) => {
       if (socketConnection) {
+        dispatch(setActionAvailable(false));
         socketConnection.emit('restart', JSON.stringify({ watchVars }));
       }
     },
@@ -85,6 +90,7 @@ const useDebugger = () => {
   const handleExit = useCallback(
     (socketConnection: SocketType) => {
       if (socketConnection) {
+        dispatch(setActionAvailable(false));
         dispatch(setExitingDebugging(true));
         socketConnection.emit('exit');
       }
@@ -100,6 +106,7 @@ const useDebugger = () => {
     ) => {
       const newWatchVars = [...watchVars, watchVariableInput];
       if (socketConnection) {
+        dispatch(setActionAvailable(false));
         socketConnection.emit(
           'addWatchVariables',
           JSON.stringify({ watchVars: newWatchVars })
@@ -114,6 +121,7 @@ const useDebugger = () => {
     (socketConnection: SocketType, variable: string, watchVars: string[]) => {
       const currentWatchVariables = watchVars.filter((el) => el !== variable);
       if (socketConnection) {
+        dispatch(setActionAvailable(false));
         socketConnection.emit(
           'removeWatchVariables',
           JSON.stringify({ watchVars: currentWatchVariables })
