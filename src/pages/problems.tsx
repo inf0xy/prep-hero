@@ -161,11 +161,11 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
         </div>
         <div className={classes.filters}>{renderedFilters}</div>
         {currentProblems && (
-          <ProblemList
-            onSort={handleSort}
-            problems={currentProblems}
-            showNotes={showNotes}
-          />
+            <ProblemList
+              onSort={handleSort}
+              problems={currentProblems}
+              showNotes={showNotes}
+            />
         )}
         <div className={classes['page-number']}>
           {(pageNumber - 1) * ITEMS_PER_PAGE + 1} -{' '}

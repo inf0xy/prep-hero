@@ -44,12 +44,18 @@
 }
 
 .links {
-  gap: 3rem;
+  gap: 2rem;
 
   & > * {
     display: flex;
     height: 3rem;
     align-items: center;
+  }
+
+  .divider {
+    height: 60%;
+    border-left: solid $text-off-white 1px;
+    transform: translateY(0.7rem);
   }
 }
 
@@ -57,15 +63,15 @@
   .footer {
     display: flex;
     flex-direction: column;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     height: 20rem;
     align-items: flex-start;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.3rem;
     padding-left: 10rem;
 
     .links {
-      gap: 3rem;
+      gap: 2rem;
     }
 
     .socials {

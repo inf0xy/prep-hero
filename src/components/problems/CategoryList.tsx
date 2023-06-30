@@ -32,6 +32,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
       onChange={handleSelectCategoryList}
       defaultText="Category"
       width="12rem"
+      listName='categories'
     />
   );
 };

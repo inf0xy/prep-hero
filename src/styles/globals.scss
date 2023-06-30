@@ -68,6 +68,10 @@
   background: $color-scrollbar-thumb-hover-light;
 }
 
+.problem-item::-webkit-scrollbar {
+  display: none;
+}
+
 *,
 *::before,
 *::after {

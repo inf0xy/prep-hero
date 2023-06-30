@@ -30,3 +30,10 @@
     background-color: $color-primary-100;
   }
 }
+
+@media (max-width: 40em) {
+  .button-group {
+    margin-top: 3rem;
+    transform: scale(135%);
+  }
+}

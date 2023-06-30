@@ -38,6 +38,7 @@ const TagList: React.FC<TagListProps> = ({ setTags, searchCriteria }) => {
       onChange={handleSelectTag}
       defaultText="Tags"
       width="8rem"
+      listName='tags'
     />
   );
 };

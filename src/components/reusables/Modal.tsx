@@ -1,6 +1,6 @@
 import { useState, ReactNode, MouseEventHandler } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import Portal from './Portal';
-
 import FullScreenButton from './codeEditor/FullScreenButton';
 
 type ModalProps = {
@@ -25,10 +25,11 @@ const Modal: React.FC<ModalProps> = ({
   showCloseButton
 }) => {
   const [fullScreen, setFullScreen] = useState(false);
+  const isMobile = useMediaQuery({ query: '(max-width: 684px)' });
 
   const modalStyle = {
-    width: fullScreen ? '100vw' : '70vw',
-    height: fullScreen ? '100vh' : '60vh'
+    width: fullScreen || isMobile ? '100vw' : '70vw',
+    height: fullScreen || isMobile ? '100vh' : '60vh'
   };
 
   const modalWithoutCloseButton = (

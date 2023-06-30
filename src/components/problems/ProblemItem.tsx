@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { useMediaQuery } from 'react-responsive';
 import Link from 'next/link';
 import Modal from '../reusables/Modal';
 import ConfirmPanel from '../reusables/ConfirmPanel';
@@ -116,6 +117,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   }
 
   const [noteContent, setNoteContent] = useState(problemNoteContent);
+  const isMobilePortrait = useMediaQuery({ query: '(max-width: 450px)' });
 
   useEffect(() => {
     if (!showNotes) {
@@ -181,30 +183,37 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </Alert>
       )}
       <div
-        className={`${classes.problem} ${
-          oddCell ? classes[`problem--${theme}--odd-cell`] : undefined
-        }`}
+        className={`${isMobilePortrait ? 'problem-item' : ''}  ${
+          classes.problem
+        } ${oddCell ? classes[`problem--${theme}--odd-cell`] : undefined}`}
       >
-        <div className={classes['solved-content']} style={solvedStatusStyle}>
-          {session?.session.user.account_type === 'user' ? (
-            <>
-              {attempted_problems.some((el) => el.title === title) ? (
-                <CodeBracketIcon data-tooltip="Attempted" />
+        {!isMobilePortrait && (
+          <>
+            <div
+              className={classes['solved-content']}
+              style={solvedStatusStyle}
+            >
+              {session?.session.user.account_type === 'user' ? (
+                <>
+                  {attempted_problems.some((el) => el.title === title) ? (
+                    <CodeBracketIcon data-tooltip="Attempted" />
+                  ) : (
+                    <CheckIcon data-tooltip="Solved" width="18" height="18" />
+                  )}
+                </>
               ) : (
-                <CheckIcon data-tooltip="Solved" width="18" height="18" />
+                <span onClick={handleEditProblem}>
+                  <EditIcon
+                    width={7}
+                    height={7}
+                    className="cursor-pointer hover:text-[#ff7230] transition ease duration-300"
+                  />
+                </span>
               )}
-            </>
-          ) : (
-            <span onClick={handleEditProblem}>
-              <EditIcon
-                width={7}
-                height={7}
-                className="cursor-pointer hover:text-[#ff7230] transition ease duration-300"
-              />
-            </span>
-          )}
-        </div>
-        <div className={classes['category-content']}>{category}</div>
+            </div>
+            <div className={classes['category-content']}>{category}</div>
+          </>
+        )}
         <div className={classes['title-content']}>
           {session && session.session.user.account_type === 'user' && (
             <div className={classes['action-icons']}>
@@ -256,21 +265,40 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         >
           {difficulty}
         </div>
+        {isMobilePortrait && (
+          <div className={classes['category-content']}>{category}</div>
+        )}
         <div className={classes['solution-content']}>
           <span onClick={() => setShowSolutionModal(true)}>
             <label htmlFor={`modal-solution-${title}`} className="w-fit">
-              <CodeIcon
-                width={8}
-                height={8}
-                className="cursor-pointer"
-                extraStyle={{ transform: 'translateX(50%)' }}
-              />
+              <CodeIcon width={8} height={8} className="cursor-pointer" />
             </label>
           </span>
         </div>
         <div className={`${classes['companies-content']}`}>
           <LogoList companyNames={companies!} className="translate-x-8" />
         </div>
+        {isMobilePortrait && (
+          <div className={classes['solved-content']} style={solvedStatusStyle}>
+            {session?.session.user.account_type === 'user' ? (
+              <>
+                {attempted_problems.some((el) => el.title === title) ? (
+                  <CodeBracketIcon data-tooltip="Attempted" />
+                ) : (
+                  <CheckIcon data-tooltip="Solved" width="18" height="18" />
+                )}
+              </>
+            ) : (
+              <span onClick={handleEditProblem}>
+                <EditIcon
+                  width={7}
+                  height={7}
+                  className="cursor-pointer hover:text-[#ff7230] transition ease duration-300"
+                />
+              </span>
+            )}
+          </div>
+        )}
       </div>
       {showProblemNote && (
         <div className={`${classes.note} ${classes[`note--${theme}`]}`}>
@@ -351,13 +379,15 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       <Modal
         id={`modal-solution-${title}`}
         type="close-button"
-        className={`max-w-[100vw] w-[70vw] h-full pt-24 pb-8 pl-3 ${
+        className={`max-w-[100vw] ${
+          isMobilePortrait ? 'w-[100vw]' : 'w-[70vw]'
+        } h-full pt-24 pb-8 pl-3 ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}
         onClose={() => setShowSolutionModal(false)}
       >
         <div
-          className={`solution-modal-wrapper--${theme} w-full h-full overflow-y-scroll`}
+          className={`solution-modal-wrapper--${theme} w-full h-fulloverflow-y-scroll`}
         >
           {showSolutionModal && (
             <Solutions

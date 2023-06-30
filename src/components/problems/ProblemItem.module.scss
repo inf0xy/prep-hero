@@ -1,15 +1,14 @@
 @import '@/styles/variables.module.scss';
 
 .problem {
-  display: grid;
-  grid-template-columns: repeat(13, 1fr);
+  display: flex;
   min-height: 6rem;
   height: 6rem;
   max-height: 10rem;
   padding: 0 2rem;
   align-items: center;
   line-height: 1.4;
-  gap: 1rem;
+  overflow-y: hidden;
   z-index: 2;
 }
 
@@ -23,34 +22,41 @@
   border-radius: 5px;
 }
 
+.solved-content,
+.solution-content,
+.category-content,
+.title-content,
+.difficulty-content,
+.solution-content,
+.companies-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
 .solved-content {
-  grid-column: span 1;
-  padding-left: 15%;
+  min-width: 6rem;
+  width: 6rem;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-
+  justify-content: center;
 }
 
 .category-content {
-  grid-column: span 2;
-  padding-right: 0.5rem;
+  min-width: 18rem;
+  width: 18rem;
 }
 
 .title-content {
-  grid-column: span 4;
-  padding-right: 2rem;
-  display: flex;
-  align-items: center;
+  min-width: 26rem;
+  width: 26rem;
   gap: 1rem;
 }
 
-.action-icons .difficulty-content {
-  grid-column: span 1;
-}
-
 .difficulty-content {
-  transform: translateX(-1rem);
+  min-width: 10rem;
+  width: 10rem;
 }
 
 .action-icons {
@@ -65,9 +71,10 @@
 }
 
 .solution-content {
-  grid-column: span 1;
-  width: 100%;
-  padding-left: 1rem;
+  min-width: 8rem;
+  width: 8rem;
+  max-width: 7rem;
+  padding-left: 2rem;
 }
 
 .solution-content svg {
@@ -75,10 +82,14 @@
 }
 
 .companies-content {
-  grid-column: span 4;
+  min-width: 35rem;
+  width: 35rem;
   position: relative;
-  overflow: visible;
-  padding-left: 1rem;
+  padding: 0.5rem 0;
+
+  .logo  {
+    height: 100%;
+  }
 }
 
 .cell {
@@ -180,4 +191,109 @@
 .modal__full-note {
   width: 60vw;
   margin: 6rem 5rem 5rem;
+}
+
+/**********************************/
+/* BELOW 1201px (Smaller desktop) */
+/**********************************/
+@media (max-width: 75em) {
+  // .solved-content {
+  //   min-width: 6rem;
+  //   width: 6rem;
+  //   opacity: 0;
+  //   visibility: hidden;
+  //   pointer-events: none;
+  // }
+
+  .category-content {
+    min-width: 12rem;
+    width: 12rem;
+  }
+
+  .title-content {
+    min-width: 22rem;
+    width: 22rem;
+    padding-right: 2rem;
+  }
+
+  // .difficulty-content {
+  //   min-width: 10rem;
+  //   width: 10rem;
+  // }
+
+  // .action-icons {
+  //   display: flex;
+  //   align-items: center;
+  //   gap: 0.3rem;
+  //   width: fit-content;
+
+  //   & > * {
+  //     cursor: pointer;
+  //   }
+  // }
+
+  // .solution-content {
+  //   min-width: 8rem;
+  //   width: 8rem;
+  //   max-width: 7rem;
+  //   padding-left: 2rem;
+  // }
+
+  .companies-content {
+    min-width: 28rem;
+    width: 28rem;
+  }
+}
+
+/**********************************/
+/* BELOW 977px (Smaller desktop) */
+/**********************************/
+@media (max-width: 69em) {
+// }
+  .solved-content {
+    min-width: 5rem;
+    width: 5rem;
+  }
+
+  .category-content {
+    min-width: 10rem;
+    width: 10rem;
+  }
+
+  .title-content {
+    min-width: 20rem;
+    width: 20rem;
+    padding: 0 1rem;
+  }
+
+  .difficulty-content {
+    min-width: 9rem;
+    width: 9rem;
+  }
+
+  .solution-content {
+    min-width: 8rem;
+    width: 8rem;
+  }
+
+  .companies-content {
+    min-width: 16rem;
+    width: 33rem;
+  }
+}
+
+/**********************************/
+/* BELOW 769px                    */
+/**********************************/
+@media (max-width: 40em) {
+  .title-content {
+    min-width: 22rem;
+    width: 22rem;
+    padding: 0 1rem;
+  }
+
+  .companies-content {
+    min-width: 33rem;
+    width: 33rem;
+  }
 }

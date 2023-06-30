@@ -55,39 +55,42 @@ const SelectBar: React.FC<SelectBarProps> = ({
         searchCriteria={searchCriteria}
         setCompany={setSearchCriteria}
       />
+      <div className={classes.utils}>
       <SearchBar
         setSearchTerm={setSearchCriteria}
         defaultText="Search"
         currentSearch={searchCriteria.text}
       />
-      <div className={classes.random}>
-        <Tooltip
-          text="Random question"
-          direction="bottom"
-          className="w-[14rem] py-4"
-        >
-          <ShuffleButton />
-        </Tooltip>
-      </div>
-      <div className={classes.reset} onClick={handleSearchReset}>
-        <Tooltip
-          text="Reset search"
-          direction="bottom"
-          className="w-[11rem] py-4"
-        >
-          <Button
-            extraStyle={{
-              borderRadius: '5px',
-              height: '3rem',
-              width: '4rem',
-              padding: '0',
-              backgroundColor: `${variables.colorSecondary100}`,
-            }}
-            color="primary"
+
+        <div className={classes.random}>
+          <Tooltip
+            text="Random question"
+            direction="bottom"
+            className="w-[14rem] py-4"
           >
-            <ResetIcon width={15} height={15} />
-          </Button>
-        </Tooltip>
+            <ShuffleButton />
+          </Tooltip>
+        </div>
+        <div className={classes.reset} onClick={handleSearchReset}>
+          <Tooltip
+            text="Reset search"
+            direction="bottom"
+            className="w-[11rem] py-4"
+          >
+            <Button
+              extraStyle={{
+                borderRadius: '5px',
+                height: '3rem',
+                width: '4rem',
+                padding: '0',
+                backgroundColor: `${variables.colorSecondary100}`
+              }}
+              color="primary"
+            >
+              <ResetIcon width={15} height={15} />
+            </Button>
+          </Tooltip>
+        </div>
       </div>
       {session && (
         <Tooltip

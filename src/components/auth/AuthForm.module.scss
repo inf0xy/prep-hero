@@ -191,6 +191,7 @@
 
 @media (max-width: 61em) {
   .auth-form {
+    overflow: hidden;
     min-height: calc(100vh - 27rem);
     height: calc(100vh - 27rem);
   }

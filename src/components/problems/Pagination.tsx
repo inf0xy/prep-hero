@@ -37,7 +37,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className={`btn-group ${className}`}>
+    <div className={`btn-group ${className} ${classes['button-group']}`}>
       {getPages().map((p: string | number, index: number) =>
         p !== '...' ? (
           <button

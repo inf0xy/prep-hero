@@ -15,46 +15,153 @@
 }
 
 .table-header {
-  display: grid;
-  grid-template-columns: repeat(13, 1fr);
+  display: flex;
+  min-height: 4rem;
+  height: 4rem;
   height: 4rem;
   border-bottom: solid $color-gray-600 0.4px;
   margin-bottom: 1.5rem;
   padding: 0 2rem;
   color: $color-gray-300;
-  gap: 1rem;
+  overflow-x: auto;
+}
+
+.solved-header,
+.category-header,
+.title-header,
+.difficulty-header,
+.solution-header,
+.companies-header {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.solved-header {
+  min-width: 6rem;
+  width: 6rem;
 }
 
 .category-header {
-  grid-column: span 1;
-
+  min-width: 18rem;
+  width: 18rem;
 }
-
-.category-header {
-  grid-column: span 2;
-}
-
 .title-header {
-  grid-column: span 4;
+  min-width: 26rem;
+  width: 26rem;
 }
 
 .difficulty-header {
-  grid-column: span 1;
-  min-width: 8.8rem;
+  min-width: 10rem;
+  width: 10rem;
 }
 
 .solution-header {
-  grid-column: span 1;
+  min-width: 8rem;
+  width: 8rem;
 }
 
 .companies-header {
-  grid-column: span 4;
 }
 
 .category-header,
 .title-header,
 .difficulty-header {
-  display: flex;
-  width: fit-content;
   gap: 0.5rem;
+  & > *:nth-child(2) {
+    transform: translateY(-1px);
+  }
+}
+
+.table-body {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/**********************************/
+/* BELOW 1201px (Smaller desktop) */
+/**********************************/
+@media (max-width: 75em) {
+  // .solved-header {
+  //   min-width: 6rem;
+  //   width: 6rem;
+  // }
+
+  .category-header {
+    min-width: 12rem;
+    width: 12rem;
+  }
+  .title-header {
+    min-width: 22rem;
+    width: 22rem;
+    padding-right: 2rem;
+  }
+
+  // .difficulty-header {
+  //   min-width: 10rem;
+  //   width: 10rem;
+
+  // }
+
+  // .solution-header {
+  //   min-width: 8rem;
+  //   width: 8rem;
+  // }
+  .companies-header {
+    min-width: 28rem;
+    width: 28rem;
+  }
+}
+
+/**********************************/
+/* BELOW 897px (Smaller desktop) */
+/**********************************/
+// @media (max-width: 56em) {
+@media (max-width: 69em) {
+  .solved-header {
+    min-width: 5rem;
+    width: 5rem;
+  }
+
+  .category-header {
+    min-width: 10rem;
+    width: 10rem;
+  }
+
+  .title-header {
+    min-width: 20rem;
+    width: 20rem;
+    padding: 0 1rem;
+  }
+
+  .difficulty-header {
+    min-width: 9rem;
+    width: 9rem;
+  }
+
+  .solution-header {
+    min-width: 8rem;
+    width: 8rem;
+  }
+
+  .companies-header {
+    min-width: 16rem;
+    width: 33rem;
+  }
+}
+
+/**********************************/
+/* BELOW 769px                    */
+/**********************************/
+@media (max-width: 40em) {
+  .title-header {
+    min-width: 22rem;
+    width: 22rem;
+    padding: 0 1rem;
+  }
+
+  .companies-header {
+    min-width: 33rem;
+    width: 33rem;
+  }
 }

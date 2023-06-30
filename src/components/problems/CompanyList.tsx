@@ -41,6 +41,7 @@ const CompanyList: React.FC<CompanyListProps> = ({
       onChange={handleSelectCompany}
       defaultText="Company"
       width="12rem"
+      listName='companies'
     />
   );
 };
