@@ -1,9 +1,11 @@
 import { ReactNode, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { useAppSelector } from '@/hooks/hooks';
 import { useTransition, animated } from 'react-spring';
+import { useMediaQuery } from 'react-responsive';
+import { useAppSelector } from '@/hooks/hooks';
 import XIcon from '../icons/XIcon';
 import variables from '@/styles/variables.module.scss';
+import classes from './Drawer.module.scss';
 
 type DrawerProps = {
   children: ReactNode;
@@ -35,6 +37,8 @@ const Drawer: React.FC<DrawerProps> = ({
   const [shouldRender, setShouldRender] = useState(false);
   const { theme } = useAppSelector((state) => state.theme);
 
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 990px)' });
+
   useEffect(() => {
     setShouldRender(true);
   }, []);
@@ -49,8 +53,8 @@ const Drawer: React.FC<DrawerProps> = ({
     }
   });
 
-  let buttonPositionX = 'right-[2rem]';
-  let buttonPositionY = 'top-[2rem]';
+  let buttonPositionX = !isTabletOrMobile ? 'right-[2rem]' : 'right-[2.5rem]';
+  let buttonPositionY = !isTabletOrMobile ? 'top-[2rem]' : 'top-[2.5rem]';
   if (left || right) {
     buttonPositionX = left ? `${left}` : `${right}`;
   }
@@ -63,15 +67,12 @@ const Drawer: React.FC<DrawerProps> = ({
     <>
       {shouldRender &&
         createPortal(
-          <div>
+          <div className={`${classes.drawer} ${classes[direction]}`}>
             {transition((style, item) =>
               item ? (
                 <animated.div
                   style={{
                     ...style,
-                    position: 'relative',
-                    borderRadius:
-                      direction === 'left' ? '0 6px 6px 0' : '6px 0 0 6px',
                     borderLeft:
                       direction === 'right'
                         ? theme === 'dark'
@@ -88,11 +89,9 @@ const Drawer: React.FC<DrawerProps> = ({
                 >
                   {showCloseButton && (
                     <button
-                      className={`absolute ${buttonPositionX} ${buttonPositionY} rounded-lg p-2 duration-300 ease ${
-                        theme === 'dark'
-                          ? 'hover:bg-[#4f4c52]'
-                          : 'hover:bg-[#dfdbe6]'
-                      }`}
+                      className={`${buttonPositionX} ${buttonPositionY} ${
+                        classes['close-button']
+                      } ${classes[`close-button--${theme}`]}`}
                       onClick={closeDrawer}
                     >
                       <XIcon

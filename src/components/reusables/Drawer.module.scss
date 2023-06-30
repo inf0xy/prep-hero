@@ -1,0 +1,29 @@
+@import '@/styles/variables.module.scss';
+
+.drawer {
+  position: relative;
+  overflow-x: hidden;
+
+  .close-button {
+    position: absolute;
+    border-radius: 5px;
+    padding: 0.5rem;
+    transition: background-color 0.3s ease;
+
+    &--dark:hover {
+      background-color: $color-gray-700;
+    }
+
+    &--light:hover {
+      background-color: $color-gray-100;
+    }
+  }
+}
+
+.left {
+  border-radius: 0 8px 8px 0;
+}
+
+.right {
+  border-radius: 8px 0 0 8px;
+}

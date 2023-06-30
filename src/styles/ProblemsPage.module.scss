@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: calc(100vh - 150px);
+  min-height: calc(100vh - 15rem);
   padding: 5rem;
 
   &--dark {
@@ -55,4 +55,10 @@
   font-size: 1.5rem;
   color: $text-gray-400;
   letter-spacing: 1px;
+}
+
+@media (max-width: 61em) {
+  .problems {
+    min-height: calc(100vh - 27rem);
+  }
 }

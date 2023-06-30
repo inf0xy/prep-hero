@@ -1,19 +1,22 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import { useMediaQuery } from 'react-responsive';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import {
-  setTheme,
   getTheme,
   getProblemCounts,
   fetchUserData,
   toggleSavedList,
-  setShowUserMenu
+  setShowUserMenu,
+  setTheme
 } from '@/store';
 import UserMenu from '../user/UserMenu';
-
+import MenuIcon from '../icons/MenuIcon';
+import MobileUserMenu from '../user/MobileUserMenu';
+import ThemeButton from '../reusables/ThemeButton';
 import LogoDark from './LogoDark';
 import LogoLight from './LogoLight';
 import ClockIcon from '../icons/ClockIcon';
@@ -23,11 +26,6 @@ import ShuffleButton from '../reusables/ShuffleButton';
 import Tooltip from '../reusables/Tooltip';
 import variables from '@/styles/variables.module.scss';
 import classes from './Header.module.scss';
-
-import { useMediaQuery } from 'react-responsive';
-import MenuIcon from '../icons/MenuIcon';
-import MobileUserMenu from '../user/MobileUserMenu';
-import ThemeButton from '../reusables/ThemeButton';
 
 type HeaderProps = {
   headerRef: RefObject<HTMLElement>;
@@ -50,7 +48,6 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   });
-
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 990px)' });
 
   useEffect(() => {
@@ -85,16 +82,18 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
       <span className={classes.logo} onClick={handleLogoClick}>
         {theme === 'dark' ? <LogoDark /> : <LogoLight />}
       </span>
-      <nav className="h-full">
-        <ul className={classes['main-nav']}>
-          <li>
-            <Link href="/resources">Resources</Link>
-          </li>
-          <li>
-            <Link href="/problems">Problems</Link>
-          </li>
-        </ul>
-      </nav>
+      {!isTabletOrMobile && (
+        <nav className="h-full">
+          <ul className={classes['main-nav']}>
+            <li>
+              <Link href="/resources">Resources</Link>
+            </li>
+            <li>
+              <Link href="/problems">Problems</Link>
+            </li>
+          </ul>
+        </nav>
+      )}
       {router.pathname.match(/\/problem\/.*/) && (
         <div className={classes['problem__action-buttons']}>
           {session && (
@@ -147,59 +146,63 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
             </div>
           </div>
         )}
-        <ThemeButton />
-        <span
-          className="cursor-pointer"
-          onClick={() => dispatch(setShowUserMenu(true))}
-        >
-          <MenuIcon width={25} />
-        </span>
-        <MobileUserMenu
-          // showUserMenu={showUserMenu}
-          // setShowUserMenu={setShowUserMenu}
-          parentRef={avatarRef}
-        />
-        {/* {!session ? (
-          !router.pathname.includes('/auth') ? (
-            <nav>
-              <ul className={classes.auth}>
-                <li
-                  className={`${classes.login} ${classes[`login--${theme}`]}`}
-                  onClick={() => router.push('/auth/login')}
-                >
-                  Login
-                </li>
-                <li
-                  className={`${classes.signup} ${classes[`signup--${theme}`]}`}
-                  onClick={() => router.push('/auth/signup')}
-                >
-                  JOIN
-                </li>
-              </ul>
-            </nav>
-          ) : null
-        ) : (
-          <div className="dropdown dropdown-end">
-            <label
-              tabIndex={0}
-              onClick={() => setShowUserMenu(!showUserMenu)}
-              ref={avatarRef}
+        {isTabletOrMobile ? (
+          <>
+            <span
+            className={classes['menu-icon']}
+              // className="cursor-pointer"
+              onClick={() => dispatch(setShowUserMenu(true))}
             >
-              <Image
-                src="/user.png"
-                alt="avatar"
-                width={32}
-                height={32}
-                className="cursor-pointer"
-              />
-            </label>
-            <UserMenu
-              showUserMenu={showUserMenu}
-              setShowUserMenu={setShowUserMenu}
-              parentRef={avatarRef}
-            />
-          </div>
-        )} */}
+              <MenuIcon width={25} />
+            </span>
+            <MobileUserMenu parentRef={avatarRef} />
+          </>
+        ) : (
+          <>
+            <ThemeButton switchTheme={() => dispatch(setTheme())} />
+            {!session ? (
+              !router.pathname.includes('/auth') ? (
+                <nav>
+                  <ul className={classes.auth}>
+                    <li
+                      className={`${classes.login} ${
+                        classes[`login--${theme}`]
+                      }`}
+                      onClick={() => router.push('/auth/login')}
+                    >
+                      Login
+                    </li>
+                    <li
+                      className={`${classes.signup} ${
+                        classes[`signup--${theme}`]
+                      }`}
+                      onClick={() => router.push('/auth/signup')}
+                    >
+                      JOIN
+                    </li>
+                  </ul>
+                </nav>
+              ) : null
+            ) : (
+              <div className="dropdown dropdown-end">
+                <label
+                  tabIndex={0}
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  ref={avatarRef}
+                >
+                  <Image
+                    src="/user.png"
+                    alt="avatar"
+                    width={32}
+                    height={32}
+                    className="cursor-pointer"
+                  />
+                </label>
+                <UserMenu parentRef={avatarRef} />
+              </div>
+            )}
+          </>
+        )}
       </div>
     </header>
   );

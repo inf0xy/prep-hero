@@ -1,5 +1,5 @@
 import { ReactNode, useState, useCallback, useEffect } from 'react';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import SearchBar from '@/components/reusables/SearchBar';
 import Button from '@/components/reusables/Button';
 import ResetIcon from '@/components/icons/ResetIcon';
@@ -27,6 +27,7 @@ import useSubmitNote from '@/hooks/useSubmitNote';
 import { Note } from '@/types/dataTypes';
 import Alert from './Alert';
 import NoteAction from '../user/NoteAction';
+import { useRouter } from 'next/router';
 
 const TitleList: React.FC<TitleListProps> = ({
   listType,

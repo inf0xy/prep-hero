@@ -15,3 +15,9 @@
    background-color: $light-background-0;
  }
 }
+
+@media (max-width: 61em) {
+  .auth-page {
+    min-height: calc(100vh - 27rem);
+  }
+}

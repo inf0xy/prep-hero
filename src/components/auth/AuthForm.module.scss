@@ -1,10 +1,12 @@
 @import '@/styles/variables.module.scss';
 
 .auth-form {
-  height: fit-content;
+  min-height: calc(100vh - 15rem);
+  height: calc(100vh - 15rem);
   width: 40rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   font-size: 1.5rem;
   font-weight: 300;
 }
@@ -161,4 +163,35 @@
 .oauth-buttons {
   display: flex;
   gap: 1.3rem;
+}
+
+@media (max-width: 37.5em) {
+  .auth-form {
+    font-size: 1.7rem;
+
+    .header p,
+    .header p span {
+      font-size: 2rem;
+    }
+
+    .divider .line {
+      width: 25%;
+    }
+  }
+  .form-actions button {
+    font-size: 2rem;
+    height: 4.8rem;
+    font-weight: 400;
+  }
+  .oauth-actions button {
+    height: 4.4rem;
+  }
+}
+
+
+@media (max-width: 61em) {
+  .auth-form {
+    min-height: calc(100vh - 27rem);
+    height: calc(100vh - 27rem);
+  }
 }

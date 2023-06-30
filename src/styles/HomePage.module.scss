@@ -326,7 +326,8 @@
 /**********************************/
 @media (max-width: 61em) {
   .homepage {
-    // font-size: 1.7rem;
+    min-height: calc(100vh - 27rem);
+
     .heading {
       .slogan {
         font-size: 6.5rem;
@@ -584,6 +585,7 @@
 /**********************************/
 @media (max-width: 26em) {
   .homepage {
+    // font-size: 1.7rem;
     font-size: 1.7rem;
     padding-left: 3rem;
     padding-right: 3rem;

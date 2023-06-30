@@ -41,20 +41,23 @@ const Footer = () => {
       className={`${classes.footer} ${
         classes[`footer--${theme}`]
       } ${footerStyle} ${
-        router.pathname === '/' || router.pathname === '/resources' ? classes['in-home-page'] : ''
+        router.pathname === '/' || router.pathname === '/resources'
+          ? classes['in-home-page']
+          : ''
       }`}
     >
-      <div className={classes.disclaimer}>Copyright &copy; 2023 Prep Hero</div>
       <div className={classes.socials}>
         <InstagramIcon theme={theme} width="22px" height="22px" />
         <LinkedinIconOutline theme={theme} width="22px" height="22px" />
         <FacebookIcon theme={theme} width="22px" height="22px" />
         <TwitterIcon theme={theme} width="22px" height="22px" />
       </div>
-      <div className={classes.job}>Jobs</div>
-      <div>Interview Prep</div>
-      <div>Term</div>
-      <div>Privacy</div>
+      <div className={classes.disclaimer}>Copyright &copy; 2023 Prep Hero</div>
+      <div className={classes.links}>
+        <div className={classes.jobs}>Jobs</div>
+        <div className={classes.term}>Term</div>
+        <div className={classes.privacy}>Privacy</div>
+      </div>
     </footer>
   );
 };

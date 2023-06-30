@@ -17,3 +17,17 @@
     padding-top: 2px;
   }
 }
+
+@media (max-width: 37.5em) {
+  .alert {
+    max-width: 100vw;
+    width: 100vw;
+    right: 0;
+    bottom: 0;
+
+    button {
+      position: absolute;
+      right: 2rem;
+    }
+  }
+}

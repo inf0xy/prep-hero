@@ -34,6 +34,10 @@
   gap: 2.5rem;
   justify-self: flex-end;
   margin-left: auto;
+
+  .menu-icon {
+    cursor: pointer;
+  }
 }
 
 .problem__action-buttons {
@@ -140,4 +144,18 @@
   position: relative;
   cursor: pointer;
   margin-right: 3rem;
+}
+
+@media (max-width: 37.5em) {
+  .header {
+    padding: 0 3rem;
+
+    .logo {
+      transform: scale(105%) translateY(-0.7rem);
+    }
+
+    .header-right-group .menu-icon {
+      transform: scale(130%) translateX(-0.7rem);
+    }
+  }
 }

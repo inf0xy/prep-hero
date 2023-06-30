@@ -3,33 +3,28 @@ import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import Image from 'next/image';
-import classes from './UserMenu.module.scss';
-import { setNavigateDestination, setTimerReminder } from '@/store';
-
-import { Dispatch, SetStateAction } from 'react';
+import { setNavigateDestination, setTimerReminder, setShowUserMenu } from '@/store';
 import UserIcon from '../icons/UserIcon';
 import DashboardIcon from '../icons/DashboardIcon';
 import JournalIcon from '../icons/JournalIcon';
 import LogoutIcon from '../icons/LogoutIcon';
 import SmallClockIcon from '../icons/SmallClockIcon';
 import BookmarkIcon from '../icons/BookmarkIcon';
+import classes from './UserMenu.module.scss';
 
 type UserMenuProps = {
-  showUserMenu: boolean;
-  setShowUserMenu: Dispatch<SetStateAction<boolean>>;
   parentRef: RefObject<HTMLLabelElement>;
 };
 
 const UserMenu: React.FC<UserMenuProps> = ({
-  showUserMenu,
-  setShowUserMenu,
   parentRef
 }) => {
   const { data: session } = useSession();
-  const { theme, timer_reminder } = useAppSelector((state) => {
+  const { theme, timer_reminder, showUserMenu } = useAppSelector((state) => {
     const { timer_reminder } = state.user;
     const { theme } = state.theme;
-    return { theme, timer_reminder };
+    const { showUserMenu } = state.navigate;
+    return { theme, timer_reminder, showUserMenu };
   });
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -42,7 +37,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
         return;
       }
       if (!ulEl.current.contains(event.target as Node)) {
-        setShowUserMenu(false);
+        dispatch(setShowUserMenu(false));
       }
     };
 
@@ -73,12 +68,12 @@ const UserMenu: React.FC<UserMenuProps> = ({
 
   const handleNavigateToSavedList = () => {
     dispatch(setNavigateDestination('saved-list'));
-    setShowUserMenu(false);
+    dispatch(setShowUserMenu(false));
     router.push('/dashboard');
   };
 
   const handleDashboardClick = () => {
-    setShowUserMenu(false);
+    dispatch(setShowUserMenu(false));
     if (session && session.session.user.account_type === 'admin') {
       router.push('/admin');
     } else {
@@ -87,7 +82,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
   }
 
   const handleNotebookClick = () => {
-    setShowUserMenu(false);
+    dispatch(setShowUserMenu(false));
     router.push('/notebook');
   }
 
@@ -117,7 +112,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
         className={`${classes['user-menu__item']} ${
           classes[`user-menu__item--${theme}`]
         } `}
-        onClick={() => setShowUserMenu(false)}
+        onClick={() => dispatch(setShowUserMenu(false))}
       >
         <UserIcon />
         My Profile

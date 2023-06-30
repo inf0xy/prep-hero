@@ -9,7 +9,6 @@
   min-height: 100vh;
   height: 100%;
   width: fit-content;
-  border-radius: 0.7rem;
   z-index: 50 !important;
   gap: 1.5rem;
   font-size: 1.5rem;
@@ -68,6 +67,18 @@
     &--light {
       border-bottom: solid $color-gray-100 1px;
     }
+
+    .avatar {
+      border-radius: 50%;
+
+      &--dark {
+        border: solid $dark-background-100 1px;
+      }
+
+      &--light {
+        border: solid $color-gray-100 1px;
+      }
+    }
   }
 }
 
@@ -92,8 +103,10 @@
 .signup {
   display: flex;
   justify-content: center;
+  align-items: center;
   cursor: pointer;
   background-color: $color-primary-100;
+  color: $text-off-white;
   height: 3.5rem;
   width: 60% !important;
   border-radius: 5px;
@@ -107,5 +120,51 @@
 
   & span:last-child {
     transform: translateX(-0.6rem) translateY(1px);
+  }
+}
+
+.my-profile {
+  span {
+    transform: translateX(-2px) translateY(2px);
+  }
+}
+
+.time-reminder {
+  span {
+    transform: translateY(2px);
+  }
+}
+
+.dashboard,
+.problems,
+.saved-list,
+.dashboard,
+.notebook {
+  span {
+    transform: translateY(1px);
+  }
+}
+
+.resources {
+  transform: translateX(-2px);
+  span {
+    transform: translateX(-2px) translateY(2px);
+  }
+}
+
+@media (max-width: 32em) {
+  .mobile-user-menu {
+    font-size: 1.8rem;
+    min-width: 100vw;
+    width: 100vw;
+
+    .mobile-user-menu__item {
+      padding: 2.2rem 2rem;
+    }
+
+    .signup {
+      height: 4.5rem;
+      font-size: 2rem;
+    }
   }
 }

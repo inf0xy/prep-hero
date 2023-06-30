@@ -1,7 +1,7 @@
 @import '@/styles/variables.module.scss';
 
 .problems-page {
-  min-height: calc(100vh - 50px);
+  min-height: calc(100vh - 15rem);
 
   font-size: 1.5rem;
   padding: 5rem;
@@ -12,5 +12,11 @@
 
   &--light {
     background-color: $light-background-0;
+  }
+}
+
+@media (max-width: 61em) {
+  .problems-page {
+    min-height: calc(100vh - 27rem);
   }
 }

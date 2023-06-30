@@ -1,14 +1,15 @@
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { setTheme } from '@/store';
+import { useAppSelector } from '@/hooks/hooks';
 
-const ThemeButton = () => {
+type ThemeButtonProps = {
+  switchTheme?: () => void;
+};
+const ThemeButton: React.FC<ThemeButtonProps> = ({ switchTheme }) => {
   const { theme } = useAppSelector((state) => state.theme);
-  const dispatch = useAppDispatch();
 
   return (
     <label
       className="swap swap-rotate cursor-pointer self-center mt-1"
-      onClick={() => dispatch(setTheme())}
+      onClick={switchTheme}
     >
       <svg
         className={`${

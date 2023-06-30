@@ -45,7 +45,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
           />
         </figure>
       </a>
-      <div className="card-body">{content}</div>
+      <div className="card-body text-center">{content}</div>
     </div>
   );
 };

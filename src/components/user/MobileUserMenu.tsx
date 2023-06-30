@@ -1,4 +1,4 @@
-import { useEffect, useRef, RefObject, Dispatch, SetStateAction } from 'react';
+import { useEffect, useRef, RefObject } from 'react';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
@@ -7,7 +7,8 @@ import Drawer from '../reusables/Drawer';
 import {
   setNavigateDestination,
   setTimerReminder,
-  setShowUserMenu
+  setShowUserMenu,
+  setTheme
 } from '@/store';
 import UserIcon from '../icons/UserIcon';
 import DashboardIcon from '../icons/DashboardIcon';
@@ -15,21 +16,16 @@ import JournalIcon from '../icons/JournalIcon';
 import LogoutIcon from '../icons/LogoutIcon';
 import SmallClockIcon from '../icons/SmallClockIcon';
 import BookmarkIcon from '../icons/BookmarkIcon';
-import classes from './MobileUserMenu.module.scss';
-import CodeBracketIcon from '../icons/CodeBracketIcon';
 import ThemeButton from '../reusables/ThemeButton';
+import classes from './MobileUserMenu.module.scss';
+import CurlyBracketsIcon from '../icons/CurlyBracketsIcon';
+import ResourcesIcon from '../icons/ResourcesIcon';
 
 type MobileUserMenuProps = {
-  // showUserMenu: boolean;
-  // setShowUserMenu: Dispatch<SetStateAction<boolean>>;
   parentRef: RefObject<HTMLLabelElement>;
 };
 
-const MobileUserMenu: React.FC<MobileUserMenuProps> = ({
-  // showUserMenu,
-  // setShowUserMenu,
-  parentRef
-}) => {
+const MobileUserMenu: React.FC<MobileUserMenuProps> = ({ parentRef }) => {
   const { data: session } = useSession();
   const { theme, timer_reminder, showUserMenu } = useAppSelector((state) => {
     const { timer_reminder } = state.user;
@@ -119,14 +115,15 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({
               classes[`mobile-user-menu__avatar--${theme}`]
             } mb-3`}
           >
-            <Image
-              src="/user.png"
-              alt="avatar"
-              width={35}
-              height={35}
-              className="white"
-            />
-
+            <span className={`${classes.avatar} ${classes[`avatar--${theme}`]}`}>
+              <Image
+                src="/user.png"
+                alt="avatar"
+                width={35}
+                height={35}
+                className="white"
+              />
+            </span>
             <h3>{session && session.session.user.name}</h3>
           </li>
         ) : (
@@ -138,7 +135,7 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({
               }}
               className={`${classes['mobile-user-menu__item']} ${
                 classes[`mobile-user-menu__item--${theme}`]
-              } ${classes.signup} mb-3`}
+              } ${classes.signup}`}
             >
               Sign Up
             </li>
@@ -153,11 +150,11 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({
           <li
             className={`${classes['mobile-user-menu__item']} ${
               classes[`mobile-user-menu__item--${theme}`]
-            }`}
+            } ${classes['my-profile']}`}
             onClick={() => dispatch(setShowUserMenu(false))}
           >
             <UserIcon />
-            My Profile
+            <span>My Profile</span>
           </li>
         ) : (
           <li
@@ -167,9 +164,10 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({
             }}
             className={`${classes['mobile-user-menu__item']} ${
               classes[`mobile-user-menu__item--${theme}`]
-            } `}
+            } ${classes.login}`}
           >
-            <UserIcon /> Login
+            <UserIcon />
+            <span>Login</span>
           </li>
         )}
         <li
@@ -180,24 +178,26 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({
         <li
           className={`${classes['mobile-user-menu__item']} ${
             classes[`mobile-user-menu__item--${theme}`]
-          } `}
+          }  ${classes.resources}`}
           onClick={() => {
             dispatch(setShowUserMenu(false));
             router.push('/resources');
           }}
         >
-          Resources
+          <ResourcesIcon width={21} height={21} />
+          <span>Resources</span>
         </li>
         <li
           className={`${classes['mobile-user-menu__item']} ${
             classes[`mobile-user-menu__item--${theme}`]
-          } `}
+          } ${classes.problems}`}
           onClick={() => {
             dispatch(setShowUserMenu(false));
             router.push('/problems');
           }}
         >
-          <CodeBracketIcon width={8} height={8} /> Problems
+          <CurlyBracketsIcon width={17} height={17} />
+          <span>Problems</span>
         </li>
         <li
           className={`${classes['divider-line']} ${
@@ -209,38 +209,39 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({
             <li
               className={`${classes['mobile-user-menu__item']} ${
                 classes[`mobile-user-menu__item--${theme}`]
-              }`}
+              } ${classes.dashboard}`}
               onClick={handleDashboardClick}
             >
               <DashboardIcon width={19} height={19} />
-              Dashboard
+              <span>Dashboard</span>
             </li>
             <li
               className={`${classes['mobile-user-menu__item']} ${
                 classes[`mobile-user-menu__item--${theme}`]
-              }`}
+              } ${classes['saved-list']}`}
               onClick={handleNavigateToSavedList}
             >
               <BookmarkIcon />
-              Saved List
+              <span>Saved List</span>
             </li>
 
             <li
               className={`${classes['mobile-user-menu__item']} ${
                 classes[`mobile-user-menu__item--${theme}`]
-              }`}
+              } ${classes.notebook}`}
               onClick={handleNotebookClick}
             >
               <JournalIcon />
-              Notebook
+              <span>Notebook</span>
             </li>
             <li
               className={`${classes['mobile-user-menu__item']} ${
                 classes[`mobile-user-menu__item--${theme}`]
-              }`}
+              } ${classes['time-reminder']}`}
               onClick={handleSetTimerReminder}
             >
-              <SmallClockIcon /> Timer Reminder
+              <SmallClockIcon />
+              <span>Timer Reminder</span>
               <input
                 type="checkbox"
                 className="toggle toggle-info"
@@ -259,22 +260,24 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({
           className={`${classes['mobile-user-menu__item']} ${
             classes[`mobile-user-menu__item--${theme}`]
           } ${classes['theme-button']}`}
+          onClick={() => dispatch(setTheme())}
         >
           <span>
             <ThemeButton />{' '}
           </span>
-          <span>{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+          <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
         </li>
         {session && (
           <li
             className={`${classes['mobile-user-menu__item']} ${
               classes[`mobile-user-menu__item--${theme}`]
-            }`}
+            } ${classes.logout}`}
             onClick={() =>
               signOut({ redirect: true, callbackUrl: '/auth/login' })
             }
           >
-            <LogoutIcon /> Logout
+            <LogoutIcon />
+            <span>Logout</span>
           </li>
         )}
       </ul>

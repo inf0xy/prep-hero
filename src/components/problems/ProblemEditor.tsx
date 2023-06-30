@@ -59,19 +59,19 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   availableWidth
 }) => {
   const session = useSession();
-  const { theme, submissions, notes, debugging, debuggingData } =
-    useAppSelector((state) => {
+  const { theme, submissions, notes, debugging } = useAppSelector(
+    (state) => {
       const { theme } = state.theme;
       const { submissions, notes } = state.user;
-      const { debugging, debuggingData } = state.debugger;
+      const { debugging } = state.debugger;
       return {
         theme,
         submissions,
         notes,
-        debugging,
-        debuggingData
+        debugging
       };
-    });
+    }
+  );
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
