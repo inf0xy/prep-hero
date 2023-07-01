@@ -261,6 +261,20 @@ body {
   }
 }
 
+.working-note-mobile .text-editor {
+  transform: translateY(-2.5rem);
+  overflow: hidden;
+  .w-md-editor-toolbar {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 1rem;
+    & > ul:nth-child(2) {
+      transform: translateX(0);
+    }
+  }
+}
+
 .react-resizable {
   position: relative;
   padding: 2rem 0;
@@ -306,7 +320,7 @@ body {
   transform: translateX(-49%);
   cursor: row-resize;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
-  background-position: 50% 2px;
+  background-position: 52% 2px;
   position: absolute;
   bottom: -5px;
 }

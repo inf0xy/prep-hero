@@ -2,7 +2,10 @@
 
 .problems-table {
   width: 100%;
-  overflow: inherit;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 8rem;
+
   font-size: 1.5rem;
 
   &--dark {
@@ -15,6 +18,8 @@
 }
 
 .table-header {
+  width: fit-content;
+  overflow: visible;
   display: flex;
   min-height: 4rem;
   height: 4rem;
@@ -23,7 +28,6 @@
   margin-bottom: 1.5rem;
   padding: 0 2rem;
   color: $color-gray-300;
-  overflow-x: auto;
 }
 
 .solved-header,
@@ -46,9 +50,11 @@
   min-width: 18rem;
   width: 18rem;
 }
+
 .title-header {
-  min-width: 26rem;
-  width: 26rem;
+  min-width: 30rem;
+  width: 30rem;
+  padding: 0 2rem;
 }
 
 .difficulty-header {
@@ -62,6 +68,8 @@
 }
 
 .companies-header {
+  min-width: 35rem;
+  width: 35rem;
 }
 
 .category-header,
@@ -75,38 +83,22 @@
 
 .table-body {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: visible;
 }
 
 /**********************************/
 /* BELOW 1201px (Smaller desktop) */
 /**********************************/
 @media (max-width: 75em) {
-  // .solved-header {
-  //   min-width: 6rem;
-  //   width: 6rem;
-  // }
-
   .category-header {
     min-width: 12rem;
     width: 12rem;
   }
   .title-header {
-    min-width: 22rem;
-    width: 22rem;
-    padding-right: 2rem;
+    min-width: 30rem;
+    width: 30rem;
   }
 
-  // .difficulty-header {
-  //   min-width: 10rem;
-  //   width: 10rem;
-
-  // }
-
-  // .solution-header {
-  //   min-width: 8rem;
-  //   width: 8rem;
-  // }
   .companies-header {
     min-width: 28rem;
     width: 28rem;
@@ -114,9 +106,8 @@
 }
 
 /**********************************/
-/* BELOW 897px (Smaller desktop) */
+/* BELOW 977px (Smaller desktop) */
 /**********************************/
-// @media (max-width: 56em) {
 @media (max-width: 69em) {
   .solved-header {
     min-width: 5rem;
@@ -129,9 +120,8 @@
   }
 
   .title-header {
-    min-width: 20rem;
-    width: 20rem;
-    padding: 0 1rem;
+    min-width: 25rem;
+    width: 25rem;
   }
 
   .difficulty-header {
@@ -145,23 +135,37 @@
   }
 
   .companies-header {
-    min-width: 16rem;
-    width: 33rem;
+    min-width: 35rem;
+    width: 35rem;
   }
 }
 
 /**********************************/
 /* BELOW 769px                    */
 /**********************************/
-@media (max-width: 40em) {
+@media (max-width: 48em) {
+  .category-header {
+    min-width: 18rem;
+    width: 18rem;
+  }
+
   .title-header {
-    min-width: 22rem;
-    width: 22rem;
-    padding: 0 1rem;
+    min-width: 26rem;
+    width: 26rem;
+  }
+
+  .difficulty-header {
+    min-width: 10rem;
+    width: 10rem;
+  }
+
+  .solution-header {
+    min-width: 8rem;
+    width: 8rem;
   }
 
   .companies-header {
-    min-width: 33rem;
-    width: 33rem;
+    min-width: 35rem;
+    width: 35rem;
   }
 }

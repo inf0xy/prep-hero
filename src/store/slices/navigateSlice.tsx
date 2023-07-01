@@ -5,13 +5,15 @@ interface NavigateState {
   savedListOpen: boolean;
   pageLoading: boolean;
   showUserMenu: boolean;
+  showProblemCodeEditor: boolean;
 }
 
 const initialState: NavigateState = {
   destination: undefined,
   savedListOpen: false,
   pageLoading: true,
-  showUserMenu: false
+  showUserMenu: false,
+  showProblemCodeEditor: false,
 };
 
 const navigateSlice = createSlice({
@@ -29,6 +31,9 @@ const navigateSlice = createSlice({
     },
     setShowUserMenu(state, action) {
       state.showUserMenu = action.payload;
+    },
+    setShowProblemCodeEditor(state, action) {
+      state.showProblemCodeEditor = action.payload;
     }
   }
 });
@@ -37,6 +42,7 @@ export const {
   setNavigateDestination,
   toggleSavedList,
   setHomePageLoading,
-  setShowUserMenu
+  setShowUserMenu,
+  setShowProblemCodeEditor
 } = navigateSlice.actions;
 export default navigateSlice.reducer;

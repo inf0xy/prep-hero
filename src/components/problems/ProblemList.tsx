@@ -19,7 +19,7 @@ const ProblemList: React.FC<ProblemListProps> = ({
 }) => {
   const { data: session } = useSession();
   const { theme } = useAppSelector((state) => state.theme);
-  const isMobilePortrait = useMediaQuery({ query: '(max-width: 450px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   const renderedProblems = problems.map((problem, index) => (
     <ProblemItem
@@ -33,16 +33,14 @@ const ProblemList: React.FC<ProblemListProps> = ({
   return (
     <div
       role="table"
-      className={`${classes['problems-table']} ${
+      className={`${isMobile ? 'problem-item' : ''} ${classes['problems-table']} ${
         classes[`problems-table--${theme}`]
       }`}
     >
       <div
-        className={`${isMobilePortrait ? 'problem-item' : ''} ${
-          classes['table-header']
-        }`}
+        className={`${classes['table-header']}`}
       >
-        {!isMobilePortrait && (
+        {!isMobile && (
           <>
             <div role="row" className={classes['solved-header']}>
               <div>
@@ -70,7 +68,7 @@ const ProblemList: React.FC<ProblemListProps> = ({
             <SortIcon width={14} height={14} />
           </span>
         </div>
-        {isMobilePortrait && (
+        {isMobile && (
           <div role="row" className={classes['category-header']}>
             <span>Category</span>
             <SortIcon width={14} height={14} />
@@ -82,7 +80,7 @@ const ProblemList: React.FC<ProblemListProps> = ({
         <div role="row" className={classes['companies-header']}>
           <div>Companies</div>
         </div>
-        {isMobilePortrait && (
+        {isMobile && (
           <div role="row" className={classes['solved-header']}>
             <div>
               {session?.session.user.account_type === 'admin'

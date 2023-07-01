@@ -22,7 +22,7 @@ const Alert: React.FC<AlertProps> = ({
       className={classes.alert}
       style={{ backgroundColor: selectedColors[status] }}
     >
-      {children}
+      <span>{children}</span>
       <button
         onClick={() => {
           onClose(false);

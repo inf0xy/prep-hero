@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
+import { useMediaQuery } from 'react-responsive';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import {
   removeProblemFromList,
@@ -12,15 +13,13 @@ import ConfirmPanel from '../ConfirmPanel';
 import Tooltip from '../Tooltip';
 import FullScreenButton from './FullScreenButton';
 import Alert from '../Alert';
-import classes from './EditorActionBar.module.scss';
-
 import SettingsIcon from '@/components/icons/SettingsIcon';
 import BookmarkFill from '@/components/icons/BookmarkFill';
 import BookmarkOutline from '@/components/icons/BookmarkOutline';
 import SourceCode from '@/components/icons/SourceCodeIcon';
 import ArrowPathIcon from '@/components/icons/ArrowPathIcon';
 import DocumentIcon from '@/components/icons/DocumentIcon';
-import { useSession } from 'next-auth/react';
+import classes from './EditorActionBar.module.scss';
 
 type EditorActionBarProps = {
   language: string;
@@ -66,6 +65,8 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
     }
     dispatch(setBreakpoints([]));
   };
+
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   const handleRetrieveLastSubmission = () => {
     if (language === 'python') {
@@ -202,11 +203,13 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
               </label>
             </Tooltip>
           </li>
-          <li>
-            <label htmlFor="modal-settings" className="cursor-pointer">
-              <FullScreenButton width={7} height={7} />
-            </label>
-          </li>
+          {!isMobile && (
+            <li>
+              <label htmlFor="modal-settings" className="cursor-pointer">
+                <FullScreenButton width={7} height={7} />
+              </label>
+            </li>
+          )}
         </ul>
       </div>
       <ConfirmPanel
@@ -218,7 +221,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
         confirmText="Confirm"
         headerText="Are you sure?"
         message="You are about to reset the code editor. Current code will be discarded."
-        className="max-w-[50vw]"
+        className={isMobile ? 'max-w-[90vw]' : 'max-w-[50vw]'}
       />
       <ConfirmPanel
         id="restore-last-submission-confirm-modal"
@@ -227,7 +230,7 @@ const EditorActionBar: React.FC<EditorActionBarProps> = ({
         confirmText="Confirm"
         headerText="Are you sure?"
         message="Current code will be discarded and replaced with last submission code."
-        className="max-w-[50vw]"
+        className={isMobile ? 'max-w-[90vw]' : 'max-w-[50vw]'}
       />
     </>
   );

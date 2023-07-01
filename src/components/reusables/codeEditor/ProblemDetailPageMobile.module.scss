@@ -4,8 +4,7 @@
   height: calc(100vh - 7rem);
   position: relative;
   padding: 1rem;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  width: 100vw;
   overflow: hidden;
 
   &--dark {
@@ -47,10 +46,15 @@
 
 .debug,
 .detail {
+  display: block;
+  width: 100%;
   height: inherit;
-  grid-column: span 1;
   border-radius: 6px;
   overflow: hidden;
+
+  &--inactive {
+    display: none;
+  }
 
   &--dark {
     background-color: $dark-background-400;
@@ -106,7 +110,7 @@
 }
 
 .working {
-  grid-column: span 1;
+  display: flex;
   height: calc(100vh - 9rem);
   border-radius: 6px;
   overflow: hidden;
@@ -118,5 +122,9 @@
   &--light {
     background-color: $light-background-0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  &--inactive {
+    display: none;
   }
 }

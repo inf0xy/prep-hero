@@ -117,7 +117,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   }
 
   const [noteContent, setNoteContent] = useState(problemNoteContent);
-  const isMobilePortrait = useMediaQuery({ query: '(max-width: 450px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   useEffect(() => {
     if (!showNotes) {
@@ -183,11 +183,9 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </Alert>
       )}
       <div
-        className={`${isMobilePortrait ? 'problem-item' : ''}  ${
-          classes.problem
-        } ${oddCell ? classes[`problem--${theme}--odd-cell`] : undefined}`}
+        className={`${classes.problem} ${oddCell ? classes[`problem--${theme}--odd-cell`] : undefined}`}
       >
-        {!isMobilePortrait && (
+        {!isMobile && (
           <>
             <div
               className={classes['solved-content']}
@@ -265,7 +263,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         >
           {difficulty}
         </div>
-        {isMobilePortrait && (
+        {isMobile && (
           <div className={classes['category-content']}>{category}</div>
         )}
         <div className={classes['solution-content']}>
@@ -278,7 +276,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         <div className={`${classes['companies-content']}`}>
           <LogoList companyNames={companies!} className="translate-x-8" />
         </div>
-        {isMobilePortrait && (
+        {isMobile && (
           <div className={classes['solved-content']} style={solvedStatusStyle}>
             {session?.session.user.account_type === 'user' ? (
               <>
@@ -380,7 +378,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         id={`modal-solution-${title}`}
         type="close-button"
         className={`max-w-[100vw] ${
-          isMobilePortrait ? 'w-[100vw]' : 'w-[70vw]'
+          isMobile ? 'w-[100vw]' : 'w-[70vw]'
         } h-full pt-24 pb-8 pl-3 ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}

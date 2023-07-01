@@ -19,6 +19,7 @@ type DrawerProps = {
   right?: string;
   closeButtonWidth?: number;
   closeButtonHeight?: number;
+  hideBorder?: boolean;
 };
 
 const Drawer: React.FC<DrawerProps> = ({
@@ -32,7 +33,8 @@ const Drawer: React.FC<DrawerProps> = ({
   left,
   right,
   closeButtonWidth,
-  closeButtonHeight
+  closeButtonHeight,
+  hideBorder
 }) => {
   const [shouldRender, setShouldRender] = useState(false);
   const { theme } = useAppSelector((state) => state.theme);
@@ -74,13 +76,13 @@ const Drawer: React.FC<DrawerProps> = ({
                   style={{
                     ...style,
                     borderLeft:
-                      direction === 'right'
+                      hideBorder && direction === 'right'
                         ? theme === 'dark'
                           ? `solid ${variables.darkBackground100} 1px`
                           : `solid ${variables.colorGray100} 1px`
                         : undefined,
                     borderRight:
-                      direction === 'left'
+                      hideBorder && direction === 'left'
                         ? theme === 'dark'
                           ? `solid ${variables.darkBackground100} 1px`
                           : `solid ${variables.colorGray100} 1px`

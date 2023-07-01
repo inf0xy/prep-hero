@@ -1,15 +1,19 @@
-import { useEffect, useRef, RefObject } from 'react';
+import { useState, useEffect, useRef, RefObject } from 'react';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import Image from 'next/image';
+import Alert from '../reusables/Alert';
 import Drawer from '../reusables/Drawer';
 import {
   setNavigateDestination,
   setTimerReminder,
   setShowUserMenu,
-  setTheme
+  setTheme,
+  toggleSavedList
 } from '@/store';
+import { NotificationType } from '@/types/dataTypes';
+import useRandomQuestion from '@/hooks/useRandomQuestion';
 import UserIcon from '../icons/UserIcon';
 import DashboardIcon from '../icons/DashboardIcon';
 import JournalIcon from '../icons/JournalIcon';
@@ -20,12 +24,17 @@ import ThemeButton from '../reusables/ThemeButton';
 import classes from './MobileUserMenu.module.scss';
 import CurlyBracketsIcon from '../icons/CurlyBracketsIcon';
 import ResourcesIcon from '../icons/ResourcesIcon';
+import ShuffleIcon from '../icons/ShuffleIcon';
 
 type MobileUserMenuProps = {
   parentRef: RefObject<HTMLLabelElement>;
 };
 
 const MobileUserMenu: React.FC<MobileUserMenuProps> = ({ parentRef }) => {
+  const [showAlert, setShowAlert] = useState(false);
+  const [notification, setNotification] = useState<NotificationType | null>(
+    null
+  );
   const { data: session } = useSession();
   const { theme, timer_reminder, showUserMenu } = useAppSelector((state) => {
     const { timer_reminder } = state.user;
@@ -35,8 +44,12 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({ parentRef }) => {
   });
   const dispatch = useAppDispatch();
   const router = useRouter();
-
   const ulEl = useRef<HTMLUListElement | null>(null);
+
+  const handleGetRandomProblem = useRandomQuestion(
+    setShowAlert,
+    setNotification
+  );
 
   useEffect(() => {
     const handler = (event: React.MouseEvent<HTMLElement>) => {
@@ -94,194 +107,242 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({ parentRef }) => {
   };
 
   return (
-    <Drawer
-      direction="right"
-      showCloseButton={true}
-      isOpen={showUserMenu}
-      closeDrawer={() => dispatch(setShowUserMenu(false))}
-    >
-      <ul
-        ref={ulEl}
-        tabIndex={0}
-        className={`${classes['mobile-user-menu']} ${
-          classes[`mobile-user-menu--${theme}`]
-        }`}
+    <>
+      {showAlert && (
+        <Alert
+          status={notification?.status!}
+          setNotification={setNotification}
+          onClose={() => setShowAlert(false)}
+        >
+          {notification?.message}
+        </Alert>
+      )}
+
+      <Drawer
+        direction="right"
+        showCloseButton={true}
+        isOpen={showUserMenu}
+        closeDrawer={() => dispatch(setShowUserMenu(false))}
       >
-        {session ? (
-          <li
-            className={`${classes['mobile-user-menu__item']} ${
-              classes[`mobile-user-menu__item--${theme}`]
-            } ${classes['mobile-user-menu__avatar']} ${
-              classes[`mobile-user-menu__avatar--${theme}`]
-            } mb-3`}
-          >
-            <span className={`${classes.avatar} ${classes[`avatar--${theme}`]}`}>
-              <Image
-                src="/user.png"
-                alt="avatar"
-                width={35}
-                height={35}
-                className="white"
+        <ul
+          ref={ulEl}
+          tabIndex={0}
+          className={`${classes['mobile-user-menu']} ${
+            classes[`mobile-user-menu--${theme}`]
+          }`}
+        >
+          {session ? (
+            <li
+              className={`${classes['mobile-user-menu__item']} ${
+                classes[`mobile-user-menu__item--${theme}`]
+              } ${classes['mobile-user-menu__avatar']} ${
+                classes[`mobile-user-menu__avatar--${theme}`]
+              } mb-3`}
+            >
+              <span
+                className={`${classes.avatar} ${classes[`avatar--${theme}`]}`}
+              >
+                <Image
+                  src="/user.png"
+                  alt="avatar"
+                  width={35}
+                  height={35}
+                  className="white"
+                />
+              </span>
+              <h3>{session && session.session.user.name}</h3>
+            </li>
+          ) : (
+            <>
+              <li
+                onClick={() => {
+                  dispatch(setShowUserMenu(false));
+                  router.push('/auth/signup');
+                }}
+                className={`${classes['mobile-user-menu__item']} ${
+                  classes[`mobile-user-menu__item--${theme}`]
+                } ${classes.signup}`}
+              >
+                Sign Up
+              </li>
+              <li
+                className={`${classes['divider-line']} ${
+                  classes[`divider-line--${theme}`]
+                } ${classes[`divider-line--signup`]}`}
               />
-            </span>
-            <h3>{session && session.session.user.name}</h3>
-          </li>
-        ) : (
-          <>
+            </>
+          )}
+          {session ? (
+            <li
+              className={`${classes['mobile-user-menu__item']} ${
+                classes[`mobile-user-menu__item--${theme}`]
+              } ${classes['my-profile']}`}
+              onClick={() => dispatch(setShowUserMenu(false))}
+            >
+              <UserIcon />
+              <span>My Profile</span>
+            </li>
+          ) : (
             <li
               onClick={() => {
                 dispatch(setShowUserMenu(false));
-                router.push('/auth/signup');
+                router.push('/auth/login');
               }}
               className={`${classes['mobile-user-menu__item']} ${
                 classes[`mobile-user-menu__item--${theme}`]
-              } ${classes.signup}`}
+              } ${classes.login}`}
             >
-              Sign Up
+              <UserIcon />
+              <span>Login</span>
             </li>
-            <li
-              className={`${classes['divider-line']} ${
-                classes[`divider-line--${theme}`]
-              } ${classes[`divider-line--signup`]}`}
-            />
-          </>
-        )}
-        {session ? (
+          )}
+          <li
+            className={`${classes['divider-line']} ${
+              classes[`divider-line--${theme}`]
+            }`}
+          />
+          {session && (
+            <>
+              <li
+                className={`${classes['mobile-user-menu__item']} ${
+                  classes[`mobile-user-menu__item--${theme}`]
+                }  ${classes.shuffle}`}
+                onClick={() => {
+                  dispatch(setShowUserMenu(false));
+                  handleGetRandomProblem();
+                }}
+              >
+                <ShuffleIcon />
+                <span>Pick Random Question</span>
+              </li>
+              <li
+                className={`${classes['mobile-user-menu__item']} ${
+                  classes[`mobile-user-menu__item--${theme}`]
+                } ${classes['saved-list']}`}
+                onClick={() => {
+                  dispatch(setShowUserMenu(false));
+                  dispatch(toggleSavedList());
+                }}
+              >
+                <BookmarkIcon />
+                <span>Saved List</span>
+              </li>
+              <li
+                className={`${classes['divider-line']} ${
+                  classes[`divider-line--${theme}`]
+                }`}
+              />
+            </>
+          )}
           <li
             className={`${classes['mobile-user-menu__item']} ${
               classes[`mobile-user-menu__item--${theme}`]
-            } ${classes['my-profile']}`}
-            onClick={() => dispatch(setShowUserMenu(false))}
-          >
-            <UserIcon />
-            <span>My Profile</span>
-          </li>
-        ) : (
-          <li
+            }  ${classes.resources}`}
             onClick={() => {
               dispatch(setShowUserMenu(false));
-              router.push('/auth/login');
+              router.push('/resources');
             }}
-            className={`${classes['mobile-user-menu__item']} ${
-              classes[`mobile-user-menu__item--${theme}`]
-            } ${classes.login}`}
           >
-            <UserIcon />
-            <span>Login</span>
+            <ResourcesIcon width={21} height={21} />
+            <span>Resources</span>
           </li>
-        )}
-        <li
-          className={`${classes['divider-line']} ${
-            classes[`divider-line--${theme}`]
-          }`}
-        />
-        <li
-          className={`${classes['mobile-user-menu__item']} ${
-            classes[`mobile-user-menu__item--${theme}`]
-          }  ${classes.resources}`}
-          onClick={() => {
-            dispatch(setShowUserMenu(false));
-            router.push('/resources');
-          }}
-        >
-          <ResourcesIcon width={21} height={21} />
-          <span>Resources</span>
-        </li>
-        <li
-          className={`${classes['mobile-user-menu__item']} ${
-            classes[`mobile-user-menu__item--${theme}`]
-          } ${classes.problems}`}
-          onClick={() => {
-            dispatch(setShowUserMenu(false));
-            router.push('/problems');
-          }}
-        >
-          <CurlyBracketsIcon width={17} height={17} />
-          <span>Problems</span>
-        </li>
-        <li
-          className={`${classes['divider-line']} ${
-            classes[`divider-line--${theme}`]
-          }`}
-        />
-        {session && (
-          <>
-            <li
-              className={`${classes['mobile-user-menu__item']} ${
-                classes[`mobile-user-menu__item--${theme}`]
-              } ${classes.dashboard}`}
-              onClick={handleDashboardClick}
-            >
-              <DashboardIcon width={19} height={19} />
-              <span>Dashboard</span>
-            </li>
-            <li
-              className={`${classes['mobile-user-menu__item']} ${
-                classes[`mobile-user-menu__item--${theme}`]
-              } ${classes['saved-list']}`}
-              onClick={handleNavigateToSavedList}
-            >
-              <BookmarkIcon />
-              <span>Saved List</span>
-            </li>
-
-            <li
-              className={`${classes['mobile-user-menu__item']} ${
-                classes[`mobile-user-menu__item--${theme}`]
-              } ${classes.notebook}`}
-              onClick={handleNotebookClick}
-            >
-              <JournalIcon />
-              <span>Notebook</span>
-            </li>
-            <li
-              className={`${classes['mobile-user-menu__item']} ${
-                classes[`mobile-user-menu__item--${theme}`]
-              } ${classes['time-reminder']}`}
-              onClick={handleSetTimerReminder}
-            >
-              <SmallClockIcon />
-              <span>Timer Reminder</span>
-              <input
-                type="checkbox"
-                className="toggle toggle-info"
-                checked={timer_reminder}
-                onChange={handleSetTimerReminder}
-              />
-            </li>
-            <li
-              className={`${classes['divider-line']} ${
-                classes[`divider-line--${theme}`]
-              }`}
-            />
-          </>
-        )}
-        <li
-          className={`${classes['mobile-user-menu__item']} ${
-            classes[`mobile-user-menu__item--${theme}`]
-          } ${classes['theme-button']}`}
-          onClick={() => dispatch(setTheme())}
-        >
-          <span>
-            <ThemeButton />{' '}
-          </span>
-          <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
-        </li>
-        {session && (
           <li
             className={`${classes['mobile-user-menu__item']} ${
               classes[`mobile-user-menu__item--${theme}`]
-            } ${classes.logout}`}
-            onClick={() =>
-              signOut({ redirect: true, callbackUrl: '/auth/login' })
-            }
+            } ${classes.problems}`}
+            onClick={() => {
+              dispatch(setShowUserMenu(false));
+              router.push('/problems');
+            }}
           >
-            <LogoutIcon />
-            <span>Logout</span>
+            <CurlyBracketsIcon changeWithTheme={true} width={17} height={17} />
+            <span>Problems</span>
           </li>
-        )}
-      </ul>
-    </Drawer>
+          <li
+            className={`${classes['divider-line']} ${
+              classes[`divider-line--${theme}`]
+            }`}
+          />
+          {session && (
+            <>
+              <li
+                className={`${classes['mobile-user-menu__item']} ${
+                  classes[`mobile-user-menu__item--${theme}`]
+                } ${classes.dashboard}`}
+                onClick={handleDashboardClick}
+              >
+                <DashboardIcon width={19} height={19} />
+                <span>Dashboard</span>
+              </li>
+              {!router.pathname.match(/\/problem\/.*/) && (
+                <li
+                  className={`${classes['mobile-user-menu__item']} ${
+                    classes[`mobile-user-menu__item--${theme}`]
+                  } ${classes['saved-list']}`}
+                  onClick={handleNavigateToSavedList}
+                >
+                  <BookmarkIcon />
+                  <span>Saved List</span>
+                </li>
+              )}
+              <li
+                className={`${classes['mobile-user-menu__item']} ${
+                  classes[`mobile-user-menu__item--${theme}`]
+                } ${classes.notebook}`}
+                onClick={handleNotebookClick}
+              >
+                <JournalIcon />
+                <span>Notebook</span>
+              </li>
+              <li
+                className={`${classes['mobile-user-menu__item']} ${
+                  classes[`mobile-user-menu__item--${theme}`]
+                } ${classes['time-reminder']}`}
+                onClick={handleSetTimerReminder}
+              >
+                <SmallClockIcon />
+                <span>Timer Reminder</span>
+                <input
+                  type="checkbox"
+                  className="toggle toggle-info"
+                  checked={timer_reminder}
+                  onChange={handleSetTimerReminder}
+                />
+              </li>
+              <li
+                className={`${classes['divider-line']} ${
+                  classes[`divider-line--${theme}`]
+                }`}
+              />
+            </>
+          )}
+          <li
+            className={`${classes['mobile-user-menu__item']} ${
+              classes[`mobile-user-menu__item--${theme}`]
+            } ${classes['theme-button']}`}
+            onClick={() => dispatch(setTheme())}
+          >
+            <span>
+              <ThemeButton />{' '}
+            </span>
+            <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+          </li>
+          {session && (
+            <li
+              className={`${classes['mobile-user-menu__item']} ${
+                classes[`mobile-user-menu__item--${theme}`]
+              } ${classes.logout}`}
+              onClick={() =>
+                signOut({ redirect: true, callbackUrl: '/auth/login' })
+              }
+            >
+              <LogoutIcon />
+              <span>Logout</span>
+            </li>
+          )}
+        </ul>
+      </Drawer>
+    </>
   );
 };
 

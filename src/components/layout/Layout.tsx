@@ -69,9 +69,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Loading />
       ) : (
         <>
-          <Header headerRef={headerRef} />
-          {!headerRef.current ? placeHolder : children}
-          {!regex.test(router.pathname) && headerRef.current && <Footer />}
+          {!router.pathname.includes('auth') && <Header headerRef={headerRef} />}
+          {!headerRef.current && !router.pathname.includes('auth') ? placeHolder : children}
+          {!regex.test(router.pathname) && headerRef.current && !router.pathname.includes('auth') && <Footer />}
         </>
       )}
     </main>

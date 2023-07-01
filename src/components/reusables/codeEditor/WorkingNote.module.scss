@@ -19,6 +19,7 @@
       right: 1.2rem;
       padding: 0.2rem;
       border-radius: 3px;
+      z-index: 10;
     }
 
     &--dark {
@@ -28,5 +29,14 @@
     &--light {
       background-color: $light-background-0;
     }
+  }
+}
+
+/**********************************/
+/* BELOW 769px                    */
+/**********************************/
+@media (max-width: 48em) {
+  .working-note {
+    width: 100vw;
   }
 }

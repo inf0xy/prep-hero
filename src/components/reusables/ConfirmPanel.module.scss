@@ -1,36 +1,4 @@
 @import '@/styles/variables.module.scss';
-/* .confirm-panel {
-  display: flex;
-  flex-direction: column;
-  padding: 3rem 4rem;
-  background-color: #333;
-  color: white;
-  min-width: 50rem;
-  font-size: 1.5rem;
-  border-radius: 10px;
-}
-
-.confirm-panel__top {
-  display: flex;
-  gap: 3rem;
-  margin: 1rem 2rem 1.5rem;
-}
-
-.confirm-panel__message h3 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-}
-
-.confirm-panel__message p {
-  font-size: 1.7rem;
-}
-
-.confirm-panel__actions {
-  display: flex;
-  align-self: end;
-  gap: 1.5rem;
-  margin-top: 2rem;
-} */
 
 .confirm-panel {
   max-width: 60rem;
@@ -42,6 +10,10 @@
 
   &--light {
     background-color: $light-background-0;
+  }
+
+  .confirm-panel__body {
+
   }
 }
 
@@ -66,4 +38,39 @@
   width: 100%;
   height: 100%;
   z-index: 2;
+}
+
+/**********************************/
+/* BELOW 641px                    */
+/**********************************/
+@media (max-width: 40em) {
+  .confirm-panel__message {
+    width: 70%;
+  }
+}
+
+/**********************************/
+/* BELOW 501px                    */
+/**********************************/
+@media (max-width: 32em) {
+  .confirm-panel__message {
+    width: 60%;
+  }
+}
+
+/**********************************/
+/* BELOW 417px                    */
+/**********************************/
+@media (max-width: 26em) {
+  .confirm-panel__body {
+    padding-left: 0.5rem;
+  }
+  .confirm-panel__message {
+    width: 50%;
+  }
+
+  .confirm-panel__actions {
+    margin-top: 2.5rem;
+    margin-bottom: 3rem;
+  }
 }

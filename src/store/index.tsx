@@ -40,7 +40,8 @@ import navigateReducer, {
   setNavigateDestination,
   toggleSavedList,
   setHomePageLoading,
-  setShowUserMenu
+  setShowUserMenu,
+  setShowProblemCodeEditor
 } from './slices/navigateSlice';
 
 export const store = configureStore({
@@ -90,5 +91,6 @@ export {
   setNavigateDestination,
   toggleSavedList,
   setHomePageLoading,
-  setShowUserMenu
+  setShowUserMenu,
+  setShowProblemCodeEditor
 };

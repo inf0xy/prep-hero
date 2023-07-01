@@ -123,7 +123,7 @@
 
 .output-wrapper {
   padding: 1.2rem 0 2rem;
-  width: 100%
+  width: 100%;
 }
 
 .output {
@@ -218,5 +218,23 @@
 
   &--light {
     background-color: $color-backdrop-light;
+  }
+}
+
+/**********************************/
+/* BELOW 897px (Smaller desktop) */
+/**********************************/
+@media (max-width: 56em) {
+  .settings {
+    width: 60vw;
+  }
+}
+
+/**********************************/
+/* BELOW 417px                    */
+/**********************************/
+@media (max-width: 26em) {
+  .settings {
+    width: 90vw;
   }
 }

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/router';
 import { signIn, useSession, getSession } from 'next-auth/react';
 import Link from 'next/link';
+import Image from 'next/image';
 import GoogleIcon from '../icons/GoogleIcon';
 import GithubIcon from '../icons/GithubIcon';
 import FacebookIcon from '../icons/FacebookIcon';
@@ -13,8 +14,8 @@ import { validateFormData } from '@/helpers/validateFormData';
 import { registerUser } from '@/helpers/registerUser';
 import classes from './AuthForm.module.scss';
 
-const loginMessage = 'Sign in to you account';
-const signupMessage = 'Create your acount';
+const loginMessage = 'Log In';
+const signupMessage = 'Sign Up';
 
 const AuthForm = () => {
   const { data: session } = useSession();
@@ -199,20 +200,23 @@ const AuthForm = () => {
   };
 
   return (
-    <div className={`${classes['auth-form']}`}>
-      <form onSubmit={handleSubmit}>
-        <div className={`${classes.header} ${classes[`header--${theme}`]}`}>
-          <h1>{loginForm ? loginMessage : signupMessage}</h1>
-          <p>
-            Or{' '}
-            <span>
-              {loginForm ? (
-                <Link href="/auth/signup">{signupMessage}</Link>
-              ) : (
-                <Link href="/auth/login">{loginMessage}</Link>
-              )}
-            </span>
-          </p>
+    <div
+      className={`${classes['auth-form']} ${classes[`auth-form--${theme}`]}`}
+    >
+      <form onSubmit={handleSubmit} className={classes['form-container']}>
+        <div
+          className={`${classes['header-logo']} ${
+            classes[`header-logo--${theme}`]
+          }`}
+        >
+          <Link href="/">
+            <Image
+              src="/prep-hero-logo.png"
+              alt="Prep Hero Icon"
+              width={100}
+              height={100}
+            />
+          </Link>
         </div>
         {showAlert && (
           <Alert
@@ -232,8 +236,8 @@ const AuthForm = () => {
                 setValidation((prev) => ({ ...prev, name: true }));
               }}
               placeholder="Name"
-              className={`${classes.name} ${
-                !validation.name ? classes['name-error'] : ''
+              className={`${classes.name} ${classes[`name--${theme}`]}${
+                !validation.name ? `${classes['name-error']} ${classes[`name-error--${theme}`]}` : ''
               }`}
             />
           )}
@@ -245,8 +249,8 @@ const AuthForm = () => {
             }}
             placeholder="Email address"
             autoComplete="new-password"
-            className={`${classes.email} ${
-              !validation.email ? classes['email-error'] : ''
+            className={`${classes.email} ${classes[`email--${theme}`]} ${
+              !validation.email ? `${classes['email-error']} ${classes[`email-error--${theme}`]}` : ''
             }`}
             style={{
               borderTopLeftRadius: loginForm ? '4px' : 'unset',
@@ -262,8 +266,8 @@ const AuthForm = () => {
             }}
             type="password"
             placeholder="Password"
-            className={`${classes.password} ${
-              !validation.password ? classes['password-error'] : ''
+            className={`${classes.password} ${classes[`password--${theme}`]} ${
+              !validation.password ? `${classes['password-error']} ${classes[`password-error--${theme}`]}` : ''
             }`}
             style={{
               borderBottomLeftRadius: loginForm ? '4px' : 'unset',
@@ -283,13 +287,24 @@ const AuthForm = () => {
               type="password"
               placeholder="Confirm Password"
               className={`${classes['confirm-password']} ${
+                classes[`confirm-password--${theme}`]
+              } ${
                 !validation.confirmPassword
-                  ? classes['confirmPassword-error']
+                  ? `${classes['confirm-password-error']} ${classes[`confirm-password-error--${theme}`]}`
                   : ''
               }`}
             />
           )}
         </div>
+        {loginForm && (
+          <p
+            className={`${classes['forgot-password']} ${
+              classes[`forgot-password--${theme}`]
+            }`}
+          >
+            Forgot Password?
+          </p>
+        )}
         <div className={classes['form-actions']}>
           <Button extraStyle={{ width: '100%' }} type="submit">
             {loginForm ? 'Sign in' : 'Register'}
@@ -303,7 +318,7 @@ const AuthForm = () => {
       >
         <div className={classes.divider}>
           <p className={`${classes.line} ${classes[`line--${theme}`]}`}></p>
-          <p>Or continue with</p>
+          <p>OR</p>
           <p className={`${classes.line} ${classes[`line--${theme}`]}`}></p>
         </div>
         <div className={classes['oauth-buttons']}>
@@ -336,6 +351,16 @@ const AuthForm = () => {
           </Button>
         </div>
       </div>
+      <p className={classes['auth-option']}>
+        {loginForm ? `Don't have an acount? ` : 'Have an account? '}
+        <span>
+          {loginForm ? (
+            <Link href="/auth/signup">{signupMessage}</Link>
+          ) : (
+            <Link href="/auth/login">{loginMessage}</Link>
+          )}
+        </span>
+      </p>
     </div>
   );
 };

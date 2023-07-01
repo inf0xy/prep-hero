@@ -28,7 +28,7 @@ const DropDown: React.FC<DropDownProps> = ({
   const { theme } = useAppSelector((state) => state.theme);
 
   const transition = useTransition(isOpen, {
-    from: { opacity: 0 },
+    from: { opacity: 1 },
     enter: { opacity: 1 },
     leave: { opacity: 0 }
   });
@@ -62,7 +62,7 @@ const DropDown: React.FC<DropDownProps> = ({
     <div
       key={option.value + index}
       className={`${classes['option-item']} ${
-        theme === 'dark' ? 'text-white hover:bg-[#656565]' : 'text-gray-500 hover:bg-[#e7e7e7]'
+        theme === 'dark' ? 'text-gray-300 hover:bg-[#656565]' : 'text-gray-500 hover:bg-[#e7e7e7]'
       }  rounded-md cursor-pointer p-3`}
       onClick={() => handleOptionClick(option)}
     >
@@ -73,7 +73,7 @@ const DropDown: React.FC<DropDownProps> = ({
   return (
     <div
       ref={divEl}
-      className="relative text-[1.4rem] font-medium"
+      className='relative text-[1.4rem] font-medium'
       style={{ width }}
     >
       <Panel
@@ -87,9 +87,9 @@ const DropDown: React.FC<DropDownProps> = ({
         onClick={handleToggle}
       >
         <span
-          className={`px-5 font-medium text-gray-200 ${
-            theme === 'dark' ? 'text-gray-200' : 'text-gray-500'
-          }`}
+        className={`px-5 font-medium  ${
+          theme === 'dark' ? 'text-[#b1aeb6]' : 'text-gray-500'
+        }`}
         >
           {defaultText}
         </span>
@@ -97,14 +97,14 @@ const DropDown: React.FC<DropDownProps> = ({
           <div className="relative w-7 h-full mr-3">
             <ChevronDown
               className={`absolute top-[25%] left-[5%] text-lg ${
-                theme === 'dark' ? 'text-gray-200' : 'text-gray-500'
+                theme === 'dark' ? 'text-[#b1aeb6]' : 'text-gray-500'
               } ${
                 isOpen ? classes['arrow-down_hide'] : classes['arrow-down_show']
               }`}
             />
             <ChevronUp
               className={`absolute top-[25%] left-[5%] text-lg ${
-                theme === 'dark' ? 'text-gray-200' : 'text-gray-500'
+                theme === 'dark' ? 'text-[#b1aeb6]' : 'text-gray-500'
               } ${
                 isOpen ? classes['arrow-up_show'] : classes['arrow-up_hide']
               }`}

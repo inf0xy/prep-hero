@@ -60,3 +60,33 @@
     }
   }
 }
+
+/**********************************/
+/* BELOW 769px                    */
+/**********************************/
+@media (max-width: 48em) {
+  .saved-list-drawer {
+    width: 70vw;
+    max-width: 70vw;
+  }
+}
+
+/**********************************/
+/* BELOW 641px                    */
+/**********************************/
+@media (max-width: 40em) {
+  .saved-list-drawer {
+    width: 100vw;
+    max-width: 100vw;
+    & > *:nth-child(2) {
+
+      & > *:nth-child(2) {
+
+        // Table body
+        & > *:nth-child(2) > div > p {
+         line-height: 1.3;
+        }
+      }
+    }
+  }
+}

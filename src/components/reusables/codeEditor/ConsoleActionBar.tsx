@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useMediaQuery } from 'react-responsive';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import useDebugger from '@/hooks/useDebugger';
 import { setDebugging } from '@/store';
@@ -75,6 +76,9 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
 
   const dispatch = useAppDispatch();
   const { handleExit } = useDebugger();
+  const isMobile = useMediaQuery({
+    query: '(max-width: 897px)'
+  });
 
   const handleDebugButton = async () => {
     if (!session) {
@@ -148,7 +152,7 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
               extraStyle={{
                 backgroundColor: variables.colorSecondary200,
                 padding: '0 2rem',
-                height: '2.5rem',
+                height: isMobile ? '3rem' : '2.5rem',
                 opacity: isLoading || debugging ? '0.5' : '1',
                 cursor: !isLoading && !debugging ? 'pointer' : 'unset'
               }}
@@ -167,30 +171,34 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
           </Tooltip>
         </div>
         <div className={classes['right-button-group']}>
-          {!exitingDebugging ? (
-            <Tooltip
-              text={debugging ? 'Exit' : 'Debug'}
-              direction="top"
-              className="w-fit px-6 py-4 left-4"
-            >
-              <button onClick={handleDebugButton}>
-                {debugging ? (
-                  <ExitIcon width={17} height={17} />
-                ) : (
-                  <DebugIcon width={21} height={21} />
-                )}
-              </button>
-            </Tooltip>
-          ) : (
-            <Tooltip
-              text="Exiting debugging"
-              direction="top"
-              className="w-[14rem] py-4 left-4"
-            >
-              <span className="cursor-not-allowed">
-                <LoadingInfinityIcon width={21} height={21} />
-              </span>
-            </Tooltip>
+          {!isMobile && (
+            <>
+              {!exitingDebugging ? (
+                <Tooltip
+                  text={debugging ? 'Exit' : 'Debug'}
+                  direction="top"
+                  className="w-fit px-6 py-4 left-4"
+                >
+                  <button onClick={handleDebugButton}>
+                    {debugging ? (
+                      <ExitIcon width={17} height={17} />
+                    ) : (
+                      <DebugIcon width={21} height={21} />
+                    )}
+                  </button>
+                </Tooltip>
+              ) : (
+                <Tooltip
+                  text="Exiting debugging"
+                  direction="top"
+                  className="w-[14rem] py-4 left-4"
+                >
+                  <span className="cursor-not-allowed">
+                    <LoadingInfinityIcon width={21} height={21} />
+                  </span>
+                </Tooltip>
+              )}
+            </>
           )}
           <Button
             disabled={isLoading || debugging ? true : false}

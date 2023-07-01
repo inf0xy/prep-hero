@@ -51,6 +51,7 @@
 
 .tags__badge--dark {
   background-color: $color-gray-600;
+  opacity: 0.75;
   color: $color-gray-100;
   transition: all 0.3s ease;
 }

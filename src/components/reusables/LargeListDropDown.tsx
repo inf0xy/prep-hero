@@ -30,7 +30,6 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
   const divEl = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  const isTabletPortrait = useMediaQuery({ query: '(max-width: 930px)' });
   const isLargePhonePortrait = useMediaQuery({ query: '(max-width: 684px)' });
   const isMediumPhonePortrait = useMediaQuery({ query: '(max-width: 554px)' });
   const isSmallPhonePortrait = useMediaQuery({ query: '(max-width: 450px)' });
@@ -135,7 +134,7 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
       >
         <span
           className={`px-5 font-medium ${
-            theme === 'dark' ? 'text-gray-200' : 'text-gray-500'
+            theme === 'dark' ? 'text-[#b1aeb6]' : 'text-gray-500'
           }`}
         >
           {defaultText}
@@ -144,14 +143,14 @@ const LargeListDropDown: React.FC<LargeListDropDownProps> = ({
           <div className="relative w-7 h-full mr-3">
             <ChevronDown
               className={`absolute top-[25%] left-[5%] text-lg ${
-                theme === 'dark' ? 'text-gray-200' : 'text-gray-500'
+                theme === 'dark' ? 'text-[#b1aeb6]' : 'text-gray-500'
               } ${
                 isOpen ? classes['arrow-down_hide'] : classes['arrow-down_show']
               }`}
             />
             <ChevronUp
               className={`absolute top-[25%] left-[5%] text-lg ${
-                theme === 'dark' ? 'text-gray-200' : 'text-gray-500'
+                theme === 'dark' ? 'text-[#b1aeb6]' : 'text-gray-500'
               } ${
                 isOpen ? classes['arrow-up_show'] : classes['arrow-up_hide']
               }`}

@@ -3,6 +3,11 @@
 .time-setter {
   width: 20rem;
   min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tabs {
@@ -77,4 +82,13 @@
 .control-bar {
   align-self: center;
   margin-top: 1rem;
+}
+
+/**********************************/
+/* BELOW 769px                    */
+/**********************************/
+@media (max-width: 48em) {
+  .time-setter {
+    transform: scale(130%);
+  }
 }

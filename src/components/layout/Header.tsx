@@ -11,7 +11,8 @@ import {
   fetchUserData,
   toggleSavedList,
   setShowUserMenu,
-  setTheme
+  setTheme,
+  setShowProblemCodeEditor
 } from '@/store';
 import UserMenu from '../user/UserMenu';
 import MenuIcon from '../icons/MenuIcon';
@@ -26,6 +27,7 @@ import ShuffleButton from '../reusables/ShuffleButton';
 import Tooltip from '../reusables/Tooltip';
 import variables from '@/styles/variables.module.scss';
 import classes from './Header.module.scss';
+import CurlyBracketsIcon from '../icons/CurlyBracketsIcon';
 
 type HeaderProps = {
   headerRef: RefObject<HTMLElement>;
@@ -33,22 +35,22 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ headerRef }) => {
   const avatarRef = useRef<HTMLLabelElement>(null);
+  const { theme, showUserMenu, showProblemCodeEditor, savedListOpen } =
+    useAppSelector((state) => {
+      const { theme } = state.theme;
+      const { showUserMenu, showProblemCodeEditor, savedListOpen } =
+        state.navigate;
+      return { theme, showUserMenu, showProblemCodeEditor, savedListOpen };
+    });
 
   const router = useRouter();
-
-  const { theme, showUserMenu } = useAppSelector((state) => {
-    const { theme } = state.theme;
-    const { showUserMenu } = state.navigate;
-    return { theme, showUserMenu };
-  });
-
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
 
-  const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
-  });
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 990px)' });
+  const isMobile = useMediaQuery({
+    query: '(max-width: 768px)'
+  });
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -96,26 +98,47 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
       )}
       {router.pathname.match(/\/problem\/.*/) && (
         <div className={classes['problem__action-buttons']}>
-          {session && (
+          {!isMobile ? (
+            <>
+              {session && (
+                <button
+                  className={classes['saved-list-button']}
+                  onClick={() => dispatch(toggleSavedList())}
+                >
+                  Saved List
+                </button>
+              )}
+              <Tooltip
+                direction="bottom"
+                text="Pick random question"
+                zIndex={30}
+                className="w-[17rem] py-4"
+                extraStyle={{
+                  left: '3rem',
+                  backgroundColor: variables.darkBackground200
+                }}
+              >
+                <ShuffleButton />
+              </Tooltip>
+            </>
+          ) : (
             <button
-              className={classes['saved-list-button']}
-              onClick={() => dispatch(toggleSavedList())}
+              className={`${!session && 'translate-x-[-2.5rem]'} ${
+                classes['show-editor-button']
+              } ${classes[`show-editor-button--${theme}`]} ${
+                showProblemCodeEditor
+                  ? classes[`show-editor-button--active`]
+                  : ''
+              }`}
+              onClick={() =>
+                dispatch(setShowProblemCodeEditor(!showProblemCodeEditor))
+              }
             >
-              Saved List
+              <CurlyBracketsIcon
+                changeWithTheme={showProblemCodeEditor ? false : true}
+              />
             </button>
           )}
-          <Tooltip
-            direction="bottom"
-            text="Pick random question"
-            zIndex={30}
-            className="w-[17rem] py-4"
-            extraStyle={{
-              left: '3rem',
-              backgroundColor: variables.darkBackground200
-            }}
-          >
-            <ShuffleButton />
-          </Tooltip>
         </div>
       )}
       <div
@@ -126,16 +149,27 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
       >
         {session && router.pathname.match(/^(.*?)\/problem\/(.*?)$/) && (
           <div className="flex space-x-4">
-            <span className="self-center  pt-[2px]">
+            <span
+              className={`${isMobile && 'scale-125 pr-2'} self-center pt-[2px]`}
+            >
               <Time />
             </span>
             <div className="dropdown dropdown-bottom dropdown-end self-center pt-[1px]">
               <label tabIndex={0} className="cursor-pointer">
-                <ClockIcon height={23} width={23} />
+                <span>
+                  <ClockIcon
+                    height={!isMobile ? 23 : 26}
+                    width={!isMobile ? 23 : 26}
+                  />
+                </span>
               </label>
               <div
                 tabIndex={0}
-                className={`dropdown-content mt-4 px-8 py-12 shadow rounded-box w-fit h-[22rem] bg-[${
+                className={`dropdown-content mt-4 px-8 py-12 shadow rounded-box ${
+                  isMobile
+                    ? 'translate-x-10 w-[30rem] h-[26rem]'
+                    : 'w-fit h-[22rem]'
+                } bg-[${
                   theme === 'dark'
                     ? variables.darkBackground100
                     : variables.lightBackground0
@@ -149,9 +183,13 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
         {isTabletOrMobile ? (
           <>
             <span
-            className={classes['menu-icon']}
-              // className="cursor-pointer"
-              onClick={() => dispatch(setShowUserMenu(true))}
+              className={classes['menu-icon']}
+              onClick={() => {
+                if (savedListOpen) {
+                  dispatch(toggleSavedList());
+                }
+                dispatch(setShowUserMenu(true));
+              }}
             >
               <MenuIcon width={25} />
             </span>

@@ -38,7 +38,7 @@ const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
                   theme === 'dark' ? 'bg-[#333]' : 'bg-white'
                 } px-[1rem] ${className}`}
               >
-                <div className={`card-body ${theme === 'dark' ? 'text-white' : 'text-gray-600'}`}>
+                <div className={`card-body ${theme === 'dark' ? 'text-white' : 'text-gray-600'} ${classes['confirm-panel__body']}`}>
                   <div className="flex space-x-[3rem] mt-[1rem] mx-[2rem] mb-[3rem]">
                     <div className={classes['confirm-panel__icon-container']}>
                       <div className={classes['confirm-panel__icon-wrapper']}>
@@ -47,7 +47,7 @@ const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
                         </span>
                       </div>
                     </div>
-                    <div>
+                    <div className={classes['confirm-panel__message']}>
                       <h2 className="card-title text-[1.7rem] mb-[2rem]">
                         {headerText}
                       </h2>
@@ -56,7 +56,7 @@ const ConfirmPanel: React.FC<ConfirmPanelProps> = ({
                   </div>
                 </div>
               </div>
-              <div className="modal-action mt-0 mb-10 pr-16 space-x-5">
+              <div className={`${classes['confirm-panel__actions']} modal-action mt-0 mb-10 pr-16 space-x-5`}>
                 <label
                   htmlFor={id}
                   className="btn bg-gray-500 border-0 text-white text-[1.5rem] normal-case font-normal w-[9rem] h-[3.5rem]"

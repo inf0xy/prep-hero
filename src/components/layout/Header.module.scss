@@ -47,7 +47,8 @@
   gap: 1.3rem;
   align-items: center;
 
-  .saved-list-button {
+  .saved-list-button,
+  .show-editor-button {
     height: 3.3rem;
     width: fit-content;
     font-size: 1.7rem;
@@ -56,13 +57,33 @@
     border-radius: 5px;
     letter-spacing: 2px;
     padding-top: 1px;
-    transition: all 0.3s ease;
+  }
 
-    &:hover {
-      background-color: $color-warning-100;
-      opacity: 0.8;
-      color: $text-off-white;
+  .saved-list-button {
+    transition: all 0.3s ease;
+  }
+
+  .saved-list-button:hover {
+    background-color: $color-warning-100;
+    opacity: 0.8;
+    color: $text-off-white;
+  }
+
+  .show-editor-button {
+    opacity: 0.8;
+    color: $text-off-white;
+
+    &--dark {
+      background-color: $dark-background-100;
     }
+
+    &--light {
+      background-color: $light-background-200;
+    }
+  }
+
+  .show-editor-button--active {
+    background-color: $color-primary-200;
   }
 }
 
@@ -146,7 +167,10 @@
   margin-right: 3rem;
 }
 
-@media (max-width: 37.5em) {
+/**********************************/
+/* BELOW 769px                    */
+/**********************************/
+@media (max-width: 48em) {
   .header {
     padding: 0 3rem;
 
@@ -154,8 +178,10 @@
       transform: scale(105%) translateY(-0.7rem);
     }
 
-    .header-right-group .menu-icon {
-      transform: scale(130%) translateX(-0.7rem);
+    .header-right-group {
+      .menu-icon {
+        transform: scale(130%) translateX(-0.7rem) translateY(1px);
+      }
     }
   }
 }

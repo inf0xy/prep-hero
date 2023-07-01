@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import Drawer from '../Drawer';
 import TextEditor from '../TextEditor';
 import { useAppSelector } from '@/hooks/hooks';
@@ -19,14 +20,16 @@ const WorkingNote: React.FC<WorkingNoteProps> = ({
   setNoteContent
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
+  const isMobilePortrait = useMediaQuery({ query: '(max-width: 417px)' });
 
   return (
     <Drawer
       direction="right"
       isOpen={showNote}
       showCloseButton={false}
+      hideBorder={false}
     >
-      <div className={classes['working-note']}>
+      <div className={`${isMobilePortrait && 'working-note-mobile'} ${classes['working-note']}`}>
         <div
           className={`${classes['text-editor-wrapper']} ${
             classes[`text-editor-wrapper--${theme}`]
