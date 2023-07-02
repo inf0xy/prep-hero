@@ -38,7 +38,7 @@
 .console-output.light::-webkit-scrollbar-track,
 .text-editor.light .w-md-editor-area::-webkit-scrollbar-track,
 .text-editor.light .w-md-editor-preview::-webkit-scrollbar-track,
-.heatmap-wrapper--light::-webkit-scrollbar-track,
+.heatmap-container--light::-webkit-scrollbar-track,
 .solution-modal-wrapper--light::-webkit-scrollbar-track,
 .problem-description-wrapper--light::-webkit-scrollbar-track,
 .title-list-wrapper--light::-webkit-scrollbar-track {
@@ -49,7 +49,7 @@
 .console-output.light::-webkit-scrollbar-thumb,
 .text-editor.light .w-md-editor-area::-webkit-scrollbar-thumb,
 .text-editor.light .w-md-editor-preview::-webkit-scrollbar-thumb,
-.heatmap-wrapper--light::-webkit-scrollbar-thumb,
+.heatmap-container--light::-webkit-scrollbar-thumb,
 .solution-modal-wrapper--light::-webkit-scrollbar-thumb,
 .problem-description-wrapper--light::-webkit-scrollbar-thumb,
 .title-list-wrapper--light::-webkit-scrollbar-thumb {
@@ -61,14 +61,14 @@
   .text-editor.light
   .w-md-editor-area::-webkit-scrollbar-thumb:hover,
 .text-editor.light .w-md-editor-preview::-webkit-scrollbar-thumb:hover,
-.heatmap-wrapper--light::-webkit-scrollbar-thumb:hover,
+.heatmap-container--light::-webkit-scrollbar-thumb:hover,
 .solution-modal-wrapper--light::-webkit-scrollbar-thumb:hover,
 .problem-description-wrapper--light::-webkit-scrollbar-thumb:hover,
 .title-list-wrapper--light::-webkit-scrollbar-thumb:hover {
   background: $color-scrollbar-thumb-hover-light;
 }
 
-.problem-item::-webkit-scrollbar {
+.no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
@@ -161,21 +161,44 @@ body {
 .w-md-editor {
   box-shadow: none !important;
   height: 50vh !important;
+  padding: 1rem;
 }
 
 .full-screen .w-md-editor {
   height: 100vh !important;
 }
 
-.w-md-editor-show-preview .w-md-editor-toolbar {
-  display: flex;
-  justify-content: flex-end;
-  min-height: 3.2rem !important;
+.w-md-editor-toolbar {
+  // display: flex;
+  // flex-direction: column-reverse;
+  // align-items: flex-start !important;
+  // gap: 0.5rem;
 
-  ul:first-child {
-    display: none;
+  ul:nth-child(2) {
+    // align-self: flex-end;
+    // margin-top: 1rem;
+    // margin-right: 1rem;
+    display: flex;
+    align-items: flex-end;
+    max-height: 1.5rem;
+    // gap: 0.5rem;
+    gap: 1rem;
   }
 }
+
+// .w-md-editor-show-preview .w-md-editor-toolbar {
+//   display: flex;
+//   justify-content: flex-end;
+//   min-height: 3.2rem !important;
+
+  // ul:first-child {
+  //   display: none;
+  // }
+//    ul:nth-child(2) {
+//       display: flex;
+//       align-items: center;
+//     }
+// }
 
 .wmde-markdown pre {
   position: relative;
@@ -189,9 +212,9 @@ body {
   .w-md-editor-toolbar {
     border-bottom: none;
 
-    & > ul:nth-child(2) {
-      transform: translateX(-1.5rem);
-    }
+    // & > ul:nth-child(2) {
+    //   transform: translateX(-1.5rem);
+    // }
   }
 
   button[data-name='fullscreen'],
@@ -261,19 +284,19 @@ body {
   }
 }
 
-.working-note-mobile .text-editor {
-  transform: translateY(-2.5rem);
-  overflow: hidden;
-  .w-md-editor-toolbar {
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: flex-start;
-    gap: 1rem;
-    & > ul:nth-child(2) {
-      transform: translateX(0);
-    }
-  }
-}
+// .working-note-mobile .text-editor {
+//   transform: translateY(-2.5rem);
+//   overflow: hidden;
+//   .w-md-editor-toolbar {
+//     display: flex;
+//     flex-direction: column-reverse;
+//     align-items: flex-start;
+//     gap: 1rem;
+//     & > ul:nth-child(2) {
+//       transform: translateX(0);
+//     }
+//   }
+// }
 
 .react-resizable {
   position: relative;
@@ -396,6 +419,18 @@ body {
   height: 15px;
 }
 
+// .code-snippet.dark > div:first-child {
+//   background-color: $pixel-snippet-color;
+// }
+
+// .code-snippet.light > div:first-child {
+//   background-color: red;
+// }
+
+// .code-snippet.light .monaco-scrollable-element.editor-scrollable {
+//   background-color: $pixel-snippet-color;
+// }
+
 .code-snippet.dark .lines-content.monaco-editor-background,
 .code-snippet.dark .margin {
   background-color: $dark-background-50 !important;
@@ -502,3 +537,12 @@ body {
 - Spacing system (px)
 2 /4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
 */
+/**********************************/
+/* BELOW 769px                    */
+/**********************************/
+// @media (max-width: 48em) {
+//   ::-webkit-scrollbar {
+//     display: none;
+//   }
+// }
+

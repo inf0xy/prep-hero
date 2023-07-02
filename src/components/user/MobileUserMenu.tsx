@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, RefObject } from 'react';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
+import { useMediaQuery } from 'react-responsive';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import Image from 'next/image';
 import Alert from '../reusables/Alert';
@@ -50,6 +51,10 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({ parentRef }) => {
     setShowAlert,
     setNotification
   );
+
+  const isMobile = useMediaQuery({
+    query: '(max-width: 768px)'
+  });
 
   useEffect(() => {
     const handler = (event: React.MouseEvent<HTMLElement>) => {
@@ -201,7 +206,7 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({ parentRef }) => {
               classes[`divider-line--${theme}`]
             }`}
           />
-          {session && (
+          {session && isMobile && router.pathname.match(/\/problem\/.*/) && (
             <>
               <li
                 className={`${classes['mobile-user-menu__item']} ${

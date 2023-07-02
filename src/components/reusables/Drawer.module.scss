@@ -35,15 +35,16 @@
 /**********************************/
 @media (max-width: 48em) {
   .drawer {
-    max-width: 80vw;
+    // max-width: 80vw;
+    max-width: 100vw;
   }
 }
 
 /**********************************/
 /* BELOW 641px                    */
 /**********************************/
-@media (max-width: 40em) {
-  .drawer {
-    max-width: 100vw;
-  }
-}
+// @media (max-width: 40em) {
+//   .drawer {
+//     max-width: 100vw;
+//   }
+// }

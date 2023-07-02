@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import {
@@ -22,6 +21,7 @@ import NoteBookIcon from '@/components/icons/NoteBookIcon';
 import ListIcon from '@/components/icons/ListIcon';
 import SavedListIcon from '@/components/icons/SavedListIcon';
 import classes from '../styles/UserDashBoard.module.scss';
+import { useRouter } from 'next/router';
 
 const DashBoard = () => {
   const [showAlert, setShowAlert] = useState(false);
@@ -47,6 +47,7 @@ const DashBoard = () => {
   const [listType, setListType] = useState<'saved' | 'completed'>('saved');
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
+  const router = useRouter();
   const parentDiv = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -136,45 +137,59 @@ const DashBoard = () => {
           <ul
             className={`${classes.utilities} ${classes[`utilities--${theme}`]}`}
           >
-            <li className={classes['timer-reminder-switch']}>
+            <li
+              className={classes['timer-reminder-switch']}
+              onClick={handleSetTimerReminder}
+            >
               <h3>Timer reminder</h3>
               <input
                 type="checkbox"
                 className="toggle toggle-info"
                 checked={timer_reminder}
-                onChange={handleSetTimerReminder}
               />
             </li>
-            <li className={classes.notebook}>
+            <li
+              className={classes.notebook}
+              onClick={() => router.push('/notebook')}
+            >
               <h3>Notebook</h3>
               <span>
-                <Link href="/notebook">
-                  <NoteBookIcon width={25} height={25} />
-                </Link>
+                <NoteBookIcon width={25} height={25} />
               </span>
             </li>
-            <li className={classes['completed-list']}>
+            <li
+              className={classes['completed-list']}
+              onClick={() => setListType('completed')}
+            >
               <h3>Completed List</h3>
-              <span onClick={() => setListType('completed')}>
+              <span>
+                {' '}
                 <ListIcon width={25} height={25} />
               </span>
             </li>
-            <li className={classes['saved-list']}>
+            <li
+              className={classes['saved-list']}
+              onClick={() => setListType('saved')}
+            >
               <h3>Saved List</h3>
-              <span onClick={() => setListType('saved')}>
+              <span>
                 <SavedListIcon width={25} height={25} />
               </span>
             </li>
           </ul>
         </div>
         <div className={classes.overview}>
-          <div className={`${classes.heatmap} ${classes[`heatmap--${theme}`]}`}>
-            <h2>{submissions.length} submissions last year</h2>
+          <div className={classes['heatmap-wrapper']}>
             <div
-              className={`heatmap-wrapper--${theme} ${classes['heatmap-container']}`}
-              ref={parentDiv}
+              className={`${classes.heatmap} ${classes[`heatmap--${theme}`]}`}
             >
-              <HeatMapCalendar parentRef={parentDiv} />
+              <h2>{submissions.length} submissions last year</h2>
+              <div
+                className={`heatmap-container--${theme} ${classes['heatmap-container']}`}
+                ref={parentDiv}
+              >
+                <HeatMapCalendar parentRef={parentDiv} />
+              </div>
             </div>
           </div>
 
@@ -185,10 +200,12 @@ const DashBoard = () => {
           >
             <SpeedChart />
           </div>
-          <span className={classes['saved-list']} id="saved-list">
+          <span className={classes['saved-list__titles']} id="saved-list">
             <TitleList
               listType="problems"
               titles={listType === 'saved' ? savedList : completedList}
+              showTopBar={true}
+              showHeader={true}
               firstIconText="Status"
               secondIconText={listType === 'saved' ? 'Remove' : undefined}
               firstIcon={<BookmarkFill className="text-primary" />}

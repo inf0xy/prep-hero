@@ -20,7 +20,7 @@ const WorkingNote: React.FC<WorkingNoteProps> = ({
   setNoteContent
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
-  const isMobilePortrait = useMediaQuery({ query: '(max-width: 417px)' });
+  const isMobilePortrait = useMediaQuery({ query: '(max-width: 768px)' });
 
   return (
     <Drawer
@@ -29,18 +29,26 @@ const WorkingNote: React.FC<WorkingNoteProps> = ({
       showCloseButton={false}
       hideBorder={false}
     >
-      <div className={`${isMobilePortrait && 'working-note-mobile'} ${classes['working-note']}`}>
+      <div
+        className={`${isMobilePortrait && 'working-note-mobile'} ${
+          classes['working-note']
+        }`}
+      >
         <div
           className={`${classes['text-editor-wrapper']} ${
             classes[`text-editor-wrapper--${theme}`]
           }`}
         >
-          <button className={classes['close-note']} onClick={closeNote}>
-            <XIcon width={15} height={15} />
-          </button>
+          {/* {!isMobilePortrait && (
+            <button className={classes['close-note']} onClick={closeNote}>
+              <XIcon width={15} height={15} />
+            </button>
+          )} */}
           <TextEditor
             value={noteContent ? noteContent : ''}
             setValue={setNoteContent}
+            fullScreen={isMobilePortrait ? true : false}
+            onCloseNote={() => closeNote()}
           />
         </div>
       </div>

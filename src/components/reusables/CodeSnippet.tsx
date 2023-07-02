@@ -37,7 +37,8 @@ const CodeSnippet: React.FC<CodeSnippetProps> = ({
           renderWhitespace: 'none',
           folding: false,
           fontSize: 14,
-          lineNumbers: 'off'
+          lineNumbers: 'off',
+          glyphMargin: false
         });
       });
 

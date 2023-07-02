@@ -1,8 +1,15 @@
 import { ReactNode, useState, useCallback, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { useMediaQuery } from 'react-responsive';
+import { useAppSelector } from '@/hooks/hooks';
+import useSubmitNote from '@/hooks/useSubmitNote';
+import { Note, NotificationType } from '@/types/dataTypes';
 import SearchBar from '@/components/reusables/SearchBar';
+import TextEditor from './TextEditor';
+import Alert from './Alert';
+import NoteAction from '../user/NoteAction';
 import Button from '@/components/reusables/Button';
 import ResetIcon from '@/components/icons/ResetIcon';
+import Modal from './Modal';
 import CheckIcon from '../icons/CheckIcon';
 import InProgressIcon from '../icons/InProgressIcon';
 import classes from './TitleList.module.scss';
@@ -10,6 +17,8 @@ import classes from './TitleList.module.scss';
 type TitleListProps = {
   listType: 'problems' | 'notes' | string;
   titles: string[];
+  showTopBar: boolean;
+  showHeader: boolean;
   firstIconText?: string;
   secondIconText?: string;
   firstIcon?: ReactNode;
@@ -20,18 +29,11 @@ type TitleListProps = {
   secondIconAction?: (val?: string) => Promise<any> | undefined;
 };
 
-import Modal from './Modal';
-import TextEditor from './TextEditor';
-import { NotificationType } from '@/types/dataTypes';
-import useSubmitNote from '@/hooks/useSubmitNote';
-import { Note } from '@/types/dataTypes';
-import Alert from './Alert';
-import NoteAction from '../user/NoteAction';
-import { useRouter } from 'next/router';
-
 const TitleList: React.FC<TitleListProps> = ({
   listType,
   titles,
+  showTopBar,
+  showHeader,
   firstIconText,
   secondIconText,
   firstIcon,
@@ -62,6 +64,7 @@ const TitleList: React.FC<TitleListProps> = ({
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 897px)' });
 
   const { handleSubmitNote } = useSubmitNote(setShowAlert, setNotification);
 
@@ -157,11 +160,7 @@ const TitleList: React.FC<TitleListProps> = ({
       )}
       <p
         className={classes['title-content']}
-        onClick={
-          listType === 'notes'
-            ? () => handleOpenNote(title)
-            : undefined
-        }
+        onClick={listType === 'notes' ? () => handleOpenNote(title) : undefined}
       >
         {listType !== 'notes' ? (
           <a href={`/problem/${title}`}>{title}</a>
@@ -176,12 +175,10 @@ const TitleList: React.FC<TitleListProps> = ({
       </p>
       <Modal
         id={`modal__notebook-note-${title}`}
-        type="close-button"
         buttonSize="btn-sm"
         className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}
-        onClose={() => handleCloseNote(title)}
         fullScreenToggle={listType === 'notes'}
       >
         <div className={`code-editor__note code-editor__note--${theme}`}>
@@ -191,6 +188,7 @@ const TitleList: React.FC<TitleListProps> = ({
               setValue={(val: string) =>
                 setNote((prev) => ({ ...prev, content: val }))
               }
+              onCloseNote={() => handleCloseNote(title)}
             />
           )}
         </div>
@@ -214,68 +212,78 @@ const TitleList: React.FC<TitleListProps> = ({
           classes[`titles-selection--${theme}`]
         }`}
       >
-        <div className={`top-bar ${classes['top-bar']}`}>
-          <div className={classes['title__searchbar']}>
-            <SearchBar
-              setSingleSearchTerm={setSearchTerm}
-              currentSearch={searchTerm}
-            />
-            <Button
-              color="secondary"
-              extraStyle={{ padding: '1rem' }}
-              onClick={() => setSearchTerm('')}
-            >
-              <ResetIcon />
-            </Button>
+        {showTopBar && (
+          <div className={`top-bar ${classes['top-bar']}`}>
+            <div className={classes['title__searchbar']}>
+              <SearchBar
+                setSingleSearchTerm={setSearchTerm}
+                currentSearch={searchTerm}
+              />
+              <Button
+                color="secondary"
+                extraStyle={{ padding: '1rem' }}
+                onClick={() => setSearchTerm('')}
+              >
+                <ResetIcon />
+              </Button>
+            </div>
+            {actionBar && actionBar}
           </div>
-          {actionBar && actionBar}
-        </div>
+        )}
         <div
-          role="table"
-          className={`${classes['titles__table']} ${
-            classes[`titles-table--${theme}`]
+          className={`${isTabletOrMobile && 'no-scrollbar'} ${
+            classes['titles-table-wrapper']
           }`}
         >
           <div
-            className={`${classes['titles-table__header']} ${
-              classes[`titles-table__header--${theme}`]
+            role="table"
+            className={`${classes['titles__table']} ${
+              classes[`titles-table--${theme}`]
             }`}
           >
-            {firstIconText !== undefined && (
+            {showHeader && (
               <div
-                role="row"
-                className={classes['first-col-header']}
-                style={
-                  firstIconText.length === 0
-                    ? { gridColumn: 'span 1' }
-                    : undefined
-                }
+                className={`${classes['titles-table__header']} ${
+                  classes[`titles-table__header--${theme}`]
+                }`}
               >
-                {firstIconText}
+                {firstIconText !== undefined && (
+                  <div
+                    role="row"
+                    className={classes['first-col-header']}
+                    style={
+                      firstIconText.length === 0
+                        ? { gridColumn: 'span 1' }
+                        : undefined
+                    }
+                  >
+                    {firstIconText}
+                  </div>
+                )}
+                {secondIconText !== undefined && (
+                  <div
+                    role="row"
+                    className={classes['second-col-header']}
+                    style={
+                      secondIconText.length === 0
+                        ? { gridColumn: 'span 1' }
+                        : undefined
+                    }
+                  >
+                    {secondIconText}
+                  </div>
+                )}
+                <div role="row" className={classes['title-header']}>
+                  Title
+                </div>
               </div>
             )}
-            {secondIconText !== undefined && (
-              <div
-                role="row"
-                className={classes['second-col-header']}
-                style={
-                  secondIconText.length === 0
-                    ? { gridColumn: 'span 1' }
-                    : undefined
-                }
-              >
-                {secondIconText}
-              </div>
-            )}
-            <div role="row" className={classes['title-header']}>
-              Title
+            <div
+              role="table-body"
+              className={`title-list-wrapper--${theme} ${classes['title-table__body']}`}
+            >
+              {renderedTitles}
             </div>
-          </div>
-          <div
-            role="table-body"
-            className={`title-list-wrapper--${theme} ${classes['title-table__body']}`}
-          >
-            {renderedTitles}
           </div>
         </div>
       </div>

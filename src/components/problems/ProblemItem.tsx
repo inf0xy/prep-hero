@@ -118,6 +118,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
 
   const [noteContent, setNoteContent] = useState(problemNoteContent);
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const isSmallMobile = useMediaQuery({ query: '(max-width: 601px)' });
 
   useEffect(() => {
     if (!showNotes) {
@@ -160,6 +161,20 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     dispatch(setSelectedProblem(problem));
     router.push('/admin/edit');
   };
+
+  const getNoteModalDimension = () => {
+    let dimension = 'w-[70vw] h-[60vh]';
+
+    if (isMobile) {
+      dimension = 'w-[80vw] h-[70vh]'
+    }
+
+    if (isSmallMobile) {
+      dimension = 'w-[100vw] h-[100vh] rounded-none'
+    }
+
+    return dimension;
+  }
 
   const solvedStatusStyle =
     session?.session.user.account_type === 'admin' ||
@@ -417,16 +432,17 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       </Modal>
       <Modal
         id={`modal__problems-note-${title}`}
-        type="close-button"
-        buttonSize="btn-sm"
         className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}
-        onClose={handleCloseNoteModal}
+        // onClose={() => setShowNote(false)}
+        // className={`max-w-[100vw] max-h-[100vh] ${getNoteModalDimension()} p-8 ${
+        //   theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
+        // }`}
       >
         <div className={`code-editor__note code-editor__note--${theme}`}>
           {showNote && (
-            <TextEditor value={noteContent!} setValue={setNoteContent} />
+            <TextEditor value={noteContent!} setValue={setNoteContent} onCloseNote={handleCloseNoteModal}/>
           )}
         </div>
       </Modal>

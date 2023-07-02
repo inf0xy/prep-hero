@@ -20,10 +20,12 @@ const SavedList = () => {
           classes[`saved-list-drawer--${theme}`]
         }`}
       >
-        <h2 className={classes.title}>Saved List</h2>
+        <h2 className={classes['header-title']}>Saved List</h2>
         <TitleList
           listType="problems"
           titles={list}
+          showTopBar={false}
+          showHeader={false}
           firstIconText=""
           secondIconText=""
           firstIcon={<BookmarkFill className="text-primary" />}

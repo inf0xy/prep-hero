@@ -234,13 +234,16 @@ const NotebookPage = () => {
           </button>
           <div className={classes['side-nav__content']}>
             <label
-            htmlFor="modal__create-new-folder"
+              htmlFor="modal__create-new-folder"
               className={`${classes['create-button']} ${
                 classes[`create-button--${theme}`]
               }`}
               onClick={() => setFolderAction('create')}
             >
-              <span className={classes['create-button__title']}><FolderAddIcon /></span>New folder
+              <span className={classes['create-button__title']}>
+                <FolderAddIcon />
+              </span>
+              New folder
             </label>
             <ul className={classes['folders']}>
               {folderNames.map((el) => (
@@ -260,6 +263,8 @@ const NotebookPage = () => {
           <TitleList
             listType="notes"
             titles={getNotesWithListName()}
+            showTopBar={true}
+            showHeader={true}
             secondIconText=""
             firstIconAction={undefined}
             secondIconAction={undefined}
@@ -333,17 +338,19 @@ const NotebookPage = () => {
         </Modal>
         <Modal
           id="modal__editor-note"
-          type="close-button"
           buttonSize="btn-sm"
           className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
             theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
           }`}
-          onClose={handleCloseNoteModal}
           fullScreenToggle={true}
         >
           <div className={`code-editor__note code-editor__note--${theme}`}>
             {editingTitle && (
-              <TextEditor value={noteContent!} setValue={setNoteContent} />
+              <TextEditor
+                value={noteContent!}
+                setValue={setNoteContent}
+                onCloseNote={handleCloseNoteModal}
+              />
             )}
           </div>
         </Modal>

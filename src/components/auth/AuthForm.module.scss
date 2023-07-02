@@ -246,3 +246,31 @@
     height: 4rem;
   }
 }
+
+/**********************************/
+/* BELOW 400px                    */
+/**********************************/
+@media (max-width: 25em) {
+  .auth-form {
+    height: 53rem;
+
+    padding: 1rem 3rem;
+    .header-logo {
+      margin-bottom: 1.7rem;
+      transform: scale(115%) translateX(-0.5rem);
+    }
+
+    .name,
+    .email,
+    .password {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .password,
+    .confirm-password {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
+}

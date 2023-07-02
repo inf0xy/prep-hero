@@ -2,9 +2,13 @@
 
 .user-dashboard {
   min-height: calc(100vh - 15rem);
+  height: fit-content;
   display: flex;
   padding: 2rem;
   gap: 2rem;
+
+  overflow-y: auto;
+  overflow-x: hidden;
 
   font-size: 1.5rem;
 
@@ -21,9 +25,11 @@
   display: flex;
   flex-direction: column;
   width: 30rem;
+  min-width: 30rem;
   border-radius: 1rem;
-  padding: 3rem 2rem;
+  padding: 4rem 2rem;
   gap: 4rem;
+  height: fit-content;
 
   &--dark {
     color: $text-off-white;
@@ -68,6 +74,7 @@
   }
 
   li {
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -92,39 +99,42 @@
   gap: 2rem;
 }
 
-.heatmap {
+.heatmap-wrapper {
   border-radius: 1rem;
-  padding: 3rem 2rem 1rem;
+  .heatmap {
+    border-radius: 1rem;
+    padding: 3rem 2rem 1rem;
+    min-width: 48rem;
 
-  &--dark {
-    color: $text-off-white;
-    background-color: $dark-background-300;
-  }
+    &--dark {
+      color: $text-off-white;
+      background-color: $dark-background-300;
+    }
 
-  &--light {
-    color: $text-gray-700;
-    background-color: $light-background-0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
+    &--light {
+      color: $text-gray-700;
+      background-color: $light-background-0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
 
-  h2 {
-    margin-bottom: 0.5rem;
-    font-size: 1.7rem;
-  }
+    h2 {
+      margin-bottom: 0.5rem;
+      font-size: 1.7rem;
+    }
 
-  .heatmap-container {
-    display: inline-block;
-    width: calc(100vw - 40rem);
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 2.5rem 0;
+    .heatmap-container {
+      display: inline-block;
+      width: calc(100vw - 40rem);
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2.5rem 0;
 
-    & > *:hover {
-      overflow-x: visible;
+      & > *:hover {
+        overflow-x: visible;
+      }
     }
   }
 }
-
 .progress {
   display: flex;
   flex-direction: column;
@@ -142,7 +152,10 @@
   border-radius: 1rem;
   padding: 2rem;
   height: fit-content;
-  min-height: 42.5rem;
+
+  & > div > div:nth-child(2) {
+    min-height: 41rem;
+  }
 
   &--dark {
     color: $text-off-white;
@@ -156,16 +169,269 @@
   }
 }
 
-.saved-list {
-  z-index: 10;
+.saved-list__titles > div {
+  height: fit-content;
 
-  & > div {
-    width: calc(100vw - 36rem);
+  // table-wrapper
+  & > div:nth-child(2) {
+    height: fit-content;
+
+    // table
+    & > div {
+      width: 100%;
+
+      & > div:nth-child(2) {
+        height: fit-content;
+      }
+    }
   }
 }
 
-@media (max-width: 61em) {
+/**********************************/
+/* BELOW 977px (Smaller desktop) */
+/**********************************/
+// @media (max-width: 61em) {
+//   .speed-records {
+//     & > div > div:nth-child(2) {
+//       min-height: 35rem;
+//       height: 35rem;
+//     }
+//   }
+// }
+
+/**********************************/
+/* BELOW 897px (Smaller desktop) */
+/**********************************/
+@media (max-width: 56em) {
   .user-dashboard {
-    min-height: calc(100vh - 27rem);
+    flex-direction: column;
+    .dashboard-left {
+      align-items: center;
+      width: 100%;
+
+      .profile {
+        width: 60rem;
+      }
+
+      .progress {
+        width: 60rem;
+      }
+
+      .utilities {
+        width: 57rem;
+      }
+    }
+
+    // .speed-records > * {
+    .speed-records > * {
+      overflow-x: auto;
+    }
+
+    .saved-list__titles > * {
+      height: fit-content;
+
+      & > * {
+        height: fit-content;
+      }
+    }
+
+    .heatmap-wrapper {
+      border-radius: 1rem;
+      overflow-x: hidden;
+      .heatmap {
+        overflow-x: hidden;
+        .heatmap-container {
+          padding-top: 0;
+          width: 100%;
+          & > * {
+            padding-top: 2.5rem;
+            overflow-x: hidden;
+          }
+        }
+        .heatmap-container::-webkit-scrollbar {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+/**********************************/
+/* BELOW 817px (Smaller desktop) */
+/**********************************/
+@media (max-width: 51em) {
+  .user-dashboard {
+    .heatmap-wrapper {
+      .heatmap {
+        .heatmap-container::-webkit-scrollbar {
+          display: unset;
+        }
+      }
+    }
+  }
+}
+
+/**********************************/
+/* BELOW 769px                    */
+/**********************************/
+@media (max-width: 48em) {
+  .user-dashboard {
+    .speed-records {
+      & > div > div:nth-child(2) {
+        min-height: 34rem;
+      }
+    }
+  }
+}
+
+/**********************************/
+/* BELOW 641px                    */
+/**********************************/
+@media (max-width: 40em) {
+  .user-dashboard {
+    .dashboard-left {
+      padding: 4rem 2rem;
+
+      .profile {
+        width: 100%;
+      }
+
+      .progress {
+        width: 100%;
+      }
+
+      .utilities {
+        width: 90%;
+      }
+    }
+
+    .speed-records {
+      & > div > div:nth-child(2) {
+        min-height: 28rem;
+      }
+    }
+
+    .heatmap-wrapper .heatmap .heatmap-container::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+/**********************************/
+/* BELOW 528px                    */
+/**********************************/
+@media (max-width: 33em) {
+  .user-dashboard {
+    .heatmap-wrapper .heatmap .heatmap-container {
+      width: calc(100% - 2em);
+    }
+
+    .speed-records {
+      & div::-webkit-scrollbar {
+        display: none;
+      }
+      & > div > div:nth-child(2) {
+        min-height: 23rem;
+      }
+    }
+
+    .saved-list__titles > div {
+      // table-wrapper
+      & > div:nth-child(2) {
+        // table
+        & > div {
+          &::-webkit-scrollbar {
+            display: none;
+          }
+
+          & > div:first-child {
+            & div:first-child,
+            & div:nth-child(2) {
+              display: none;
+            }
+            & div:last-child {
+              margin-left: 5.5rem;
+            }
+          }
+          // table body
+          & > div:nth-child(2) {
+            overflow-x: visible;
+
+            div :first-child,
+            div :nth-child(2) {
+              min-width: 2rem;
+              width: 2rem;
+              padding: 0;
+            }
+
+            div :nth-child(2) {
+              margin-left: 1rem;
+            }
+
+            div :nth-child(3) {
+              margin-left: 1rem;
+              a {
+                min-width: 30rem;
+              }
+            }
+          }
+
+          & > div:nth-child(2)::-webkit-scrollbar {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+/**********************************/
+/* BELOW 501px                    */
+/**********************************/
+@media (max-width: 32em) {
+  .user-dashboard {
+    .saved-list__titles > div {
+      & > div:first-child > div {
+        min-width: 100%;
+      }
+
+      // & > div:nth-child(2) {
+      //   & > div > div:nth-child(2) {
+
+      //   }
+      // }
+    }
+  }
+}
+
+/**********************************/
+/* BELOW 501px                    */
+/**********************************/
+@media (max-width: 32em) {
+  .user-dashboard {
+    .speed-records {
+      & > div > div:nth-child(2) {
+        min-height: 21rem;
+      }
+    }
+  }
+}
+
+/**********************************/
+/* BELOW 417px                    */
+/**********************************/
+@media (max-width: 26em) {
+  .user-dashboard {
+    .heatmap-wrapper .heatmap {
+      .heatmap-container {
+        width: 80vw;
+      }
+    }
+
+    .speed-records {
+      & > div > div:nth-child(2) {
+        min-height: 17rem;
+      }
+    }
   }
 }

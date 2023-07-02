@@ -211,7 +211,11 @@ const AuthForm = () => {
         >
           <Link href="/">
             <Image
-              src="/prep-hero-logo.png"
+              src={
+                theme === 'dark'
+                  ? '/prep-hero-logo-dark.png'
+                  : '/prep-hero-logo-light.png'
+              }
               alt="Prep Hero Icon"
               width={100}
               height={100}
@@ -237,7 +241,11 @@ const AuthForm = () => {
               }}
               placeholder="Name"
               className={`${classes.name} ${classes[`name--${theme}`]}${
-                !validation.name ? `${classes['name-error']} ${classes[`name-error--${theme}`]}` : ''
+                !validation.name
+                  ? `${classes['name-error']} ${
+                      classes[`name-error--${theme}`]
+                    }`
+                  : ''
               }`}
             />
           )}
@@ -250,7 +258,11 @@ const AuthForm = () => {
             placeholder="Email address"
             autoComplete="new-password"
             className={`${classes.email} ${classes[`email--${theme}`]} ${
-              !validation.email ? `${classes['email-error']} ${classes[`email-error--${theme}`]}` : ''
+              !validation.email
+                ? `${classes['email-error']} ${
+                    classes[`email-error--${theme}`]
+                  }`
+                : ''
             }`}
             style={{
               borderTopLeftRadius: loginForm ? '4px' : 'unset',
@@ -267,7 +279,11 @@ const AuthForm = () => {
             type="password"
             placeholder="Password"
             className={`${classes.password} ${classes[`password--${theme}`]} ${
-              !validation.password ? `${classes['password-error']} ${classes[`password-error--${theme}`]}` : ''
+              !validation.password
+                ? `${classes['password-error']} ${
+                    classes[`password-error--${theme}`]
+                  }`
+                : ''
             }`}
             style={{
               borderBottomLeftRadius: loginForm ? '4px' : 'unset',
@@ -290,7 +306,9 @@ const AuthForm = () => {
                 classes[`confirm-password--${theme}`]
               } ${
                 !validation.confirmPassword
-                  ? `${classes['confirm-password-error']} ${classes[`confirm-password-error--${theme}`]}`
+                  ? `${classes['confirm-password-error']} ${
+                      classes[`confirm-password-error--${theme}`]
+                    }`
                   : ''
               }`}
             />

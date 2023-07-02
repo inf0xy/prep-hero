@@ -3,7 +3,6 @@
 .auth-page {
   position: relative;
   min-height: 100vh;
-  max-height: 100vh;
   overflow: hidden;
   display: flex;
   padding: 14rem 3rem 0 3rem;
@@ -46,7 +45,7 @@
 /**********************************/
 @media (max-width: 37.5em) {
   .auth-page {
-    padding-top: 10rem;
+    padding: 10rem 4rem 3rem;
 
     .auth__theme-button {
       bottom: 5rem;
@@ -55,6 +54,22 @@
       label {
         padding: 0.5rem;
       }
+    }
+  }
+}
+
+/**********************************/
+/* BELOW 400px                    */
+/**********************************/
+@media (max-width: 25em) {
+  .auth-page {
+    min-height: 86vh;
+    height: 86vh;
+    padding-top: 4rem;
+
+    .auth__theme-button {
+      bottom: 4rem;
+      right: 4rem;
     }
   }
 }

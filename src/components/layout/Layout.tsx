@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import { useMediaQuery } from 'react-responsive';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { setHomePageLoading } from '@/store';
 import useCustomScrollbar from '@/hooks/useCustomScrollbar';
@@ -26,6 +27,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 990px)' });
+  const isSmallMobile = useMediaQuery({ query: '(max-width: 501px)' });
 
   useEffect(() => {
     if (session && router.pathname === '/') {
@@ -47,12 +50,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       : variables.lightBackground0;
   const placeHolder = <div className={`min-h-screen ${backgroundColor}`} />;
 
+  const excludedRoutes = [/\/auth\/.*/, /\/problem\/.*/];
+
   return (
     <main
       className={`relative min-w-screen overflow-x-hidden max-w-full ${
-        showUserMenu
+        showUserMenu && isTabletOrMobile
           ? `${
-              !router.pathname.includes('auth') ? 'pr-[8px]' : ''
+              excludedRoutes.every((el) => !router.pathname.match(el)) && !isSmallMobile
+                ? 'pr-[8px]'
+                : ''
             } h-screen overflow-y-hidden`
           : ''
       }`}
@@ -69,9 +76,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Loading />
       ) : (
         <>
-          {!router.pathname.includes('auth') && <Header headerRef={headerRef} />}
-          {!headerRef.current && !router.pathname.includes('auth') ? placeHolder : children}
-          {!regex.test(router.pathname) && headerRef.current && !router.pathname.includes('auth') && <Footer />}
+          {!router.pathname.includes('auth') && (
+            <Header headerRef={headerRef} />
+          )}
+          {!headerRef.current && !router.pathname.includes('auth')
+            ? placeHolder
+            : children}
+          {!regex.test(router.pathname) &&
+            headerRef.current &&
+            !router.pathname.includes('auth') && <Footer />}
         </>
       )}
     </main>

@@ -225,7 +225,7 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
               <div className="dropdown dropdown-end">
                 <label
                   tabIndex={0}
-                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  onClick={() => dispatch(setShowUserMenu(!showUserMenu))}
                   ref={avatarRef}
                 >
                   <Image
