@@ -1,9 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import { useAppSelector } from '@/hooks/hooks';
 import Drawer from '../Drawer';
 import TextEditor from '../TextEditor';
-import { useAppSelector } from '@/hooks/hooks';
-import XIcon from '@/components/icons/XIcon';
 import classes from './WorkingNote.module.scss';
 
 type WorkingNoteProps = {

@@ -1,6 +1,6 @@
-import { ReactNode, useState, useCallback, useEffect } from 'react';
+import { ReactNode, useState, useCallback, useEffect, useRef, Dispatch, SetStateAction } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import useSubmitNote from '@/hooks/useSubmitNote';
 import { Note, NotificationType } from '@/types/dataTypes';
 import SearchBar from '@/components/reusables/SearchBar';
@@ -13,6 +13,7 @@ import Modal from './Modal';
 import CheckIcon from '../icons/CheckIcon';
 import InProgressIcon from '../icons/InProgressIcon';
 import classes from './TitleList.module.scss';
+import { toggleFullScreen } from '@/store';
 
 type TitleListProps = {
   listType: 'problems' | 'notes' | string;
@@ -27,6 +28,8 @@ type TitleListProps = {
   actionBar?: ReactNode;
   firstIconAction?: (val?: string) => Promise<any> | undefined;
   secondIconAction?: (val?: string) => Promise<any> | undefined;
+  currentModal?: string,
+  setCurrentModal?: Dispatch<SetStateAction<string>>
 };
 
 const TitleList: React.FC<TitleListProps> = ({
@@ -41,11 +44,19 @@ const TitleList: React.FC<TitleListProps> = ({
   testTitles,
   actionBar,
   firstIconAction,
-  secondIconAction
+  secondIconAction,
+  currentModal,
+  setCurrentModal
 }) => {
   const [currentTitles, setCurrentTitles] = useState(titles);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const tableWrapperRef = useRef(null);
+  const [tableBodyHeight, setTableBodyHeight] = useState<number | undefined>(
+    undefined
+  );
+
+  const dispatch = useAppDispatch();
   const { theme, submissions, notes } = useAppSelector((state) => {
     const { theme } = state.theme;
     const { submissions, notes } = state.user;
@@ -75,18 +86,25 @@ const TitleList: React.FC<TitleListProps> = ({
         list_name: selectedNote.list_name,
         content: selectedNote.content
       });
+      if (setCurrentModal) {
+        setCurrentModal(`modal__notebook-note-${title}`);
+      }
       setShowNote(true);
     }
   };
 
-  const handleCloseNote = async (title: string) => {
+  const handleCloseNote = async (title: string | undefined) => {
     const savingNote = {
       list_name: note.list_name,
       title,
       content: note.content
     };
     await handleSubmitNote(undefined, savingNote);
+    if (setCurrentModal) {
+      setCurrentModal('');
+    }
     setShowNote(false);
+    dispatch(toggleFullScreen(false));
   };
 
   const handleSearch = useCallback(() => {
@@ -114,6 +132,13 @@ const TitleList: React.FC<TitleListProps> = ({
     }
     return null;
   };
+
+  const handleSetTableHeight = () => {
+    const height =  (tableWrapperRef.current as any).clientHeight;
+    setTableBodyHeight(height);
+  };
+
+
 
   useEffect(() => {
     handleSearch();
@@ -175,20 +200,20 @@ const TitleList: React.FC<TitleListProps> = ({
       </p>
       <Modal
         id={`modal__notebook-note-${title}`}
-        buttonSize="btn-sm"
-        className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
+        className={`max-w-[70vw] max-h-[60vh] w-[70vw] h-[60vh] ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}
-        fullScreenToggle={listType === 'notes'}
+        isOpen={currentModal === `modal__notebook-note-${title}`}
       >
-        <div className={`code-editor__note code-editor__note--${theme}`}>
-          {showNote && note.content && (
+        <div>
+          {showNote && (
             <TextEditor
-              value={note.content}
+            value={note.content!}
               setValue={(val: string) =>
                 setNote((prev) => ({ ...prev, content: val }))
               }
               onCloseNote={() => handleCloseNote(title)}
+              previewMode='preview'
             />
           )}
         </div>
@@ -213,7 +238,7 @@ const TitleList: React.FC<TitleListProps> = ({
         }`}
       >
         {showTopBar && (
-          <div className={`top-bar ${classes['top-bar']}`}>
+          <div onClick={handleSetTableHeight} className={`top-bar ${classes['top-bar']}`}>
             <div className={classes['title__searchbar']}>
               <SearchBar
                 setSingleSearchTerm={setSearchTerm}
@@ -231,9 +256,13 @@ const TitleList: React.FC<TitleListProps> = ({
           </div>
         )}
         <div
+          ref={tableWrapperRef}
           className={`${isTabletOrMobile && 'no-scrollbar'} ${
             classes['titles-table-wrapper']
           }`}
+          style={{
+            minHeight: tableBodyHeight ? `${tableBodyHeight}px` : undefined
+          }}
         >
           <div
             role="table"

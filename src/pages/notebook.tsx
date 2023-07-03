@@ -1,19 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { renameFolder, deleteFolder } from '@/store';
+import { renameFolder, deleteFolder, toggleFullScreen } from '@/store';
 import useSubmitNote from '@/hooks/useSubmitNote';
 import { NotificationType } from '@/types/dataTypes';
 import { listNameSelections } from '@/helpers/formFields';
 import TitleList from '@/components/reusables/TitleList';
 import TextEditor from '@/components/reusables/TextEditor';
-import MenuIcon from '@/components/icons/MenuIcon';
 import Modal from '@/components/reusables/Modal';
 import ConfirmPanel from '@/components/reusables/ConfirmPanel';
 import Alert from '@/components/reusables/Alert';
 import FolderAddIcon from '@/components/icons/FolderAddIcon';
 import FolderItem from '@/components/user/FolderItem';
-import FolderPlus from '@/components/icons/FolderPlus';
 import classes from '@/styles/NotebookPage.module.scss';
+import NotebookMobileNav from '@/components/user/NoteBookMobileNav';
+import FolderOutlineIcon from '@/components/icons/FolderOutlineIcon';
+import PlusIcon from '@/components/icons/PlusIcon';
+import NotebookFolderList from '@/components/user/NotebookFolderList';
 
 const NotebookPage = () => {
   const { theme, notes } = useAppSelector((state) => {
@@ -35,6 +38,12 @@ const NotebookPage = () => {
   const folderNameRef = useRef<HTMLInputElement | null>(null);
   const noteTitleRef = useRef<HTMLInputElement | null>(null);
   const { handleSubmitNote } = useSubmitNote(setShowAlert, setNotification);
+
+  const [currentModal, setCurrentModal] = useState('');
+  const [showNewNoteModal, setShowNewNoteModal] = useState(false);
+  const [showFolderList, setShowFolderList] = useState(false);
+
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 896px)' });
 
   useEffect(() => {
     const folders = new Set();
@@ -60,14 +69,9 @@ const NotebookPage = () => {
       newNoteModal.checked = false;
     }
   };
-
   const openNewNoteModal = () => {
-    const newNoteModal = document.querySelector(
-      'input[type="checkbox"]#modal__editor-note'
-    ) as HTMLInputElement;
-    if (newNoteModal) {
-      newNoteModal.checked = true;
-    }
+    setCurrentModal('modal__editor-note');
+    setShowNewNoteModal(true);
   };
 
   const getNotesWithListName = () => {
@@ -204,6 +208,9 @@ const NotebookPage = () => {
     await handleSubmitNote(undefined, note);
     setNoteContent('');
     setEditingTitle(null);
+    setCurrentModal('');
+    setShowNewNoteModal(false);
+    dispatch(toggleFullScreen(false));
   };
 
   return (
@@ -222,43 +229,81 @@ const NotebookPage = () => {
           classes[`notebook-page--${theme}`]
         }`}
       >
-        <div
-          className={`${classes['side-nav']} ${classes[`side-nav--${theme}`]}`}
-        >
-          <button
-            className={`${classes['list-button']} ${
-              classes[`list-button--${theme}`]
+        {!isTabletOrMobile ? (
+          <div
+            className={`${classes['side-nav']} ${
+              classes[`side-nav--${theme}`]
             }`}
           >
-            <MenuIcon width={8} height={8} />
-          </button>
+            <div className={classes['side-nav__content']}>
+              <label
+                htmlFor="modal__create-new-folder"
+                className={`${classes['create-button']} ${
+                  classes[`create-button--${theme}`]
+                }`}
+                onClick={() => setFolderAction('create')}
+              >
+                <span className={classes['create-button__title']}>
+                  <FolderAddIcon />
+                </span>
+                New folder
+              </label>
+              <ul className={classes['folders']}>
+                {folderNames.map((el) => (
+                  <FolderItem
+                    key={el}
+                    folderName={el}
+                    selectedFolder={selectedFolder}
+                    setSelectedFolder={setSelectedFolder}
+                    setActionFolderName={setActionFolderName}
+                    setFolderAction={setFolderAction}
+                  />
+                ))}
+              </ul>
+            </div>
+          </div>
+        ) : (
+          <>
+            <NotebookMobileNav
+              showFolderList={showFolderList}
+              setShowFolderList={setShowFolderList}
+              setFolderAction={setFolderAction}
+            />
+            {showFolderList && (
+              <NotebookFolderList
+                folderNames={folderNames}
+                selectedFolder={selectedFolder}
+                showFolderList={showFolderList}
+                setShowFolderList={setShowFolderList}
+                setSelectedFolder={setSelectedFolder}
+                setActionFolderName={setActionFolderName}
+                setFolderAction={setFolderAction}
+              />
+            )}
+          </>
+        )}
+
+        {/* <div
+          className={`${classes['side-nav']} ${classes[`side-nav--${theme}`]}`}
+        >
           <div className={classes['side-nav__content']}>
             <label
-              htmlFor="modal__create-new-folder"
-              className={`${classes['create-button']} ${
-                classes[`create-button--${theme}`]
-              }`}
-              onClick={() => setFolderAction('create')}
+            htmlFor="modal__create-new-folder"
+            className={`${classes['create-button']} ${
+              classes[`create-button--${theme}`]
+            }`}
+            onClick={() => setFolderAction('create')}
             >
               <span className={classes['create-button__title']}>
-                <FolderAddIcon />
+                <PlusIcon width={30} height={30}/>
               </span>
-              New folder
             </label>
-            <ul className={classes['folders']}>
-              {folderNames.map((el) => (
-                <FolderItem
-                  key={el}
-                  folderName={el}
-                  selectedFolder={selectedFolder}
-                  setSelectedFolder={setSelectedFolder}
-                  setActionFolderName={setActionFolderName}
-                  setFolderAction={setFolderAction}
-                />
-              ))}
-            </ul>
+            <button>
+              <FolderOutlineIcon width={22} height={22} />
+            </button>
           </div>
-        </div>
+        </div> */}
+
         <div className={classes['note-list']}>
           <TitleList
             listType="notes"
@@ -269,6 +314,8 @@ const NotebookPage = () => {
             firstIconAction={undefined}
             secondIconAction={undefined}
             actionBar={undefined}
+            currentModal={currentModal}
+            setCurrentModal={setCurrentModal}
           />
         </div>
         <Modal
@@ -286,7 +333,11 @@ const NotebookPage = () => {
               {folderAction === 'create' ? 'New folder' : 'Rename folder'}
             </label>
             <input ref={folderNameRef} placeholder="Name" />
-            <div className={classes['create-folder-actions']}>
+            <div
+              className={`${classes['create-folder-actions']} ${
+                classes[`create-folder-actions--${theme}`]
+              }`}
+            >
               <button
                 onClick={() => {
                   if (folderNameRef.current) {
@@ -320,7 +371,11 @@ const NotebookPage = () => {
           >
             <label className={classes.title}>New note</label>
             <input ref={noteTitleRef} placeholder="Title" />
-            <div className={classes['create-note-actions']}>
+            <div
+              className={`${classes['create-note-actions']} ${
+                classes[`create-note-actions--${theme}`]
+              }`}
+            >
               <button
                 onClick={() => {
                   if (noteTitleRef.current) {
@@ -338,18 +393,18 @@ const NotebookPage = () => {
         </Modal>
         <Modal
           id="modal__editor-note"
-          buttonSize="btn-sm"
-          className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
+          className={`max-w-[70vw] max-h-[60vh] w-[70vw] h-[60vh] ${
             theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
           }`}
-          fullScreenToggle={true}
+          isOpen={currentModal === 'modal__editor-note'}
         >
-          <div className={`code-editor__note code-editor__note--${theme}`}>
-            {editingTitle && (
+          <div>
+            {showNewNoteModal && (
               <TextEditor
                 value={noteContent!}
                 setValue={setNoteContent}
                 onCloseNote={handleCloseNoteModal}
+                previewMode="edit"
               />
             )}
           </div>

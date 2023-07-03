@@ -37,27 +37,32 @@ const ProblemList: React.FC<ProblemListProps> = ({
         classes[`problems-table--${theme}`]
       }`}
     >
-      <div
-        className={`${classes['table-header']}`}
-      >
+      <div className={`${classes['table-header']}`}>
         {!isMobile && (
           <>
             <div role="row" className={classes['solved-header']}>
               <div>
                 {session?.session.user.account_type === 'admin'
                   ? 'Edit'
-                  : 'Status'}
+                  : ''}
               </div>
             </div>
             <div role="row" className={classes['category-header']}>
               <span>Category</span>
-              <SortIcon width={14} height={14} />
+              <span
+                className="cursor-pointer"
+                onClick={() => onSort('category')}
+              >
+                <SortIcon width={14} height={14} />
+              </span>
             </div>
           </>
         )}
         <div role="row" className={classes['title-header']}>
           <span>Title</span>
-          <SortIcon width={14} height={14} />
+          <span className="cursor-pointer" onClick={() => onSort('title')}>
+            <SortIcon width={14} height={14} />
+          </span>
         </div>
         <div role="row" className={classes['difficulty-header']}>
           <span>Difficulty</span>

@@ -101,6 +101,8 @@
 }
 
 .note {
+  min-width: 94rem;
+  width: 94rem;
   position: relative;
   padding-right: 1rem;
   margin: 1rem 0 1.5rem;
@@ -165,10 +167,14 @@
 .note-icon,
 .bookmark-icon,
 .expand,
-.edit,
+.view-note,
 .clear,
 .add span {
   transition: color 0.3s ease;
+}
+
+.view-note {
+  transform: translateY(1px);
 }
 
 .title-link:hover,
@@ -176,7 +182,7 @@
 .bookmark-icon:hover,
 .solution-content svg:hover,
 .expand:hover,
-.edit:hover,
+.view-note:hover,
 .clear:hover,
 .add span:hover {
   color: $color-primary-50;
@@ -262,6 +268,7 @@
   .title-content {
     min-width: 26rem;
     width: 26rem;
+    padding-left: 0;
   }
 
   .difficulty-content {
@@ -277,5 +284,10 @@
   .companies-content {
     min-width: 35rem;
     width: 35rem;
+  }
+
+  .note {
+    min-width: 104rem;
+    width: 104rem;
   }
 }

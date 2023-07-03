@@ -16,6 +16,7 @@ const useRandomQuestion: (
 ) => () => void = (setShowAlert, setNotification) => {
   const { allProblemsCount } = useAppSelector((state) => state.problems);
   const [titleList, setTitleList] = useState([]);
+  const [lastNumber, setLastNumber] = useState<number | null>(null);
 
   const router = useRouter();
 
@@ -33,10 +34,23 @@ const useRandomQuestion: (
     }
   }, []);
 
+  useEffect(() => {
+    if (titleList.length > 0) {
+      const randomNumber = Math.floor(Math.random() * titleList.length);
+      setLastNumber(randomNumber);
+    }
+  }, [titleList]);
+
   const handleGetRandomProblem = useCallback(() => {
-    const randomNumber =
-      Math.floor(Math.random() * (allProblemsCount - 1 + 1)) + 1;
-    if (randomNumber <= titleList.length && titleList[randomNumber]) {
+    let randomNumber = Math.floor(Math.random() * allProblemsCount);
+
+    while (lastNumber && randomNumber === lastNumber) {
+      randomNumber = Math.floor(Math.random() * allProblemsCount);
+    }
+
+    setLastNumber(randomNumber);
+
+    if (randomNumber < titleList.length && titleList[randomNumber]) {
       const randomProblemTitle = titleList[randomNumber];
       if (router.pathname.match(/\/problem\/.*/)) {
         window.location.assign(`/problem/${randomProblemTitle}`);
@@ -44,7 +58,8 @@ const useRandomQuestion: (
         router.push(`/problem/${randomProblemTitle}`);
       }
     }
-  }, []);
+  }, [lastNumber]);
+
   return handleGetRandomProblem;
 };
 

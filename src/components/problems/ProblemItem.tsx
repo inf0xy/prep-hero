@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useMediaQuery } from 'react-responsive';
@@ -15,31 +15,31 @@ import {
   addProblemToList,
   deleteNote,
   removeProblemFromList,
-  setSelectedProblem
+  setSelectedProblem,
+  toggleFullScreen
 } from '@/store';
 import { NotificationType, Problem } from '@/types/dataTypes';
 import {
   statusStyle,
-  noteStripStyle,
-  fullNoteStyle
+  noteStripStyle
 } from '@/helpers/extraStyles';
-import classes from './ProblemItem.module.scss';
-import variables from '@/styles/variables.module.scss';
 
 import CheckIcon from '@/components/icons/CheckIcon';
 import NoteIcon from '../icons/NoteIcon';
 import CodeIcon from '../icons/CodeIcon';
-import ExpandIcon from '../icons/ExpandIcon';
 import EditIcon from '../icons/EditIcon';
 import TrashIcon from '../icons/TrashIcon';
 import CodeBracketIcon from '../icons/CodeBracketIcon';
 import PlusIconOutline from '../icons/PlusIconOutline';
 import BookmarkOutline from '../icons/BookmarkOutline';
+import PreviewIconColor from '../icons/PreviewIconColor';
 import BookmarkFill from '../icons/BookmarkFill';
 import LogoList from './LogoList';
 import Tooltip from '../reusables/Tooltip';
 import Solutions from '../reusables/Solutions';
 import useSubmitNote from '@/hooks/useSubmitNote';
+
+import classes from './ProblemItem.module.scss';
 
 type ProblemItemProps = {
   problem: Problem;
@@ -103,6 +103,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     null
   );
   const [showNote, setShowNote] = useState(false);
+  const [noteAction, setNoteAction] = useState<string | undefined>(undefined);
 
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
@@ -118,7 +119,9 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
 
   const [noteContent, setNoteContent] = useState(problemNoteContent);
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-  const isSmallMobile = useMediaQuery({ query: '(max-width: 601px)' });
+  // const isSmallMobile = useMediaQuery({ query: '(max-width: 601px)' });
+
+  const [currentModal, setCurrentModal] = useState('');
 
   useEffect(() => {
     if (!showNotes) {
@@ -143,6 +146,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     setNoteContent(problemNoteContent);
   }, [notes, title]);
 
+
+
   const handleCloseNoteModal = async () => {
     const note = {
       list_name: list_names!.join(', '),
@@ -150,7 +155,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       content: noteContent
     };
     await handleSubmitNote(undefined, note);
+    setCurrentModal('');
     setShowNote(false);
+    dispatch(toggleFullScreen(false));
+    setNoteAction(undefined);
   };
 
   const handleDeleteNote = async () => {
@@ -162,19 +170,26 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     router.push('/admin/edit');
   };
 
-  const getNoteModalDimension = () => {
-    let dimension = 'w-[70vw] h-[60vh]';
-
-    if (isMobile) {
-      dimension = 'w-[80vw] h-[70vh]'
+  const handleNoteAction = (action: string, e: any) => {
+    setNoteAction(action);
+    setShowNote(true);
+    const closestLabel = (e.target as HTMLElement).closest('label');
+    const currentLabel = closestLabel?.getAttribute('for');
+    if (currentLabel) {
+      setCurrentModal(currentLabel);
     }
+  };
 
-    if (isSmallMobile) {
-      dimension = 'w-[100vw] h-[100vh] rounded-none'
-    }
-
-    return dimension;
-  }
+  // const getNoteModalDimension = () => {
+  //   let dimension = 'w-[70vw] h-[60vh]';
+  //   if (isMobile) {
+  //     dimension = 'w-[80vw] h-[70vh]';
+  //   }
+  //   if (isSmallMobile) {
+  //     dimension = 'w-[100vw] h-[100vh] rounded-none';
+  //   }
+  //   return dimension;
+  // };
 
   const solvedStatusStyle =
     session?.session.user.account_type === 'admin' ||
@@ -198,7 +213,9 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </Alert>
       )}
       <div
-        className={`${classes.problem} ${oddCell ? classes[`problem--${theme}--odd-cell`] : undefined}`}
+        className={`${classes.problem} ${
+          oddCell ? classes[`problem--${theme}--odd-cell`] : undefined
+        }`}
       >
         {!isMobile && (
           <>
@@ -222,7 +239,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                     className="cursor-pointer hover:text-[#ff7230] transition ease duration-300"
                   />
                 </span>
-              )}
+            )}
             </div>
             <div className={classes['category-content']}>{category}</div>
           </>
@@ -326,34 +343,17 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
             <ul className={classes['note-actions']}>
               <>
                 <Tooltip
-                  text="Expand"
+                  text="View Note"
                   direction="top"
-                  className="w-fit px-6 py-4"
+                  className="w-[9rem] py-4"
                 >
-                  <li className={classes.expand}>
-                    <label
-                      htmlFor={`modal__full-note-${title}`}
-                      className="cursor-pointer"
-                    >
-                      <ExpandIcon width={7} height={7} />
-                    </label>
-                  </li>
-                </Tooltip>
-                <Tooltip
-                  text="Edit"
-                  direction="top"
-                  className="w-fit px-6 py-4"
-                >
-                  <li
-                    className={classes.edit}
-                    onClick={() => setShowNote(true)}
-                  >
+                  <li className={classes['view-note']} onClick={(e) => handleNoteAction('view', e)}>
                     <label
                       htmlFor={`modal__problems-note-${title}`}
                       className="w-fit cursor-pointer"
                     >
                       <span className="opacity-[0.7]">
-                        <EditIcon width={8} height={8} />
+                        <PreviewIconColor width={22} height={22} />
                       </span>
                     </label>
                   </li>
@@ -378,7 +378,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
             <div className={classes.add}>
               <label
                 htmlFor={`modal__problems-note-${title}`}
-                onClick={() => setShowNote(true)}
+                onClick={(e) => handleNoteAction('add', e)}
               >
                 <span className="opacity-[0.7]">
                   <PlusIconOutline width={8} height={8} />
@@ -415,34 +415,20 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </div>
       </Modal>
       <Modal
-        id={`modal__full-note-${title}`}
-        buttonSize="btn-sm"
-        className={`${
-          theme === 'dark'
-            ? `bg-[${variables.darkBackground50}]`
-            : `bg-[${variables.lightBackground0}]`
-        }`}
-      >
-        <div className={classes['modal__full-note']}>
-          <EditorPreview
-            value={problemNoteContent!}
-            extraStyle={fullNoteStyle[theme]}
-          />
-        </div>
-      </Modal>
-      <Modal
         id={`modal__problems-note-${title}`}
-        className={`max-w-[100vw] max-h-[100vh] w-[70vw] h-[60vh] px-8 pt-24 ${
+        className={`max-w-[70vw] max-h-[60vh] w-[70vw] h-[60vh] ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}
-        // onClose={() => setShowNote(false)}
-        // className={`max-w-[100vw] max-h-[100vh] ${getNoteModalDimension()} p-8 ${
-        //   theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
-        // }`}
+        isOpen={currentModal === `modal__problems-note-${title}`}
       >
-        <div className={`code-editor__note code-editor__note--${theme}`}>
+        <div>
           {showNote && (
-            <TextEditor value={noteContent!} setValue={setNoteContent} onCloseNote={handleCloseNoteModal}/>
+            <TextEditor
+              value={noteContent!}
+              setValue={setNoteContent}
+              onCloseNote={handleCloseNoteModal}
+              previewMode={noteAction === 'view' ? 'preview' : 'edit'}
+            />
           )}
         </div>
       </Modal>

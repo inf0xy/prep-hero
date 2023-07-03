@@ -6,6 +6,7 @@ interface NavigateState {
   pageLoading: boolean;
   showUserMenu: boolean;
   showProblemCodeEditor: boolean;
+  showFullScreen: boolean;
 }
 
 const initialState: NavigateState = {
@@ -14,6 +15,7 @@ const initialState: NavigateState = {
   pageLoading: true,
   showUserMenu: false,
   showProblemCodeEditor: false,
+  showFullScreen: false,
 };
 
 const navigateSlice = createSlice({
@@ -34,6 +36,9 @@ const navigateSlice = createSlice({
     },
     setShowProblemCodeEditor(state, action) {
       state.showProblemCodeEditor = action.payload;
+    },
+    toggleFullScreen(state, action) {
+      state.showFullScreen = action.payload;
     }
   }
 });
@@ -43,6 +48,7 @@ export const {
   toggleSavedList,
   setHomePageLoading,
   setShowUserMenu,
-  setShowProblemCodeEditor
+  setShowProblemCodeEditor,
+  toggleFullScreen
 } = navigateSlice.actions;
 export default navigateSlice.reducer;

@@ -2,8 +2,8 @@ import { useState, ChangeEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { setDuration, setTimerDuration } from '@/store';
 import TimerControlBar from './TimerControlBar';
-import classes from './TimeSetter.module.scss';
 import ConfirmPanel from '../ConfirmPanel';
+import classes from './TimeSetter.module.scss';
 
 const TimeSetter = () => {
   const [mode, setMode] = useState('timer');

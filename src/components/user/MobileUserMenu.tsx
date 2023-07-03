@@ -214,7 +214,9 @@ const MobileUserMenu: React.FC<MobileUserMenuProps> = ({ parentRef }) => {
                 }  ${classes.shuffle}`}
                 onClick={() => {
                   dispatch(setShowUserMenu(false));
-                  handleGetRandomProblem();
+                  setTimeout(() => {
+                    handleGetRandomProblem();
+                  }, 300);
                 }}
               >
                 <ShuffleIcon />

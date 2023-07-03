@@ -146,6 +146,7 @@ const DashBoard = () => {
                 type="checkbox"
                 className="toggle toggle-info"
                 checked={timer_reminder}
+                readOnly={true}
               />
             </li>
             <li

@@ -2,12 +2,12 @@
 
 .utils {
   display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
 }
 
 .note-switch {
-  height: 2.5rem;
-  width: 4.5rem;
-  border-radius: 7px;
   align-self: center;
+  justify-self: center;
+  transform: translateY(0.5rem);
 }

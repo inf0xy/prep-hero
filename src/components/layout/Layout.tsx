@@ -50,7 +50,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       : variables.lightBackground0;
   const placeHolder = <div className={`min-h-screen ${backgroundColor}`} />;
 
-  const excludedRoutes = [/\/auth\/.*/, /\/problem\/.*/];
+  const excludedRoutes = [/\/auth\/.*/, /\/problem\/.*/, /\/dashboard/];
 
   return (
     <main

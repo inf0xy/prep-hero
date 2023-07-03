@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { useTransition, animated } from 'react-spring';
+import { useMediaQuery } from 'react-responsive';
 import { useAppSelector } from '@/hooks/hooks';
 import classes from './Tooltip.module.scss';
 
@@ -28,6 +29,7 @@ const Tooltip: React.FC<TooltipProps> = ({
   });
 
   const { theme } = useAppSelector((state) => state.theme);
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1105px)' });
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -42,22 +44,28 @@ const Tooltip: React.FC<TooltipProps> = ({
       className={classes['tooltip-container']}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{ zIndex: zIndex ?? 1 }}
+      style={{
+        zIndex: zIndex ?? 1
+      }}
     >
       {children}
-      {transition((style, item) =>
-        item ? (
-          <animated.div style={style}>
-            <div
-              className={`${classes.tooltip} ${
-                classes[`tooltip--${direction}`]
-              } ${classes[`tooltip--${theme}`]} ${className}`}
-              style={extraStyle}
-            >
-              {text}
-            </div>
-          </animated.div>
-        ) : null
+      {!isTabletOrMobile && (
+        <>
+          {transition((style, item) =>
+            item ? (
+              <animated.div style={style}>
+                <div
+                  className={`${classes.tooltip} ${
+                    classes[`tooltip--${direction}`]
+                  } ${classes[`tooltip--${theme}`]} ${className}`}
+                  style={extraStyle}
+                >
+                  {text}
+                </div>
+              </animated.div>
+            ) : null
+          )}
+        </>
       )}
     </div>
   );

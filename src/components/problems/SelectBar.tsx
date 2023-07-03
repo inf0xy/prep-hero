@@ -56,11 +56,11 @@ const SelectBar: React.FC<SelectBarProps> = ({
         setCompany={setSearchCriteria}
       />
       <div className={classes.utils}>
-      <SearchBar
-        setSearchTerm={setSearchCriteria}
-        defaultText="Search"
-        currentSearch={searchCriteria.text}
-      />
+        <SearchBar
+          setSearchTerm={setSearchCriteria}
+          defaultText="Search"
+          currentSearch={searchCriteria.text}
+        />
 
         <div className={classes.random}>
           <Tooltip
@@ -91,21 +91,21 @@ const SelectBar: React.FC<SelectBarProps> = ({
             </Button>
           </Tooltip>
         </div>
+        {session && (
+          <Tooltip
+            text="Toggle all notes"
+            direction="bottom"
+            className="w-[13rem] py-4"
+          >
+            <input
+              type="checkbox"
+              className={`toggle toggle-lg toggle-warning ${classes['note-switch']}`}
+              checked={showNotes}
+              onChange={() => setShowNotes((prev) => !prev)}
+            />
+          </Tooltip>
+        )}
       </div>
-      {session && (
-        <Tooltip
-          text="Toggle all notes"
-          direction="bottom"
-          className="w-[13rem] py-4"
-        >
-          <input
-            type="checkbox"
-            className={`toggle toggle-lg ${classes['note-switch']}`}
-            checked={showNotes}
-            onChange={() => setShowNotes((prev) => !prev)}
-          />
-        </Tooltip>
-      )}
     </>
   );
 };

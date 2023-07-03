@@ -41,7 +41,8 @@ import navigateReducer, {
   toggleSavedList,
   setHomePageLoading,
   setShowUserMenu,
-  setShowProblemCodeEditor
+  setShowProblemCodeEditor,
+  toggleFullScreen
 } from './slices/navigateSlice';
 
 export const store = configureStore({
@@ -92,5 +93,6 @@ export {
   toggleSavedList,
   setHomePageLoading,
   setShowUserMenu,
-  setShowProblemCodeEditor
+  setShowProblemCodeEditor,
+  toggleFullScreen
 };

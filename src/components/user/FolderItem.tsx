@@ -3,10 +3,10 @@ import { Dispatch, SetStateAction } from 'react';
 import EllipsisVerticalIcon from '../icons/EllipsisVerticalIcon';
 import FolderOpenIcon from '../icons/FolderOpen';
 import FolderClosedIcon from '../icons/FolderClosed';
-import classes from './ActionMenu.module.scss';
 import EditIcon from '../icons/EditIcon';
 import TrashIcon from '../icons/TrashIcon';
 import DocumentPlus from '../icons/DocumentPlus';
+import classes from './ActionMenu.module.scss';
 
 interface FolderItemProps {
   folderName: string;
@@ -14,6 +14,7 @@ interface FolderItemProps {
   setSelectedFolder: Dispatch<SetStateAction<string | null>>;
   setActionFolderName: Dispatch<SetStateAction<string | null>>;
   setFolderAction: Dispatch<SetStateAction<string>>;
+  setShowFolderList?: Dispatch<SetStateAction<boolean>>;
 }
 
 const FolderItem: React.FC<FolderItemProps> = ({
@@ -21,7 +22,8 @@ const FolderItem: React.FC<FolderItemProps> = ({
   selectedFolder,
   setSelectedFolder,
   setActionFolderName,
-  setFolderAction
+  setFolderAction,
+  setShowFolderList
 }) => {
   const { theme } = useAppSelector((state) => state.theme);
   return (
@@ -40,14 +42,24 @@ const FolderItem: React.FC<FolderItemProps> = ({
           }
         }}
       >
-        <span>
+        <span
+          onClick={
+            setShowFolderList ? () => setShowFolderList(false) : undefined
+          }
+        >
           {selectedFolder === folderName ? (
             <FolderOpenIcon width={18} height={18} />
           ) : (
             <FolderClosedIcon width={18} height={18} />
           )}
         </span>
-        <p>{folderName}</p>
+        <p
+          onClick={
+            setShowFolderList ? () => setShowFolderList(false) : undefined
+          }
+        >
+          {folderName}
+        </p>
       </div>
       <div
         className={`dropdown ${classes['vertical-dots']}`}
@@ -58,9 +70,9 @@ const FolderItem: React.FC<FolderItemProps> = ({
         </label>
         <ul
           tabIndex={0}
-          className={`dropdown-content shadow ${
-            classes['folder-actions']
-          } ${classes[`folder-actions--${theme}`]}`}
+          className={`dropdown-content shadow ${classes['folder-actions']} ${
+            classes[`folder-actions--${theme}`]
+          }`}
         >
           {folderName !== 'Problems' && (
             <>
@@ -69,15 +81,13 @@ const FolderItem: React.FC<FolderItemProps> = ({
                   classes[`new-note--${theme}`]
                 }`}
               >
-
-                  <label
-                    htmlFor="modal__create-new-note"
-                    className="cursor-pointer"
-                  >
-                    <DocumentPlus />
-                    <span>New note</span>
-                  </label>
-
+                <label
+                  htmlFor="modal__create-new-note"
+                  className="cursor-pointer"
+                >
+                  <DocumentPlus />
+                  <span>New note</span>
+                </label>
               </li>
               <li
                 className={`${classes['rename']} ${
@@ -96,15 +106,13 @@ const FolderItem: React.FC<FolderItemProps> = ({
             </>
           )}
           <li className={`${classes['delete']} ${classes[`delete--${theme}`]}`}>
-
-              <label
-                htmlFor="delete-folder-confirm-modal"
-                className="cursor-pointer"
-              >
-                <TrashIcon />
-                <span>Remove</span>
-              </label>
-
+            <label
+              htmlFor="delete-folder-confirm-modal"
+              className="cursor-pointer"
+            >
+              <TrashIcon />
+              <span>Remove</span>
+            </label>
           </li>
         </ul>
       </div>
