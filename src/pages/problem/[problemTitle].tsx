@@ -3,11 +3,11 @@ import { useMediaQuery } from 'react-responsive';
 import { getAllTitles, getSelectedProblem } from '@/helpers/problem-api-util';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { toggleSavedList } from '@/store';
-import { Problem, SocketType } from '@/types/dataTypes';
+import { Problem } from '@/types/dataTypes';
+import ProblemDetailPageMobile from '@/components/reusables/codeEditor/ProblemDetailPageMobile';
+import ProblemDetailPageDesktop from '@/components/reusables/codeEditor/ProblemDetailPageDesktop';
 import SavedList from '@/components/problems/SavedList';
 import Drawer from '@/components/reusables/Drawer';
-import ProblemDetailPageDesktop from '@/components/reusables/codeEditor/ProblemDetailPageDesktop';
-import ProblemDetailPageMobile from '@/components/reusables/codeEditor/ProblemDetailPageMobile';
 
 type ProblemDetailPageProps = {
   selectedProblem: Problem;
@@ -21,7 +21,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   return (
-    <>
+    <div className='h-fit max-h-fit'>
       <Drawer
         direction="left"
         showCloseButton={true}
@@ -36,7 +36,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
         ) : (
           <ProblemDetailPageMobile selectedProblem={selectedProblem} />
         ))}
-    </>
+    </div>
   );
 };
 

@@ -8,12 +8,11 @@ import {
   setExitingDebugging,
   setShowProblemCodeEditor
 } from '@/store';
-import Resizable from '../Resizable';
 import Debugger from './Debugger';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import ProblemEditor from '@/components/problems/ProblemEditor';
 import { Problem, SocketType } from '@/types/dataTypes';
-import classes from './ProblemDetailPageMobile.module.scss';
+import classes from '@/styles/ProblemDetailPageMobile.module.scss';
 
 interface ProblemDetailPageMobileProps {
   selectedProblem: Problem;
@@ -135,7 +134,9 @@ const ProblemDetailPageMobile: React.FC<ProblemDetailPageMobileProps> = ({
         <>
           {!debugging ? (
             <div
-              className={`${classes.detail} ${showProblemCodeEditor && classes['detail--inactive']} ${classes[`detail--${theme}`]}`}
+              className={`${classes.detail} ${
+                showProblemCodeEditor && classes['detail--inactive']
+              } ${classes[`detail--${theme}`]}`}
             >
               <ul className={`${classes.tabs} ${classes[`tabs--${theme}`]}`}>
                 <li
@@ -184,7 +185,11 @@ const ProblemDetailPageMobile: React.FC<ProblemDetailPageMobileProps> = ({
               </div>
             </div>
           ) : (
-            <div className={`${classes.debug} ${!showProblemCodeEditor && classes['debug--inactive']} ${classes[`debug--${theme}`]}`}>
+            <div
+              className={`${classes.debug} ${
+                !showProblemCodeEditor && classes['debug--inactive']
+              } ${classes[`debug--${theme}`]}`}
+            >
               <Debugger
                 socketConnection={socketConnection}
                 setSocketConnection={setSocketConnection}
@@ -195,7 +200,9 @@ const ProblemDetailPageMobile: React.FC<ProblemDetailPageMobileProps> = ({
       )}{' '}
       {windowWidth && (
         <div
-          className={`${classes.working} ${!showProblemCodeEditor && classes['working--inactive']} ${classes[`working--${theme}`]}`}
+          className={`${classes.working} ${
+            !showProblemCodeEditor && classes['working--inactive']
+          } ${classes[`working--${theme}`]}`}
           style={{
             minWidth: `${windowWidth - 20}px`
           }}

@@ -156,8 +156,18 @@
       color: $text-gray-800;
     }
 
-    &--error {
-      background-color: $color-error-700;
+    &--error--dark {
+      background-color: $color-debug-error-background-dark;
+      & > div > p {
+        color: $color-debug-error-text-dark;
+      }
+    }
+
+    &--error--light {
+      background-color: $color-debug-error-background-light;
+      & > div > p {
+        color: $color-debug-error-text-light;
+      }
     }
   }
 }
@@ -177,7 +187,7 @@
   width: 100%;
   height: 100%;
   height: 100%;
-  z-index: 100;
+  z-index: 25;
   backdrop-filter: blur(2px);
   font-size: 1.5rem;
   font-weight: 500;

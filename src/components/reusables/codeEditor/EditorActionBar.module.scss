@@ -12,6 +12,7 @@
   gap: 1rem;
   z-index: 5;
   position: sticky;
+  overflow-x: hidden;
 
   &--dark {
     background-color: $dark-background-300;
@@ -46,5 +47,15 @@
     .options {
       transform: translateX(-1.5rem) translateY(1px) scale(120%);
     }
+  }
+}
+
+/**********************************/
+/* BELOW 769px                    */
+/**********************************/
+@media (max-width: 48em) {
+  .editor-menu {
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
   }
 }

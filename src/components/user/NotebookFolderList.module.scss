@@ -31,7 +31,13 @@
         min-width: 40rem;
         display: flex;
         justify-content: flex-end;
-        padding: 2rem 3rem 0;
+        position: relative;
+
+        & > * {
+          position: absolute;
+          top: 2rem;
+          right: 3rem;
+        }
 
 
         &--dark {
@@ -43,7 +49,7 @@
         &--light {
           background-color: $light-background-0;
           color: $text-gray-700;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          border-right: solid $color-gray-200 1px;
         }
       }
     }
@@ -52,11 +58,10 @@
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
-      padding: 3rem;
+      padding: 7rem 3rem;
       overflow-x: visible;
       max-width: 40rem;
       height: 100%;
-
 
       &--dark {
         background-color: $dark-background-400;
@@ -67,16 +72,111 @@
       &--light {
         background-color: $light-background-0;
         color: $text-gray-700;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-right: solid $color-gray-200 1px;
       }
 
       & > li {
         min-width: 40rem;
+
+        & > div:first-child {
+          overflow: hidden;
+        }
 
         & > div:nth-child(2) {
           margin-right: 6rem;
         }
       }
     }
+  }
+}
+
+/**********************************/
+/* BELOW 513px                    */
+/**********************************/
+@media (max-width: 32em) {
+  .notebook__mobile-folder-list {
+    font-size: 1.6rem;
+    padding-top: 0;
+    width: 100vw;
+    min-width: 100vw;
+
+    &--dark {
+        background-color: $dark-background-400;
+      }
+
+    &--light {
+      background-color: $light-background-0;
+    }
+
+
+    .folder-list__wrapper {
+      .close-button__wrapper {
+        min-width: 100vw;
+        width: 100vw;
+
+        .close-folder-list__button {
+          min-width: 100vw;
+
+          & > * {
+            top: 3rem;
+            right: 4rem;
+          }
+        }
+      }
+
+      .folders {
+        min-width: 100vw;
+        width: 100vw;
+        padding: 9rem 0 3rem 5rem;
+        gap: 2rem;
+        border-right: none;
+
+        li {
+          div:first-child {
+            width: 70vw;
+          }
+          div:nth-child(2) {
+            margin-right: 8rem;
+
+            & > ul {
+              left: -12rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**********************************/
+/* PIXEL 5 & IPHONE 12 PRO        */
+/**********************************/
+@media (max-width: 393px) {
+  .notebook__mobile-folder-list .folder-list__wrapper {
+      .folders li div:nth-child(2) {
+        margin-right: 10rem;
+      }
+  }
+}
+
+/**********************************/
+/* IPHONE SE                      */
+/**********************************/
+@media (max-width: 375px) {
+  .notebook__mobile-folder-list .folder-list__wrapper {
+      .folders li div:nth-child(2) {
+        margin-right: 11.6rem;
+      }
+  }
+}
+
+/**********************************/
+/* GALAXY S8+                     */
+/**********************************/
+@media (max-width: 360px) {
+  .notebook__mobile-folder-list .folder-list__wrapper {
+      .folders li div:nth-child(2) {
+        margin-right: 13rem;
+      }
   }
 }

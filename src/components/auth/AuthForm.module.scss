@@ -1,7 +1,7 @@
 @import '@/styles/variables.module.scss';
 
 .auth-form {
-  min-height: 50vh;
+  min-height: 45vh;
   max-height: 100vh;
   overflow: hidden;
   height: 61rem;
@@ -195,7 +195,27 @@
 
 .oauth-buttons {
   display: flex;
-  gap: 1.3rem;
+  justify-content: center;
+  gap: 2rem;
+
+  .github,
+  .google,
+  .facebook {
+    height: 4rem;
+    width: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  &--dark span {
+    background-color: $color-gray-600;
+  }
+
+  &--light span {
+    background-color: $color-gray-300;
+  }
 }
 
 .auth-option,

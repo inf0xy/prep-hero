@@ -50,8 +50,8 @@
 }
 
 .title-content {
-  min-width: 30rem;
-  width: 30rem;
+  min-width: 45rem;
+  width: 45rem;
   gap: 1rem;
   padding: 0 2rem;
 }
@@ -211,8 +211,8 @@
   }
 
   .title-content {
-    min-width: 30rem;
-    width: 30rem;
+    min-width: 35rem;
+    width: 35rem;
   }
 
   .companies-content {
@@ -222,7 +222,7 @@
 }
 
 /**********************************/
-/* BELOW 977px (Smaller desktop) */
+/* BELOW 1105px (Smaller desktop) */
 /**********************************/
 @media (max-width: 69em) {
   .solved-content {
@@ -233,11 +233,6 @@
   .category-content {
     min-width: 10rem;
     width: 10rem;
-  }
-
-  .title-content {
-    min-width: 25rem;
-    width: 25rem;
   }
 
   .difficulty-content {
@@ -257,9 +252,22 @@
 }
 
 /**********************************/
+/* BELOW 977px (Smaller desktop) */
+/**********************************/
+@media (max-width: 61em) {
+  .solution-modal-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/**********************************/
 /* BELOW 769px                    */
 /**********************************/
 @media (max-width: 48em) {
+  .problem {
+    min-height: 8rem;
+    height: 8rem;
+  }
   .category-content {
     min-width: 18rem;
     width: 18rem;

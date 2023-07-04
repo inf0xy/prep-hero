@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useAppSelector } from '@/hooks/hooks';
-import classes from './NotebookMobileNav.module.scss';
 import FolderOutlineIcon from '../icons/FolderOutlineIcon';
 import PlusIcon from '../icons/PlusIcon';
+import classes from './NotebookMobileNav.module.scss';
 
 interface NotebookMobileNavProps {
   setFolderAction: Dispatch<SetStateAction<string>>;

@@ -27,7 +27,14 @@
   border-bottom: solid $color-gray-600 0.4px;
   margin-bottom: 1.5rem;
   padding: 0 2rem;
-  color: $color-gray-300;
+
+  &--dark {
+    color: $color-gray-300;
+  }
+
+  &--light {
+    color: $color-gray-500;
+  }
 }
 
 .solved-header,
@@ -52,8 +59,8 @@
 }
 
 .title-header {
-  min-width: 30rem;
-  width: 30rem;
+  min-width: 45rem;
+  width: 45rem;
   padding: 0 2rem;
 }
 
@@ -95,8 +102,8 @@
     width: 12rem;
   }
   .title-header {
-    min-width: 30rem;
-    width: 30rem;
+    min-width: 35rem;
+    width: 35rem;
   }
 
   .companies-header {
@@ -106,7 +113,7 @@
 }
 
 /**********************************/
-/* BELOW 977px (Smaller desktop) */
+/* BELOW 1105px (Smaller desktop) */
 /**********************************/
 @media (max-width: 69em) {
   .solved-header {
@@ -117,11 +124,6 @@
   .category-header {
     min-width: 10rem;
     width: 10rem;
-  }
-
-  .title-header {
-    min-width: 25rem;
-    width: 25rem;
   }
 
   .difficulty-header {

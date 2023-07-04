@@ -14,8 +14,6 @@ import FolderAddIcon from '@/components/icons/FolderAddIcon';
 import FolderItem from '@/components/user/FolderItem';
 import classes from '@/styles/NotebookPage.module.scss';
 import NotebookMobileNav from '@/components/user/NoteBookMobileNav';
-import FolderOutlineIcon from '@/components/icons/FolderOutlineIcon';
-import PlusIcon from '@/components/icons/PlusIcon';
 import NotebookFolderList from '@/components/user/NotebookFolderList';
 
 const NotebookPage = () => {
@@ -282,29 +280,11 @@ const NotebookPage = () => {
             )}
           </>
         )}
-
-        {/* <div
-          className={`${classes['side-nav']} ${classes[`side-nav--${theme}`]}`}
+        <div
+          className={`${classes['note-list']} ${
+            classes[`note-list--${theme}`]
+          }`}
         >
-          <div className={classes['side-nav__content']}>
-            <label
-            htmlFor="modal__create-new-folder"
-            className={`${classes['create-button']} ${
-              classes[`create-button--${theme}`]
-            }`}
-            onClick={() => setFolderAction('create')}
-            >
-              <span className={classes['create-button__title']}>
-                <PlusIcon width={30} height={30}/>
-              </span>
-            </label>
-            <button>
-              <FolderOutlineIcon width={22} height={22} />
-            </button>
-          </div>
-        </div> */}
-
-        <div className={classes['note-list']}>
           <TitleList
             listType="notes"
             titles={getNotesWithListName()}

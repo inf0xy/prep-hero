@@ -19,17 +19,14 @@ import {
   toggleFullScreen
 } from '@/store';
 import { NotificationType, Problem } from '@/types/dataTypes';
-import {
-  statusStyle,
-  noteStripStyle
-} from '@/helpers/extraStyles';
+import { statusStyle, noteStripStyle } from '@/helpers/extraStyles';
 
 import CheckIcon from '@/components/icons/CheckIcon';
 import NoteIcon from '../icons/NoteIcon';
 import CodeIcon from '../icons/CodeIcon';
 import EditIcon from '../icons/EditIcon';
 import TrashIcon from '../icons/TrashIcon';
-import CodeBracketIcon from '../icons/CodeBracketIcon';
+import InProgressIcon from '../icons/InProgressIcon';
 import PlusIconOutline from '../icons/PlusIconOutline';
 import BookmarkOutline from '../icons/BookmarkOutline';
 import PreviewIconColor from '../icons/PreviewIconColor';
@@ -38,6 +35,7 @@ import LogoList from './LogoList';
 import Tooltip from '../reusables/Tooltip';
 import Solutions from '../reusables/Solutions';
 import useSubmitNote from '@/hooks/useSubmitNote';
+
 
 import classes from './ProblemItem.module.scss';
 
@@ -118,8 +116,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   }
 
   const [noteContent, setNoteContent] = useState(problemNoteContent);
-  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-  // const isSmallMobile = useMediaQuery({ query: '(max-width: 601px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 820px)' });
 
   const [currentModal, setCurrentModal] = useState('');
 
@@ -145,8 +142,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     }
     setNoteContent(problemNoteContent);
   }, [notes, title]);
-
-
 
   const handleCloseNoteModal = async () => {
     const note = {
@@ -179,17 +174,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       setCurrentModal(currentLabel);
     }
   };
-
-  // const getNoteModalDimension = () => {
-  //   let dimension = 'w-[70vw] h-[60vh]';
-  //   if (isMobile) {
-  //     dimension = 'w-[80vw] h-[70vh]';
-  //   }
-  //   if (isSmallMobile) {
-  //     dimension = 'w-[100vw] h-[100vh] rounded-none';
-  //   }
-  //   return dimension;
-  // };
 
   const solvedStatusStyle =
     session?.session.user.account_type === 'admin' ||
@@ -226,7 +210,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
               {session?.session.user.account_type === 'user' ? (
                 <>
                   {attempted_problems.some((el) => el.title === title) ? (
-                    <CodeBracketIcon data-tooltip="Attempted" />
+                    <InProgressIcon width={19} height={19} data-tooltip="Attempted" />
                   ) : (
                     <CheckIcon data-tooltip="Solved" width="18" height="18" />
                   )}
@@ -239,7 +223,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                     className="cursor-pointer hover:text-[#ff7230] transition ease duration-300"
                   />
                 </span>
-            )}
+              )}
             </div>
             <div className={classes['category-content']}>{category}</div>
           </>
@@ -313,7 +297,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
             {session?.session.user.account_type === 'user' ? (
               <>
                 {attempted_problems.some((el) => el.title === title) ? (
-                  <CodeBracketIcon data-tooltip="Attempted" />
+                  <InProgressIcon width={19} height={19} data-tooltip="Attempted" />
                 ) : (
                   <CheckIcon data-tooltip="Solved" width="18" height="18" />
                 )}
@@ -347,7 +331,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   direction="top"
                   className="w-[9rem] py-4"
                 >
-                  <li className={classes['view-note']} onClick={(e) => handleNoteAction('view', e)}>
+                  <li
+                    className={classes['view-note']}
+                    onClick={(e) => handleNoteAction('view', e)}
+                  >
                     <label
                       htmlFor={`modal__problems-note-${title}`}
                       className="w-fit cursor-pointer"
@@ -392,15 +379,17 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       <Modal
         id={`modal-solution-${title}`}
         type="close-button"
-        className={`max-w-[100vw] ${
-          isMobile ? 'w-[100vw]' : 'w-[70vw]'
-        } h-full pt-24 pb-8 pl-3 ${
+        buttonPosition='right-9 top-9'
+        className={`max-w-[100vw] h-full pt-24 pb-8 pl-3 ${
+          isMobile ? 'w-screen h-screen min-w-screen min-h-screen' : 'w-[70vw] min-w-[70vw]'
+        } ${
           theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
         }`}
         onClose={() => setShowSolutionModal(false)}
+        noBorderRadius={isMobile ? true : false}
       >
         <div
-          className={`solution-modal-wrapper--${theme} w-full h-fulloverflow-y-scroll`}
+          className={`solution-modal-wrapper--${theme} ${classes['solution-modal-wrapper']} w-full h-full ${isMobile ? 'overflow-y-visible' : 'overflow-y-hidden'} `}
         >
           {showSolutionModal && (
             <Solutions

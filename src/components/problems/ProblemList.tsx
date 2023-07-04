@@ -19,7 +19,7 @@ const ProblemList: React.FC<ProblemListProps> = ({
 }) => {
   const { data: session } = useSession();
   const { theme } = useAppSelector((state) => state.theme);
-  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 820px)' });
 
   const renderedProblems = problems.map((problem, index) => (
     <ProblemItem
@@ -37,7 +37,7 @@ const ProblemList: React.FC<ProblemListProps> = ({
         classes[`problems-table--${theme}`]
       }`}
     >
-      <div className={`${classes['table-header']}`}>
+      <div className={`${classes['table-header']} ${classes[`table-header--${theme}`]}`}>
         {!isMobile && (
           <>
             <div role="row" className={classes['solved-header']}>

@@ -386,7 +386,7 @@
 }
 
 /**********************************/
-/* BELOW 501px                    */
+/* BELOW 513px                    */
 /**********************************/
 @media (max-width: 32em) {
   .user-dashboard {
@@ -394,21 +394,8 @@
       & > div:first-child > div {
         min-width: 100%;
       }
-
-      // & > div:nth-child(2) {
-      //   & > div > div:nth-child(2) {
-
-      //   }
-      // }
     }
-  }
-}
 
-/**********************************/
-/* BELOW 501px                    */
-/**********************************/
-@media (max-width: 32em) {
-  .user-dashboard {
     .speed-records {
       & > div > div:nth-child(2) {
         min-height: 21rem;

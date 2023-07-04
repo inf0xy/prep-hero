@@ -7,6 +7,7 @@ import {
   useEffect
 } from 'react';
 import MonacoEditor from '@monaco-editor/react';
+import { useMediaQuery } from 'react-responsive';
 import Loading from '../Loading';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import { CodeOptions } from '@/types/dataTypes';
@@ -59,6 +60,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const [lastDebugLineNumber, setLastDebugLineNumber] = useState(0);
 
   const dispatch = useAppDispatch();
+  const isMobile = useMediaQuery({
+    query: '(max-width: 897px)'
+  });
 
   const breakpointsRef = useRef<number[] | null>(null);
   const codeEditorModelRef = useRef(null);
@@ -72,36 +76,38 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   } | null>(null);
 
   const handleMouseDown = (event: any) => {
-    if (
-      event.target?.position &&
-      event.target.position.column === 1 &&
-      event.target.range.endColumn > 1
-    ) {
-      const { lineNumber } = event.target?.position;
-      if (!breakpointState.current.includes(lineNumber)) {
-        const newBreakpoints = [...breakpoints, lineNumber];
-        dispatch(setBreakpoints(newBreakpoints));
-        breakpointState.current = [...breakpointState.current, lineNumber];
-        renderedBreakpointsDecorations('add', {
-          startLineNumber: lineNumber,
-          startColumn: 1,
-          endLineNumber: lineNumber,
-          endColumn: 1
-        });
-      } else {
-        const newBreakpoints = breakpoints.filter(
-          (line) => line !== lineNumber
-        );
-        dispatch(setBreakpoints(newBreakpoints));
-        breakpointState.current = breakpointState.current.filter(
-          (el) => el !== lineNumber
-        );
-        renderedBreakpointsDecorations('remove', {
-          startLineNumber: lineNumber,
-          startColumn: 1,
-          endLineNumber: lineNumber,
-          endColumn: 1
-        });
+    if (!isMobile) {
+      if (
+        event.target?.position &&
+        event.target.position.column === 1 &&
+        event.target.range.endColumn > 1
+      ) {
+        const { lineNumber } = event.target?.position;
+        if (!breakpointState.current.includes(lineNumber)) {
+          const newBreakpoints = [...breakpoints, lineNumber];
+          dispatch(setBreakpoints(newBreakpoints));
+          breakpointState.current = [...breakpointState.current, lineNumber];
+          renderedBreakpointsDecorations('add', {
+            startLineNumber: lineNumber,
+            startColumn: 1,
+            endLineNumber: lineNumber,
+            endColumn: 1
+          });
+        } else {
+          const newBreakpoints = breakpoints.filter(
+            (line) => line !== lineNumber
+          );
+          dispatch(setBreakpoints(newBreakpoints));
+          breakpointState.current = breakpointState.current.filter(
+            (el) => el !== lineNumber
+          );
+          renderedBreakpointsDecorations('remove', {
+            startLineNumber: lineNumber,
+            startColumn: 1,
+            endLineNumber: lineNumber,
+            endColumn: 1
+          });
+        }
       }
     }
   };
@@ -197,8 +203,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         new (monacolRef.current as any).Range(1, 1, lineCount, 1)
       );
       decorations.forEach((decoration: any) => {
-        if (
-          decoration.options.className === currentStyle) {
+        if (decoration.options.className === currentStyle) {
           decoration.options.className = replacingStyle;
         }
       });
@@ -315,7 +320,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   const handleMouseMove = (event: any) => {
-    if (event.target?.position) {
+    if (!isMobile && event.target?.position) {
       if (
         event.target.position.column === 1 &&
         event.target.range.endColumn > 1
@@ -349,7 +354,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   const handleMouseLeave = (event: any) => {
-    if (lastHoverState.current) {
+    if (!isMobile && lastHoverState.current) {
       handleHoverOffLineNumber(lastHoverState.current);
     }
   };
@@ -379,8 +384,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const handleEditorChange = (value: string | undefined) => {
     if (!readOnly && value !== undefined) {
       setCodeInput(value);
-      dispatch(setDebuggingCode(value));
-      updateBreakpoints();
+
+      if (!!isMobile) {
+        dispatch(setDebuggingCode(value));
+        updateBreakpoints();
+      }
     }
   };
 
@@ -392,7 +400,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         height={height}
         value={value}
         options={{
-          glyphMargin: true,
+          glyphMargin: isMobile ? false : true,
           wordWrap: 'on',
           minimap: { enabled: false },
           showUnused: false,
@@ -405,7 +413,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           readOnly: debuggingStarted ? true : false
         }}
         onChange={handleEditorChange}
-        // loading={<SmallLoading width={40} height={40} />}
         loading={<Loading width={40} height={40} />}
         onMount={(editor, monaco) => {
           (codeEditorModelRef as any).current = editor;

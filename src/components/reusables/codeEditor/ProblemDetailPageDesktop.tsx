@@ -13,7 +13,7 @@ import Debugger from './Debugger';
 import ProblemDetail from '@/components/problems/ProblemDetail';
 import ProblemEditor from '@/components/problems/ProblemEditor';
 import { Problem, SocketType } from '@/types/dataTypes';
-import classes from './ProblemDetailPageDesktop.module.scss'
+import classes from '@/styles/ProblemDetailPageDesktop.module.scss';
 
 interface ProblemDetailPageDesktopProps {
   selectedProblem: Problem;

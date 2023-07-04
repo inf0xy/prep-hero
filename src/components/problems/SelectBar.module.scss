@@ -11,3 +11,21 @@
   justify-self: center;
   transform: translateY(0.5rem);
 }
+
+/**********************************/
+/* SAMSUNG GALAXY                 */
+/**********************************/
+@media (max-width: 414px) {
+  .note-switch {
+    transform: translateY(-0.1rem);
+  }
+}
+
+/**********************************/
+/* GALAXY S8                      */
+/**********************************/
+@media (max-width: 360px) {
+  .note-switch {
+    transform: translateY(0.5rem);
+  }
+}

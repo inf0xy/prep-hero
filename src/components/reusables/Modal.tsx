@@ -1,19 +1,21 @@
 import { useState, ReactNode, MouseEventHandler } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import { useAppSelector } from '@/hooks/hooks';
 import Portal from './Portal';
 import FullScreenButton from './codeEditor/FullScreenButton';
-import { useAppSelector } from '@/hooks/hooks';
+import XIcon from '../icons/XIcon';
 
 type ModalProps = {
   children: ReactNode;
   id: string;
   className?: string;
   type?: undefined | 'close-button';
-  buttonSize?: string;
+  buttonPosition?: string;
   onClose?: MouseEventHandler<HTMLLabelElement> | undefined | null;
   isOpen?: boolean;
   fullScreenToggle?: boolean;
   showCloseButton?: boolean;
+  noBorderRadius?: boolean;
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -21,11 +23,12 @@ const Modal: React.FC<ModalProps> = ({
   id,
   className,
   type,
-  buttonSize,
+  buttonPosition,
   onClose,
   isOpen,
   fullScreenToggle,
-  showCloseButton
+  showCloseButton,
+  noBorderRadius
 }) => {
   const [fullScreen, setFullScreen] = useState(false);
   const { theme, showFullScreen } = useAppSelector((state) => {
@@ -34,6 +37,7 @@ const Modal: React.FC<ModalProps> = ({
     return { theme, showFullScreen };
   });
 
+  const isMobileOrTablelet = useMediaQuery({ query: '(max-width: 976px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 642px)' });
   const isSmallMobile = useMediaQuery({ query: '(max-width: 521px)' });
   const isSmallMobilePortrait = useMediaQuery({ query: '(max-width: 400px)' });
@@ -66,8 +70,13 @@ const Modal: React.FC<ModalProps> = ({
       />
       <label htmlFor={id} className="modal cursor-pointer">
         <label
-          className={`modal-box relative p-0 ${className} ${getDimension()}} ${isSmallMobilePortrait && 'small-mobile-portrait'}`}
-          style={{ borderRadius: showFullScreen || isSmallMobile ? 0 : '1rem'}}
+          className={`modal-box relative p-0 bg-transparent ${className} ${getDimension()}} ${
+            isSmallMobilePortrait && 'small-mobile-portrait'
+          }`}
+          style={{
+            borderRadius:
+              noBorderRadius || showFullScreen || isSmallMobile ? 0 : '1rem'
+          }}
           htmlFor=""
         >
           {children}
@@ -84,12 +93,17 @@ const Modal: React.FC<ModalProps> = ({
           className={`w-fit h-fit p-[1px] rounded overflow-hidden ${
             theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
           }`}
-          style={{ borderRadius: '1rem' }}
+          style={{
+            borderRadius:
+              noBorderRadius === false || !showFullScreen || isSmallMobile ? '1rem' : 0
+          }}
         >
           <div
-            className={`modal-box relative p-0 ${
-              fullScreenToggle && fullScreen ? 'full-screen' : ''
-            } ${!className?.includes('max-w') ? 'max-w-fit' : ''} ${className}`}
+            className={`modal-box relative p-0 bg-transparent ${
+              isMobileOrTablelet && 'no-scrollbar'
+            } ${fullScreenToggle && fullScreen ? 'full-screen' : ''} ${
+              !className?.includes('max-w') ? 'max-w-fit' : ''
+            } ${className}`}
             style={fullScreenToggle ? modalStyle : {}}
           >
             {fullScreenToggle && (
@@ -103,10 +117,14 @@ const Modal: React.FC<ModalProps> = ({
             {(showCloseButton === undefined || showCloseButton === true) && (
               <label
                 htmlFor={id}
-                className={`btn ${buttonSize} btn-circle absolute right-8 top-7 bg-[#474747]  hover:bg-[#404040] border-0`}
+                className={`absolute ${buttonPosition} cursor-pointer hover:text-red-300 p-2 rounded-xl duration-300 ease ${
+                  theme === 'dark' ? 'hover:bg-zinc-600' : 'hover:bg-gray-200'
+                } `}
                 onClick={onClose ?? undefined}
               >
-                <span className="text-xl">✕</span>
+                <span>
+                  <XIcon width={22} height={22} />
+                </span>
               </label>
             )}
             {children}

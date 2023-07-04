@@ -33,9 +33,9 @@ import useCodeLines from '@/hooks/useCodeLines';
 import useCodeCustomEffect from '@/hooks/useCodeCustomEffect';
 import Link from 'next/link';
 import LockIcon from '../icons/LockIcon';
+import SmallLoading from '../reusables/SmallLoading';
 import variables from '@/styles/variables.module.scss';
 import classes from './ProblemEditor.module.scss';
-import SmallLoading from '../reusables/SmallLoading';
 
 type ProblemEditorProps = {
   prompts: { python: string; javascript: string; [key: string]: string };
@@ -60,7 +60,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
 }) => {
   const session = useSession();
   const { theme, submissions, notes, debugging } = useAppSelector(
-    (state) => {
+    state => {
       const { theme } = state.theme;
       const { submissions, notes } = state.user;
       const { debugging } = state.debugger;
@@ -72,6 +72,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
       };
     }
   );
+
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
@@ -393,7 +394,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                       )}
                       {!isLoading && codeError && (
                         <code
-                          className={`${classes.code} ${classes['code--error']}`}
+                          className={`${classes.code} ${classes[`code--error--${theme}`]}`}
                         >
                           {!codeError.includes('\n') ? (
                             <p className="text-red-500 mt-4 mb-4 text-[1.4rem]">
@@ -485,8 +486,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
           <Modal
             id="modal-settings"
             type="close-button"
-            buttonSize="btn-sm"
+            buttonPosition='top-5 right-[-1.5rem]'
             className="overflow-visible"
+            noBorderRadius={false}
           >
             <div
               className={`${classes.settings} ${classes[`settings--${theme}`]}`}

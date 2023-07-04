@@ -34,7 +34,7 @@
   &--light {
     background-color: $light-background-0;
     color: $text-gray-700;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-right: solid $color-gray-200 1px;
   }
 
   .list-button {
@@ -121,7 +121,6 @@
   &--light {
     background-color: $light-background-0;
     color: $text-gray-700;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .title {
@@ -258,6 +257,15 @@
   width: calc(100vw - 35rem);
   overflow-x: hidden;
 
+  &--dark > div {
+    border: solid $dark-background-100 1px;
+  }
+
+  &--light > div {
+    border: solid $color-gray-200 1px;
+    box-shadow: none;
+  }
+
   & > div {
     min-height: 100%;
     width: 100%;
@@ -270,21 +278,21 @@
 
     // table wrapper
     & > div:nth-child(2) {
-      // min-height: calc(100vh - 27rem);
-
-      // & > div > div:first-child {
-      //   width: calc(100vw - 35rem);
-      // }
 
       // table body
       & > div > div:nth-child(2) {
         min-height: calc(100vh - 30rem);
         overflow: visible;
+        padding-top: 2rem;
+
+        & > div > p {
+          line-height: 1.5;
+        }
       }
 
       & ul {
         overflow-x: visible;
-        top: -1.3rem;
+        top: -2rem;
         left: -2rem;
       }
     }
@@ -305,12 +313,22 @@
 /**********************************/
 @media (max-width: 40em) {
   .note-list {
-    margin: 3rem;
-    // width: calc(100vw - 31rem);
+    margin: 0;
+
+    &--dark > div {
+      border: none;
+    }
+
+    &--light > div {
+      border:  none;
+    }
 
     & > div {
+       border-radius: 0;
+
       // table wrapper
       & > div:nth-child(2) {
+
         // table body
         & > div > div:nth-child(2)::-webkit-scrollbar {
           display: none;
@@ -329,31 +347,21 @@
 /**********************************/
 @media (max-width: 37.5em) {
   .note-list {
-    margin: 2rem;
-
     & > div {
+
       // table wrapper
       & > div:nth-child(2) {
         & > div {
           overflow: hidden;
         }
-        // & > div > div:first-child {
-        //   overflow: visible;
-        // }
 
         // table body
         & > div > div:nth-child(2) {
           & > div > p {
-            min-width: 26rem;
-            width: 26rem;
             line-height: 1.5;
           }
         }
       }
-
-      // & > div:nth-child(2) > div {
-      //   overflow: visible;
-      // }
     }
   }
 }
@@ -363,7 +371,6 @@
 /**********************************/
 @media (max-width: 32em) {
   .note-list {
-    // width: calc(100vw - 31rem);
     & > div {
       & > div > div > div {
         min-width: calc(100% - 6rem) !important;
@@ -392,35 +399,40 @@
 }
 
 /**********************************/
-/* BELOW 501px                    */
+/* BELOW 417px                    */
 /**********************************/
-@media (max-width: 375px) {
+@media (max-width: 26em) {
   .note-list {
-    // width: calc(100vw - 31rem);
     & > div {
-      // & > div > div > div {
-      //   min-width: calc(100% - 6rem) !important;
-      // }
 
       // table wrapper
       & > div:nth-child(2) {
-        & > div {
-          overflow: auto;
-        }
-        // & > div > div:first-child {
-        //   width: 32rem;
-        //   min-width: 32rem;
-        // }
 
+        // table header
+        & > div > div:first-child > div:first-child{
+          min-width: 4rem;
+          width: 4rem;
+        }
         // table body
         & > div > div:nth-child(2) {
-          margin-top: 4rem;
-          gap: 1.5rem;
 
-          & > div > p {
-            width: 25rem;
-            min-width: 25rem;
-          }
+          // table cell
+          & > div {
+
+            // second col-icon
+            & > div:first-child {
+              padding-left: 0;
+              & > span > div > ul {
+                left: 0;
+              }
+            }
+
+            & > p {
+              width: 20rem;
+              min-width: 20rem;
+              transform: translateX(-3rem);
+            }
+           }
         }
       }
     }

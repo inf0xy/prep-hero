@@ -339,36 +339,34 @@ const AuthForm = () => {
           <p>OR</p>
           <p className={`${classes.line} ${classes[`line--${theme}`]}`}></p>
         </div>
-        <div className={classes['oauth-buttons']}>
-          <Button
-            extraStyle={{ width: '100%', padding: '0.8rem' }}
-            color="github"
+        <div className={`${classes['oauth-buttons']} ${classes[`oauth-buttons--${theme}`]}`}>
+          <span
+            className={classes.github}
             onClick={() =>
               signIn('github', { callbackUrl: '/problems', redirect: true })
             }
           >
             <GithubIcon width="21px" height="21px" />
-          </Button>
-          <Button
-            extraStyle={{ width: '100%', padding: '0.8rem' }}
-            color="google"
+          </span>
+          <span
+            className={classes.google}
             onClick={() =>
               signIn('google', { callbackUrl: '/problems', redirect: true })
             }
           >
             <GoogleIcon width="18px" height="18px" />
-          </Button>
-          <Button
-            extraStyle={{ width: '100%', padding: '0.8rem' }}
-            color="facebook"
+          </span>
+          <span
+            className={classes.facebook}
             onClick={() =>
               signIn('facebook', { callbackUrl: '/problems', redirect: true })
             }
           >
             <FacebookIcon width="22px" height="22px" />
-          </Button>
+          </span>
         </div>
       </div>
+
       <p className={classes['auth-option']}>
         {loginForm ? `Don't have an acount? ` : 'Have an account? '}
         <span>

@@ -29,6 +29,7 @@
 .filters {
   display: flex;
   align-self: flex-start;
+  flex-wrap: wrap;
   margin-bottom: 3rem;
   gap: 1rem;
 }
@@ -72,5 +73,52 @@
       gap: 1rem;
       transform: scale(110%);
     }
+  }
+}
+
+/**********************************/
+/* BELOW 977px (Smaller desktop) */
+/**********************************/
+@media (max-width: 61em) {
+  .problems {
+    min-height: calc(100vh - 15rem);
+  }
+}
+
+/**********************************/
+/* BELOW 769px                    */
+/**********************************/
+@media (max-width: 48em) {
+  .filters {
+    margin-top: 1rem;
+    transform: translateX(-1.5rem);
+  }
+}
+
+/**********************************/
+/* BELOW 601px                    */
+/**********************************/
+@media (max-width: 37.5em) {
+  .filters {
+    // margin-top: 1rem;
+    transform: translateX(0);
+  }
+}
+
+/**********************************/
+/* SAMSUNG GALAXY                 */
+/**********************************/
+@media (max-width: 414px) {
+  .filters {
+    transform: translateX(0.5rem);
+  }
+}
+
+/**********************************/
+/* GALAXY S8                      */
+/**********************************/
+@media (max-width: 360px) {
+  .filters {
+    margin-top: 1.5rem;
   }
 }

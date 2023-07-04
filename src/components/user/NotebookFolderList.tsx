@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
+import { useAppSelector } from '@/hooks/hooks';
 import FolderItem from './FolderItem';
 import Drawer from '../reusables/Drawer';
-import classes from './NotebookFolderList.module.scss';
-import { useAppSelector } from '@/hooks/hooks';
 import XIcon from '../icons/XIcon';
+import classes from './NotebookFolderList.module.scss';
 
 interface NotebookFolderListProps {
   folderNames: string[];
