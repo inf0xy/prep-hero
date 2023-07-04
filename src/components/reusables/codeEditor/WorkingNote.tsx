@@ -38,11 +38,6 @@ const WorkingNote: React.FC<WorkingNoteProps> = ({
             classes[`text-editor-wrapper--${theme}`]
           }`}
         >
-          {/* {!isMobilePortrait && (
-            <button className={classes['close-note']} onClick={closeNote}>
-              <XIcon width={15} height={15} />
-            </button>
-          )} */}
           <TextEditor
             value={noteContent ? noteContent : ''}
             setValue={setNoteContent}

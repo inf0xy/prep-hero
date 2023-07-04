@@ -1,8 +1,9 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import '@uiw/react-markdown-preview/markdown.css';
 import '@uiw/react-md-editor/markdown-editor.css';
 import { useMediaQuery } from 'react-responsive';
+import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import PreviewIcon from '../icons/PreviewIcon';
 import XIcon from '../icons/XIcon';
@@ -104,13 +105,16 @@ const FullScreenButton = () => {
   const appDispatch = useAppDispatch();
 
   const click = () => {
-    dispatch!({
-      fullscreen: 'fullscreen'
-    });
-    if (showFullScreen) {
-      appDispatch(toggleFullScreen(false));
-    } else {
+    if (!showFullScreen) {
+      dispatch!({
+        fullscreen: true
+      });
       appDispatch(toggleFullScreen(true));
+    } else {
+      dispatch!({
+        fullscreen: false
+      });
+      appDispatch(toggleFullScreen(false));
     }
   };
 
@@ -132,7 +136,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const { theme } = useAppSelector((state) => state.theme);
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isSmallMobile = useMediaQuery({ query: '(max-width: 521px)' });
-
+  const router = useRouter();
   const groupCommandsLargeScreen = [
     {
       name: 'live',
@@ -156,7 +160,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     }
   ];
 
-  const groupCommandsSmallScreen = [
+  const groupCommandsTabletScreen = [
     codePreview,
     divider,
     {
@@ -173,7 +177,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     }
   ];
 
-  const groupCommandsSmallScreenPortrait = [
+  const groupCommandsSmallScreen = [
     codePreview,
     {
       name: 'preview',
@@ -183,18 +187,25 @@ const TextEditor: React.FC<TextEditorProps> = ({
     }
   ];
 
+  let groupCommands = groupCommandsLargeScreen;
+
   const getCommands = () => {
-    let groupCommands = groupCommandsLargeScreen;
-    if (isMobile) {
+    if (isMobile && !router.pathname.includes('/notebook')) {
       groupCommands = groupCommandsSmallScreen;
     }
 
-    if (isSmallMobile) {
-      groupCommands = groupCommandsSmallScreenPortrait;
+    if (isMobile && router.pathname.includes('/notebook')) {
+      groupCommands = groupCommandsTabletScreen;
+    }
+
+    if (isSmallMobile && router.pathname.includes('/notebook')) {
+      groupCommands = groupCommandsSmallScreen;
     }
 
     return groupCommands;
   };
+
+  const fullSreenMode = isSmallMobile ? true : fullScreen ? fullScreen : false;
 
   return (
     <div data-color-mode={theme} className={classes.editor}>
@@ -204,7 +215,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
         onChange={setValue as () => void}
         className={`${className} text-editor ${theme}`}
         enableScroll={false}
-        fullscreen={fullScreen ? fullScreen : false}
+        fullscreen={fullSreenMode}
         preview={previewMode ? previewMode : 'edit'}
         extraCommands={getCommands()}
       />

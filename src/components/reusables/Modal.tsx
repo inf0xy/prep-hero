@@ -1,4 +1,10 @@
-import { useState, ReactNode, MouseEventHandler } from 'react';
+import {
+  useState,
+  useRef,
+  ReactNode,
+  MouseEventHandler,
+  useEffect
+} from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useAppSelector } from '@/hooks/hooks';
 import Portal from './Portal';
@@ -37,6 +43,8 @@ const Modal: React.FC<ModalProps> = ({
     return { theme, showFullScreen };
   });
 
+  const modalRef = useRef(null);
+
   const isMobileOrTablelet = useMediaQuery({ query: '(max-width: 976px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 642px)' });
   const isSmallMobile = useMediaQuery({ query: '(max-width: 521px)' });
@@ -58,6 +66,17 @@ const Modal: React.FC<ModalProps> = ({
     }
     return dimension;
   };
+
+  useEffect(() => {
+    // ${fullScreenToggle && fullScreen ? 'full-screen' : 'minimize'}
+    if (fullScreenToggle && modalRef.current) {
+      if (fullScreen) {
+        (modalRef.current as HTMLElement).classList.add('full-screen');
+      } else {
+        (modalRef.current as HTMLElement).classList.remove('full-screen');
+      }
+    }
+  }, [fullScreen, fullScreenToggle]);
 
   const modalWithoutCloseButton = (
     <div className={`${!isOpen && 'opacity-0'}`}>
@@ -95,15 +114,21 @@ const Modal: React.FC<ModalProps> = ({
           }`}
           style={{
             borderRadius:
-              noBorderRadius === false || !showFullScreen || isSmallMobile ? '1rem' : 0
+              noBorderRadius === false || !showFullScreen || isSmallMobile
+                ? '1rem'
+                : 0
           }}
         >
           <div
+            ref={modalRef}
+            // className={`modal-box relative p-0 bg-transparent ${
+            //   isMobileOrTablelet && 'no-scrollbar'
+            // } ${fullScreenToggle && fullScreen ? 'full-screen' : 'minimize'} ${
+            //   !className?.includes('max-w') ? 'max-w-fit' : ''
+            // } ${className}`}
             className={`modal-box relative p-0 bg-transparent ${
               isMobileOrTablelet && 'no-scrollbar'
-            } ${fullScreenToggle && fullScreen ? 'full-screen' : ''} ${
-              !className?.includes('max-w') ? 'max-w-fit' : ''
-            } ${className}`}
+            } ${!className?.includes('max-w') ? 'max-w-fit' : ''} ${className}`}
             style={fullScreenToggle ? modalStyle : {}}
           >
             {fullScreenToggle && (

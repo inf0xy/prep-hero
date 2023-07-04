@@ -160,13 +160,13 @@ body {
 
 .w-md-editor {
   box-shadow: none !important;
-  height: 50vh !important;
+  height: 60vh !important;
   padding: 1rem;
 }
 
-.full-screen .w-md-editor {
-  height: 100vh !important;
-}
+// .full-screen .w-md-editor {
+//   height: 100vh !important;
+// }
 
 .w-md-editor-toolbar {
   ul:nth-child(2) {
