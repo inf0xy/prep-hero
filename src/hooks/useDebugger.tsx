@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { getSession } from 'next-auth/react';
 import { useAppDispatch } from './hooks';
 import {
   setDebuggingData,
@@ -12,12 +13,11 @@ const useDebugger = () => {
   const dispatch = useAppDispatch();
 
   const handleStartDebugging = useCallback(
-    (
+    async (
       socketConnection: SocketType,
       debuggingCode: string,
       breakpoints: number[]
     ) => {
-
       const data = {
         codeLine: '',
         callStack: [],
@@ -26,15 +26,24 @@ const useDebugger = () => {
         watchVariables: {}
       };
 
-      dispatch(setDebuggingData(data));
+      const session = await getSession();
+      let userId: string;
+      if (session) {
+        userId = session.session.user._id;
+        dispatch(setDebuggingData(data));
 
-      if (socketConnection) {
-        dispatch(setActionAvailable(false));
-        const debuggingData = {
-          code: debuggingCode,
-          breakpoints
-        };
-        socketConnection.emit('startDebugging', JSON.stringify(debuggingData));
+        if (socketConnection) {
+          dispatch(setActionAvailable(false));
+          const debuggingData = {
+            userId,
+            code: debuggingCode,
+            breakpoints
+          };
+          socketConnection.emit(
+            'startDebugging',
+            JSON.stringify(debuggingData)
+          );
+        }
       }
     },
     [dispatch]

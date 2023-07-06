@@ -14,6 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(404).json('Not found');
       }
     } catch (err: any) {
+      console.error(err);
       res.status(400).json({ message: 'Invalid input' });
     }
   }

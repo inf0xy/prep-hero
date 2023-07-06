@@ -78,7 +78,8 @@ export const updateProblem = async (problem: Problem) => {
         prompts: problem.prompts,
         solution_codes: problem.solution_codes
       }
-    }
+    },
+    { writeConcern: { w: 'majority' } }
   );
 };
 

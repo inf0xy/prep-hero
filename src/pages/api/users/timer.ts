@@ -11,6 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await setTimerReminder(new ObjectId(userId), timer_reminder);
       res.status(200).json({ message: 'Timer is set', timer_reminder });
     } catch (err: any) {
+      console.error(err);
       res.status(500).json({ message: 'Something went wrong' });
     }
   } else {

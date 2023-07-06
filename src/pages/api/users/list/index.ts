@@ -14,6 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await addProblemToList(new ObjectId(userId), title);
       res.status(201).json({ message: 'Added', title });
     } catch (err: any) {
+      console.error(err);
       res.status(400).json({ message: 'Invalid request' });
     }
   } else if (req.method === 'DELETE') {
@@ -25,6 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       );
       res.status(200).json({ message: 'Removed', title });
     } catch (err: any) {
+      console.error(err);
       res.status(400).json({ message: 'Invalid request' });
     }
   } else if (req.method === 'PUT') {
@@ -33,6 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await clearList(new ObjectId(userId as string));
       return res.status(200).json({ message: 'Cleared' });
     } catch (err: any) {
+      console.error(err);
       res.status(400).json({ message: 'Invalid request' });
     }
   }

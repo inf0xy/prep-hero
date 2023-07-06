@@ -24,6 +24,8 @@ type DebuggerProps = {
   setSocketConnection: Dispatch<SetStateAction<SocketType>>;
 };
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 const Debugger: React.FC<DebuggerProps> = ({
   socketConnection,
   setSocketConnection
@@ -49,7 +51,7 @@ const Debugger: React.FC<DebuggerProps> = ({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const addWatchVarButtonRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
-  const { handleAddWatchVariables, handleRemoveWatchVariables } = useDebugger();
+  const { handleAddWatchVariables, handleRemoveWatchVariables, handleExit } = useDebugger();
 
   useEffect(() => {
     const handleResize = () => {
@@ -91,7 +93,7 @@ const Debugger: React.FC<DebuggerProps> = ({
   }, [windowHeight]);
 
   useEffect(() => {
-    const socket = io('http://localhost:5000');
+    const socket = io(`${BACKEND_URL}`);
     setSocketConnection(socket);
 
     socket.on('startDebugging', (data) => {
@@ -130,6 +132,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         dispatch(setDebuggingData(newDebuggingData));
         dispatch(setCurrentDebuggingLineNumber(breakpoints[0]));
       }
+
       dispatch(setActionAvailable(true));
     });
 
@@ -156,6 +159,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         }
         dispatch(setCurrentDebuggingLineNumber(currentLineNumber));
       }
+
       dispatch(setActionAvailable(true));
     });
 
@@ -285,9 +289,12 @@ const Debugger: React.FC<DebuggerProps> = ({
     });
 
     socket.on('error', (error) => {
-      setNotification({ status: 'error', message: 'Something went wrong.' });
+      setNotification({ status: 'error', message: 'Something went wrong. Exiting debugger...' });
       setShowAlert(true);
       console.error('Socket error:', error);
+      setTimeout(() => {
+        handleExit(socket);
+      }, 2000);
     });
 
     socket.on('exit', (data) => {

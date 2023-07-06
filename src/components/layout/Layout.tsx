@@ -38,6 +38,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [dispatch, pageLoading, router, session]);
 
+  useEffect(() => {
+    if (session && router.pathname.includes('auth')) {
+      router.push('/problems');
+    }
+  }, [router, session]);
+
   const headerRef = useRef<HTMLElement>(null);
 
   useCustomScrollbar();

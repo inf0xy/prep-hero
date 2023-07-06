@@ -18,6 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(500).json(result);
       }
     } catch (err: any) {
+      console.error(err);
       res.status(400).json({ message: 'Invalid request' });
     }
   }

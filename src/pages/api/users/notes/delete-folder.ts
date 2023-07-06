@@ -14,6 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       );
       res.status(200).json({ notes: result[0].notes });
     } catch (err: any) {
+      console.error(err);
       res.status(500).json({ message: err.message });
     }
   } else {

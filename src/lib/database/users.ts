@@ -130,9 +130,13 @@ export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
     );
 
     if (foundEmptyList && foundEmptyList.notes[0].title === 'placeholder') {
-      await usersCollection.updateOne({ _id: userId }, {
-        $pull: { notes: { title: 'placeholder' } }
-      } as unknown as PullOperator<Document>);
+      await usersCollection.updateOne(
+        { _id: userId },
+        {
+          $pull: { notes: { title: 'placeholder' } }
+        } as unknown as PullOperator<Document>,
+        { writeConcern: { w: 'majority' } }
+      );
     }
 
     const result = await usersCollection
@@ -147,7 +151,8 @@ export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
             'notes.$.title': title,
             'notes.$.content': content
           }
-        }
+        },
+        { writeConcern: { w: 'majority' } }
       );
       return 'Udpated';
     } else {
@@ -161,7 +166,8 @@ export const createOrUpdateNote = async (userId: ObjectId, note: Note) => {
               content
             }
           }
-        }
+        },
+        { writeConcern: { w: 'majority' } }
       );
       return 'Created';
     }
@@ -191,7 +197,8 @@ export const deleteUserNote = async (userId: ObjectId, title: string) => {
             $push: {
               notes: { list_name: listName, title: 'placeholder', content: '' }
             }
-          }
+          },
+          { writeConcern: { w: 'majority' } }
         );
       }
       const notes = await usersCollection
@@ -214,7 +221,8 @@ export const editNoteName = async (
   await connectDB();
   const result = await usersCollection.updateOne(
     { _id, 'notes.title': oldTitle },
-    { $set: { 'notes.$.title': newTitle } }
+    { $set: { 'notes.$.title': newTitle } },
+    { writeConcern: { w: 'majority' } }
   );
   return usersCollection
     .find({ _id }, { projection: { notes: 1, _id: 0 } })
@@ -234,10 +242,18 @@ export const editListName = async (
     return 'Not allowed';
   }
 
+  // await usersCollection.updateMany(
+  //   { _id },
+  //   { $set: { 'notes.$[elem].list_name': newFolderName } },
+  //   { arrayFilters: [{ 'elem.list_name': oldFolderName }] }
+  // );
   await usersCollection.updateMany(
     { _id },
     { $set: { 'notes.$[elem].list_name': newFolderName } },
-    { arrayFilters: [{ 'elem.list_name': oldFolderName }] }
+    {
+      arrayFilters: [{ 'elem.list_name': oldFolderName }],
+      writeConcern: { w: 'majority' }
+    }
   );
 
   return usersCollection
@@ -247,9 +263,13 @@ export const editListName = async (
 
 export const deleteFolder = async (_id: ObjectId, folderName: string) => {
   await connectDB();
-  await usersCollection.updateMany({ _id }, {
-    $pull: { notes: { list_name: folderName } }
-  } as unknown as PullOperator<Document>);
+  await usersCollection.updateMany(
+    { _id },
+    {
+      $pull: { notes: { list_name: folderName } }
+    } as unknown as PullOperator<Document>,
+    { writeConcern: { w: 'majority' } }
+  );
 
   return usersCollection
     .find({ _id }, { projection: { notes: 1, _id: 0 } })
@@ -258,17 +278,29 @@ export const deleteFolder = async (_id: ObjectId, folderName: string) => {
 
 export const addProblemToList = async (_id: ObjectId, title: string) => {
   await connectDB();
-  return usersCollection.updateOne({ _id }, { $push: { list: title } });
+  return usersCollection.updateOne(
+    { _id },
+    { $push: { list: title } },
+    { writeConcern: { w: 'majority' } }
+  );
 };
 
 export const removeProbleFromlist = async (_id: ObjectId, title: string) => {
   await connectDB();
-  return usersCollection.updateOne({ _id }, { $pull: { list: title } });
+  return usersCollection.updateOne(
+    { _id },
+    { $pull: { list: title } },
+    { writeConcern: { w: 'majority' } }
+  );
 };
 
 export const clearList = async (_id: ObjectId) => {
   await connectDB();
-  return usersCollection.updateOne({ _id }, { $set: { list: [] } });
+  return usersCollection.updateOne(
+    { _id },
+    { $set: { list: [] } },
+    { writeConcern: { w: 'majority' } }
+  );
 };
 
 export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
@@ -350,7 +382,8 @@ export const saveSubmission = async (_id: ObjectId, submission: Submission) => {
       $push: {
         submissions: userSubmission
       }
-    }
+    },
+    { writeConcern: { w: 'majority' } }
   );
 };
 
@@ -358,6 +391,7 @@ export const setTimerReminder = async (_id: ObjectId, timerSet: boolean) => {
   await connectDB();
   return usersCollection.updateOne(
     { _id },
-    { $set: { timer_reminder: timerSet } }
+    { $set: { timer_reminder: timerSet } },
+    { writeConcern: { w: 'majority' } }
   );
 };

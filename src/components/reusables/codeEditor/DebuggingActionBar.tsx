@@ -67,7 +67,7 @@ const DebuggingActionBar: React.FC<DebuggingActionBarProps> = ({
     handleStepOut,
     handleRestart
   } = useDebugger();
-  console.log(actionAvailable);
+
   return (
     <>
       {showAlert && (

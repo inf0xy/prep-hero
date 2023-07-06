@@ -11,6 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const result = await saveSubmission(new ObjectId(userId), submission);
       res.status(201).json({ message: result, submission });
     } catch (err: any) {
+      console.error(err);
       res.status(400).json({ message: 'Invalid request' });
     }
   }
