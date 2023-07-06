@@ -7,14 +7,20 @@ type AccentureIconProps = {
 
 const AccentureIcon: React.FC<AccentureIconProps> = ({ width, height }) => {
   return (
-    <Image
-      src="/accenture.png"
-      alt="Accenture Icon"
-      // width={width ? width : 15}
-      width="11"
-      // height={height ? height : 15}
-      height="11"
-    />
+    <div
+      style={{
+        width: `${width}px`,
+        height: `${height}px`,
+        position: 'relative'
+      }}
+    >
+      <Image
+        alt="Accenture Icon"
+        src="/accenture.png"
+        fill={true}
+        sizes={`${width}px`}
+      />
+    </div>
   );
 };
 
