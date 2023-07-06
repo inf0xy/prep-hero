@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const result = await getProblemByTitle(title as string);
-    res.status(200).json(result);
+  res.status(200).json(result);
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ message: 'Something went wrong.' });

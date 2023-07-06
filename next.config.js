@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const removeImports = require('next-remove-imports')();
 const { join } = require('path')
+const withTM = require('next-transpile-modules')(['react-markdown']);
 
-const nextConfig = removeImports({
+const nextConfig = withTM(removeImports({
   reactStrictMode: true,
   experimental: { esmExternals: true },
   images: {
@@ -11,6 +12,6 @@ const nextConfig = removeImports({
   sassOptions: {
     includePaths: [join(__dirname, 'styles')],
   },
-});
+}));
 
 module.exports = nextConfig;

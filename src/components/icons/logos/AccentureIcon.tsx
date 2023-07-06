@@ -10,8 +10,10 @@ const AccentureIcon: React.FC<AccentureIconProps> = ({ width, height }) => {
     <Image
       src="/accenture.png"
       alt="Accenture Icon"
-      width={width ? width : 15}
-      height={height ? height : 15}
+      // width={width ? width : 15}
+      width="11"
+      // height={height ? height : 15}
+      height="11"
     />
   );
 };

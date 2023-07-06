@@ -2,6 +2,7 @@ import { ReactNode, useState, useCallback, useEffect, useRef, Dispatch, SetState
 import { useMediaQuery } from 'react-responsive';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import useSubmitNote from '@/hooks/useSubmitNote';
+import { toggleFullScreen } from '@/store';
 import { Note, NotificationType } from '@/types/dataTypes';
 import SearchBar from '@/components/reusables/SearchBar';
 import TextEditor from './TextEditor';
@@ -13,7 +14,6 @@ import Modal from './Modal';
 import CheckIcon from '../icons/CheckIcon';
 import InProgressIcon from '../icons/InProgressIcon';
 import classes from './TitleList.module.scss';
-import { toggleFullScreen } from '@/store';
 
 type TitleListProps = {
   listType: 'problems' | 'notes' | string;

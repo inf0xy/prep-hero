@@ -24,6 +24,7 @@ export const getProblems = async (page: number, filters: SearchCriteria) => {
 };
 
 export const getAllTitles = async () => {
+console.log('getAllTitles IS called------------>');
   try {
     const { data } = await axios.get('http://localhost:3000/api/problems/titles');
     return data;

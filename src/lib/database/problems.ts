@@ -1,4 +1,8 @@
-import { connectDB, problemsCollection, testCasesCollection } from './db-util';
+import {
+  connectDB,
+  problemsCollection,
+  testCasesCollection
+} from './db-util';
 import { config } from '@/helpers/config';
 
 const ITEMS_PER_PAGE = config.ITEMS_PER_PAGE;
@@ -23,8 +27,8 @@ export default class Problem {
     public leetcode_link: string,
     public solution_link: string,
     public description: string,
-    public prompts: { python: string, javascript: string},
-    public solution_codes: { python: string, javascript: string}
+    public prompts: { python: string; javascript: string },
+    public solution_codes: { python: string; javascript: string }
   ) {
     this.list_names = list_names;
     this.title = title;
@@ -35,8 +39,7 @@ export default class Problem {
     this.leetcode_link = leetcode_link;
     this.solution_link = solution_link;
     this.description = description;
-    this.prompts = prompts,
-    this.solution_codes = solution_codes
+    (this.prompts = prompts), (this.solution_codes = solution_codes);
   }
 }
 
@@ -52,7 +55,7 @@ export const addNewProblems = async (problem: Problem) => {
     problem.solution_link,
     problem.description,
     problem.prompts,
-    problem.solution_codes,
+    problem.solution_codes
   );
   await connectDB();
   return problemsCollection.insertOne(problem);
@@ -150,6 +153,7 @@ export const getProblems = async (
       .limit(ITEMS_PER_PAGE)
       .toArray();
   }
+
   return { count, problems: result };
 };
 
@@ -197,7 +201,9 @@ export const getProblemsCount = async () => {
 
 export const getProblemTitles = async () => {
   await connectDB();
-  const testTitles = await testCasesCollection.find({}, { projection: { title: 1, _id: 0 } }).toArray();
+  const testTitles = await testCasesCollection
+    .find({}, { projection: { title: 1, _id: 0 } })
+    .toArray();
   const titles = await problemsCollection
     .find({}, { projection: { title: 1, _id: 0 } })
     .toArray();
@@ -207,5 +213,8 @@ export const getProblemTitles = async () => {
 
 export const getProblemByTitle = async (title: string) => {
   await connectDB();
-  return problemsCollection.findOne({ title }, { projection: { _id: 0 } });
+  return problemsCollection.findOne(
+    { title },
+    { projection: { _id: 0 } }
+  );
 };
