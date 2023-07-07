@@ -45,6 +45,7 @@
 
 .links {
   gap: 2rem;
+  height: 3rem;
 
   & > * {
     display: flex;
@@ -54,8 +55,14 @@
 
   .divider {
     height: 60%;
-    border-left: solid $text-off-white 1px;
     transform: translateY(0.7rem);
+
+    &--dark {
+      border-left: solid $text-off-white 1px;
+    }
+    &--light {
+      border-left: solid $text-gray-700 1px;
+    }
   }
 }
 

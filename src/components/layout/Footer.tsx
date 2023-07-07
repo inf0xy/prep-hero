@@ -55,9 +55,9 @@ const Footer = () => {
       <div className={classes.disclaimer}>Copyright &copy; 2023 Prep Hero</div>
       <div className={classes.links}>
         <div className={classes.jobs}>Jobs</div>
-        <div className={classes.divider}/>
+        <div className={`${classes.divider} ${classes[`divider--${theme}`]}`}/>
         <div className={classes.term}>Term</div>
-        <div className={classes.divider}/>
+        <div className={`${classes.divider} ${classes[`divider--${theme}`]}`}/>
         <div className={classes.privacy}>Privacy</div>
       </div>
     </footer>
