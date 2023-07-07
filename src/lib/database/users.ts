@@ -62,10 +62,28 @@ export const createUser = async (
   github_id: string | null = null,
   facebook_id: string | null = null
 ) => {
+  console.log('name ', name);
+  console.log('email ', email);
+  console.log('oauth_type ', oauth_type);
+  console.log('google_id ', google_id);
+  console.log('github_id ', github_id);
+  console.log('facebook_id ', facebook_id);
+
   let hashed = null;
   if (!oauth_type && password) {
     hashed = await hashPassword(password);
   }
+
+  await connectDB();
+
+  if (oauth_type) {
+    const existedUser = await usersCollection.findOne({ oauth_type, email });
+
+    if (existedUser) {
+      return { message: 'Account existed' };
+    }
+  }
+
   const newUser = new User(
     name,
     email,
@@ -75,8 +93,11 @@ export const createUser = async (
     github_id,
     facebook_id
   );
-  await connectDB();
-  return usersCollection.insertOne(newUser);
+
+  await usersCollection.insertOne(newUser, {
+    writeConcern: { w: 'majority' }
+  });
+  return { message: 'User created' };
 };
 
 export const confirmAndFetchUser = async (email: string, password: string) => {

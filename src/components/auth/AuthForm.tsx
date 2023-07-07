@@ -219,6 +219,7 @@ const AuthForm = () => {
               alt="Prep Hero Icon"
               width={100}
               height={100}
+              priority={true}
             />
           </Link>
         </div>

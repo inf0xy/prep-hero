@@ -39,12 +39,20 @@ const HomePage = () => {
               classes[`image-wrapper--${theme}`]
             }`}
           >
-            <Image
-              src="/code-editor-image.png"
-              alt="Code Editor Image"
-              width={300}
-              height={300}
-            />
+            <div
+              style={{
+                width: `${300}px`,
+                height: `${200}px`,
+                position: 'relative'
+              }}
+            >
+              <Image
+                src="/code-editor-image.png"
+                alt="Code Editor Image"
+                fill={true}
+                sizes={`${300}px`}
+              />
+            </div>
           </div>
         </div>
       </div>

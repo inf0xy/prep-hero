@@ -21,6 +21,7 @@ const Loading: React.FC<LoadingProsp> = ({ height, width, className }) => {
           alt="Prep Hero Icon"
           width={width ? width : 50}
           height={height ? height : 50}
+          priority={true}
         />
       </div>
     </div>

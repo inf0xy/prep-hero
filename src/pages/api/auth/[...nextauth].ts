@@ -69,10 +69,8 @@ export const authOptions: NextAuthOptions = {
           facebook_id
         );
       } catch (err: any) {
-        if (!err.message.includes('duplicate key error')) {
-          console.error(err);
-          return false;
-        }
+        console.error(err);
+        return false;
       }
 
       if (oauth_type === 'google') {

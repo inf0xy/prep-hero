@@ -207,14 +207,23 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    cursor: pointer;
   }
 
   &--dark span {
     background-color: $color-gray-600;
+    transition: background-color 0.3s ease;
+    &:hover {
+      background-color: $color-gray-300;
+    }
   }
 
   &--light span {
     background-color: $color-gray-300;
+    transition: background-color 0.3s ease;
+    &:hover {
+      background-color: $color-gray-600;
+    }
   }
 }
 
