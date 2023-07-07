@@ -1,6 +1,7 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
+import { Session } from 'next-auth/core/types';
 import { useMediaQuery } from 'react-responsive';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { setHomePageLoading } from '@/store';
@@ -10,11 +11,13 @@ import Footer from './Footer';
 import Loading from '../reusables/Loading';
 import variables from '@/styles/variables.module.scss';
 
+
 type LayoutProps = {
   children: ReactNode;
 };
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const [loadedSession, setLoadedSession] = useState<Session | null>();
   const router = useRouter();
   const regex = /\/(problem\/.*|notebook)/;
 
@@ -26,23 +29,31 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   });
 
   const dispatch = useAppDispatch();
-  const { data: session } = useSession();
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 990px)' });
   const isSmallMobile = useMediaQuery({ query: '(max-width: 501px)' });
 
   useEffect(() => {
-    if (session && router.pathname === '/') {
-      router.push('/problems');
-    } else if (pageLoading && (session === null || router.pathname !== '/')) {
-      dispatch(setHomePageLoading(false));
-    }
-  }, [dispatch, pageLoading, router, session]);
+    getSession().then((session) => {
+      setLoadedSession(session);
+      // No required session pages
+      if (
+        router.pathname === '/problems' ||
+        router.pathname === '/resources' ||
+        (router.pathname as string).match(/\/problem\/.*/) ||
+        (!session && (router.pathname === '/' || router.pathname.includes('auth')))
+      ) {
+        dispatch(setHomePageLoading(false));
+        return;
+      }
 
-  useEffect(() => {
-    if (session && router.pathname.includes('auth')) {
-      router.push('/problems');
-    }
-  }, [router, session]);
+      // Pages rendered based on session
+      if (!session && (router.pathname === '/dashboard' || router.pathname === '/notebook')) {
+          router.push('/auth/login');
+      } else if (session && (router.pathname === '/' || router.pathname.includes('auth'))) {
+        router.push('/problems');
+      }
+    });
+  }, [dispatch, router, loadedSession]);
 
   const headerRef = useRef<HTMLElement>(null);
 
@@ -63,7 +74,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       className={`relative min-w-screen overflow-x-hidden max-w-full ${
         showUserMenu && isTabletOrMobile
           ? `${
-              excludedRoutes.every((el) => !router.pathname.match(el)) && !isSmallMobile
+              excludedRoutes.every((el) => !router.pathname.match(el)) &&
+              !isSmallMobile
                 ? 'pr-[8px]'
                 : ''
             } h-screen overflow-y-hidden`
