@@ -1,6 +1,9 @@
-import { useState, useEffect, useRef, RefObject } from 'react';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import vsDark from 'react-syntax-highlighter/dist/cjs/styles/prism/vs-dark';
+import prism from 'react-syntax-highlighter/dist/cjs/styles/prism/prism';
+import js from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
+import python from 'react-syntax-highlighter/dist/cjs/languages/prism/python';
 import { useAppSelector } from '@/hooks/hooks';
-import { loader } from '@monaco-editor/react';
 import classes from './CodeSnippet.module.scss';
 
 type CodeSnippetProps = {
@@ -8,49 +11,11 @@ type CodeSnippetProps = {
   language: string;
 };
 
-const CodeSnippet: React.FC<CodeSnippetProps> = ({
-  value,
-  language
-}) => {
+SyntaxHighlighter.registerLanguage('js', js);
+SyntaxHighlighter.registerLanguage('python', python);
+
+const CodeSnippet: React.FC<CodeSnippetProps> = ({ value, language }) => {
   const { theme } = useAppSelector((state) => state.theme);
-  const [height, setHeight] = useState('300px');
-
-  const editorRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const loadMonacoEditor = async () => {
-      await loader.init();
-
-      const editor = await loader.init().then((monaco) => {
-        return monaco.editor.create(editorRef.current!, {
-          theme: theme === 'dark' ? 'vs-dark' : 'light',
-          value: JSON.parse(value),
-          language,
-          automaticLayout: true,
-          scrollBeyondLastLine: false,
-          readOnly: true,
-          wordWrap: 'on',
-          minimap: { enabled: false },
-          showUnused: false,
-          renderLineHighlight: 'none',
-          quickSuggestions: false,
-          renderWhitespace: 'none',
-          folding: false,
-          fontSize: 14,
-          lineNumbers: 'off',
-          glyphMargin: false
-        });
-      });
-
-      const contentHeight = editor.getContentHeight();
-      setHeight(`${contentHeight + 46}px`);
-    };
-
-    if (typeof window !== 'undefined') {
-      loadMonacoEditor();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [theme, height]);
 
   return (
     <div
@@ -61,9 +26,17 @@ const CodeSnippet: React.FC<CodeSnippetProps> = ({
           `code-snippet-container--${theme === 'dark' ? 'dark' : 'light'}`
         ]
       }`}
-      style={{ height }}
+      style={{ fontSize: '14px' }}
     >
-      <div ref={editorRef} />
+      <SyntaxHighlighter
+        // eslint-disable-next-line react/no-children-prop
+        children={value.slice(1, -1).replaceAll('\\n', '\n')}
+        // @ts-ignore
+        style={theme === 'dark' ? vsDark : prism}
+        language={language}
+        PreTag="div"
+        wrapLongLines={true}
+      />
     </div>
   );
 };

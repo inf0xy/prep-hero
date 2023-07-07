@@ -384,40 +384,8 @@ body {
   height: 15px;
 }
 
-.code-snippet.dark .lines-content.monaco-editor-background,
-.code-snippet.dark .margin {
-  background-color: $dark-background-50 !important;
-}
-
-.code-snippet.light .lines-content.monaco-editor-background,
-.code-snippet.light .margin {
-  background-color: $light-background-200 !important;
-}
-
-.code-snippet.dark .core-guide.core-guide-indent.vertical,
-.code-snippet.dark .core-guide.core-guide-indent-active.vertical,
-.code-snippet.light .core-guide.core-guide-indent.vertical,
-.code-snippet.light .core-guide.core-guide-indent-active.vertical {
-  display: none !important;
-}
-
-.code-snippet.dark .decorationsOverviewRuler,
-.code-snippet.dark .invisible.scrollbar.vertical.fade,
-.code-snippet.dark .visible.scrollbar.vertical,
-.code-snippet.light .decorationsOverviewRuler,
-.code-snippet.light .invisible.scrollbar.vertical.fade,
-.code-snippet.light .visible.scrollbar.vertical {
-  width: 0 !important;
-}
-
-.code-snippet.dark .scroll-decoration,
-.code-snippet.light .scroll-decoration {
-  width: 0 !important;
-}
-
-.code-snippet.dark .monaco-editor,
-.code-snippet.light .monaco-editor {
-  pointer-events: none;
+.code-snippet.light span  {
+  background-color: transparent !important;
 }
 
 .custom-tooltip {

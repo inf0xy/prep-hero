@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { setSelectedProblem } from '@/store';
-import { getAllTitles, getSelectedProblem } from '@/helpers/problem-api-util';
+import { getSelectedProblem } from '@/helpers/problem-api-util';
 import { getProblemTitles } from '@/lib/database/problems';
 import { NotificationType } from '@/types/dataTypes';
 import Button from '@/components/reusables/Button';

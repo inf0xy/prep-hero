@@ -19,6 +19,7 @@ const ClipboardCopiedIcon: React.FC<ClipboardCopiedIconProps> = ({
       className={`${className} w-${width ? width : '6'} h-${
         height ? height : '6'
       }`}
+      style={{color: '#343036'}}
     >
       <path
         strokeLinecap="round"

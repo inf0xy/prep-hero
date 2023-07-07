@@ -4,12 +4,13 @@
   padding: 2rem;
   border-radius: 10px;
   overflow: hidden;
+  font-size: 1.5rem;
 
   &--dark {
-    background-color: $dark-background-50;
+    background-color: $color-code-snippet-dark;
   }
 
   &--light {
-    background-color: $light-background-200;
+    background-color: $color-code-snippet-light;
   }
 }
