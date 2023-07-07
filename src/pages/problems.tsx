@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { GetStaticProps } from 'next';
+import { GetStaticProps, GetServerSideProps } from 'next';
 import { getProblems } from '@/helpers/problem-api-util';
+import { getProblems as getProblemsApi } from '@/lib/database/problems';
 import { Problem, SearchCriteria, SearchOrForm } from '@/types/dataTypes';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { fetchUserData } from '@/store';
 import { config } from '@/helpers/config';
+import { countData, problemsData } from '@/helpers/problemsData';
 import useSort from '@/hooks/useSort';
 import ProblemList from '@/components/problems/ProblemList';
 import Pagination from '@/components/problems/Pagination';
@@ -161,11 +163,11 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
         </div>
         <div className={classes.filters}>{renderedFilters}</div>
         {currentProblems && (
-            <ProblemList
-              onSort={handleSort}
-              problems={currentProblems}
-              showNotes={showNotes}
-            />
+          <ProblemList
+            onSort={handleSort}
+            problems={currentProblems}
+            showNotes={showNotes}
+          />
         )}
         <div className={classes['page-number']}>
           {(pageNumber - 1) * ITEMS_PER_PAGE + 1} -{' '}
@@ -186,18 +188,38 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { count, problems } = await getProblems(1, {
-    listName: '',
-    category: '',
-    difficulty: '',
-    tags: [],
-    companies: [],
-    text: ''
-  });
+  let problems;
+  let count;
+
+  if (process.env.NODE_ENV === 'production') {
+    // Provide fallback or mock data for build process
+    problems = problemsData;
+    count = countData;
+  } else {
+    try {
+      const { problems: fetchedProblems, count: fetchedCount } =
+        (await getProblemsApi(
+          1,
+          '',
+          '',
+          '',
+          JSON.stringify([]),
+          JSON.stringify([]),
+          ''
+        )) as unknown as { problems: Problem[]; count: number };
+      problems = fetchedProblems;
+      count = fetchedCount;
+    } catch (err: any) {
+      console.error(err);
+      return {
+        props: { error: 'An error occurred' }
+      };
+    }
+  }
 
   return {
     props: { problems, count },
-    revalidate: 3600
+    revalidate: 3600,
   };
 };
 

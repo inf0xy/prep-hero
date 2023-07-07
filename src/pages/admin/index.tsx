@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { useRouter } from 'next/router';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { setSelectedProblem } from '@/store';
@@ -77,6 +77,8 @@ const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ titles, testTitles }) =
         <TitleList
           listType='admin'
           titles={titles}
+          showHeader={true}
+          showTopBar={true}
           testTitles={testTitles}
           firstIconText="Edit"
           secondIconText="Test"
@@ -91,13 +93,22 @@ const AdminDashBoard: React.FC<AdminDashBoardProps> = ({ titles, testTitles }) =
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+// export const getStaticProps: GetStaticProps = async () => {
+//   const { titles, testTitles } = await getAllTitles();
+
+//   return {
+//     props: { titles, testTitles },
+//     revalidate: 3600
+//   };
+// };
+
+export const getServerSideProps: GetServerSideProps = async () => {
   const { titles, testTitles } = await getAllTitles();
 
   return {
     props: { titles, testTitles },
-    revalidate: 3600
   };
 };
+
 
 export default AdminDashBoard;

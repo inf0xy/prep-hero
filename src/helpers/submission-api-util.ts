@@ -29,7 +29,7 @@ export const submitCode = async (submission: string, language: string, title: st
   const userId = session.session.user._id;
 
   try {
-     const result = await axios.post(`http://52.73.0.82/submit/${language}`, {
+     const result = await axios.post(`${BACKEND_URL}/submit/${language}`, {
       userId,
       code: submission,
       title,

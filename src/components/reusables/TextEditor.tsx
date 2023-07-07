@@ -17,14 +17,24 @@ import TextEditIcon from '../icons/TextEditIcon';
 interface TextEditorProps {
   value: string;
   setValue: (val: string) => void;
-  onCloseNote: (val?: string | undefined) => void;
+  onCloseNote?: ((val?: string | undefined) => void) | undefined;
   className?: string;
   fullScreen?: boolean;
   previewMode?: 'edit' | 'preview' | undefined;
 }
 
+let editorContext: any;
+let divider: any;
 const MDEditor = dynamic(
-  () => import('@uiw/react-md-editor').then((mod) => mod.default),
+  () =>
+    import('@uiw/react-md-editor').then((mod) => {
+      const { EditorContext, commands } = mod;
+      if (EditorContext && commands) {
+        editorContext = EditorContext;
+        divider = commands.divider;
+      }
+      return mod.default;
+    }),
   { ssr: false }
 );
 
@@ -33,15 +43,15 @@ const Markdown = dynamic(
   { ssr: false }
 );
 
-let editorContext: any;
-let divider: any;
-import('@uiw/react-md-editor').then((mod) => {
-  const { EditorContext, commands } = mod;
-  if (EditorContext && commands) {
-    editorContext = EditorContext;
-    divider = commands.divider;
-  }
-});
+// let editorContext: any;
+// let divider: any;
+// import('@uiw/react-md-editor').then((mod) => {
+//   const { EditorContext, commands } = mod;
+//   if (EditorContext && commands) {
+//     editorContext = EditorContext;
+//     divider = commands.divider;
+//   }
+// });
 
 const SwitchModeButton = () => {
   const { preview, dispatch }: { preview?: any; dispatch?: any } =
@@ -156,7 +166,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
       name: 'preview',
       keyCommand: 'preview',
       value: 'preview',
-      icon: <CloseNoteButton onCloseNote={onCloseNote} />
+      icon: <CloseNoteButton onCloseNote={onCloseNote ?? (() => {})} />
     }
   ];
 
@@ -173,7 +183,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
       name: 'preview',
       keyCommand: 'preview',
       value: 'preview',
-      icon: <CloseNoteButton onCloseNote={onCloseNote} />
+      icon: <CloseNoteButton onCloseNote={onCloseNote ?? (() => {})} />
     }
   ];
 
@@ -183,7 +193,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
       name: 'preview',
       keyCommand: 'preview',
       value: 'preview',
-      icon: <CloseNoteButton onCloseNote={onCloseNote} />
+      icon: <CloseNoteButton onCloseNote={onCloseNote ?? (() => {})} />
     }
   ];
 

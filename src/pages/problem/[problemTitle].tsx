@@ -1,6 +1,5 @@
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { GetServerSideProps } from 'next';
 import { useMediaQuery } from 'react-responsive';
-import { getAllTitles, getSelectedProblem } from '@/helpers/problem-api-util';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
 import { toggleSavedList } from '@/store';
 import { Problem } from '@/types/dataTypes';
@@ -8,6 +7,8 @@ import ProblemDetailPageMobile from '@/components/reusables/codeEditor/ProblemDe
 import ProblemDetailPageDesktop from '@/components/reusables/codeEditor/ProblemDetailPageDesktop';
 import SavedList from '@/components/problems/SavedList';
 import Drawer from '@/components/reusables/Drawer';
+
+import { getProblemByTitle } from '@/lib/database/problems';
 
 type ProblemDetailPageProps = {
   selectedProblem: Problem;
@@ -21,7 +22,7 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   return (
-    <div className='h-fit max-h-fit'>
+    <div className="h-fit max-h-fit">
       <Drawer
         direction="left"
         showCloseButton={true}
@@ -40,31 +41,22 @@ const ProblemDetailPage: React.FC<ProblemDetailPageProps> = ({
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const problemTitle = context.params!.problemTitle as string;
-  const selectedProblem = await getSelectedProblem(problemTitle);
-  return {
-    props: {
-      selectedProblem
-    },
-    revalidate: 30
-  };
-};
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  let titles = [];
   try {
-    const result = await getAllTitles();
-    titles = result.titles;
+    const selectedProblem = await getProblemByTitle(problemTitle as string);
+    return {
+      props: {
+        selectedProblem
+      }
+    };
   } catch (err: any) {
     console.error(err);
-  } finally {
-    const paths = titles.map((title: string) => ({
-      params: { problemTitle: title }
-    }));
     return {
-      paths,
-      fallback: 'blocking'
+      props: {
+        error: 'An error occurred'
+      }
     };
   }
 };

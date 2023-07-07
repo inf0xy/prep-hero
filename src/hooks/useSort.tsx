@@ -23,15 +23,15 @@ const useSort = (
         }
       };
 
-      const difficulties = {
+      const difficulties: { [key: string]: number } = {
         Easy: 1,
         Medium: 2,
         Hard: 3
       };
 
       const difficultyCompare = (a: Problem, b: Problem) => {
-        const aOrder = difficulties[a.difficulty];
-        const bOrder = difficulties[b.difficulty];
+        const aOrder = difficulties[a.difficulty!];
+        const bOrder = difficulties[b.difficulty!];
 
         if (aOrder === bOrder) {
           return 0;

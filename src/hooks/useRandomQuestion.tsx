@@ -32,7 +32,7 @@ const useRandomQuestion: (
       setNotification({ status: 'error', message: 'Something went wrong' });
       setShowAlert(true);
     }
-  }, []);
+  }, [setNotification, setShowAlert]);
 
   useEffect(() => {
     if (titleList.length > 0) {
@@ -58,7 +58,7 @@ const useRandomQuestion: (
         router.push(`/problem/${randomProblemTitle}`);
       }
     }
-  }, [lastNumber]);
+  }, [allProblemsCount, lastNumber, router, titleList]);
 
   return handleGetRandomProblem;
 };

@@ -10,10 +10,10 @@ export const getProblems = async (page: number, filters: SearchCriteria) => {
     tags: JSON.stringify(filters.tags),
     companies: JSON.stringify(filters.companies),
     text: filters.text
-  }
+  };
 
   try {
-    const { data } = await axios.get('http://localhost:3000/api/problems', {
+    const { data } = await axios.get('/api/problems', {
       params: paramsConfig
     });
     return data;
@@ -25,17 +25,7 @@ export const getProblems = async (page: number, filters: SearchCriteria) => {
 
 export const getAllTitles = async () => {
   try {
-    const { data } = await axios.get('http://localhost:3000/api/problems/titles');
-    return data;
-  } catch (err: any) {
-    console.error(err.message);
-    throw new Error(err.message);
-  }
-}
-
-export const getSelectedProblem = async (title: string) => {
-  try {
-    const { data } = await axios.get(`http://localhost:3000/api/problems/${title}`);
+    const { data } = await axios.get('/api/problems/titles');
     return data;
   } catch (err: any) {
     console.error(err.message);
@@ -43,3 +33,12 @@ export const getSelectedProblem = async (title: string) => {
   }
 };
 
+export const getSelectedProblem = async (title: string) => {
+  try {
+    const { data } = await axios.get(`/api/problems/${title}`);
+    return data;
+  } catch (err: any) {
+    console.error(err.message);
+    throw new Error(err.message);
+  }
+};

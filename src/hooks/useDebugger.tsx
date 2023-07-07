@@ -54,7 +54,7 @@ const useDebugger = () => {
       dispatch(setActionAvailable(false));
       socketConnection.emit('stopDebugging');
     }
-  }, []);
+  }, [dispatch]);
 
   const handleStepIn = useCallback(
     (socketConnection: SocketType, watchVars: string[]) => {
@@ -63,7 +63,7 @@ const useDebugger = () => {
         socketConnection.emit('stepIn', JSON.stringify({ watchVars }));
       }
     },
-    []
+    [dispatch]
   );
 
   const handleStepOver = useCallback(
@@ -73,7 +73,7 @@ const useDebugger = () => {
         socketConnection.emit('stepOver', JSON.stringify({ watchVars }));
       }
     },
-    []
+    [dispatch]
   );
 
   const handleStepOut = useCallback(
@@ -83,7 +83,7 @@ const useDebugger = () => {
         socketConnection.emit('stepOut', JSON.stringify({ watchVars }));
       }
     },
-    []
+    [dispatch]
   );
 
   const handleRestart = useCallback(
@@ -93,7 +93,7 @@ const useDebugger = () => {
         socketConnection.emit('restart', JSON.stringify({ watchVars }));
       }
     },
-    []
+    [dispatch]
   );
 
   const handleExit = useCallback(

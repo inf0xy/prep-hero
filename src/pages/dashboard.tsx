@@ -60,7 +60,7 @@ const DashBoard = () => {
     return () => {
       dispatch(setNavigateDestination(undefined));
     };
-  }, []);
+  }, [destination, dispatch]);
 
   useEffect(() => {
     setSavedList(list);

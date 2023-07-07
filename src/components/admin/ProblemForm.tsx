@@ -311,6 +311,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
               value={description}
               setValue={setDescription}
               className={classes.description}
+              onCloseNote={undefined}
             />
           </div>
         </div>

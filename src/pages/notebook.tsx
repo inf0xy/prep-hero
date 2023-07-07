@@ -12,9 +12,9 @@ import ConfirmPanel from '@/components/reusables/ConfirmPanel';
 import Alert from '@/components/reusables/Alert';
 import FolderAddIcon from '@/components/icons/FolderAddIcon';
 import FolderItem from '@/components/user/FolderItem';
-import classes from '@/styles/NotebookPage.module.scss';
-import NotebookMobileNav from '@/components/user/NoteBookMobileNav';
+import NotebookMobileNav from '@/components/user/NotebookMobileNav';
 import NotebookFolderList from '@/components/user/NotebookFolderList';
+import classes from '@/styles/NotebookPage.module.scss';
 
 const NotebookPage = () => {
   const { theme, notes } = useAppSelector((state) => {

@@ -186,7 +186,8 @@ export const deleteUserNote = async (userId: ObjectId, title: string) => {
     const listName = foundNotes.notes[0].list_name;
     const result = await usersCollection.updateOne(
       { _id: userId },
-      { $pull: { notes: { title } } }
+      { $pull: { notes: { title } } },
+      { writeConcern: { w: 'majority' } }
     );
 
     if (result.modifiedCount === 1) {
@@ -242,11 +243,6 @@ export const editListName = async (
     return 'Not allowed';
   }
 
-  // await usersCollection.updateMany(
-  //   { _id },
-  //   { $set: { 'notes.$[elem].list_name': newFolderName } },
-  //   { arrayFilters: [{ 'elem.list_name': oldFolderName }] }
-  // );
   await usersCollection.updateMany(
     { _id },
     { $set: { 'notes.$[elem].list_name': newFolderName } },
