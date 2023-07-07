@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { title } = req.query;
 
-console.log('make it into route, and the title is ', title);
   if (req.method !== 'GET') {
     return res.status(400).json({ message: 'Invalid' });
   }

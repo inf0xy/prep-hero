@@ -68,7 +68,6 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   useEffect(() => {
-    // ${fullScreenToggle && fullScreen ? 'full-screen' : 'minimize'}
     if (fullScreenToggle && modalRef.current) {
       if (fullScreen) {
         (modalRef.current as HTMLElement).classList.add('full-screen');
@@ -121,11 +120,6 @@ const Modal: React.FC<ModalProps> = ({
         >
           <div
             ref={modalRef}
-            // className={`modal-box relative p-0 bg-transparent ${
-            //   isMobileOrTablelet && 'no-scrollbar'
-            // } ${fullScreenToggle && fullScreen ? 'full-screen' : 'minimize'} ${
-            //   !className?.includes('max-w') ? 'max-w-fit' : ''
-            // } ${className}`}
             className={`modal-box relative p-0 bg-transparent ${
               isMobileOrTablelet && 'no-scrollbar'
             } ${!className?.includes('max-w') ? 'max-w-fit' : ''} ${className}`}

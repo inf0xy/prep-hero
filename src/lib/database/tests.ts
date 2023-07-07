@@ -22,7 +22,7 @@ export const addNewTest = async (test: any) => {
       javascript: test.javascript
     }
   };
-  const options = { upsert: true };
+  const options = { upsert: true, writeConcern: { w: 'majority' } as const };
   return testCasesCollection.updateOne(filter, update, options);
 };
 

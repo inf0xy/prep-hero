@@ -43,16 +43,6 @@ const Markdown = dynamic(
   { ssr: false }
 );
 
-// let editorContext: any;
-// let divider: any;
-// import('@uiw/react-md-editor').then((mod) => {
-//   const { EditorContext, commands } = mod;
-//   if (EditorContext && commands) {
-//     editorContext = EditorContext;
-//     divider = commands.divider;
-//   }
-// });
-
 const SwitchModeButton = () => {
   const { preview, dispatch }: { preview?: any; dispatch?: any } =
     useContext(editorContext);

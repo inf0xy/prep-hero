@@ -62,13 +62,6 @@ export const createUser = async (
   github_id: string | null = null,
   facebook_id: string | null = null
 ) => {
-  console.log('name ', name);
-  console.log('email ', email);
-  console.log('oauth_type ', oauth_type);
-  console.log('google_id ', google_id);
-  console.log('github_id ', github_id);
-  console.log('facebook_id ', facebook_id);
-
   let hashed = null;
   if (!oauth_type && password) {
     hashed = await hashPassword(password);
