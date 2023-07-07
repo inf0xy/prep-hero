@@ -21,13 +21,11 @@ module.exports = {
     utils: true,
     logs: true,
     rtl: false,
-    prefix: "",
+    prefix: '',
     themes: [
       {
-        mytheme: {
-          dark: {
-            DEFAULT: '#181818'
-          },
+        dark: {
+          backgroundColor: '#181818',
           primary: '#e65715',
           secondary: '#15e6d0',
           accent: '#009989',

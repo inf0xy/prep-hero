@@ -11,7 +11,6 @@ import Footer from './Footer';
 import Loading from '../reusables/Loading';
 import variables from '@/styles/variables.module.scss';
 
-
 type LayoutProps = {
   children: ReactNode;
 };
@@ -21,38 +20,77 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const regex = /\/(problem\/.*|notebook)/;
 
-  const { pageLoading, theme, showUserMenu } = useAppSelector((state) => {
-    const { pageLoading } = state.navigate;
-    const { theme } = state.theme;
-    const { showUserMenu } = state.navigate;
-    return { pageLoading, theme, showUserMenu };
-  });
+  const { pageLoading, theme, showUserMenu } = useAppSelector(
+    (state) => {
+      const { pageLoading } = state.navigate;
+      const { theme } = state.theme;
+      const { showUserMenu } = state.navigate;
+      return { pageLoading, theme, showUserMenu };
+    }
+  );
 
   const dispatch = useAppDispatch();
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 990px)' });
   const isSmallMobile = useMediaQuery({ query: '(max-width: 501px)' });
 
   useEffect(() => {
+    if (
+      router.pathname === '/404' ||
+      router.pathname === '/403' ||
+      router.pathname === '/problems' ||
+      router.pathname === '/resources' ||
+      router.pathname.includes('/problem')
+    ) {
+      dispatch(setHomePageLoading(false));
+      return;
+    }
+
     getSession().then((session) => {
       setLoadedSession(session);
+      // Invalid access to admin pages
+      if (
+        session &&
+        (router.pathname === '/admin' ||
+          router.pathname.match(/\/admin\/*./)) &&
+        session?.session.user.account_type !== 'admin'
+      ) {
+        router.push('/403');
+        return;
+      }
       // No required session pages
       if (
-        router.pathname === '/problems' ||
-        router.pathname === '/resources' ||
-        (router.pathname as string).match(/\/problem\/.*/) ||
-        (!session && (router.pathname === '/' || router.pathname.includes('auth')))
+        !session &&
+        (router.pathname === '/' ||
+          router.asPath === '/auth/login' ||
+          router.asPath === '/auth/signup')
       ) {
+        dispatch(setHomePageLoading(false));
+        return;
+      } else if (!session && router.pathname.includes('auth')) {
+        router.push('/auth/login');
         dispatch(setHomePageLoading(false));
         return;
       }
 
       // Pages rendered based on session
-      if (!session && (router.pathname === '/dashboard' || router.pathname === '/notebook')) {
-          router.push('/auth/login');
-      } else if (session && (router.pathname === '/' || router.pathname.includes('auth'))) {
+      if (
+        !session &&
+        (router.pathname === '/dashboard' || router.pathname === '/notebook')
+      ) {
+        router.push('/auth/login');
+        return;
+      }
+
+      if (
+        session &&
+        (router.pathname === '/' ||
+          router.asPath === '/auth/login' ||
+          router.asPath === '/auth/signup')
+      ) {
         router.push('/problems');
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, router, loadedSession]);
 
   const headerRef = useRef<HTMLElement>(null);
@@ -68,6 +106,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const placeHolder = <div className={`min-h-screen ${backgroundColor}`} />;
 
   const excludedRoutes = [/\/auth\/.*/, /\/problem\/.*/, /\/dashboard/];
+
+  if (router.pathname === '/404' || router.pathname === '/403') {
+    return <>{children}</>;
+  }
 
   return (
     <main

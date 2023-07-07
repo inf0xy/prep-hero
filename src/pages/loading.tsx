@@ -1,8 +1,14 @@
+import Head from 'next/head';
 import Loading from '@/components/reusables/Loading';
 
 const LoadingPage = () => {
   return (
-    <Loading />
+    <>
+      <Head>
+        <title>Loading</title>
+      </Head>
+      <Loading />
+    </>
   );
 };
 

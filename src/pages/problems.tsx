@@ -1,5 +1,6 @@
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
-import { GetStaticProps, GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import { getProblems } from '@/helpers/problem-api-util';
 import { getProblems as getProblemsApi } from '@/lib/database/problems';
 import { Problem, SearchCriteria, SearchOrForm } from '@/types/dataTypes';
@@ -150,6 +151,13 @@ const AllProblemsPage: React.FC<AllProblemsPageProps> = ({
 
   return (
     <>
+      <Head>
+        <title>Problems - Prep Hero</title>
+        <meta
+          name="description"
+          content="Explore a vast library of coding challenges that cover a wide range of topics and difficulty levels."
+        />
+      </Head>
       <section
         className={`${classes['problems']} ${classes[`problems--${theme}`]}`}
       >
@@ -219,7 +227,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: { problems, count },
-    revalidate: 3600,
+    revalidate: 3600
   };
 };
 

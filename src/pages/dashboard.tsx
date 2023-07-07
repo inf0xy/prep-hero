@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useState, useRef, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -91,6 +92,13 @@ const DashBoard = () => {
 
   return (
     <>
+      <Head>
+        <title>Dashboard - Prep Hero</title>
+        <meta
+          name="description"
+          content="Track your progress and identify areas for improvement with our performance analytics. Get detailed insights into your coding speed, accuracy, and efficiency."
+        />
+      </Head>
       {showAlert && (
         <Alert
           status={notification?.status!}
