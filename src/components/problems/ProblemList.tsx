@@ -33,9 +33,6 @@ const ProblemList: React.FC<ProblemListProps> = ({
   return (
     <div
       role="table"
-      // className={`${isMobile && 'no-scrollbar'} ${classes['problems-table']} ${
-      //   classes[`problems-table--${theme}`]
-      // }`}
       className={`${classes['problems-table']} ${
         classes[`problems-table--${theme}`]
       }`}

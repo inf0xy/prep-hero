@@ -182,6 +182,12 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
       content: noteContent!
     };
     setShowNote(false);
+
+    const bodyElement = document.body;
+    if (bodyElement) {
+      bodyElement.style.overflow = '';
+    }
+
     await handleSubmitNote(undefined, note);
   };
 

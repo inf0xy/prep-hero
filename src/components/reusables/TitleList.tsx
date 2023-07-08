@@ -7,7 +7,6 @@ import {
   Dispatch,
   SetStateAction
 } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import useSubmitNote from '@/hooks/useSubmitNote';
 import { toggleFullScreen } from '@/store';
@@ -83,7 +82,6 @@ const TitleList: React.FC<TitleListProps> = ({
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 897px)' });
 
   const { handleSubmitNote } = useSubmitNote(setShowAlert, setNotification);
 
@@ -107,12 +105,20 @@ const TitleList: React.FC<TitleListProps> = ({
       title,
       content: note.content
     };
-    await handleSubmitNote(undefined, savingNote);
+
+    setShowNote(false);
+    dispatch(toggleFullScreen(false));
+
+    const bodyElement = document.body;
+    if (bodyElement) {
+      bodyElement.style.overflow = '';
+    }
+
     if (setCurrentModal) {
       setCurrentModal('');
     }
-    setShowNote(false);
-    dispatch(toggleFullScreen(false));
+
+    await handleSubmitNote(undefined, savingNote);
   };
 
   const handleSearch = useCallback(() => {
@@ -266,9 +272,6 @@ const TitleList: React.FC<TitleListProps> = ({
         )}
         <div
           ref={tableWrapperRef}
-          // className={`${isTabletOrMobile && 'no-scrollbar'} ${
-          //   classes['titles-table-wrapper']
-          // }`}
           className={`${classes['titles-table-wrapper']}`}
           style={{
             minHeight: tableBodyHeight ? `${tableBodyHeight}px` : undefined

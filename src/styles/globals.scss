@@ -460,6 +460,10 @@ body {
 /* BELOW 417px                    */
 /**********************************/
 @media (max-width: 26em) {
+  .w-md-editor {
+    height: 100vh;
+  }
+
   .w-md-editor-toolbar {
     width: 100vw;
     flex-direction: column-reverse;
@@ -473,14 +477,14 @@ body {
 
     ul:nth-child(2) {
       align-self: flex-end !important;
-      scale: 130%;
+      scale: 150%;
       margin-right: 2rem;
     }
   }
 }
 
 /**********************************/
-/* BELOW 417px                    */
+/* BELOW 376px                    */
 /**********************************/
 @media (max-width: 376px) {
   .w-md-editor-toolbar {

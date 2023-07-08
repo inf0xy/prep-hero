@@ -137,6 +137,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isSmallMobile = useMediaQuery({ query: '(max-width: 521px)' });
   const router = useRouter();
+
   const groupCommandsLargeScreen = [
     {
       name: 'live',
@@ -205,7 +206,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     return groupCommands;
   };
 
-  const fullSreenMode = isSmallMobile ? true : fullScreen ? fullScreen : false;
+  const fullSreenMode = isSmallMobile ? true : fullScreen ?? false;
 
   return (
     <div data-color-mode={theme} className={classes.editor}>

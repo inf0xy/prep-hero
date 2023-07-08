@@ -149,11 +149,17 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       title,
       content: noteContent
     };
-    await handleSubmitNote(undefined, note);
     setCurrentModal('');
     setShowNote(false);
     dispatch(toggleFullScreen(false));
+
+    const bodyElement = document.body;
+    if (bodyElement) {
+      bodyElement.style.overflow = '';
+    }
+
     setNoteAction(undefined);
+    await handleSubmitNote(undefined, note);
   };
 
   const handleDeleteNote = async () => {

@@ -51,4 +51,5 @@ export const {
   setShowProblemCodeEditor,
   toggleFullScreen
 } = navigateSlice.actions;
+
 export default navigateSlice.reducer;

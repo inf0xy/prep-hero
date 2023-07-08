@@ -122,9 +122,6 @@ const Modal: React.FC<ModalProps> = ({
         >
           <div
             ref={modalRef}
-            // className={`modal-box relative p-0 bg-transparent ${
-            //   isMobileOrTablelet && 'no-scrollbar'
-            // } ${!className?.includes('max-w') ? 'max-w-fit' : ''} ${className}`}
             className={`modal-box relative p-0 bg-transparent ${
               !className?.includes('max-w') ? 'max-w-fit' : ''
             } ${className}`}

@@ -214,6 +214,12 @@ const NotebookPage = () => {
     setCurrentModal('');
     setShowNewNoteModal(false);
     dispatch(toggleFullScreen(false));
+
+    const bodyElement = document.body;
+    if (bodyElement) {
+      bodyElement.style.overflow = '';
+    }
+
     await handleSubmitNote(undefined, note);
   };
 
