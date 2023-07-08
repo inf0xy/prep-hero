@@ -59,10 +59,10 @@ const Modal: React.FC<ModalProps> = ({
     let dimension = '';
     if (showFullScreen || isSmallMobile) {
       dimension =
-        'max-w-[100vw] max-h-[100vh] w-[100vw] min-w-[100vw] min-h-[100vh] h-[100vh]';
+        'max-w-[100vw] max-h-[100svh] w-[100vw] min-w-[100vw] min-h-[100svh] h-[100svh]';
     } else if (isMobile) {
       dimension =
-        'max-w-[85vw] max-h-[75vh] w-[85vw] min-w-[85vw] min-h-[75vh] h-[75vh]';
+        'max-w-[85vw] max-h-[75svh] w-[85vw] min-w-[85vw] min-h-[75svh] h-[75svh]';
     }
     return dimension;
   };
