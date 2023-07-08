@@ -43,6 +43,7 @@ const NotebookPage = () => {
   const [showFolderList, setShowFolderList] = useState(false);
 
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 896px)' });
+  const isMobilePortrait = useMediaQuery({ query: '(max-width: 642px)' });
 
   useEffect(() => {
     const folders = new Set();
@@ -58,7 +59,11 @@ const NotebookPage = () => {
       }
     });
     setFolderNames(Array.from(folders) as string[]);
-  }, [notes]);
+
+    return () => {
+      dispatch(toggleFullScreen(false));
+    };
+  }, [dispatch, notes]);
 
   const closeNewNoteModal = () => {
     const newNoteModal = document.querySelector(
@@ -204,12 +209,12 @@ const NotebookPage = () => {
       title: editingTitle!,
       content: noteContent!
     };
-    await handleSubmitNote(undefined, note);
     setNoteContent('');
     setEditingTitle(null);
     setCurrentModal('');
     setShowNewNoteModal(false);
     dispatch(toggleFullScreen(false));
+    await handleSubmitNote(undefined, note);
   };
 
   return (
@@ -393,6 +398,7 @@ const NotebookPage = () => {
                 setValue={setNoteContent}
                 onCloseNote={handleCloseNoteModal}
                 previewMode="edit"
+                fullScreen={isMobilePortrait ? true : false}
               />
             )}
           </div>

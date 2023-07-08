@@ -1,4 +1,4 @@
-import { useState, useRef, Dispatch, SetStateAction } from 'react';
+import { useState, useRef, Dispatch, SetStateAction, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import CodeEditor from '@/components/reusables/codeEditor/CodeEditor';
 import Resizable from '../reusables/Resizable';
@@ -181,8 +181,8 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
       title,
       content: noteContent!
     };
-    await handleSubmitNote(undefined, note);
     setShowNote(false);
+    await handleSubmitNote(undefined, note);
   };
 
   const renderedTopBar = debugging ? (

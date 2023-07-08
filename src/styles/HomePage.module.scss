@@ -140,6 +140,12 @@
         border: solid $code-editor-image-border-color 3px;
         border-radius: 1rem;
         overflow: hidden;
+
+
+        position: relative;
+        width: 30rem;
+        height: 20rem;
+
         & > * {
           transform: scale(102%);
         }
@@ -405,6 +411,7 @@
 
     .first-section .code-editor-image {
       margin-left: 0;
+      min-width: 30rem;
     }
 
     .second-section {
@@ -476,6 +483,10 @@
 
     .first-section {
       padding: 1rem;
+
+      .code-editor-image .image-wrapper {
+        scale: 90%;
+      }
     }
 
     .third-section {
@@ -536,6 +547,9 @@
 
       .code-editor-image {
         height: 20rem;
+        .image-wrapper {
+          scale: 70%;
+        }
       }
     }
 

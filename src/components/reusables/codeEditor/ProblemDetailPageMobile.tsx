@@ -6,7 +6,8 @@ import {
   setDuration,
   setWatchVars,
   setExitingDebugging,
-  setShowProblemCodeEditor
+  setShowProblemCodeEditor,
+  toggleFullScreen
 } from '@/store';
 import Debugger from './Debugger';
 import ProblemDetail from '@/components/problems/ProblemDetail';
@@ -80,6 +81,7 @@ const ProblemDetailPageMobile: React.FC<ProblemDetailPageMobileProps> = ({
       dispatch(setDebugging(false));
       dispatch(setExitingDebugging(false));
       dispatch(setShowProblemCodeEditor(false));
+      dispatch(toggleFullScreen(false));
       window.removeEventListener('resize', handleResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -446,3 +446,20 @@ body {
 - Spacing system (px)
 2 /4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
 */
+
+/**********************************/
+/* BELOW 417px                    */
+/**********************************/
+@media (max-width: 26em) {
+  .w-md-editor-toolbar {
+    width: 100vw;
+    flex-direction: column-reverse;
+    align-items: flex-start !important;
+
+    ul:nth-child(2) {
+      align-self: flex-end !important;
+      margin-right: 2rem;
+      margin-bottom: 1rem;
+    }
+  }
+}

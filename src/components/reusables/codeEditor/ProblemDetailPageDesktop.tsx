@@ -6,7 +6,8 @@ import {
   setDuration,
   setWatchVars,
   setExitingDebugging,
-  setShowProblemCodeEditor
+  setShowProblemCodeEditor,
+  toggleFullScreen
 } from '@/store';
 import Resizable from '../Resizable';
 import Debugger from './Debugger';
@@ -78,6 +79,7 @@ const ProblemDetailPageDesktop: React.FC<ProblemDetailPageDesktopProps> = ({
       dispatch(setDebugging(false));
       dispatch(setExitingDebugging(false));
       dispatch(setShowProblemCodeEditor(false));
+      dispatch(toggleFullScreen(false));
       window.removeEventListener('resize', handleResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
