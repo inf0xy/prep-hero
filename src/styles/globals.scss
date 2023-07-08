@@ -461,7 +461,7 @@ body {
 /**********************************/
 @media (max-width: 26em) {
   .w-md-editor {
-    padding: 2rem 0;
+    padding: 3rem 0;
   }
 
   .w-md-editor-toolbar {
@@ -484,13 +484,18 @@ body {
 }
 
 /**********************************/
-/* BELOW 376px                    */
+/* BELOW 391px                    */
 /**********************************/
-@media (max-width: 376px) {
+@media (max-width: 390px) {
   .w-md-editor {
     padding: 0;
   }
+}
 
+/**********************************/
+/* BELOW 376px                    */
+/**********************************/
+@media (max-width: 376px) {
   .w-md-editor-toolbar {
     ul:nth-child(1) {
       scale: 115%;
