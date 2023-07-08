@@ -474,18 +474,18 @@ body {
     ul:nth-child(2) {
       align-self: flex-end !important;
       scale: 150%;
-      margin-right: 2rem;
+      margin-right: 2.5rem;
     }
   }
 }
 
 /**********************************/
-/* BELOW 391px                    */
+/* BELOW 394px                    */
 /**********************************/
-@media (max-width: 390px) {
+@media (max-width: 393px) {
   .w-md-editor-toolbar {
     ul:nth-child(1) {
-      margin-right: 1.6rem;
+      margin-left: 1.6rem;
     }
   }
 }
