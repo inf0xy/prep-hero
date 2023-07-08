@@ -7,6 +7,7 @@ import {
   Dispatch,
   SetStateAction
 } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import useSubmitNote from '@/hooks/useSubmitNote';
 import { toggleFullScreen } from '@/store';
@@ -82,6 +83,8 @@ const TitleList: React.FC<TitleListProps> = ({
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
+
+  const isMobilePortrait = useMediaQuery({ query: '(max-width: 642px)' });
 
   const { handleSubmitNote } = useSubmitNote(setShowAlert, setNotification);
 
@@ -226,6 +229,7 @@ const TitleList: React.FC<TitleListProps> = ({
               }
               onCloseNote={() => handleCloseNote(title)}
               previewMode="preview"
+              fullScreen={isMobilePortrait ? true : false}
             />
           )}
         </div>

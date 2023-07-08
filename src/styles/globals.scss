@@ -460,10 +460,6 @@ body {
 /* BELOW 417px                    */
 /**********************************/
 @media (max-width: 26em) {
-  .w-md-editor {
-    padding: 3.5rem 0;
-  }
-
   .w-md-editor-toolbar {
     width: 100vw;
     flex-direction: column-reverse;
@@ -487,10 +483,6 @@ body {
 /* BELOW 391px                    */
 /**********************************/
 @media (max-width: 390px) {
-  .w-md-editor {
-    padding: 0;
-  }
-
   .w-md-editor-toolbar {
     ul:nth-child(1) {
       margin-right: 1.6rem;
