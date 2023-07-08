@@ -11,7 +11,6 @@ import Footer from './Footer';
 import Loading from '../reusables/Loading';
 import variables from '@/styles/variables.module.scss';
 
-
 type LayoutProps = {
   children: ReactNode;
 };
@@ -33,27 +32,41 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const isSmallMobile = useMediaQuery({ query: '(max-width: 501px)' });
 
   useEffect(() => {
+    if (
+      router.pathname === '404' ||
+      router.pathname === '403' ||
+      router.pathname === '/problems' ||
+      router.pathname === '/resources' ||
+      (router.pathname as string).match(/\/problem\/.*/)
+    ) {
+      dispatch(setHomePageLoading(false));
+      return;
+    }
     getSession().then((session) => {
       setLoadedSession(session);
       // No required session pages
       if (
-        router.pathname === '/problems' ||
-        router.pathname === '/resources' ||
-        (router.pathname as string).match(/\/problem\/.*/) ||
-        (!session && (router.pathname === '/' || router.pathname.includes('auth')))
+        !session &&
+        (router.pathname === '/' || router.pathname.includes('auth'))
       ) {
         dispatch(setHomePageLoading(false));
         return;
       }
 
       // Pages rendered based on session
-      if (!session && (router.pathname === '/dashboard' || router.pathname === '/notebook')) {
-          router.push('/auth/login');
-      } else if (session && (router.pathname === '/' || router.pathname.includes('auth'))) {
+      if (
+        !session &&
+        (router.pathname === '/dashboard' || router.pathname === '/notebook')
+      ) {
+        router.push('/auth/login');
+      } else if (
+        session &&
+        (router.pathname === '/' || router.pathname.includes('auth'))
+      ) {
         router.push('/problems');
       }
     });
-  }, [dispatch, router, loadedSession]);
+  }, [dispatch, router.pathname, loadedSession]);
 
   const headerRef = useRef<HTMLElement>(null);
 
@@ -68,6 +81,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const placeHolder = <div className={`min-h-screen ${backgroundColor}`} />;
 
   const excludedRoutes = [/\/auth\/.*/, /\/problem\/.*/, /\/dashboard/];
+
+  if (router.pathname === '404' || router.pathname === '403') {
+    return <>{children}</>;
+  }
 
   return (
     <main
