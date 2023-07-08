@@ -17,81 +17,232 @@ type LayoutProps = {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [loadedSession, setLoadedSession] = useState<Session | null>();
+  const [alreadyRedirect, setAlreadyRedirect] = useState(false);
   const router = useRouter();
   const regex = /\/(problem\/.*|notebook)/;
 
-  const { pageLoading, theme, showUserMenu } = useAppSelector(
-    (state) => {
-      const { pageLoading } = state.navigate;
-      const { theme } = state.theme;
-      const { showUserMenu } = state.navigate;
-      return { pageLoading, theme, showUserMenu };
-    }
-  );
+  const [currentPath, setCurentPath] = useState<string | null>(null);
+
+  const { pageLoading, theme, showUserMenu } = useAppSelector((state) => {
+    const { pageLoading } = state.navigate;
+    const { theme } = state.theme;
+    const { showUserMenu } = state.navigate;
+    return { pageLoading, theme, showUserMenu };
+  });
 
   const dispatch = useAppDispatch();
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 990px)' });
   const isSmallMobile = useMediaQuery({ query: '(max-width: 501px)' });
 
+  console.log(currentPath);
+
   useEffect(() => {
-    if (
-      router.pathname === '/404' ||
-      router.pathname === '/403' ||
-      router.pathname === '/problems' ||
-      router.pathname === '/resources' ||
-      router.pathname.includes('/problem')
-    ) {
-      dispatch(setHomePageLoading(false));
-      return;
+    setCurentPath(router.asPath);
+  }, []);
+
+  useEffect(() => {
+    if (currentPath !== router.asPath) {
+      setCurentPath(router.asPath);
     }
 
-    getSession().then((session) => {
-      setLoadedSession(session);
-      // Invalid access to admin pages
+    if (currentPath) {
       if (
-        session &&
-        (router.pathname === '/admin' ||
-          router.pathname.match(/\/admin\/*./)) &&
-        session?.session.user.account_type !== 'admin'
-      ) {
-        router.push('/403');
-        return;
-      }
-      // No required session pages
-      if (
-        !session &&
-        (router.pathname === '/' ||
-          router.asPath === '/auth/login' ||
-          router.asPath === '/auth/signup')
+        currentPath === '/404' ||
+        currentPath === '/403' ||
+        currentPath === '/problems' ||
+        currentPath === '/resources' ||
+        currentPath.includes('/problem')
+        // ((currentPath === '/auth/login' || currentPath === '/auth/signup') &&
+        //   loadedSession)
       ) {
         dispatch(setHomePageLoading(false));
-        return;
-      } else if (!session && router.pathname.includes('auth')) {
-        router.push('/auth/login');
-        dispatch(setHomePageLoading(false));
-        return;
-      }
 
-      // Pages rendered based on session
-      if (
-        !session &&
-        (router.pathname === '/dashboard' || router.pathname === '/notebook')
-      ) {
-        router.push('/auth/login');
+        if (currentPath.includes('/problem')) {
+          setAlreadyRedirect(false);
+        }
+
         return;
       }
+console.log('EXECUTE SESSION PART');
+      getSession().then((session) => {
+        if (session !== loadedSession) {
+          setLoadedSession(session);
+        }
 
-      if (
-        session &&
-        (router.pathname === '/' ||
-          router.asPath === '/auth/login' ||
-          router.asPath === '/auth/signup')
-      ) {
-        router.push('/problems');
-      }
-    });
+        // WITHOUT session
+        if (!session) {
+          if (currentPath === '/admin' || currentPath.match(/\/admin\/*./)) {
+            router.push('/403');
+          } else if (
+            currentPath === '/' ||
+            currentPath === '/auth/login' ||
+            currentPath === '/auth/signup'
+          ) {
+            dispatch(setHomePageLoading(false));
+          } else if (
+            currentPath === '/dashboard' ||
+            currentPath === '/notebook'
+          ) {
+            router.push('/auth/login');
+          }
+          // WITH session
+        } else {
+          if (
+            (currentPath === '/admin' || currentPath.match(/\/admin\/*./)) &&
+            session?.session.user.account_type !== 'admin'
+          ) {
+            router.push('/403');
+          } else if (
+            currentPath === '/' ||
+            currentPath === '/auth/login' ||
+            currentPath === '/auth/signup'
+          ) {
+            router.push('/problems');
+            setAlreadyRedirect(true);
+          }
+        }
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, router, loadedSession]);
+  }, [dispatch, currentPath, loadedSession]);
+
+  // useEffect(() => {
+  //   if (alreadyRedirect) {
+  //     dispatch(setHomePageLoading(false));
+  //     return;
+  //   };
+
+  //   if (
+  //     router.pathname === '/404' ||
+  //     router.pathname === '/403' ||
+  //     router.pathname === '/problems' ||
+  //     router.pathname === '/resources' ||
+  //     router.pathname.includes('/problem')
+  //   ) {
+  //     dispatch(setHomePageLoading(false));
+  //     return;
+  //   }
+
+  //   getSession().then((session) => {
+  //     if (session !== loadedSession) {
+  //       setLoadedSession(session);
+  //     }
+  //     // Invalid access to admin pages
+  //     if (
+  //       (!session &&
+  //         (router.pathname === '/admin' ||
+  //           router.pathname.match(/\/admin\/*./))) ||
+  //       (session &&
+  //         (router.pathname === '/admin' ||
+  //           router.pathname.match(/\/admin\/*./)) &&
+  //         session?.session.user.account_type !== 'admin')
+  //     ) {
+  //       router.push('/403');
+  //       return;
+  //     }
+  //     // No required session pages
+  //     if (
+  //       !session &&
+  //       (router.pathname === '/' ||
+  //         router.asPath === '/auth/login' ||
+  //         router.asPath === '/auth/signup')
+  //     ) {
+  //       dispatch(setHomePageLoading(false));
+  //       return;
+  //     } else if (!session && router.pathname.includes('auth')) {
+  //       router.push('/auth/login');
+  //       dispatch(setHomePageLoading(false));
+  //       return;
+  //     }
+
+  //     // Pages rendered based on session
+  //     if (
+  //       !session &&
+  //       (router.pathname === '/dashboard' || router.pathname === '/notebook')
+  //     ) {
+  //       router.push('/auth/login');
+  //       return;
+  //     }
+
+  //     if (
+  //       session &&
+  //       (router.pathname === '/' ||
+  //         router.asPath === '/auth/login' ||
+  //         router.asPath === '/auth/signup')
+  //     ) {
+  //       console.log('redirecting to problems');
+  //       router.push('/problems');
+  //       setAlreadyRedirect(true);
+  //     }
+  //   });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [dispatch, router, router.pathname, loadedSession]);
+
+  useEffect(() => {
+    if (router.pathname === '/problems') {
+      setAlreadyRedirect(false);
+    }
+  }, [router.pathname]);
+
+  // useEffect(() => {
+  //   if (
+  //     router.pathname === '/404' ||
+  //     router.pathname === '/403' ||
+  //     router.pathname === '/problems' ||
+  //     router.pathname === '/resources' ||
+  //     router.pathname.includes('/problem')
+  //   ) {
+  //     dispatch(setHomePageLoading(false));
+  //     return;
+  //   }
+
+  //   getSession().then((session) => {
+  //     setLoadedSession(session);
+  //     // Invalid access to admin pages
+  //     if (
+  //       session &&
+  //       (router.pathname === '/admin' ||
+  //         router.pathname.match(/\/admin\/*./)) &&
+  //       session?.session.user.account_type !== 'admin'
+  //     ) {
+  //       router.push('/403');
+  //       return;
+  //     }
+  //     // No required session pages
+  //     if (
+  //       !session &&
+  //       (router.pathname === '/' ||
+  //         router.asPath === '/auth/login' ||
+  //         router.asPath === '/auth/signup')
+  //     ) {
+  //       dispatch(setHomePageLoading(false));
+  //       return;
+  //     } else if (!session && router.pathname.includes('auth')) {
+  //       router.push('/auth/login');
+  //       dispatch(setHomePageLoading(false));
+  //       return;
+  //     }
+
+  //     // Pages rendered based on session
+  //     if (
+  //       !session &&
+  //       (router.pathname === '/dashboard' || router.pathname === '/notebook')
+  //     ) {
+  //       router.push('/auth/login');
+  //       return;
+  //     }
+
+  //     if (
+  //       session &&
+  //       (router.pathname === '/' ||
+  //         router.asPath === '/auth/login' ||
+  //         router.asPath === '/auth/signup')
+  //     ) {
+  //       router.push('/problems');
+  //     }
+  //   });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [dispatch, router, loadedSession]);
 
   const headerRef = useRef<HTMLElement>(null);
 
