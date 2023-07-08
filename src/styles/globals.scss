@@ -461,8 +461,7 @@ body {
 /**********************************/
 @media (max-width: 26em) {
   .w-md-editor {
-    max-height: 100lvh;
-    height: 100lvh;
+    padding: 2rem 0;
   }
 
   .w-md-editor-toolbar {
@@ -489,8 +488,7 @@ body {
 /**********************************/
 @media (max-width: 376px) {
   .w-md-editor {
-    max-height: 100svh;
-    height: 100svh;
+    padding: 0;
   }
 
   .w-md-editor-toolbar {
