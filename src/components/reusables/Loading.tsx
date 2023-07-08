@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import Image from 'next/image';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { getTheme } from '@/store';
 import classes from './Loading.module.scss';
 
 type LoadingProsp = {
@@ -10,6 +12,11 @@ type LoadingProsp = {
 
 const Loading: React.FC<LoadingProsp> = ({ height, width, className }) => {
   const { theme } = useAppSelector(state => state.theme);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getTheme());
+  }, [dispatch]);
 
   return (
     <div

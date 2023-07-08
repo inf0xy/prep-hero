@@ -16,7 +16,10 @@ type LayoutProps = {
 };
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const [loadedSession, setLoadedSession] = useState<Session | null>();
+  const [loadedSession, setLoadedSession] = useState<
+    Session | undefined | null
+  >(undefined);
+
   const router = useRouter();
   const regex = /\/(problem\/.*|notebook)/;
 
@@ -32,41 +35,67 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const isSmallMobile = useMediaQuery({ query: '(max-width: 501px)' });
 
   useEffect(() => {
-    if (
-      router.pathname === '404' ||
-      router.pathname === '403' ||
-      router.pathname === '/problems' ||
-      router.pathname === '/resources' ||
-      (router.pathname as string).match(/\/problem\/.*/)
-    ) {
-      dispatch(setHomePageLoading(false));
-      return;
-    }
-    getSession().then((session) => {
-      setLoadedSession(session);
-      // No required session pages
+    getSession().then(session => setLoadedSession(session));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const currentPath = decodeURI(router.asPath);
+
+    if (currentPath) {
       if (
-        !session &&
-        (router.pathname === '/' || router.pathname.includes('auth'))
+        currentPath === '/404' ||
+        currentPath === '/403' ||
+        currentPath === '/problems' ||
+        currentPath === '/resources' ||
+        currentPath.includes('/problem') ||
+        ((currentPath === '/auth/login' || currentPath === '/auth/signup') &&
+          loadedSession === null)
       ) {
         dispatch(setHomePageLoading(false));
         return;
       }
 
-      // Pages rendered based on session
-      if (
-        !session &&
-        (router.pathname === '/dashboard' || router.pathname === '/notebook')
-      ) {
-        router.push('/auth/login');
-      } else if (
-        session &&
-        (router.pathname === '/' || router.pathname.includes('auth'))
-      ) {
-        router.push('/problems');
-      }
-    });
-  }, [dispatch, router.pathname, loadedSession]);
+      getSession().then((session) => {
+        if (session !== loadedSession) {
+          setLoadedSession(session);
+        }
+
+        // WITHOUT session
+        if (!session) {
+          if (currentPath === '/admin' || currentPath.match(/\/admin\/*./)) {
+            router.push('/403');
+          } else if (
+            currentPath === '/' ||
+            currentPath === '/auth/login' ||
+            currentPath === '/auth/signup'
+          ) {
+            dispatch(setHomePageLoading(false));
+          } else if (
+            currentPath === '/dashboard' ||
+            currentPath === '/notebook'
+          ) {
+            router.push('/auth/login');
+          }
+        // WITH session
+        } else {
+          if (
+            (currentPath === '/admin' || currentPath.match(/\/admin\/*./)) &&
+            session?.session.user.account_type !== 'admin'
+          ) {
+            router.push('/403');
+          } else if (
+            currentPath === '/' ||
+            currentPath === '/auth/login' ||
+            currentPath === '/auth/signup'
+          ) {
+            router.push('/problems');
+          }
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, router.asPath, loadedSession]);
 
   const headerRef = useRef<HTMLElement>(null);
 
@@ -82,7 +111,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const excludedRoutes = [/\/auth\/.*/, /\/problem\/.*/, /\/dashboard/];
 
-  if (router.pathname === '404' || router.pathname === '403') {
+  if (router.pathname === '/404' || router.pathname === '/403') {
     return <>{children}</>;
   }
 

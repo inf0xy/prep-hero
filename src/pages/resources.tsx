@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import ResourceCard from '@/components/reusables/ResourceCard';
 import { useAppSelector } from '@/hooks/hooks';
 import { config } from '@/helpers/config';
@@ -38,42 +39,51 @@ const ResourcesPage = () => {
     </a>
   );
   return (
-    <div
-      className={`${classes['resources-page']} ${
-        classes[`resources-page--${theme}`]
-      }`}
-    >
-      <ResourceCard
-        image="/technterviewhandbookimage.webp"
-        imageAlt="Technical Interview Book Image"
-        link={INTERVIEW_HANDBOOK_URL}
-        content={techHandBookResourceContent}
-        backgroundColor={variables.lightBackground0}
-      />
-      <ResourceCard
-        image="/interviewguide.svg"
-        imageAlt="Interview Guide Image"
-        link={INTERVIEW_GUIDE}
-        content={interviewGuideContent}
-        backgroundColor={variables.lightBackground0}
-        className="translate-y-[2rem]"
-      />
-      <ResourceCard
-        image="/fullstackcafe.webp"
-        imageAlt="Fullstack Cafe Image"
-        link={FULLSTACK_CAFE_URL}
-        content={fullstackCafeContent}
-        backgroundColor={variables.colorFullStackCafe}
-        className="translate-y-[-1rem]"
-      />
-      <ResourceCard
-        image="/neetcodeio.webp"
-        imageAlt="Neetcode IO Image"
-        link={NEETCODEIO_URL}
-        content={neetcodeContent}
-        backgroundColor={variables.colorNeetcode}
-      />
-    </div>
+    <>
+      <Head>
+        <title>Resources - Prep Hero</title>
+        <meta
+          name="description"
+          content="Access a curated collection of commonly asked interview behavioral questions, and variety of resources to learn effective strategies to tackle coding problems."
+        />
+      </Head>
+      <div
+        className={`${classes['resources-page']} ${
+          classes[`resources-page--${theme}`]
+        }`}
+      >
+        <ResourceCard
+          image="/technterviewhandbookimage.webp"
+          imageAlt="Technical Interview Book Image"
+          link={INTERVIEW_HANDBOOK_URL}
+          content={techHandBookResourceContent}
+          backgroundColor={variables.lightBackground0}
+        />
+        <ResourceCard
+          image="/interviewguide.svg"
+          imageAlt="Interview Guide Image"
+          link={INTERVIEW_GUIDE}
+          content={interviewGuideContent}
+          backgroundColor={variables.lightBackground0}
+          className="translate-y-[2rem]"
+        />
+        <ResourceCard
+          image="/fullstackcafe.webp"
+          imageAlt="Fullstack Cafe Image"
+          link={FULLSTACK_CAFE_URL}
+          content={fullstackCafeContent}
+          backgroundColor={variables.colorFullStackCafe}
+          className="translate-y-[-1rem]"
+        />
+        <ResourceCard
+          image="/neetcodeio.webp"
+          imageAlt="Neetcode IO Image"
+          link={NEETCODEIO_URL}
+          content={neetcodeContent}
+          backgroundColor={variables.colorNeetcode}
+        />
+      </div>
+    </>
   );
 };
 

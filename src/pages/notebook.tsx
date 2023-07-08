@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useState, useEffect, useRef } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
@@ -213,6 +214,13 @@ const NotebookPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Notebook - Prep Hero</title>
+        <meta
+          name="description"
+          content="Create and organize personal notes/memos."
+        />
+      </Head>
       {showAlert && (
         <Alert
           onClose={() => setShowAlert(false)}
