@@ -45,10 +45,10 @@ const Modal: React.FC<ModalProps> = ({
 
   const modalRef = useRef(null);
 
-  const isMobileOrTablelet = useMediaQuery({ query: '(max-width: 976px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 642px)' });
   const isSmallMobile = useMediaQuery({ query: '(max-width: 521px)' });
   const isSmallMobilePortrait = useMediaQuery({ query: '(max-width: 400px)' });
+  const isExtraSmallMobile = useMediaQuery({ query: '(max-width: 390px)' });
 
   const modalStyle = {
     width: fullScreen || isMobile ? '100vw' : '70vw',
@@ -58,11 +58,13 @@ const Modal: React.FC<ModalProps> = ({
   const getDimension = () => {
     let dimension = '';
     if (showFullScreen || isSmallMobile) {
-      dimension =
-        'max-w-[100vw] max-h-[100svh] w-[100vw] min-w-[100vw] min-h-[100svh] h-[100svh]';
+      dimension = isExtraSmallMobile
+        ? 'max-w-[100vw] max-h-[100svh] w-[100vw] min-w-[100vw] min-h-[100svh] h-[100svh]'
+        : 'max-w-[100vw] max-h-[100lvh] w-[100vw] min-w-[100vw] min-h-[100lvh] h-[100lvh]';
     } else if (isMobile) {
-      dimension =
-        'max-w-[85vw] max-h-[75svh] w-[85vw] min-w-[85vw] min-h-[75svh] h-[75svh]';
+      dimension = isExtraSmallMobile
+        ? 'max-w-[85vw] max-h-[75svh] w-[85vw] min-w-[85vw] min-h-[75svh] h-[75svh]'
+        : 'max-w-[85vw] max-h-[75lvh] w-[85vw] min-w-[85vw] min-h-[75lvh] h-[75lvh]';
     }
     return dimension;
   };
@@ -123,7 +125,9 @@ const Modal: React.FC<ModalProps> = ({
             // className={`modal-box relative p-0 bg-transparent ${
             //   isMobileOrTablelet && 'no-scrollbar'
             // } ${!className?.includes('max-w') ? 'max-w-fit' : ''} ${className}`}
-            className={`modal-box relative p-0 bg-transparent ${!className?.includes('max-w') ? 'max-w-fit' : ''} ${className}`}
+            className={`modal-box relative p-0 bg-transparent ${
+              !className?.includes('max-w') ? 'max-w-fit' : ''
+            } ${className}`}
             style={fullScreenToggle ? modalStyle : {}}
           >
             {fullScreenToggle && (

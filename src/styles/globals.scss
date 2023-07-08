@@ -384,7 +384,7 @@ body {
   height: 15px;
 }
 
-.code-snippet.light span  {
+.code-snippet.light span {
   background-color: transparent !important;
 }
 
@@ -464,11 +464,30 @@ body {
     width: 100vw;
     flex-direction: column-reverse;
     align-items: flex-start !important;
+    gap: 1.5rem;
+
+    ul:nth-child(1) {
+      scale: 118%;
+      margin-left: 1.6rem;
+    }
 
     ul:nth-child(2) {
       align-self: flex-end !important;
+      scale: 130%;
       margin-right: 2rem;
-      margin-bottom: 1rem;
+    }
+  }
+}
+
+/**********************************/
+/* BELOW 417px                    */
+/**********************************/
+@media (max-width: 376px) {
+  .w-md-editor-toolbar {
+    ul:nth-child(1) {
+      scale: 115%;
+      display: flex;
+      gap: 1px;
     }
   }
 }
