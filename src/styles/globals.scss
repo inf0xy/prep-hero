@@ -461,7 +461,8 @@ body {
 /**********************************/
 @media (max-width: 26em) {
   .w-md-editor {
-    height: 100vh;
+    max-height: 100lvh;
+    height: 100lvh;
   }
 
   .w-md-editor-toolbar {
@@ -487,6 +488,11 @@ body {
 /* BELOW 376px                    */
 /**********************************/
 @media (max-width: 376px) {
+  .w-md-editor {
+    max-height: 100svh;
+    height: 100svh;
+  }
+
   .w-md-editor-toolbar {
     ul:nth-child(1) {
       scale: 115%;
