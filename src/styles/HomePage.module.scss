@@ -583,6 +583,7 @@
     .first-section {
       .code-editor-image {
         height: 16rem;
+        scale: 85%;
       }
     }
 
@@ -635,10 +636,10 @@
       .message {
         padding: 0 1rem;
       }
-      .code-editor-image {
-        height: 20rem;
-        transform: scale(160%);
-      }
+      // .code-editor-image {
+      //   height: 20rem;
+      //   transform: scale(160%);
+      // }
     }
 
     .second-section {

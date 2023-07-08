@@ -35,11 +35,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const isSmallMobile = useMediaQuery({ query: '(max-width: 501px)' });
 
   useEffect(() => {
-    getSession().then(session => setLoadedSession(session));
+    getSession().then((session) => setLoadedSession(session));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+    let currentSession: null | Session;
+    const fetchSession = async () => {
+      currentSession = await getSession();
+    };
+
     const currentPath = decodeURI(router.asPath);
 
     if (currentPath) {
@@ -49,8 +54,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         currentPath === '/problems' ||
         currentPath === '/resources' ||
         currentPath.includes('/problem') ||
-        ((currentPath === '/auth/login' || currentPath === '/auth/signup') &&
-          loadedSession === null)
+        ((currentPath === '/' ||
+          currentPath === '/auth/login' ||
+          currentPath === '/auth/signup') &&
+          loadedSession === null) ||
+        ((currentPath === '/dashboard' || currentPath === '/notebook') &&
+          loadedSession)
       ) {
         dispatch(setHomePageLoading(false));
         return;
@@ -65,19 +74,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         if (!session) {
           if (currentPath === '/admin' || currentPath.match(/\/admin\/*./)) {
             router.push('/403');
-          } else if (
-            currentPath === '/' ||
-            currentPath === '/auth/login' ||
-            currentPath === '/auth/signup'
-          ) {
-            dispatch(setHomePageLoading(false));
+            // } else if (
+            //   currentPath === '/' ||
+            //   currentPath === '/auth/login' ||
+            //   currentPath === '/auth/signup'
+            // ) {
+            //   dispatch(setHomePageLoading(false));
           } else if (
             currentPath === '/dashboard' ||
             currentPath === '/notebook'
           ) {
             router.push('/auth/login');
           }
-        // WITH session
+          // WITH session
         } else {
           if (
             (currentPath === '/admin' || currentPath.match(/\/admin\/*./)) &&

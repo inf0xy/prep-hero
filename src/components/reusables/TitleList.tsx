@@ -1,4 +1,12 @@
-import { ReactNode, useState, useCallback, useEffect, useRef, Dispatch, SetStateAction } from 'react';
+import {
+  ReactNode,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  Dispatch,
+  SetStateAction
+} from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import useSubmitNote from '@/hooks/useSubmitNote';
@@ -28,8 +36,8 @@ type TitleListProps = {
   actionBar?: ReactNode;
   firstIconAction?: (val?: string) => Promise<any> | undefined;
   secondIconAction?: (val?: string) => Promise<any> | undefined;
-  currentModal?: string,
-  setCurrentModal?: Dispatch<SetStateAction<string>>
+  currentModal?: string;
+  setCurrentModal?: Dispatch<SetStateAction<string>>;
 };
 
 const TitleList: React.FC<TitleListProps> = ({
@@ -134,11 +142,9 @@ const TitleList: React.FC<TitleListProps> = ({
   };
 
   const handleSetTableHeight = () => {
-    const height =  (tableWrapperRef.current as any).clientHeight;
+    const height = (tableWrapperRef.current as any).clientHeight;
     setTableBodyHeight(height);
   };
-
-
 
   useEffect(() => {
     handleSearch();
@@ -208,12 +214,12 @@ const TitleList: React.FC<TitleListProps> = ({
         <div>
           {showNote && (
             <TextEditor
-            value={note.content!}
+              value={note.content!}
               setValue={(val: string) =>
                 setNote((prev) => ({ ...prev, content: val }))
               }
               onCloseNote={() => handleCloseNote(title)}
-              previewMode='preview'
+              previewMode="preview"
             />
           )}
         </div>
@@ -238,7 +244,10 @@ const TitleList: React.FC<TitleListProps> = ({
         }`}
       >
         {showTopBar && (
-          <div onClick={handleSetTableHeight} className={`top-bar ${classes['top-bar']}`}>
+          <div
+            onClick={handleSetTableHeight}
+            className={`top-bar ${classes['top-bar']}`}
+          >
             <div className={classes['title__searchbar']}>
               <SearchBar
                 setSingleSearchTerm={setSearchTerm}
@@ -257,9 +266,10 @@ const TitleList: React.FC<TitleListProps> = ({
         )}
         <div
           ref={tableWrapperRef}
-          className={`${isTabletOrMobile && 'no-scrollbar'} ${
-            classes['titles-table-wrapper']
-          }`}
+          // className={`${isTabletOrMobile && 'no-scrollbar'} ${
+          //   classes['titles-table-wrapper']
+          // }`}
+          className={`${classes['titles-table-wrapper']}`}
           style={{
             minHeight: tableBodyHeight ? `${tableBodyHeight}px` : undefined
           }}
