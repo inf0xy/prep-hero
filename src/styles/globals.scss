@@ -68,10 +68,6 @@
   background: $color-scrollbar-thumb-hover-light;
 }
 
-// .no-scrollbar::-webkit-scrollbar {
-//   display: none;
-// }
-
 *,
 *::before,
 *::after {
@@ -460,6 +456,10 @@ body {
 /* BELOW 417px                    */
 /**********************************/
 @media (max-width: 26em) {
+  .modal-note .w-md-editor {
+    padding: 3rem 0;
+  }
+
   .w-md-editor-toolbar {
     width: 100vw;
     flex-direction: column-reverse;
@@ -483,6 +483,10 @@ body {
 /* BELOW 394px                    */
 /**********************************/
 @media (max-width: 393px) {
+  .modal-note .w-md-editor {
+    padding: 0;
+  }
+
   .w-md-editor-toolbar {
     ul:nth-child(1) {
       margin-left: 1.6rem;

@@ -220,7 +220,7 @@ const TitleList: React.FC<TitleListProps> = ({
         }`}
         isOpen={currentModal === `modal__notebook-note-${title}`}
       >
-        <div style={{ height: isMobilePortrait ? '100vh' : '' }}>
+        <div className={isMobilePortrait ? 'modal-note' : ''}>
           {showNote && (
             <TextEditor
               value={note.content!}
