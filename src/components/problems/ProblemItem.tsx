@@ -116,7 +116,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
 
   const [noteContent, setNoteContent] = useState(problemNoteContent);
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' });
-  const isMobile = useMediaQuery({ query: '(max-width: 416px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 642px)' });
+  const isSmallMobile = useMediaQuery({ query: '(max-width: 416px)' });
 
   const [currentModal, setCurrentModal] = useState('');
 
@@ -255,8 +256,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                     <BookmarkFill
                       width={8}
                       height={8}
-                      // width={isMobile ? 10 : 8}
-                      // height={isMobile ? 10 : 8}
+                      // width={isSmallMobile ? 10 : 8}
+                      // height={isSmallMobile ? 10 : 8}
                       className="text-primary"
                     />
                   </span>
@@ -274,8 +275,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                     <BookmarkOutline
                       width={8}
                       height={8}
-                      // width={isMobile ? 10 : 8}
-                      // height={isMobile ? 10 : 8}
+                      // width={isSmallMobile ? 10 : 8}
+                      // height={isSmallMobile ? 10 : 8}
                     />
                   </span>
                 </Tooltip>
@@ -288,8 +289,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   <NoteIcon
                     width={8}
                     height={8}
-                    // width={isMobile ? 10 : 8}
-                    // height={isMobile ? 10 : 8}
                     className="cursor-pointer"
                   />
                 </span>
@@ -313,10 +312,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           <span onClick={() => setShowSolutionModal(true)}>
             <label htmlFor={`modal-solution-${title}`} className="w-fit">
               <CodeIcon
-                // width={8}
-                // height={8}
-                width={isMobile ? 10 : 8}
-                height={isMobile ? 10 : 8}
+                width={isSmallMobile ? 10 : 8}
+                height={isSmallMobile ? 10 : 8}
                 className="cursor-pointer"
               />
             </label>
@@ -331,17 +328,15 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
               <>
                 {attempted_problems.some((el) => el.title === title) ? (
                   <InProgressIcon
-                    width={isMobile ? 23 : 19}
-                    height={isMobile ? 23 : 19}
+                    width={isSmallMobile ? 23 : 19}
+                    height={isSmallMobile ? 23 : 19}
                     data-tooltip="Attempted"
                   />
                 ) : (
                   <CheckIcon
                     data-tooltip="Solved"
-                    width={isMobile ? '22' : '18'}
-                    height={isMobile ? '22' : '18'}
-                    // width={isMobile ? '25' : '18'}
-                    // height={isMobile ? '25' : '18'}
+                    width={isSmallMobile ? '22' : '18'}
+                    height={isSmallMobile ? '22' : '18'}
                   />
                 )}
               </>
@@ -350,8 +345,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 <EditIcon
                   width={7}
                   height={7}
-                  // width={isMobile ? 9 : 7}
-                  // height={isMobile ? 9 : 7}
                   className="cursor-pointer hover:text-[#ff7230] transition ease duration-300"
                 />
               </span>
@@ -386,8 +379,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                     >
                       <span className="opacity-[0.7]">
                         <PreviewIconColor
-                          width={isMobile ? 26 : 22}
-                          height={isMobile ? 26 : 22}
+                          width={isSmallMobile ? 26 : 22}
+                          height={isSmallMobile ? 26 : 22}
                         />
                       </span>
                     </label>
@@ -404,8 +397,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                       className="cursor-pointer"
                     >
                       <TrashIcon
-                        width={isMobile ? 26 : 22}
-                        height={isMobile ? 26 : 22}
+                        width={isSmallMobile ? 26 : 22}
+                        height={isSmallMobile ? 26 : 22}
                       />
                     </label>
                   </li>
@@ -422,8 +415,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   <PlusIconOutline
                     width={8}
                     height={8}
-                    // width={isMobile ? 10 : 8}
-                    // height={isMobile ? 10 : 8}
                   />
                 </span>
               </label>
@@ -470,7 +461,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         }`}
         isOpen={currentModal === `modal__problems-note-${title}`}
       >
-        <div>
+        <div className={isMobile ? 'modal-note' : ''}>
           {showNote && (
             <TextEditor
               value={noteContent!}
