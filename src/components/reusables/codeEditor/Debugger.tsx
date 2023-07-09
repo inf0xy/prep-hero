@@ -24,7 +24,8 @@ type DebuggerProps = {
   setSocketConnection: Dispatch<SetStateAction<SocketType>>;
 };
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+// const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BACKEND_URL = 'wss://prep-hero-server.duckdns.org';
 
 const Debugger: React.FC<DebuggerProps> = ({
   socketConnection,
