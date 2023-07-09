@@ -40,11 +40,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    let currentSession: null | Session;
-    const fetchSession = async () => {
-      currentSession = await getSession();
-    };
-
     const currentPath = decodeURI(router.asPath);
 
     if (currentPath) {
@@ -60,8 +55,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           loadedSession === null) ||
         ((currentPath === '/dashboard' || currentPath === '/notebook') &&
           loadedSession)
-        // ((currentPath === '/dashboard') &&
-        // loadedSession) || currentPath === '/notebook'
       ) {
         dispatch(setHomePageLoading(false));
         return;
@@ -76,12 +69,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         if (!session) {
           if (currentPath === '/admin' || currentPath.match(/\/admin\/*./)) {
             router.push('/403');
-            // } else if (
-            //   currentPath === '/' ||
-            //   currentPath === '/auth/login' ||
-            //   currentPath === '/auth/signup'
-            // ) {
-            //   dispatch(setHomePageLoading(false));
           } else if (
             currentPath === '/dashboard' ||
             currentPath === '/notebook'
