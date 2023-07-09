@@ -456,8 +456,12 @@ body {
 /* BELOW 417px                    */
 /**********************************/
 @media (max-width: 26em) {
+  body {
+    font-size: 1.7rem;
+  }
+
   .modal-note .w-md-editor {
-    padding: 3rem 0;
+    padding: 3.5rem 0;
   }
 
   .w-md-editor-toolbar {

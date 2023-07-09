@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useMediaQuery } from 'react-responsive';
@@ -35,7 +35,6 @@ import LogoList from './LogoList';
 import Tooltip from '../reusables/Tooltip';
 import Solutions from '../reusables/Solutions';
 import useSubmitNote from '@/hooks/useSubmitNote';
-
 
 import classes from './ProblemItem.module.scss';
 
@@ -116,7 +115,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   }
 
   const [noteContent, setNoteContent] = useState(problemNoteContent);
-  const isMobile = useMediaQuery({ query: '(max-width: 820px)' });
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 416px)' });
 
   const [currentModal, setCurrentModal] = useState('');
 
@@ -207,7 +207,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           oddCell ? classes[`problem--${theme}--odd-cell`] : undefined
         }`}
       >
-        {!isMobile && (
+        {!isTabletOrMobile && (
           <>
             <div
               className={classes['solved-content']}
@@ -216,7 +216,11 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
               {session?.session.user.account_type === 'user' ? (
                 <>
                   {attempted_problems.some((el) => el.title === title) ? (
-                    <InProgressIcon width={19} height={19} data-tooltip="Attempted" />
+                    <InProgressIcon
+                      width={19}
+                      height={19}
+                      data-tooltip="Attempted"
+                    />
                   ) : (
                     <CheckIcon data-tooltip="Solved" width="18" height="18" />
                   )}
@@ -248,7 +252,11 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                     data-tooltip="Remove"
                     onClick={() => dispatch(removeProblemFromList(title!))}
                   >
-                    <BookmarkFill className="text-primary" />
+                    <BookmarkFill
+                      width={isMobile ? 10 : 8}
+                      height={isMobile ? 10 : 8}
+                      className="text-primary"
+                    />
                   </span>
                 </Tooltip>
               ) : (
@@ -261,7 +269,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                     className={classes['bookmark-icon']}
                     onClick={() => dispatch(addProblemToList(title!))}
                   >
-                    <BookmarkOutline />
+                    <BookmarkOutline
+                      width={isMobile ? 10 : 8}
+                      height={isMobile ? 10 : 8}
+                    />
                   </span>
                 </Tooltip>
               )}
@@ -270,7 +281,11 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   className={classes['note-icon']}
                   onClick={() => setShowProblemNote(!showProblemNote)}
                 >
-                  <NoteIcon className="cursor-pointer" />
+                  <NoteIcon
+                    width={isMobile ? 10 : 8}
+                    height={isMobile ? 10 : 8}
+                    className="cursor-pointer"
+                  />
                 </span>
               </Tooltip>
             </div>
@@ -285,34 +300,46 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         >
           {difficulty}
         </div>
-        {isMobile && (
+        {isTabletOrMobile && (
           <div className={classes['category-content']}>{category}</div>
         )}
         <div className={classes['solution-content']}>
           <span onClick={() => setShowSolutionModal(true)}>
             <label htmlFor={`modal-solution-${title}`} className="w-fit">
-              <CodeIcon width={8} height={8} className="cursor-pointer" />
+              <CodeIcon
+                width={isMobile ? 10 : 8}
+                height={isMobile ? 10 : 8}
+                className="cursor-pointer"
+              />
             </label>
           </span>
         </div>
         <div className={`${classes['companies-content']}`}>
           <LogoList companyNames={companies!} className="translate-x-8" />
         </div>
-        {isMobile && (
+        {isTabletOrMobile && (
           <div className={classes['solved-content']} style={solvedStatusStyle}>
             {session?.session.user.account_type === 'user' ? (
               <>
                 {attempted_problems.some((el) => el.title === title) ? (
-                  <InProgressIcon width={19} height={19} data-tooltip="Attempted" />
+                  <InProgressIcon
+                    width={19}
+                    height={19}
+                    data-tooltip="Attempted"
+                  />
                 ) : (
-                  <CheckIcon data-tooltip="Solved" width="18" height="18" />
+                  <CheckIcon
+                    data-tooltip="Solved"
+                    width={isMobile ? '25' : '18'}
+                    height={isMobile ? '25' : '18'}
+                  />
                 )}
               </>
             ) : (
               <span onClick={handleEditProblem}>
                 <EditIcon
-                  width={7}
-                  height={7}
+                  width={isMobile ? 9 : 7}
+                  height={isMobile ? 9 : 7}
                   className="cursor-pointer hover:text-[#ff7230] transition ease duration-300"
                 />
               </span>
@@ -346,7 +373,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                       className="w-fit cursor-pointer"
                     >
                       <span className="opacity-[0.7]">
-                        <PreviewIconColor width={22} height={22} />
+                        <PreviewIconColor
+                          width={isMobile ? 27 : 22}
+                          height={isMobile ? 27 : 22}
+                        />
                       </span>
                     </label>
                   </li>
@@ -361,7 +391,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                       htmlFor={`note-delete-confirm-modal-${title}`}
                       className="cursor-pointer"
                     >
-                      <TrashIcon width={8} height={8} />
+                      <TrashIcon width={isMobile ? 10 : 8} height={isMobile ? 10 : 8} />
                     </label>
                   </li>
                 </Tooltip>
@@ -374,7 +404,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 onClick={(e) => handleNoteAction('add', e)}
               >
                 <span className="opacity-[0.7]">
-                  <PlusIconOutline width={8} height={8} />
+                  <PlusIconOutline
+                    width={isMobile ? 10 : 8}
+                    height={isMobile ? 10 : 8}
+                  />
                 </span>
               </label>
               <p>Add a note</p>
@@ -385,17 +418,21 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       <Modal
         id={`modal-solution-${title}`}
         type="close-button"
-        buttonPosition='right-9 top-9'
+        buttonPosition="right-9 top-9"
         className={`max-w-[100vw] h-full pt-24 pb-8 pl-3 ${
-          isMobile ? 'w-screen h-screen min-w-screen min-h-screen' : 'w-[70vw] min-w-[70vw]'
-        } ${
-          theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
-        }`}
+          isTabletOrMobile
+            ? 'w-screen h-screen min-w-screen min-h-screen'
+            : 'w-[70vw] min-w-[70vw]'
+        } ${theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'}`}
         onClose={() => setShowSolutionModal(false)}
-        noBorderRadius={isMobile ? true : false}
+        noBorderRadius={isTabletOrMobile ? true : false}
       >
         <div
-          className={`solution-modal-wrapper--${theme} ${classes['solution-modal-wrapper']} w-full h-full ${isMobile ? 'overflow-y-visible' : 'overflow-y-hidden'} `}
+          className={`solution-modal-wrapper--${theme} ${
+            classes['solution-modal-wrapper']
+          } w-full h-full ${
+            isTabletOrMobile ? 'overflow-y-visible' : 'overflow-y-hidden'
+          } `}
         >
           {showSolutionModal && (
             <Solutions

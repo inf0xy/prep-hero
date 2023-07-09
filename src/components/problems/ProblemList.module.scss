@@ -172,3 +172,17 @@
     width: 35rem;
   }
 }
+
+/**********************************/
+/* BELOW 417px                    */
+/**********************************/
+@media (max-width: 26em) {
+  .problems-table {
+    font-size: 1.7rem;
+
+    .title-header {
+      min-width: 30rem;
+      width: 30rem;
+    }
+  }
+}

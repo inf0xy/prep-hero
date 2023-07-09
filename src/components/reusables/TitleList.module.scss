@@ -51,7 +51,6 @@
    height: 200rem;
 
   .titles__table {
-    // width: fit-content;
     width: 100%;
     height: fit-content;
     font-size: 1.5rem;
@@ -160,5 +159,23 @@
         margin-left: 0.5rem;
       }
     }
+  }
+}
+
+/**********************************/
+/* BELOW 417px                    */
+/**********************************/
+@media (max-width: 26em) {
+  .first-col-icon {
+    scale: 120%;
+  }
+
+  .second-col-icon {
+    scale: 130%;
+  }
+
+  .title-content {
+    line-height: 1.3;
+    transform: translateY(2.5px);
   }
 }
