@@ -22,6 +22,7 @@ type ModalProps = {
   fullScreenToggle?: boolean;
   showCloseButton?: boolean;
   noBorderRadius?: boolean;
+  availableHeight?: number | undefined;
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -34,7 +35,8 @@ const Modal: React.FC<ModalProps> = ({
   isOpen,
   fullScreenToggle,
   showCloseButton,
-  noBorderRadius
+  noBorderRadius,
+  availableHeight
 }) => {
   const [fullScreen, setFullScreen] = useState(false);
   const { theme, showFullScreen } = useAppSelector((state) => {
@@ -108,7 +110,7 @@ const Modal: React.FC<ModalProps> = ({
   const modalWithCloseButton = (
     <div>
       <input type="checkbox" id={id} className="modal-toggle" />
-      <div className="modal">
+      <div className="modal" style={{ height: `${availableHeight}px` ?? `calc(100vh - 70px)` }}>
         <div
           className={`modal-with-close-button w-fit h-fit p-[1px] rounded overflow-hidden ${
             theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'

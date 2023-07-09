@@ -52,6 +52,15 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   oddCell
 }) => {
   const [showProblemNote, setShowProblemNote] = useState(false);
+  const [showSolutionModal, setShowSolutionModal] = useState(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [notification, setNotification] = useState<NotificationType | null>(
+    null
+  );
+  const [showNote, setShowNote] = useState(false);
+  const [noteAction, setNoteAction] = useState<string | undefined>(undefined);
+  const [savedList, setSavedList] = useState<string[]>([]);
+
   const {
     list_names,
     title,
@@ -69,8 +78,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
     hard_solved,
     notes,
     list,
-    theme,
-    selectedNote
+    theme
   } = useAppSelector((state) => {
     const {
       attempted_problems,
@@ -81,7 +89,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       list
     } = state.user;
     const { theme } = state.theme;
-    const { selectedNote } = state.notes;
     return {
       attempted_problems,
       easy_solved,
@@ -89,18 +96,9 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
       hard_solved,
       notes,
       list,
-      theme,
-      selectedNote
+      theme
     };
   });
-
-  const [showSolutionModal, setShowSolutionModal] = useState(false);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [notification, setNotification] = useState<NotificationType | null>(
-    null
-  );
-  const [showNote, setShowNote] = useState(false);
-  const [noteAction, setNoteAction] = useState<string | undefined>(undefined);
 
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
@@ -120,6 +118,15 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   const isSmallMobile = useMediaQuery({ query: '(max-width: 416px)' });
 
   const [currentModal, setCurrentModal] = useState('');
+
+  useEffect(() => {
+    if (
+      list.every((el) => !savedList.includes(el)) &&
+      savedList.every((el) => !list.includes(el))
+    ) {
+      setSavedList(list);
+    }
+  }, [list, savedList]);
 
   useEffect(() => {
     if (!showNotes) {
@@ -251,13 +258,14 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   <span
                     className={classes['bookmark-icon']}
                     data-tooltip="Remove"
-                    onClick={() => dispatch(removeProblemFromList(title!))}
+                    onClick={() => {
+                      setSavedList((prev) => prev.filter((el) => el !== title));
+                      dispatch(removeProblemFromList(title!));
+                    }}
                   >
                     <BookmarkFill
                       width={8}
                       height={8}
-                      // width={isSmallMobile ? 10 : 8}
-                      // height={isSmallMobile ? 10 : 8}
                       className="text-primary"
                     />
                   </span>
@@ -270,14 +278,12 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 >
                   <span
                     className={classes['bookmark-icon']}
-                    onClick={() => dispatch(addProblemToList(title!))}
+                    onClick={() => {
+                      setSavedList(prev => [...prev, title!]);
+                      dispatch(addProblemToList(title!));
+                    }}
                   >
-                    <BookmarkOutline
-                      width={8}
-                      height={8}
-                      // width={isSmallMobile ? 10 : 8}
-                      // height={isSmallMobile ? 10 : 8}
-                    />
+                    <BookmarkOutline width={8} height={8} />
                   </span>
                 </Tooltip>
               )}
@@ -286,11 +292,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   className={classes['note-icon']}
                   onClick={() => setShowProblemNote(!showProblemNote)}
                 >
-                  <NoteIcon
-                    width={8}
-                    height={8}
-                    className="cursor-pointer"
-                  />
+                  <NoteIcon width={8} height={8} className="cursor-pointer" />
                 </span>
               </Tooltip>
             </div>
@@ -412,10 +414,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 onClick={(e) => handleNoteAction('add', e)}
               >
                 <span className="opacity-[0.7]">
-                  <PlusIconOutline
-                    width={8}
-                    height={8}
-                  />
+                  <PlusIconOutline width={8} height={8} />
                 </span>
               </label>
               <p>Add a note</p>
