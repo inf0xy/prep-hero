@@ -253,8 +253,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                     onClick={() => dispatch(removeProblemFromList(title!))}
                   >
                     <BookmarkFill
-                      width={isMobile ? 10 : 8}
-                      height={isMobile ? 10 : 8}
+                      width={8}
+                      height={8}
+                      // width={isMobile ? 10 : 8}
+                      // height={isMobile ? 10 : 8}
                       className="text-primary"
                     />
                   </span>
@@ -270,8 +272,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                     onClick={() => dispatch(addProblemToList(title!))}
                   >
                     <BookmarkOutline
-                      width={isMobile ? 10 : 8}
-                      height={isMobile ? 10 : 8}
+                      width={8}
+                      height={8}
+                      // width={isMobile ? 10 : 8}
+                      // height={isMobile ? 10 : 8}
                     />
                   </span>
                 </Tooltip>
@@ -282,8 +286,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   onClick={() => setShowProblemNote(!showProblemNote)}
                 >
                   <NoteIcon
-                    width={isMobile ? 10 : 8}
-                    height={isMobile ? 10 : 8}
+                    width={8}
+                    height={8}
+                    // width={isMobile ? 10 : 8}
+                    // height={isMobile ? 10 : 8}
                     className="cursor-pointer"
                   />
                 </span>
@@ -307,8 +313,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           <span onClick={() => setShowSolutionModal(true)}>
             <label htmlFor={`modal-solution-${title}`} className="w-fit">
               <CodeIcon
-                width={isMobile ? 10 : 8}
-                height={isMobile ? 10 : 8}
+                width={8}
+                height={8}
+                // width={isMobile ? 10 : 8}
+                // height={isMobile ? 10 : 8}
                 className="cursor-pointer"
               />
             </label>
@@ -330,16 +338,20 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 ) : (
                   <CheckIcon
                     data-tooltip="Solved"
-                    width={isMobile ? '25' : '18'}
-                    height={isMobile ? '25' : '18'}
+                    width={isMobile ? '22' : '18'}
+                    height={isMobile ? '22' : '18'}
+                    // width={isMobile ? '25' : '18'}
+                    // height={isMobile ? '25' : '18'}
                   />
                 )}
               </>
             ) : (
               <span onClick={handleEditProblem}>
                 <EditIcon
-                  width={isMobile ? 9 : 7}
-                  height={isMobile ? 9 : 7}
+                  width={7}
+                  height={7}
+                  // width={isMobile ? 9 : 7}
+                  // height={isMobile ? 9 : 7}
                   className="cursor-pointer hover:text-[#ff7230] transition ease duration-300"
                 />
               </span>
@@ -391,7 +403,12 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                       htmlFor={`note-delete-confirm-modal-${title}`}
                       className="cursor-pointer"
                     >
-                      <TrashIcon width={isMobile ? 10 : 8} height={isMobile ? 10 : 8} />
+                      <TrashIcon
+                        width={8}
+                        height={8}
+                        // width={isMobile ? 10 : 8}
+                        // height={isMobile ? 10 : 8}
+                      />
                     </label>
                   </li>
                 </Tooltip>
@@ -405,8 +422,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
               >
                 <span className="opacity-[0.7]">
                   <PlusIconOutline
-                    width={isMobile ? 10 : 8}
-                    height={isMobile ? 10 : 8}
+                    width={8}
+                    height={8}
+                    // width={isMobile ? 10 : 8}
+                    // height={isMobile ? 10 : 8}
                   />
                 </span>
               </label>
