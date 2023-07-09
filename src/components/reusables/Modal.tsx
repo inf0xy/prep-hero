@@ -110,7 +110,7 @@ const Modal: React.FC<ModalProps> = ({
       <input type="checkbox" id={id} className="modal-toggle" />
       <div className="modal">
         <div
-          className={`w-fit h-fit p-[1px] rounded overflow-hidden ${
+          className={`modal-with-close-button w-fit h-fit p-[1px] rounded overflow-hidden ${
             theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
           }`}
           style={{

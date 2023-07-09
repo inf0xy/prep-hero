@@ -45,6 +45,28 @@ const NotebookPage = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 896px)' });
   const isMobilePortrait = useMediaQuery({ query: '(max-width: 642px)' });
 
+  const adjustModalPosition = () => {
+    const viewportHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    const modalEl = document.querySelector(
+      '.modal-with-close-button'
+    ) as HTMLDivElement;
+    // Calculate available visible area
+    const visibleArea = viewportHeight - documentHeight;
+
+    // Adjust modal position based on available visible area
+    if (modalEl) {
+      if (visibleArea < 0) {
+        // Keyboard is open, move modal up
+        const offset = Math.abs(visibleArea) + 'px';
+        modalEl.style.top = offset;
+      } else {
+        // Keyboard is closed, reset modal position
+        modalEl.style.top = '0';
+      }
+    }
+  };
+
   useEffect(() => {
     const folders = new Set();
     notes.forEach((el) => {
@@ -60,8 +82,34 @@ const NotebookPage = () => {
     });
     setFolderNames(Array.from(folders) as string[]);
 
+    const createFolderInputEl = document.querySelector('.create-folder-input');
+    const modalEl = document.querySelector('.modal-with-close-button');
+    console.log(createFolderInputEl);
+
+    if (createFolderInputEl && modalEl) {
+      createFolderInputEl.addEventListener('focus', () => {
+        // (modalEl as HTMLDivElement).style.transform = 'translateY(-70%)';
+        adjustModalPosition();
+      });
+
+      createFolderInputEl.addEventListener('blur', () => {
+        // (modalEl as HTMLDivElement).style.transform = 'translateY(0)';
+        adjustModalPosition();
+      });
+    }
+
     return () => {
       dispatch(toggleFullScreen(false));
+      if (createFolderInputEl && modalEl) {
+        createFolderInputEl.removeEventListener('focus', () => {
+          // (modalEl as HTMLDivElement).style.transform = 'translateY(-70%)';
+          adjustModalPosition();
+        });
+        createFolderInputEl.removeEventListener('blur', () => {
+          // (modalEl as HTMLDivElement).style.transform = 'translateY(0)';
+          adjustModalPosition();
+        });
+      }
     };
   }, [dispatch, notes]);
 
@@ -223,6 +271,10 @@ const NotebookPage = () => {
     await handleSubmitNote(undefined, note);
   };
 
+  const handleCreateNewFolderInput = (e: MouseEvent) => {
+    e.target;
+  };
+
   return (
     <>
       <Head>
@@ -331,7 +383,11 @@ const NotebookPage = () => {
             <label className={classes.title}>
               {folderAction === 'create' ? 'New folder' : 'Rename folder'}
             </label>
-            <input ref={folderNameRef} placeholder="Name" />
+            <input
+              className="create-folder-input"
+              ref={folderNameRef}
+              placeholder="Name"
+            />
             <div
               className={`${classes['create-folder-actions']} ${
                 classes[`create-folder-actions--${theme}`]

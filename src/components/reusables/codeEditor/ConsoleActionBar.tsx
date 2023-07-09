@@ -120,6 +120,7 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
       >
         <div className={classes['left-button-group']}>
           <Button
+            disable={!session ? true : false}
             extraStyle={{
               padding: '0 1rem',
               backgroundColor: variables.colorGray700
@@ -148,7 +149,7 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             } p-4`}
           >
             <Button
-              disabled={isLoading || debugging ? true : false}
+              disabled={isLoading || debugging || !session ? true : false}
               extraStyle={{
                 backgroundColor: variables.colorSecondary200,
                 padding: '0 2rem',
@@ -201,7 +202,7 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             </>
           )}
           <Button
-            disabled={isLoading || debugging ? true : false}
+            disabled={isLoading || debugging || !session ? true : false}
             extraStyle={{
               backgroundColor: variables.colorGray500,
               padding: '0 2rem',
@@ -221,7 +222,7 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             Run
           </Button>
           <Button
-            disabled={isLoading || debugging ? true : false}
+            disabled={isLoading || debugging || !session ? true : false}
             extraStyle={{
               backgroundColor: variables.colorPrimary200,
               padding: '0 2rem',
