@@ -60,6 +60,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           loadedSession === null) ||
         ((currentPath === '/dashboard' || currentPath === '/notebook') &&
           loadedSession)
+        // ((currentPath === '/dashboard') &&
+        // loadedSession) || currentPath === '/notebook'
       ) {
         dispatch(setHomePageLoading(false));
         return;

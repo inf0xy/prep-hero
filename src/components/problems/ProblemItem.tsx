@@ -25,7 +25,7 @@ import CheckIcon from '@/components/icons/CheckIcon';
 import NoteIcon from '../icons/NoteIcon';
 import CodeIcon from '../icons/CodeIcon';
 import EditIcon from '../icons/EditIcon';
-import TrashIcon from '../icons/TrashIcon';
+import TrashIconColor from '../icons/TrashIconColor';
 import InProgressIcon from '../icons/InProgressIcon';
 import PlusIconOutline from '../icons/PlusIconOutline';
 import BookmarkOutline from '../icons/BookmarkOutline';
@@ -398,7 +398,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                       htmlFor={`note-delete-confirm-modal-${title}`}
                       className="cursor-pointer"
                     >
-                      <TrashIcon
+                      <TrashIconColor
                         width={isSmallMobile ? 26 : 22}
                         height={isSmallMobile ? 26 : 22}
                       />

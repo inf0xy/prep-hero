@@ -22,7 +22,6 @@ type ModalProps = {
   fullScreenToggle?: boolean;
   showCloseButton?: boolean;
   noBorderRadius?: boolean;
-  availableHeight?: number | undefined;
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -35,8 +34,7 @@ const Modal: React.FC<ModalProps> = ({
   isOpen,
   fullScreenToggle,
   showCloseButton,
-  noBorderRadius,
-  availableHeight
+  noBorderRadius
 }) => {
   const [fullScreen, setFullScreen] = useState(false);
   const { theme, showFullScreen } = useAppSelector((state) => {
@@ -81,6 +79,51 @@ const Modal: React.FC<ModalProps> = ({
     }
   }, [fullScreen, fullScreenToggle]);
 
+  const [modalHeight, setModalHeight] = useState<number | undefined>(undefined);
+  const [virtualKeyboardHeight, setVirtualKeyboardHeight] = useState(0);
+  const [windowHeight, setWindowHeight] = useState(0);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setWindowHeight(window.innerHeight);
+      setModalHeight(window.innerHeight);
+    }
+
+    if ('virtualKeyboard' in navigator) {
+      (navigator.virtualKeyboard as any).overlaysContent = true;
+      (navigator.virtualKeyboard as any).addEventListener(
+        'geometrychange',
+        (event: any) => {
+          const { height } = event.target.boundingRect;
+          setVirtualKeyboardHeight(height);
+        }
+      );
+    }
+
+    return () => {
+      if ('virtualKeyboard' in navigator) {
+        (navigator.virtualKeyboard as any).overlaysContent = false;
+        (navigator.virtualKeyboard as any).removeEventListener(
+          'geometrychange',
+          (event: any) => {
+            const { height } = event.target.boundingRect;
+            setVirtualKeyboardHeight(height);
+          }
+        );
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (windowHeight) {
+      if (virtualKeyboardHeight > 0) {
+        setModalHeight(windowHeight - virtualKeyboardHeight + 70);
+      } else {
+        setModalHeight(windowHeight);
+      }
+    }
+  }, [virtualKeyboardHeight, windowHeight]);
+
   const modalWithoutCloseButton = (
     <div className={`${!isOpen && 'opacity-0'}`}>
       <input
@@ -110,50 +153,57 @@ const Modal: React.FC<ModalProps> = ({
   const modalWithCloseButton = (
     <div>
       <input type="checkbox" id={id} className="modal-toggle" />
-      <div className="modal" style={{ height: `${availableHeight}px` ?? `calc(100vh - 70px)` }}>
+      {windowHeight && (
         <div
-          className={`modal-with-close-button w-fit h-fit p-[1px] rounded overflow-hidden ${
-            theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
-          }`}
+          className="modal"
           style={{
-            borderRadius:
-              noBorderRadius === false || !showFullScreen || isSmallMobile
-                ? '1rem'
-                : 0
+            height: modalHeight
           }}
         >
           <div
-            ref={modalRef}
-            className={`modal-box relative p-0 bg-transparent ${
-              !className?.includes('max-w') ? 'max-w-fit' : ''
-            } ${className}`}
-            style={fullScreenToggle ? modalStyle : {}}
+            className={`modal-with-close-button w-fit h-fit p-[1px] rounded overflow-hidden ${
+              theme === 'dark' ? 'bg-[#2b2b2b]' : 'bg-white'
+            }`}
+            style={{
+              borderRadius:
+                noBorderRadius === false || !showFullScreen || isSmallMobile
+                  ? '1rem'
+                  : 0
+            }}
           >
-            {fullScreenToggle && (
-              <span
-                className="absolute right-10 top-[6.8rem] scale-[86%] z-10 cursor-pointer"
-                onClick={() => setFullScreen(!fullScreen)}
-              >
-                <FullScreenButton />
-              </span>
-            )}
-            {(showCloseButton === undefined || showCloseButton === true) && (
-              <label
-                htmlFor={id}
-                className={`absolute ${buttonPosition} cursor-pointer hover:text-red-300 p-2 rounded-xl duration-300 ease ${
-                  theme === 'dark' ? 'hover:bg-zinc-600' : 'hover:bg-gray-200'
-                } `}
-                onClick={onClose ?? undefined}
-              >
-                <span>
-                  <XIcon width={22} height={22} />
+            <div
+              ref={modalRef}
+              className={`modal-box relative p-0 bg-transparent ${
+                !className?.includes('max-w') ? 'max-w-fit' : ''
+              } ${className}`}
+              style={fullScreenToggle ? modalStyle : {}}
+            >
+              {fullScreenToggle && (
+                <span
+                  className="absolute right-10 top-[6.8rem] scale-[86%] z-10 cursor-pointer"
+                  onClick={() => setFullScreen(!fullScreen)}
+                >
+                  <FullScreenButton />
                 </span>
-              </label>
-            )}
-            {children}
+              )}
+              {(showCloseButton === undefined || showCloseButton === true) && (
+                <label
+                  htmlFor={id}
+                  className={`absolute ${buttonPosition} cursor-pointer hover:text-red-300 p-2 rounded-xl duration-300 ease ${
+                    theme === 'dark' ? 'hover:bg-zinc-600' : 'hover:bg-gray-200'
+                  } `}
+                  onClick={onClose ?? undefined}
+                >
+                  <span>
+                    <XIcon width={22} height={22} />
+                  </span>
+                </label>
+              )}
+              {children}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 

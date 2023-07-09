@@ -45,68 +45,6 @@ const NotebookPage = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 896px)' });
   const isMobilePortrait = useMediaQuery({ query: '(max-width: 642px)' });
 
-  // const adjustModalPosition = () => {
-  //   const viewportHeight = window.innerHeight;
-  //   const documentHeight = document.documentElement.scrollHeight;
-  //   const modalEl = document.querySelector(
-  //     '.modal-with-close-button'
-  //   ) as HTMLDivElement;
-  //   // Calculate available visible area
-  //   const visibleArea = viewportHeight - documentHeight;
-
-  //   // Adjust modal position based on available visible area
-  //   if (modalEl) {
-  //     if (visibleArea < 0) {
-  //       // Keyboard is open, move modal up
-  //       const offset = Math.abs(visibleArea) + 'px';
-  //       modalEl.style.top = offset;
-  //     } else {
-  //       // Keyboard is closed, reset modal position
-  //       modalEl.style.top = '0';
-  //     }
-  //   }
-  // };
-
-  // ! TESTING SOMETHING
-  const [modalHeight, setModalHeight] = useState<number | undefined>(undefined);
-
-  useEffect(() => {
-      if (typeof window !== 'undefined') {
-        if ('virtualKeyboard' in navigator) {
-          (navigator.virtualKeyboard as any).overlaysContent = true;
-          // (navigator.virtualKeyboard as any).addEventListener(
-          //   'geometrychange',
-          //   (event: any) => {
-          //     const { x, y, width, height } = event.target.boundingRect;
-          //     setModalHeight(window.innerHeight - 70 - height);
-          //   }
-          // );
-          (navigator.virtualKeyboard as any).ongeometrychange = (event: any) => {
-            const { x, y, width, height } = event.target.boundingRect;
-            setModalHeight(window.innerHeight - 70 - height);
-          }
-        } else {
-          setModalHeight(window.innerHeight - 70);
-        }
-      }
-
-      return () => {
-        if ('virtualKeyboard' in navigator) {
-          (navigator.virtualKeyboard as any).overlaysContent = false;
-          (navigator.virtualKeyboard as any).ongeometrychange = null;
-          // (navigator.virtualKeyboard as any).removeEventListener(
-          //   'geometrychange',
-          //   (event: any) => {
-          //     const { x, y, width, height } = event.target.boundingRect;
-          //     setModalHeight(window.innerHeight - height);
-          //   }
-          // );
-        }
-      }
-  }, []);
-
-  // ! //////////////////////////
-
   useEffect(() => {
     const folders = new Set();
     notes.forEach((el) => {
@@ -122,34 +60,8 @@ const NotebookPage = () => {
     });
     setFolderNames(Array.from(folders) as string[]);
 
-    // const createFolderInputEl = document.querySelector('.create-folder-input');
-    // const modalEl = document.querySelector('.modal-with-close-button');
-    // console.log(createFolderInputEl);
-
-    // if (createFolderInputEl && modalEl) {
-    //   createFolderInputEl.addEventListener('focus', () => {
-    //     // (modalEl as HTMLDivElement).style.transform = 'translateY(-70%)';
-    //     adjustModalPosition();
-    //   });
-
-    //   createFolderInputEl.addEventListener('blur', () => {
-    //     // (modalEl as HTMLDivElement).style.transform = 'translateY(0)';
-    //     adjustModalPosition();
-    //   });
-    // }
-
     return () => {
       dispatch(toggleFullScreen(false));
-      // if (createFolderInputEl && modalEl) {
-      //   createFolderInputEl.removeEventListener('focus', () => {
-      //     // (modalEl as HTMLDivElement).style.transform = 'translateY(-70%)';
-      //     adjustModalPosition();
-      //   });
-      //   createFolderInputEl.removeEventListener('blur', () => {
-      //     // (modalEl as HTMLDivElement).style.transform = 'translateY(0)';
-      //     adjustModalPosition();
-      //   });
-      // }
     };
   }, [dispatch, notes]);
 
@@ -410,7 +322,6 @@ const NotebookPage = () => {
           type="close-button"
           showCloseButton={false}
           className="min-w-[30rem] min-h-[15rem]"
-          availableHeight={modalHeight}
         >
           <div
             className={`${classes['form__create-folder']} ${
