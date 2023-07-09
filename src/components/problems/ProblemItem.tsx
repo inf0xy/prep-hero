@@ -313,10 +313,10 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           <span onClick={() => setShowSolutionModal(true)}>
             <label htmlFor={`modal-solution-${title}`} className="w-fit">
               <CodeIcon
-                width={8}
-                height={8}
-                // width={isMobile ? 10 : 8}
-                // height={isMobile ? 10 : 8}
+                // width={8}
+                // height={8}
+                width={isMobile ? 10 : 8}
+                height={isMobile ? 10 : 8}
                 className="cursor-pointer"
               />
             </label>
