@@ -331,8 +331,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
               <>
                 {attempted_problems.some((el) => el.title === title) ? (
                   <InProgressIcon
-                    width={19}
-                    height={19}
+                    width={isMobile ? 23 : 19}
+                    height={isMobile ? 23 : 19}
                     data-tooltip="Attempted"
                   />
                 ) : (
@@ -386,8 +386,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                     >
                       <span className="opacity-[0.7]">
                         <PreviewIconColor
-                          width={isMobile ? 27 : 22}
-                          height={isMobile ? 27 : 22}
+                          width={isMobile ? 26 : 22}
+                          height={isMobile ? 26 : 22}
                         />
                       </span>
                     </label>
@@ -404,10 +404,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                       className="cursor-pointer"
                     >
                       <TrashIcon
-                        width={8}
-                        height={8}
-                        // width={isMobile ? 10 : 8}
-                        // height={isMobile ? 10 : 8}
+                        width={isMobile ? 26 : 22}
+                        height={isMobile ? 26 : 22}
                       />
                     </label>
                   </li>

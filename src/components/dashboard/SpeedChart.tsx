@@ -85,7 +85,7 @@ const SpeedChart = () => {
     const problems = submissions.filter((el) =>
       hardProblems.includes(el.title)
     );
-    setUserData(getSolveTimes(problems, variables.colorError500));
+    setUserData(getSolveTimes(problems, variables.colorError300));
   };
 
   const options: any = {

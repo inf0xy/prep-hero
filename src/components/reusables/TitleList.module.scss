@@ -167,7 +167,8 @@
 /**********************************/
 @media (max-width: 26em) {
   .first-col-icon {
-    scale: 120%;
+    scale: 105%;
+    transform: translateY(1px);
   }
 
   .second-col-icon {
@@ -177,5 +178,19 @@
   .title-content {
     line-height: 1.3;
     transform: translateY(1px);
+  }
+
+  .top-bar {
+    .title__searchbar {
+      div:first-child {
+        width: 90%;
+      }
+    }
+    div:last-child {
+      margin-top: 1rem;
+      ul {
+        margin-right: 1rem;
+      }
+    }
   }
 }

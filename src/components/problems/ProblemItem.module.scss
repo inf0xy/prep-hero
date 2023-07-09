@@ -132,6 +132,7 @@
   cursor: pointer;
   margin-left: 0.5rem;
 }
+
 .add {
   position: absolute;
   top: 1.5rem;
@@ -319,20 +320,15 @@
   }
 
   .add {
-    position: absolute;
     top: 1rem;
-    left: 4rem;
-    gap: 0.8rem;
-    font-size: 1.6rem;
-    color: $color-gray-700;
   }
 
   .add label {
-    margin-top: 3px;
+    margin-top: 0.5rem;
   }
 
   .add p {
     font-size: 1.6rem;
-    margin-top: 3px;
+    margin-top: 0.6rem;
   }
 }

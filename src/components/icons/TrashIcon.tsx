@@ -1,34 +1,18 @@
+import Image from 'next/image';
+
 type TrashIconProps = {
-  className?: string;
   width?: number;
   height?: number;
-  extraStyle?: object;
 };
 
-const TrashIcon: React.FC<TrashIconProps> = ({
-  className,
-  width,
-  height,
-  extraStyle
-}) => {
+const TrashIcon: React.FC<TrashIconProps> = ({ width, height }) => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className={`w-${width ? width : '6'} h-${
-        height ? height : '6'
-      } ${className}`}
-      style={extraStyle}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-      />
-    </svg>
+    <Image
+      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEIUlEQVR4nO1ZT6hWVRC/RgsrN/0jrRZF/4PUTbapvqBevffN3HPOzO1SSaBikbXQKAxC5YEKQtZGKLJFtqo2/XlFRX9EyHBRbbSNLkqhsj+g1aIoXBRz/5wz3O59T9/7zusLvoGzmTPfnPnNzJmZc78kGdGIRjQiocnJybMMuIcN0DsW6eP2xVMW6aEkSRYkw2c8v2uR/z6dJSDlN8mwkHj+dI33K+W1ybBQmTbeuJcM8F1tS/aU3FQyLGSQ9nnDILujS072fBoh7UuGhYYagDH5jQbore7KUlSXk8Ew/rJLrtzzKXRyOp1ypuu7G+YMwCK/ecYXdHDrjblHAHnTfwUgBX56zgCKKPTt8qKKAO8NuU47uqrNmS4LtCPo5b0Fr2+XJ4Mmg7Q7eIgeGZxety40OX5xUHr/fRDwTnVZNw5KrwV+SkX2mSQWGeTN6qDtNT9N86sN8lZEvl6JL5AoNSNVVDXkrW7cXRUA0HblmM0RAdB6ddAubwDyBxWoz2qeQ9fzsn2+3esAPlClyvtBL+9S/WF9TABr1EC2Rxm1vzr8awXKqYriPB/om0r20yBLr6gZaXU0ABY5a6vRFvijKirHZwSA9EPlgA/bek3adxwNQDWQ1RH4RBkwVaXFLzMBMEi/VuXybeWAUJ4xuzMaAAduharXnwdg9HrF/3NGAEB/VbzXAgD6opZFpJujAZAqo6rQYWXUnppfP1TaAMiecsDL/vfIR3xkTX5dNADGmEtVFfL5bpBeCB7Ec7sAjI09eJ5qWM8374UsuoeWRAOQ5/ki5cHfvQFAz9V859yFXQAQ8SJVLp/1DgD6o+YLyGgAyubEp+rDer3e2c1GBJBf1gWAxulylYLbhCc6lNyp6A9+Pfvnd+cXNDu0dOUuAAB8jUrBTcKTiKmonIhqfGksHfOGWXtFYSzwk543YW/qApCm2VIF4ImSl1+p7sXReQDAh4K3s6WlsfSYvwPgVnQBMP3sliDHjwqPgJaptDoYHYDMO94IdLc2RwyZgboA6DdxPTJYyG5TEdgfHYAMYWFIIyh5dH8YBWi8C4BDN6F49xW81KG6A+9FByAd1Hs7zR4QXpo6q0YM6gIgc46SM5XcSsV7NTqAtldZmtJYE5QY2DRW9sL9obESgLwZfAR2xwfQ8irLx/OLLfCPMqjVZbTfzxdbpO8M8rdpml5SAJhw11qk36TzSlNLyqKwUd2BndEBWKAtzWYk1OutWtjsojL7ND/iSjfP8/wcpW+b0rclOgADvKHtVTZrfaheY8AbBmPldAcC3asAHBLPz1ZXr7dqoUH+Sl32LIlNMj7o4csCfz/9Z8dpPh8iH9fDIQCcn8wHWaDHldcGskzMx3wbFX8nIf08Z8OBf6r+dpp/Kkbh6rPjbBYBLatH8hGNaEQjSv6X9A/87FLYbWdr8QAAAABJRU5ErkJggg=="
+      width={width ? width : 20}
+      height={height ? height : 20}
+      alt="trash icon"
+    />
   );
 };
 

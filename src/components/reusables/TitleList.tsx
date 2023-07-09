@@ -143,7 +143,7 @@ const TitleList: React.FC<TitleListProps> = ({
 
   const getStatusIcon = (title: string) => {
     if (submissions.some((el) => el.title === title && el.accepted)) {
-      return <CheckIcon width="17" height="17" />;
+      return <CheckIcon width="18" height="18" />;
     } else if (submissions.some((el) => el.title === title && !el.accepted)) {
       return <InProgressIcon width={19} height={19} />;
     }
