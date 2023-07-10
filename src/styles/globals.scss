@@ -477,9 +477,18 @@ body {
 
     ul:nth-child(2) {
       align-self: flex-end !important;
-      scale: 150%;
+      scale: 140%;
       margin-right: 2.5rem;
     }
+  }
+}
+
+/**********************************/
+/* iPhone XR                      */
+/**********************************/
+@media (max-width: 414px) {
+  .modal-note .w-md-editor {
+    padding: 1rem 0;
   }
 }
 
@@ -488,18 +497,27 @@ body {
 /**********************************/
 @media (max-width: 393px) {
   .modal-note .w-md-editor {
-    padding: 0;
+    padding: 1rem 0;
   }
 
   .w-md-editor-toolbar {
     ul:nth-child(1) {
-      margin-left: 1.6rem;
+      margin-left: 2.5rem;
     }
   }
 }
 
 /**********************************/
-/* BELOW 376px                    */
+/* iPhone 12 Pro                  */
+/**********************************/
+@media (max-width: 390px) {
+  .w-md-editor-toolbar {
+    margin-left: 1rem;
+  }
+}
+
+/**********************************/
+/* iPhone SE                      */
 /**********************************/
 @media (max-width: 376px) {
   .w-md-editor-toolbar {
@@ -507,6 +525,7 @@ body {
       scale: 115%;
       display: flex;
       gap: 1px;
+      margin-left: 1.6rem;
     }
   }
 }

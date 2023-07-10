@@ -25,6 +25,7 @@ import classes from './TitleList.module.scss';
 
 type TitleListProps = {
   listType: 'problems' | 'notes' | string;
+  listProgress: 'saved' | 'completed';
   titles: string[];
   showTopBar: boolean;
   showHeader: boolean;
@@ -42,6 +43,7 @@ type TitleListProps = {
 
 const TitleList: React.FC<TitleListProps> = ({
   listType,
+  listProgress,
   titles,
   showTopBar,
   showHeader,
@@ -158,7 +160,7 @@ const TitleList: React.FC<TitleListProps> = ({
   useEffect(() => {
     handleSearch();
   }, [handleSearch, searchTerm]);
-
+  console.log(listType);
   const renderedTitles = currentTitles.map((title) => (
     <div key={title} className={classes['title__cell']}>
       {firstIconText !== undefined && (
@@ -203,7 +205,17 @@ const TitleList: React.FC<TitleListProps> = ({
         onClick={listType === 'notes' ? () => handleOpenNote(title) : undefined}
       >
         {listType !== 'notes' ? (
-          <a href={`/problem/${title}`}>{title}</a>
+          <a
+            href={`/problem/${title}`}
+            style={{
+              minWidth: listProgress === 'completed' ? '40vw' : undefined,
+              width: listProgress === 'completed' ? 'fit-content' : undefined,
+              maxWidth:
+                listProgress === 'completed' ? 'calc(100vw - 130px)' : undefined
+            }}
+          >
+            {title}
+          </a>
         ) : (
           <label
             htmlFor={`modal__notebook-note-${title}`}

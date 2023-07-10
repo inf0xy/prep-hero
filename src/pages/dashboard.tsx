@@ -213,6 +213,7 @@ const DashBoard = () => {
             <TitleList
               listType="problems"
               titles={listType === 'saved' ? savedList : completedList}
+              listProgress={listType}
               showTopBar={true}
               showHeader={true}
               firstIconText="Status"
@@ -222,13 +223,13 @@ const DashBoard = () => {
               firstIconAction={undefined}
               secondIconAction={
                 listType === 'saved'
-                  ? (title) => dispatch(removeProblemFromList(title!))
-                  : undefined
+                ? (title) => dispatch(removeProblemFromList(title!))
+                : undefined
               }
               actionBar={
                 listType === 'saved' ? (
                   <TitleListActionBar setTitles={setSavedList} />
-                ) : (
+                  ) : (
                   completedListActionBar
                 )
               }
