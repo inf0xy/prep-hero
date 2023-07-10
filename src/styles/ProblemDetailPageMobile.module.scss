@@ -148,5 +148,6 @@
   .description {
     min-height: calc(100vh - 13.5rem);
     height: calc(100vh - 13.5rem);
+    overflow-y: auto;
   }
 }
