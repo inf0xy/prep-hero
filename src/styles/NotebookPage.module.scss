@@ -268,7 +268,7 @@
 
   & > div {
     min-height: 100%;
-    height: fit-content;
+    height: calc(100vh - 17rem);
     width: 100%;
     padding: 3rem;
 

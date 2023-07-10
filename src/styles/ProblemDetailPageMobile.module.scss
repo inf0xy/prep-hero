@@ -136,8 +136,17 @@
 /* BELOW 769px                    */
 /**********************************/
 @media (max-width: 48em) {
+  .problem-detail-page {
+    overflow-y: hidden;
+  }
+
   .timer-alert {
     width: 34rem;
     top: 0;
+  }
+
+  .description {
+    min-height: calc(100vh - 13.5rem);
+    height: calc(100vh - 13.5rem);
   }
 }
