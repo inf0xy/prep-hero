@@ -3,6 +3,7 @@ import classes from './Button.module.scss';
 import { useAppSelector } from '@/hooks/hooks';
 
 type ButtonProps = {
+  id?: string;
   color?: string;
   children: ReactNode;
   className?: string;
@@ -16,6 +17,7 @@ const defaultProps = {
 };
 
 const Button: React.FC<ButtonProps> = ({
+  id,
   color,
   children,
   className,
@@ -30,6 +32,8 @@ const Button: React.FC<ButtonProps> = ({
   };
   return (
     <button
+      id={id ?? ''}
+      aria-label={id ?? ''}
       style={buttonStyle}
       className={`${classes[`custom-button--${theme}`]} ${
         classes[`custom-button--${theme}--${color}`]

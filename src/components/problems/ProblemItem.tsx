@@ -201,6 +201,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         </Alert>
       )}
       <div
+        role="row"
+        aria-label="row"
         className={`${classes.problem} ${
           oddCell ? classes[`problem--${theme}--odd-cell`] : undefined
         }`}
@@ -208,23 +210,33 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
         {!isTabletOrMobile && (
           <>
             <div
+              role="cell"
+              aria-label="solved content cell"
               className={classes['solved-content']}
               style={solvedStatusStyle}
             >
               {session?.session.user.account_type === 'user' ? (
                 <>
                   {attempted_problems.some((el) => el.title === title) ? (
-                    <InProgressIcon
-                      width={19}
-                      height={19}
-                      data-tooltip="Attempted"
-                    />
+                    <span id="in-progress-icon" aria-label="in progress">
+                      <InProgressIcon
+                        width={19}
+                        height={19}
+                        data-tooltip="Attempted"
+                      />
+                    </span>
                   ) : (
-                    <CheckIcon data-tooltip="Solved" width="18" height="18" />
+                    <span id="completed-icon" aria-label="completed">
+                      <CheckIcon data-tooltip="Solved" width="18" height="18" />
+                    </span>
                   )}
                 </>
               ) : (
-                <span onClick={handleEditProblem}>
+                <span
+                  role="button"
+                  arial-label="edit"
+                  onClick={handleEditProblem}
+                >
                   <EditIcon
                     width={7}
                     height={7}
@@ -236,7 +248,11 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
             <div className={classes['category-content']}>{category}</div>
           </>
         )}
-        <div className={classes['title-content']}>
+        <div
+          role="cell"
+          aria-label="title cell"
+          className={classes['title-content']}
+        >
           {session && session.session.user.account_type === 'user' && (
             <div className={classes['action-icons']}>
               {list.includes(title!) ? (
@@ -246,6 +262,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   className="w-fit px-4 py-2"
                 >
                   <span
+                    role="button"
+                    aria-label="remove problem"
                     className={classes['bookmark-icon']}
                     data-tooltip="Remove"
                     onClick={() => dispatch(removeProblemFromList(title!))}
@@ -264,6 +282,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   className="w-[9rem] py-2"
                 >
                   <span
+                    role="button"
+                    aria-label="add problem"
                     className={classes['bookmark-icon']}
                     onClick={() => dispatch(addProblemToList(title!))}
                   >
@@ -273,6 +293,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
               )}
               <Tooltip text="Note" direction="top" className="w-fit px-6 py-2">
                 <span
+                  role="button"
+                  aria-label="open note"
                   className={classes['note-icon']}
                   onClick={() => setShowProblemNote(!showProblemNote)}
                 >
@@ -286,16 +308,28 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           </Link>
         </div>
         <div
+          role="cell"
+          aria-label="difficulty cell"
           className={classes['difficulty-content']}
           style={{ color: colors[difficulty!].inner }}
         >
           {difficulty}
         </div>
         {isTabletOrMobile && (
-          <div className={classes['category-content']}>{category}</div>
+          <div
+            role="cell"
+            aria-label="category cell"
+            className={classes['category-content']}
+          >
+            {category}
+          </div>
         )}
         <div className={classes['solution-content']}>
-          <span onClick={() => setShowSolutionModal(true)}>
+          <span
+            role="button"
+            aria-label="open solution"
+            onClick={() => setShowSolutionModal(true)}
+          >
             <label htmlFor={`modal-solution-${title}`} className="w-fit">
               <CodeIcon
                 width={isSmallMobile ? 10 : 8}
@@ -305,29 +339,42 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
             </label>
           </span>
         </div>
-        <div className={`${classes['companies-content']}`}>
+        <div
+          role="cell"
+          aria-label="companies cell"
+          className={`${classes['companies-content']}`}
+        >
           <LogoList companyNames={companies!} className="translate-x-8" />
         </div>
         {isTabletOrMobile && (
-          <div className={classes['solved-content']} style={solvedStatusStyle}>
+          <div
+            role="cell"
+            aria-label="solved content cell"
+            className={classes['solved-content']}
+            style={solvedStatusStyle}
+          >
             {session?.session.user.account_type === 'user' ? (
               <>
                 {attempted_problems.some((el) => el.title === title) ? (
-                  <InProgressIcon
-                    width={isSmallMobile ? 23 : 19}
-                    height={isSmallMobile ? 23 : 19}
-                    data-tooltip="Attempted"
-                  />
+                  <span id="in-progress-icon" aria-label="in progress">
+                    <InProgressIcon
+                      width={isSmallMobile ? 23 : 19}
+                      height={isSmallMobile ? 23 : 19}
+                      data-tooltip="Attempted"
+                    />
+                  </span>
                 ) : (
-                  <CheckIcon
-                    data-tooltip="Solved"
-                    width={isSmallMobile ? '22' : '18'}
-                    height={isSmallMobile ? '22' : '18'}
-                  />
+                  <span id="completed-icon" aria-label="completed">
+                    <CheckIcon
+                      data-tooltip="Solved"
+                      width={isSmallMobile ? '22' : '18'}
+                      height={isSmallMobile ? '22' : '18'}
+                    />
+                  </span>
                 )}
               </>
             ) : (
-              <span onClick={handleEditProblem}>
+              <span role="button" aria-label="edit" onClick={handleEditProblem}>
                 <EditIcon
                   width={7}
                   height={7}
@@ -356,6 +403,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   className="w-[9rem] py-4"
                 >
                   <li
+                    role="button"
+                    aria-label="view note"
                     className={classes['view-note']}
                     onClick={(e) => handleNoteAction('view', e)}
                   >
@@ -377,7 +426,11 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   direction="top"
                   className="w-fit px-6 py-4"
                 >
-                  <li className={classes.clear}>
+                  <li
+                    role="button"
+                    aria-label="delete note"
+                    className={classes.clear}
+                  >
                     <label
                       htmlFor={`note-delete-confirm-modal-${title}`}
                       className="cursor-pointer"
@@ -394,6 +447,8 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
           ) : (
             <div className={classes.add}>
               <label
+                role="button"
+                aria-label="add note"
                 htmlFor={`modal__problems-note-${title}`}
                 onClick={(e) => handleNoteAction('add', e)}
               >

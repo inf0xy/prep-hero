@@ -18,6 +18,8 @@ const Auth = () => {
       className={`${classes['auth-page']} ${classes[`auth-page--${theme}`]}`}
     >
       <button
+        id='switch theme'
+        aria-label='switch theme'
         className={classes['auth__theme-button']}
         onClick={() => dispatch(setTheme())}
       >

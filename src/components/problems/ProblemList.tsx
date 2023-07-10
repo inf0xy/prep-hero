@@ -33,23 +33,38 @@ const ProblemList: React.FC<ProblemListProps> = ({
   return (
     <div
       role="table"
+      aria-label="table"
       className={`${classes['problems-table']} ${
         classes[`problems-table--${theme}`]
       }`}
     >
-      <div className={`${classes['table-header']} ${classes[`table-header--${theme}`]}`}>
+      <div
+        role="rowheader"
+        aria-label="row header"
+        className={`${classes['table-header']} ${
+          classes[`table-header--${theme}`]
+        }`}
+      >
         {!isMobile && (
           <>
-            <div role="row" className={classes['solved-header']}>
+            <div
+              role="columnheader"
+              aria-label="column header"
+              className={classes['solved-header']}
+            >
               <div>
-                {session?.session.user.account_type === 'admin'
-                  ? 'Edit'
-                  : ''}
+                {session?.session.user.account_type === 'admin' ? 'Edit' : ''}
               </div>
             </div>
-            <div role="row" className={classes['category-header']}>
+            <div
+              role="columnheader"
+              aria-label="column header"
+              className={classes['category-header']}
+            >
               <span>Category</span>
               <span
+                role="button"
+                aria-label="sort category"
                 className="cursor-pointer"
                 onClick={() => onSort('category')}
               >
@@ -58,15 +73,30 @@ const ProblemList: React.FC<ProblemListProps> = ({
             </div>
           </>
         )}
-        <div role="row" className={classes['title-header']}>
+        <div
+          role="columnheader"
+          aria-label="column header"
+          className={classes['title-header']}
+        >
           <span>Title</span>
-          <span className="cursor-pointer" onClick={() => onSort('title')}>
+          <span
+            role="button"
+            aria-label="sort title"
+            className="cursor-pointer"
+            onClick={() => onSort('title')}
+          >
             <SortIcon width={14} height={14} />
           </span>
         </div>
-        <div role="row" className={classes['difficulty-header']}>
+        <div
+          role="columnheader"
+          aria-label="column header"
+          className={classes['difficulty-header']}
+        >
           <span>Difficulty</span>
           <span
+            role="button"
+            aria-label="sort difficulty"
             className="cursor-pointer pt-[0.5px]"
             onClick={() => onSort('difficulty')}
           >
@@ -79,14 +109,26 @@ const ProblemList: React.FC<ProblemListProps> = ({
             <SortIcon width={14} height={14} />
           </div>
         )}
-        <div role="row" className={classes['solution-header']}>
+        <div
+          role="columnheader"
+          aria-label="column header"
+          className={classes['solution-header']}
+        >
           <div>Solution</div>
         </div>
-        <div role="row" className={classes['companies-header']}>
+        <div
+          role="columnheader"
+          aria-label="column header"
+          className={classes['companies-header']}
+        >
           <div>Companies</div>
         </div>
         {isMobile && (
-          <div role="row" className={classes['solved-header']}>
+          <div
+            role="columnheader"
+            aria-label="column header"
+            className={classes['solved-header']}
+          >
             <div>
               {session?.session.user.account_type === 'admin'
                 ? 'Edit'
@@ -95,7 +137,7 @@ const ProblemList: React.FC<ProblemListProps> = ({
           </div>
         )}
       </div>
-      <div role="table-body" className={classes['table-body']}>
+      <div role="rowgroup" className={classes['table-body']}>
         {renderedProblems}
       </div>
     </div>

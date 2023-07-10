@@ -102,6 +102,8 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
             <>
               {session && (
                 <button
+                  id="saved list"
+                  aria-label="saved list"
                   className={classes['saved-list-button']}
                   onClick={() => dispatch(toggleSavedList())}
                 >
@@ -118,11 +120,15 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
                   backgroundColor: variables.darkBackground200
                 }}
               >
-                <ShuffleButton />
+                <span role="button" aria-label="pick random">
+                  <ShuffleButton />
+                </span>
               </Tooltip>
             </>
           ) : (
             <button
+              id="code editor"
+              aria-label="code editor"
               className={`${!session && 'translate-x-[-2.5rem]'} ${
                 classes['show-editor-button']
               } ${classes[`show-editor-button--${theme}`]} ${
@@ -156,7 +162,7 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
             </span>
             <div className="dropdown dropdown-bottom dropdown-end self-center pt-[1px]">
               <label tabIndex={0} className="cursor-pointer">
-                <span>
+                <span role="button" aria-label="timer">
                   <ClockIcon
                     height={!isMobile ? 23 : 26}
                     width={!isMobile ? 23 : 26}

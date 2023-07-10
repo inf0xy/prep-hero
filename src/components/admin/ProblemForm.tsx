@@ -423,6 +423,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
       </form>
       <div className={classes['form-actions']}>
         <Button
+          id='back'
           color="gray"
           className="self-center"
           extraStyle={{ padding: '1rem 4.6rem' }}
@@ -433,6 +434,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({ problem }) => {
           Back
         </Button>
         <Button
+          id='submit new problem'
           className="self-center"
           extraStyle={{ padding: '1rem 4rem' }}
           onClick={handleSubmit}
