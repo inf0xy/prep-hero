@@ -25,7 +25,7 @@ type DebuggerProps = {
 };
 
 // const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-const BACKEND_URL = 'wss://prep-hero-server.duckdns.org';
+const BACKEND_URL = 'https://prep-hero-server.duckdns.org';
 
 const Debugger: React.FC<DebuggerProps> = ({
   socketConnection,
@@ -94,7 +94,8 @@ const Debugger: React.FC<DebuggerProps> = ({
   }, [windowHeight]);
 
   useEffect(() => {
-    const socket = io(`${BACKEND_URL}`);
+    // const socket = io(`${BACKEND_URL}`);
+    const socket = io('https://prep-hero-server.duckdns.org');
     setSocketConnection(socket);
 
     socket.on('startDebugging', (data) => {
