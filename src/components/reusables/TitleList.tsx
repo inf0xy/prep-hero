@@ -208,7 +208,7 @@ const TitleList: React.FC<TitleListProps> = ({
           <a
             href={`/problem/${title}`}
             style={{
-              minWidth: listProgress === 'completed' ? '40vw' : undefined,
+              minWidth: listProgress === 'completed' ? 'calc(100vw - 100px)' : undefined,
               width: listProgress === 'completed' ? 'fit-content' : undefined,
               maxWidth:
                 listProgress === 'completed' ? 'calc(100vw - 130px)' : undefined
