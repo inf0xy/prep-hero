@@ -97,7 +97,7 @@ const Debugger: React.FC<DebuggerProps> = ({
     const socket = io(`${BACKEND_URL}`);
 console.log(socket);
     setSocketConnection(socket);
-
+dispatch(setActionAvailable(true));
     socket.on('startDebugging', (data) => {
       if (data) {
         const {
