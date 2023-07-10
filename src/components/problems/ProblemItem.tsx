@@ -451,6 +451,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
               setValue={setNoteContent}
               onCloseNote={handleCloseNoteModal}
               previewMode={noteAction === 'view' ? 'preview' : 'edit'}
+              fullScreen={isMobile ? true : false}
             />
           )}
         </div>
