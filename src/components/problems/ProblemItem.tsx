@@ -59,7 +59,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   );
   const [showNote, setShowNote] = useState(false);
   const [noteAction, setNoteAction] = useState<string | undefined>(undefined);
-  const [savedList, setSavedList] = useState<string[]>([]);
 
   const {
     list_names,
@@ -118,15 +117,6 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
   const isSmallMobile = useMediaQuery({ query: '(max-width: 416px)' });
 
   const [currentModal, setCurrentModal] = useState('');
-
-  useEffect(() => {
-    if (
-      list.every((el) => !savedList.includes(el)) &&
-      savedList.every((el) => !list.includes(el))
-    ) {
-      setSavedList(list);
-    }
-  }, [list, savedList]);
 
   useEffect(() => {
     if (!showNotes) {
@@ -258,10 +248,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                   <span
                     className={classes['bookmark-icon']}
                     data-tooltip="Remove"
-                    onClick={() => {
-                      setSavedList((prev) => prev.filter((el) => el !== title));
-                      dispatch(removeProblemFromList(title!));
-                    }}
+                    onClick={() => dispatch(removeProblemFromList(title!))}
                   >
                     <BookmarkFill
                       width={8}
@@ -278,10 +265,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({
                 >
                   <span
                     className={classes['bookmark-icon']}
-                    onClick={() => {
-                      setSavedList(prev => [...prev, title!]);
-                      dispatch(addProblemToList(title!));
-                    }}
+                    onClick={() => dispatch(addProblemToList(title!))}
                   >
                     <BookmarkOutline width={8} height={8} />
                   </span>

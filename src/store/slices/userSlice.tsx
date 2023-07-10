@@ -16,6 +16,7 @@ import {
   deleteFolder,
   renameNote
 } from './notesSlice';
+import { useAppDispatch } from '@/hooks/hooks';
 
 interface User {
   notes: Note[];
@@ -69,6 +70,7 @@ export const addProblemToList = createAsyncThunk(
     if (!session) {
       throw new Error('Unauthorized');
     }
+
     const { data } = await axios.post<AddProblemToListResponse>(
       '/api/users/list',
       {

@@ -25,7 +25,7 @@ import classes from './TitleList.module.scss';
 
 type TitleListProps = {
   listType: 'problems' | 'notes' | string;
-  listProgress: 'saved' | 'completed';
+  listProgress?: 'saved' | 'completed';
   titles: string[];
   showTopBar: boolean;
   showHeader: boolean;
