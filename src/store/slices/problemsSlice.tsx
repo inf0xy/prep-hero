@@ -25,6 +25,7 @@ interface ProblemState {
   easyProblemsCount: number;
   mediumProblemsCount: number;
   hardProblemsCount: number;
+  testTitles: string[];
   isLoading: boolean;
   error: undefined | string;
 }
@@ -61,6 +62,14 @@ export const getProblemCounts = createAsyncThunk(
   }
 );
 
+export const getTestTitles = createAsyncThunk(
+  'problems/getTestTitles',
+  async () => {
+    const { data } = await axios.get('/api/problems/titles');
+    return data;
+  }
+);
+
 const initialState: ProblemState = {
   selectedProblem: {
     list_names: undefined,
@@ -79,6 +88,7 @@ const initialState: ProblemState = {
   easyProblemsCount: 0,
   mediumProblemsCount: 0,
   hardProblemsCount: 0,
+  testTitles: [],
   isLoading: false,
   error: undefined
 };
@@ -137,6 +147,21 @@ const problemsSlice = createSlice({
       state.allProblemsCount = easyCount + mediumCount + hardCount;
     });
     builder.addCase(getProblemCounts.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(getTestTitles.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getTestTitles.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = undefined;
+      const { testTitles } = action.payload;
+      if (testTitles) {
+        state.testTitles = testTitles;
+      }
+    });
+    builder.addCase(getTestTitles.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message;
     });

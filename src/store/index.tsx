@@ -19,6 +19,7 @@ import notesSlice, {
 } from './slices/notesSlice';
 import problemsReducer, {
   setSelectedProblem,
+  getTestTitles,
   addProblem,
   updateProblem,
   getProblemCounts
@@ -74,6 +75,7 @@ export {
   deleteFolder,
   renameNote,
   setSelectedProblem,
+  getTestTitles,
   addProblem,
   updateProblem,
   getProblemCounts,

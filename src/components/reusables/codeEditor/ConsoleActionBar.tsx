@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import { useMediaQuery } from 'react-responsive';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import useDebugger from '@/hooks/useDebugger';
@@ -55,24 +56,37 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
   handleRunCodeManually
 }) => {
   const { data: session } = useSession();
-  const { theme, duration, timerDuration, debugging, exitingDebugging } =
-    useAppSelector((state) => {
-      const { theme } = state.theme;
-      const { duration, timerDuration } = state.user;
-      const { debugging, breakpoints, exitingDebugging } = state.debugger;
-      return {
-        theme,
-        duration,
-        timerDuration,
-        debugging,
-        breakpoints,
-        exitingDebugging
-      };
-    });
+  const {
+    theme,
+    duration,
+    selectedProblem,
+    testTitles,
+    timerDuration,
+    debugging,
+    exitingDebugging
+  } = useAppSelector((state) => {
+    const { theme } = state.theme;
+    const { duration, timerDuration } = state.user;
+    const { selectedProblem, testTitles } = state.problems;
+    const { debugging, breakpoints, exitingDebugging } = state.debugger;
+    return {
+      theme,
+      duration,
+      selectedProblem,
+      testTitles,
+      timerDuration,
+      debugging,
+      breakpoints,
+      exitingDebugging
+    };
+  });
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
     null
   );
+
+  const router = useRouter();
+  const currentProblemTitle = decodeURI(router.asPath).slice(9);
 
   const dispatch = useAppDispatch();
   const { handleExit } = useDebugger();
@@ -171,79 +185,130 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             </Button>
           </Tooltip>
         </div>
-        <div className={classes['right-button-group']}>
-          {!isMobile && (
-            <>
-              {!exitingDebugging ? (
-                <Tooltip
-                  text={debugging ? 'Exit' : 'Debug'}
-                  direction="top"
-                  className="w-fit px-6 py-4 left-4"
-                >
-                  <button onClick={handleDebugButton}>
-                    {debugging ? (
-                      <ExitIcon width={17} height={17} />
-                    ) : (
-                      <DebugIcon width={21} height={21} />
-                    )}
-                  </button>
-                </Tooltip>
-              ) : (
-                <Tooltip
-                  text="Exiting debugging"
-                  direction="top"
-                  className="w-[14rem] py-4 left-4"
-                >
-                  <span className="cursor-not-allowed">
-                    <LoadingInfinityIcon width={21} height={21} />
-                  </span>
-                </Tooltip>
-              )}
-            </>
-          )}
-          <Button
-            disabled={isLoading || debugging || !session ? true : false}
-            extraStyle={{
-              backgroundColor: variables.colorGray500,
-              padding: '0 2rem',
-              opacity: isLoading || debugging ? '0.5' : '1',
-              cursor: !isLoading && !debugging ? 'pointer' : 'unset'
-            }}
-            onClick={() =>
-              handleSubmission(
-                'test',
-                reviewCode,
-                language,
-                codeInputPython,
-                codeInputJavascript
-              )
-            }
-          >
-            Run
-          </Button>
-          <Button
-            disabled={isLoading || debugging || !session ? true : false}
-            extraStyle={{
-              backgroundColor: variables.colorPrimary200,
-              padding: '0 2rem',
-              opacity: isLoading || debugging ? '0.5' : '1',
-              cursor: !isLoading && !debugging ? 'pointer' : 'unset'
-            }}
-            onClick={() =>
-              handleSubmission(
-                'submit',
-                reviewCode,
-                language,
-                codeInputPython,
-                codeInputJavascript,
-                duration,
-                timerDuration
-              )
-            }
-          >
-            Submit
-          </Button>
-        </div>
+        {selectedProblem &&
+        (!testTitles.includes(currentProblemTitle)) ? (
+          <div className={classes['right-button-group']}>
+            {!isMobile && (
+              <Tooltip
+                text="Unavailable"
+                direction="top"
+                className="w-fit h-[3rem] px-6 py-4 left-4"
+              >
+                <button disabled={true} style={{ opacity: 0.4 }}>
+                  <DebugIcon width={21} height={21} />
+                </button>
+              </Tooltip>
+            )}
+            <Tooltip
+              text="Test Unavailable"
+              direction="top"
+              className="w-[13rem] h-[3rem] py-4 left-10"
+            >
+              <Button
+                disabled={true}
+                extraStyle={{
+                  backgroundColor: variables.colorGray500,
+                  padding: '0 2rem',
+                  opacity: '0.4',
+                  cursor: 'unset'
+                }}
+              >
+                Run
+              </Button>
+            </Tooltip>
+            <Tooltip
+              text="Test Unavailable"
+              direction="top"
+              className="w-[13rem] h-[3rem] py-4 left-10"
+            >
+              <Button
+                disabled={true}
+                extraStyle={{
+                  backgroundColor: variables.colorPrimary200,
+                  padding: '0 2rem',
+                  opacity: '0.4',
+                  cursor: 'unset'
+                }}
+              >
+                Submit
+              </Button>
+            </Tooltip>
+          </div>
+        ) : (
+          <div className={classes['right-button-group']}>
+            {!isMobile && (
+              <>
+                {!exitingDebugging ? (
+                  <Tooltip
+                    text={debugging ? 'Exit' : 'Debug'}
+                    direction="top"
+                    className="w-fit px-6 py-4 left-4"
+                  >
+                    <button onClick={handleDebugButton}>
+                      {debugging ? (
+                        <ExitIcon width={17} height={17} />
+                      ) : (
+                        <DebugIcon width={21} height={21} />
+                      )}
+                    </button>
+                  </Tooltip>
+                ) : (
+                  <Tooltip
+                    text="Exiting debugging"
+                    direction="top"
+                    className="w-[14rem] py-4 left-4"
+                  >
+                    <span className="cursor-not-allowed">
+                      <LoadingInfinityIcon width={21} height={21} />
+                    </span>
+                  </Tooltip>
+                )}
+              </>
+            )}
+            <Button
+              disabled={isLoading || debugging || !session ? true : false}
+              extraStyle={{
+                backgroundColor: variables.colorGray500,
+                padding: '0 2rem',
+                opacity: isLoading || debugging ? '0.5' : '1',
+                cursor: !isLoading && !debugging ? 'pointer' : 'unset'
+              }}
+              onClick={() =>
+                handleSubmission(
+                  'test',
+                  reviewCode,
+                  language,
+                  codeInputPython,
+                  codeInputJavascript
+                )
+              }
+            >
+              Run
+            </Button>
+            <Button
+              disabled={isLoading || debugging || !session ? true : false}
+              extraStyle={{
+                backgroundColor: variables.colorPrimary200,
+                padding: '0 2rem',
+                opacity: isLoading || debugging ? '0.5' : '1',
+                cursor: !isLoading && !debugging ? 'pointer' : 'unset'
+              }}
+              onClick={() =>
+                handleSubmission(
+                  'submit',
+                  reviewCode,
+                  language,
+                  codeInputPython,
+                  codeInputJavascript,
+                  duration,
+                  timerDuration
+                )
+              }
+            >
+              Submit
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );

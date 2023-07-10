@@ -13,6 +13,7 @@
   z-index: 5;
   position: sticky;
   overflow-x: hidden;
+  overflow-y: hidden;
 
   &--dark {
     background-color: $dark-background-300;

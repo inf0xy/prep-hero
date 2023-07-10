@@ -4,12 +4,13 @@ import { getSession } from 'next-auth/react';
 import { Session } from 'next-auth/core/types';
 import { useMediaQuery } from 'react-responsive';
 import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
-import { setHomePageLoading } from '@/store';
+import { setHomePageLoading, getTestTitles } from '@/store';
 import useCustomScrollbar from '@/hooks/useCustomScrollbar';
 import Header from './Header';
 import Footer from './Footer';
 import Loading from '../reusables/Loading';
 import variables from '@/styles/variables.module.scss';
+import { getProblemTitles } from '@/lib/database/problems';
 
 type LayoutProps = {
   children: ReactNode;
@@ -35,7 +36,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const isSmallMobile = useMediaQuery({ query: '(max-width: 501px)' });
 
   useEffect(() => {
-    getSession().then((session) => setLoadedSession(session));
+    getSession()
+      .then((session) => {
+        setLoadedSession(session);
+        dispatch(getTestTitles());
+      })
+      .catch((err: any) => console.error(err));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
