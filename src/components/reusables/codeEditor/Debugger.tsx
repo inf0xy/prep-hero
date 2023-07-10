@@ -94,8 +94,8 @@ const Debugger: React.FC<DebuggerProps> = ({
   }, [windowHeight]);
 
   useEffect(() => {
-    // const socket = io(`${BACKEND_URL}`);
-    const socket = io('https://prep-hero-server.duckdns.org');
+    const socket = io(`${BACKEND_URL}`);
+console.log(socket);
     setSocketConnection(socket);
 
     socket.on('startDebugging', (data) => {
