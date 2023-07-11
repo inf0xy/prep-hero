@@ -1,38 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Prephero
 
-## Getting Started
+![Prephero Logo](./public/prep-hero-icon.svg)
 
-First, run the development server:
+Prephero is a comprehensive online platform designed to help you level up your coding skills and ace technical interviews. With a wide variety of LeetCode-type problems and a user-friendly Next.js app interface, Prephero offers an interactive learning experience for aspiring software engineers.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Extensive Problem Library:** Prephero provides a vast collection of coding problems, similar to those found on platforms like LeetCode. These problems cover a wide range of difficulty levels, data structures, and algorithms to help you master different concepts.
+- **Intuitive User Interface:** The Next.js app interface is built with user experience in mind. The clean and intuitive design allows you to easily navigate through problems, track your progress, and manage your submissions.
+- **Problem Filtering and Searching:** Find the right problem for your practice by utilizing the search and filtering options. Sort problems based on difficulty level, topic, or keyword to focus on specific areas of improvement.
+- **Real-Time Code Editor:** Solve problems directly in the browser using the real-time code editor provided by Prephero. Write, run, and debug your code all in one place, ensuring a seamless coding experience.
+- **Submission and Feedback:** Submit your solutions to problems and receive immediate feedback. Prephero's intelligent test runner checks your code against various test cases and provides detailed results to help you identify and fix any errors.
+- **Progress Tracking:** Keep track of your progress as you solve problems. Prephero automatically saves your submissions, allowing you to review your solutions and monitor your improvement over time.
+- **Community Discussion:** Engage in discussion forums with other users to gain insights, share approaches, and learn from each other. Collaborate with fellow coders and boost your problem-solving skills.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Installation and Setup
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+1. Clone the repository:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+   ```bash
+   git clone https://github.com/your-username/prephero.git
+   ```
+2. Navigate to the project directory:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+   ```bash
+   cd prephero
+   ```
+3. Install the dependencies:
 
-## Learn More
+   ```bash
+   npm install
+   ```   
+4. Start the development server:
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   ```bash
+   npm run dev
+   ```
+5. Open your browser and visit http://localhost:3000 to access Prephero.
