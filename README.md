@@ -1,6 +1,6 @@
 # Prephero
 
-![Prephero Logo](./public/prep-hero-icon.svg)
+![Prephero Logo](./public/prep-hero-icon.svg){: width="100" height="100"}
 
 Prephero is a comprehensive online platform designed to help you level up your coding skills and ace technical interviews. With a wide variety of LeetCode-type problems and a user-friendly Next.js app interface, Prephero offers an interactive learning experience for aspiring software engineers.
 
