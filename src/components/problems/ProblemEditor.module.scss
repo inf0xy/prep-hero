@@ -147,6 +147,11 @@
     overflow-y: auto;
     overflow-x: hidden;
 
+    p {
+      line-break: anywhere;
+      line-height: 1.2;
+    }
+
     &--dark {
       background-color: $dark-background-100;
     }

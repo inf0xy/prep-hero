@@ -34,7 +34,7 @@ const ProblemList: React.FC<ProblemListProps> = ({
     <div
       role="table"
       aria-label="table"
-      className={`${classes['problems-table']} ${
+      className={`problem-list ${theme} ${classes['problems-table']} ${
         classes[`problems-table--${theme}`]
       }`}
     >

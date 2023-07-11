@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import Test, { getSingleTest } from '@/lib/database/tests';
+import { getSingleTest } from '@/lib/database/tests';
 import { addTest } from '@/helpers/tests-api-util';
 import { NotificationType } from '@/types/dataTypes';
 import { useAppSelector } from '@/hooks/hooks';

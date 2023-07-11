@@ -34,6 +34,7 @@
   background: $color-scrollbar-thumb-hover-light;
 }
 
+.problem-list.light::-webkit-scrollbar-track,
 .debugger.light div div div::-webkit-scrollbar-track,
 .console-output.light::-webkit-scrollbar-track,
 .text-editor.light .w-md-editor-area::-webkit-scrollbar-track,
@@ -45,6 +46,7 @@
   background: $color-scrollbar-track-light;
 }
 
+.problem-list.light::-webkit-scrollbar-thumb,
 .debugger.light div div div::-webkit-scrollbar-thumb,
 .console-output.light::-webkit-scrollbar-thumb,
 .text-editor.light .w-md-editor-area::-webkit-scrollbar-thumb,
@@ -56,6 +58,7 @@
   background: $color-scrollbar-thumb-light;
 }
 
+.problem-list.light::-webkit-scrollbar-thumb:hover,
 .debugger.light div div div::-webkit-scrollbar-thumb:hover,
 .console-output.light::-webkit-scrollbar-thumb:hover
   .text-editor.light
