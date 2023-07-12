@@ -109,11 +109,6 @@ const Debugger: React.FC<DebuggerProps> = ({
           watchVariables
         } = JSON.parse(data);
 
-        if (callStack.filter((el: string) => el === '<module>').least === 2) {
-          const foundIndex = callStack.findIndex('<module>');
-          callStack.splice(foundIndex, 1);
-        }
-
         dispatch(
           setDebuggingData({
             codeLine,
@@ -154,11 +149,6 @@ const Debugger: React.FC<DebuggerProps> = ({
         watchVariables
       } = JSON.parse(data);
 
-      if (callStack.filter((el: string) => el === '<module>').least === 2) {
-        const foundIndex = callStack.findIndex('<module>');
-        callStack.splice(foundIndex, 1);
-      }
-
       const newDebuggingData = {
         codeLine,
         callStack: callStack.reverse(),
@@ -187,11 +177,6 @@ const Debugger: React.FC<DebuggerProps> = ({
         watchVariables
       } = JSON.parse(data);
 
-      if (callStack.filter((el: string) => el === '<module>').least === 2) {
-        const foundIndex = callStack.findIndex('<module>');
-        callStack.splice(foundIndex, 1);
-      }
-
       const newDebuggingData = {
         codeLine,
         callStack: callStack.reverse(),
@@ -218,11 +203,6 @@ const Debugger: React.FC<DebuggerProps> = ({
         stdOut,
         watchVariables
       } = JSON.parse(data);
-
-      if (callStack.filter((el: string) => el === '<module>').least === 2) {
-        const foundIndex = callStack.findIndex('<module>');
-        callStack.splice(foundIndex, 1);
-      }
 
       const newDebuggingData = {
         codeLine,
@@ -272,11 +252,6 @@ const Debugger: React.FC<DebuggerProps> = ({
         watchVariables
       } = JSON.parse(data);
 
-      if (callStack.filter((el: string) => el === '<module>').least === 2) {
-        const foundIndex = callStack.findIndex('<module>');
-        callStack.splice(foundIndex, 1);
-      }
-
       const newDebuggingData = {
         codeLine,
         callStack: callStack.reverse(),
@@ -303,11 +278,6 @@ const Debugger: React.FC<DebuggerProps> = ({
         stdOut,
         watchVariables
       } = JSON.parse(data);
-
-      if (callStack.filter((el: string) => el === '<module>').least === 2) {
-        const foundIndex = callStack.findIndex('<module>');
-        callStack.splice(foundIndex, 1);
-      }
 
       const newDebuggingData = {
         codeLine,
@@ -466,6 +436,12 @@ const Debugger: React.FC<DebuggerProps> = ({
     setWatchVariableInput('');
   };
 
+  let filteredCallStack = debuggingData.callStack.slice();
+  if (filteredCallStack.filter((el: string) => el === '<module>').length === 2) {
+    const foundIndex = filteredCallStack.findIndex(el => el === '<module>');
+    filteredCallStack.splice(foundIndex, 1);
+  }
+
   return (
     <>
       {showAlert && (
@@ -567,7 +543,7 @@ const Debugger: React.FC<DebuggerProps> = ({
         >
           <h2>Call Stack</h2>
           <div className={classes['callstack__content']}>
-            {debuggingData.callStack.map((el, index) => (
+            {filteredCallStack.map((el, index) => (
               <p key={`${el}-${index}`}>{el}</p>
             ))}
           </div>
