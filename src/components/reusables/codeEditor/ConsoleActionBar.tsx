@@ -152,7 +152,7 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
           <Tooltip
             text={
               !isLoading && !debugging
-                ? 'Stdout'
+                ? language === 'javascript' ? 'Unavailable' : 'Stdout'
                 : debugging
                 ? 'Unavailable during debugging'
                 : 'Unavailable during execution'
@@ -163,13 +163,13 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
             } p-4`}
           >
             <Button
-              disabled={isLoading || debugging || !session ? true : false}
+              disabled={isLoading || debugging || !session || language === 'javascript' ? true : false}
               extraStyle={{
                 backgroundColor: variables.colorSecondary200,
                 padding: '0 2rem',
                 height: isMobile ? '3rem' : '2.5rem',
-                opacity: isLoading || debugging ? '0.5' : '1',
-                cursor: !isLoading && !debugging ? 'pointer' : 'unset'
+                opacity: isLoading || debugging || language === 'javascript' ? '0.5' : '1',
+                cursor: !isLoading && !debugging && language !== 'javascript' ? 'pointer' : 'unset'
               }}
               onClick={() =>
                 handleRunCodeManually(
@@ -186,7 +186,7 @@ const ConsoleActionBar: React.FC<ConsoleActionBarProps> = ({
           </Tooltip>
         </div>
         {selectedProblem &&
-        (!testTitles.includes(currentProblemTitle)) ? (
+        (!testTitles.includes(currentProblemTitle)) || language === 'javascript' ? (
           <div className={classes['right-button-group']}>
             {!isMobile && (
               <Tooltip
