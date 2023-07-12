@@ -385,7 +385,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     if (!readOnly && value !== undefined) {
       setCodeInput(value);
 
-      if (!!isMobile) {
+      if (!isMobile) {
         dispatch(setDebuggingCode(value));
         updateBreakpoints();
       }
