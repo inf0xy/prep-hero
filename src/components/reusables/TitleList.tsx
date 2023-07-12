@@ -7,6 +7,7 @@ import {
   Dispatch,
   SetStateAction
 } from 'react';
+import Link from 'next/link';
 import { useMediaQuery } from 'react-responsive';
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks';
 import useSubmitNote from '@/hooks/useSubmitNote';
@@ -205,7 +206,7 @@ const TitleList: React.FC<TitleListProps> = ({
         onClick={listType === 'notes' ? () => handleOpenNote(title) : undefined}
       >
         {listType !== 'notes' ? (
-          <a
+          <Link
             href={`/problem/${title}`}
             style={{
               minWidth: listProgress === 'completed' ? 'calc(100vw - 100px)' : undefined,
@@ -215,7 +216,7 @@ const TitleList: React.FC<TitleListProps> = ({
             }}
           >
             {title}
-          </a>
+          </Link>
         ) : (
           <label
             htmlFor={`modal__notebook-note-${title}`}
