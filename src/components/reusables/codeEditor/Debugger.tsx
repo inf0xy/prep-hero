@@ -495,9 +495,9 @@ const Debugger: React.FC<DebuggerProps> = ({
                   <h2>Watch</h2>
                   <Tooltip
                     text="Add expression"
-                    direction="top"
-                    className="w-[12rem] p-4 left-[-2.5rem] bottom-[100%]"
-                    extraStyle={{ bottom: '90%' }}
+                    direction="bottom"
+                    className="w-[12rem] p-4 left-[-7rem]"
+                    extraStyle={{ top: '0.6rem' }}
                   >
                     <div
                       ref={addWatchVarButtonRef}
