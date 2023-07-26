@@ -59,19 +59,17 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
   availableWidth
 }) => {
   const session = useSession();
-  const { theme, submissions, notes, debugging } = useAppSelector(
-    state => {
-      const { theme } = state.theme;
-      const { submissions, notes } = state.user;
-      const { debugging } = state.debugger;
-      return {
-        theme,
-        submissions,
-        notes,
-        debugging
-      };
-    }
-  );
+  const { theme, submissions, notes, debugging } = useAppSelector((state) => {
+    const { theme } = state.theme;
+    const { submissions, notes } = state.user;
+    const { debugging } = state.debugger;
+    return {
+      theme,
+      submissions,
+      notes,
+      debugging
+    };
+  });
 
   const [showAlert, setShowAlert] = useState(false);
   const [notification, setNotification] = useState<NotificationType | null>(
@@ -400,7 +398,9 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                       )}
                       {!isLoading && codeError && (
                         <code
-                          className={`${classes.code} ${classes[`code--error--${theme}`]}`}
+                          className={`${classes.code} ${
+                            classes[`code--error--${theme}`]
+                          }`}
                         >
                           {!codeError.includes('\n') ? (
                             <p className="text-red-500 mt-4 mb-4 text-[1.4rem]">
@@ -448,6 +448,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
                 className={`${classes['code-actions-backdrop']} ${
                   classes[`code-actions-backdrop--${theme}`]
                 }`}
+                style={{ width: `${availableWidth}px` }}
               >
                 <p
                   className={`${classes['lock-message']} ${
@@ -492,7 +493,7 @@ const ProblemEditor: React.FC<ProblemEditorProps> = ({
           <Modal
             id="modal-settings"
             type="close-button"
-            buttonPosition='top-5 right-[-1.5rem]'
+            buttonPosition="top-5 right-[-1.5rem]"
             className="overflow-visible"
             noBorderRadius={false}
           >
