@@ -14,6 +14,7 @@ import { NotificationType } from '@/types/dataTypes';
 import { validateFormData } from '@/helpers/validateFormData';
 import { registerUser } from '@/helpers/registerUser';
 import classes from './AuthForm.module.scss';
+import variables from '@/styles/variables.module.scss';
 
 const loginMessage = 'Log In';
 const signupMessage = 'Sign Up';
@@ -337,7 +338,14 @@ const AuthForm = () => {
             </p>
           )}
           <div className={classes['form-actions']}>
-            <Button id={`${slug}`} extraStyle={{ width: '100%' }} type="submit">
+            <Button
+              id={`${slug}`}
+              extraStyle={{
+                width: '100%',
+                backgroundColor: variables.colorPrimary200
+              }}
+              type="submit"
+            >
               {loginForm ? 'Sign in' : 'Register'}
             </Button>
           </div>

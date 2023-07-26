@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import classes from './Button.module.scss';
 import { useAppSelector } from '@/hooks/hooks';
+import classes from './Button.module.scss';
 
 type ButtonProps = {
   id?: string;
