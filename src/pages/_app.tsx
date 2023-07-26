@@ -1,13 +1,13 @@
 import Head from 'next/head';
+import type { AppProps } from 'next/app';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import '@/styles/globals.scss';
-import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 import { Provider } from 'react-redux';
+import { store } from '@/store';
 import Loading from '@/components/reusables/Loading';
 import Layout from '@/components/layout/Layout';
-import { store } from '@/store';
+import '@/styles/globals.scss';
 
 export default function App({
   Component,

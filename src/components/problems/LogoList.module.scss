@@ -16,11 +16,11 @@
   gap: 1rem;
 
   &--dark {
-    background-color: $dark-background-100;
+    background-color: $more-companies-background-dark;
   }
 
   &--light {
-    background-color: $light-background-200;
+    background-color: $more-companies-background-light;
   }
 }
 
@@ -33,8 +33,8 @@
   }
 
   &--light {
-    background-color: $color-gray-400;
-    color: $text-off-white;
+    background-color: $color-gray-50;
+    color: $text-gray-900;
   }
 }
 
