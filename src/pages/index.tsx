@@ -48,22 +48,13 @@ const HomePage = () => {
                 classes[`image-wrapper--${theme}`]
               }`}
             >
-              {/* <div
-              classes
-                style={{
-                  width: `${300}px`,
-                  height: `${200}px`,
-                  position: 'relative'
-                }}
-              > */}
-                <Image
-                  src="/code-editor-image.png"
-                  alt="Code Editor Image"
-                  fill={true}
-                  sizes={`${300}px`}
-                />
-              </div>
-            {/* </div> */}
+              <Image
+                src="/code-editor-image.png"
+                alt="Code Editor Image"
+                fill={true}
+                sizes={`${300}px`}
+              />
+            </div>
           </div>
         </div>
         <div className={classes['second-section']}>
